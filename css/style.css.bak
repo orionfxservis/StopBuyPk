@@ -938,3 +938,13 @@ body {
     background: var(--primary-color);
     color: black;
 }
+
+.search-panel {
+    padding: 18px 20px;   /* reduced height */
+    border-radius: 16px;
+}
+
+.advanced-search-panel {
+    padding: 15px 18px !important;
+    gap: 12px;
+}
