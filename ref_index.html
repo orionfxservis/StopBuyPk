@@ -4,53 +4,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qeemat Point - Premium Deals</title>
-
-    <!-- CSS -->
+    <title>Orion FX - Premium Deals</title>
     <link rel="stylesheet" href="css/style.css">
-
-    <!-- Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Playfair+Display:wght@700&display=swap"
         rel="stylesheet">
-
-    <!-- Icons -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-
-    <!-- ================= NAVBAR ================= -->
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">Qeemat Point</div>
-
         <div class="nav-links">
             <a href="#products" class="active">Products</a>
             <a href="#deals">Deals</a>
             <a href="#blog">Blog</a>
             <a href="#contact">Contact</a>
         </div>
-
-        <a href="#" class="login-trigger"><i class="fas fa-user-shield"></i></a>
+        <a href="#" class="login-trigger"><i class="fas fa-user"></i></a>
     </nav>
 
-
-    <!-- ================= HERO ================= -->
+    <!-- Hero Section -->
     <section class="hero">
-
-        <!-- Animated Floating Background Objects -->
-        <div class="floating-circle small" style="top:20%; left:15%;"></div>
-        <div class="floating-circle medium" style="top:30%; left:75%;"></div>
-        <div class="floating-circle large" style="top:60%; left:10%;"></div>
-        <div class="floating-circle small" style="top:80%; left:80%;"></div>
-        <div class="floating-circle large blur" style="top:40%; left:50%; width:300px; height:300px; opacity:0.1; filter:blur(40px);"></div>
+        <div class="hero-slider">
+            <div class="slide active" style="background-image: url('images/bg/car.jpg');"></div>
+            <div class="slide" style="background-image: url('images/bg/burger.jpg');"></div>
+            <div class="slide" style="background-image: url('images/bg/laptop.jpg');"></div>
+            <div class="slide" style="background-image: url('images/bg/sport-bike.jpg');"></div>
+            <div class="slide" style="background-image: url('images/hero3.jpg');"></div>
+        </div>
 
         <div class="hero-content">
 
-            <!-- Typing Text -->
+            <!-- Then typing text -->
             <div class="typed-wrapper">
-                <h1 class="typed-text"></h1>
-                <p class="typed-subtext"></p>
+                <h1 class="typed-text" data-text='["Deals You Can’t Resist","ڈیلز جو آپ نظر انداز نہیں کر سکتے"]'></h1>
+                <p class="typed-subtext"
+                    data-subtext='["Grab Today’s Top Picks Before They’re Gone!","آج کی بہترین پیشکشیں ابھی حاصل کریں!"]'>
+                </p>
             </div>
 
             <!-- Explore Deals -->
@@ -58,103 +50,102 @@
                 Explore Deals <i class="fas fa-fire"></i>
             </a>
 
-            <!-- Popular Searches (MOVED HERE) -->
-            <div class="popular-searchs-top">
-                <span>🔥 Popular:</span>
-                <button onclick="quickSearch('iPhone')">iPhone</button>
-                <button onclick="quickSearch('Cars')">Cars</button>
-                <button onclick="quickSearch('Laptop')">Laptop</button>
-                <button onclick="quickSearch('Apartments')">Apartments</button>
-            </div>
+            <!-- Then search panel -->
+            <div class="advanced-search-panel">
 
-            <!-- SEARCH PANEL -->
-            <div class="search-panel">
+                <!-- Category -->
+                <div class="category-boxes" id="category">
 
-                <!-- Categories -->
-                <div class="category-wrapper">
-
-                    <!-- Row 1 -->
-                    <div class="category-row single">
-                        <div class="cat-box active" data-value="All">🔥 All</div>
-                    </div>
-
-                    <!-- Row 2 -->
-                    <div class="category-row">
-                        <div class="cat-box" data-value="Food">🍔 Food</div>
-                        <div class="cat-box" data-value="Mobiles">📱 Mobiles</div>
-                        <div class="cat-box" data-value="Cars">🚗 Cars</div>
-                        <div class="cat-box" data-value="Property">🏠 Property</div>
-                        <div class="cat-box" data-value="Electronics">🔌 Electronics</div>
-                        <div class="cat-box" data-value="Jobs">💼 Jobs</div>
-                    </div>
-
-                    <!-- Row 3 -->
-                    <div class="category-row">
-                        <div class="cat-box" data-value="Fashion">👕 Fashion</div>
-                        <div class="cat-box" data-value="Services">🛠 Services</div>
-                        <div class="cat-box" data-value="Books">📚 Books</div>
-                        <div class="cat-box" data-value="Bikes">🏍 Bikes</div>
-                        <div class="cat-box" data-value="Gaming">🎮 Gaming</div>
-                        <div class="cat-box" data-value="Kids">🧸 Kids</div>
-                    </div>
+                    <div class="cat-box active" data-value="All"><i>🔥</i> All</div>
+                    <div class="cat-box" data-value="Food"><i>🍔</i> Food</div>
+                    <div class="cat-box" data-value="Mobiles"><i>📱</i> Mobiles</div>
+                    <div class="cat-box" data-value="Cars"><i>🚗</i> Cars</div>
+                    <div class="cat-box" data-value="Property"><i>🏠</i> Property</div>
+                    <div class="cat-box" data-value="Electronics"><i>🔌</i> Electronics</div>
+                    <div class="cat-box" data-value="Jobs"><i>💼</i> Jobs</div>
 
                 </div>
 
-                <!-- Search Row -->
-                <div class="search-row">
+                <!-- Search Keyword & Voice -->
+                <div class="search-group" style="flex: 2; min-width: 300px;">
+                    <label>Keyword</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="searchInput" placeholder="Search / تلاش کریں"
+                            style="flex: 1; min-width: 0; padding: 14px 16px; font-size: 14px; color: #fff; background: linear-gradient(145deg, #111, #1c1c1c); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; outline: none; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.6), inset -2px -2px 5px rgba(255,255,255,0.05); transition: 0.3s;">
+                        <button class="voice-btn" onclick="startVoice()"
+                            style="background: var(--primary-color); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 0 15px; cursor: pointer; color: #000; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: 0.3s; box-shadow: 0 0 10px rgba(204,164,59,0.3); white-space: nowrap;">
+                            🎤 Speak
+                        </button>
+                    </div>
+                </div>
 
-                    <input type="text" id="searchInput" placeholder="Search / تلاش کریں">
-
+                <!-- Area -->
+                <div class="search-group">
+                    <label>Area</label>
                     <select id="area">
-                        <option>All Areas</option>
+                        <option value="">All Areas</option>
                         <option>DHA</option>
                         <option>Gulshan</option>
                         <option>Saddar</option>
-                        <option>F. B. Area Block 16</option>
-                        <option>F. B. Area Block 17</option>
-                        <option>F. B. Area Block 18</option>
-                        <option>F. B. Area Block 19</option>
-                        <option>F. B. Area Block 20</option>
-                        <option>F. B. Area Block 21</option>
-                        <option>F. B. Area Block 22</option>
+                        <option>Clifton</option>
+                        <option>North Nazimabad</option>
                     </select>
+                </div>
 
+                <!-- City -->
+                <div class="search-group">
+                    <label>City</label>
                     <select id="city">
-                        <option>Karachi</option>
+                        <option selected>Karachi</option>
                         <option>Lahore</option>
                         <option>Islamabad</option>
-                        <option>Faisalabad</option>
                     </select>
-
-                    <button class="voice-btn" onclick="startVoice()">🎤</button>
-                    <button class="location-btn" onclick="getLocation()">📍</button>
-                    <button class="search-btn">Search</button>
-
                 </div>
+
+                <!-- Buttons -->
+                <div class="search-actions">
+                    <button class="location-btn" onclick="getLocation()">
+                        <i class="fas fa-location-arrow"></i> Use My Location
+                    </button>
+                    <button class="search-btn">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+
 
             </div>
 
-
+            <!-- Popular Searches -->
+            <div class="popular-searches">
+                <span>🔥 Popular:</span>
+                <button onclick="quickSearch('iPhone')">iPhone</button>
+                <button onclick="quickSearch('Used Cars')">Used Cars</button>
+                <button onclick="quickSearch('Laptops')">Laptops</button>
+                <button onclick="quickSearch('Apartments')">Apartments</button>
+            </div>
 
         </div>
+
+
+        <!-- Floating Circles -->
+        <div class="floating-circle small" style="top:10%; left:15%;"></div>
+        <div class="floating-circle medium" style="top:30%; left:70%;"></div>
+        <div class="floating-circle large" style="top:70%; left:25%;"></div>
+        <div class="floating-circle small" style="top:50%; left:80%;"></div>
+        <div class="floating-circle medium" style="top:80%; left:50%;"></div>
     </section>
 
-
-    <!-- Horizontal Categories (NEW) -->
-    <div class="category-bar">
-        <div class="bar-item">📱 Mobiles</div>
-        <div class="bar-item">🚗 Cars</div>
-        <div class="bar-item">🏠 Property</div>
-        <div class="bar-item">🔌 Electronics</div>
-        <div class="bar-item">💼 Jobs</div>
-        <div class="bar-item">🍔 Food</div>
-        <div class="bar-item">👕 Fashion</div>
-        <div class="bar-item">🛠 Services</div>
-        <div class="bar-item">📚 Books</div>
-        <div class="bar-item">🏍 Bikes</div>
-    </div>
-
-
+    <!-- Horizontal Scroll Slider (Mobile Like Daraz) -->
+    <section class="category-slider">
+        <div class="slider-track">
+            <div class="slide-item">📱 Mobiles</div>
+            <div class="slide-item">🚗 Cars</div>
+            <div class="slide-item">🏠 Property</div>
+            <div class="slide-item">🔌 Electronics</div>
+            <div class="slide-item">💼 Jobs</div>
+            <div class="slide-item">🍔 Food</div>
+        </div>
+    </section>
 
     <!-- Near You Deals Section -->
     <section class="nearby-section" style="padding: 40px 50px; background: #121212;">
@@ -307,7 +298,17 @@
         window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; }
 
 
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
 
+        function showNextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        // Change slide every 5 seconds
+        setInterval(showNextSlide, 5000);
 
         const texts = [
             { heading: "Deals You Can’t Resist", sub: "Grab Today’s Top Picks Before They’re Gone!" },
@@ -504,7 +505,6 @@
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
-
 </body>
 
 </html>
