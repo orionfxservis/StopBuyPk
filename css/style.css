@@ -1125,9 +1125,15 @@ html {
     }
     
     /* Hero Section Fixes */
+    .hero {
+        height: auto;
+        min-height: 100vh;
+        padding-top: 120px;
+        padding-bottom: 40px;
+    }
     .hero-content {
         transform: translateY(0);
-        margin-top: 90px;
+        margin-top: 0;
         padding: 0 15px;
     }
     .typed-text {
@@ -1168,7 +1174,21 @@ html {
     }
     
     .search-row {
+        display: flex;
+        flex-wrap: wrap;
         gap: 10px;
+    }
+    .search-row input {
+        width: 100%;
+    }
+    .search-row select {
+        flex: 1 1 calc(50% - 10px);
+    }
+    .search-row button {
+        flex: 1;
+    }
+    .search-row .voice-btn {
+        flex: 0 0 auto;
     }
 
     /* Wrap the category bar so it fits on two lines without scrolling */
