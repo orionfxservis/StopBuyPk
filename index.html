@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -25,18 +25,53 @@
         <div class="logo">Qeemat Point</div>
 
         <div class="nav-links">
-            <a href="#products" class="active">Products</a>
-            <a href="#deals">Deals</a>
-            <a href="#blog">Blog</a>
-            <a href="#contact">Contact</a>
+			<a href="#home">🏠 Home</a>
+			<a href="#deals">🔥 Deals</a>
+			<a href="#products">Products</a>
+			<a href="#blog">Blog</a>
+			<a href="#contact">📞 Contact</a>
         </div>
+        <div class="login-wrapper" style="position: relative; display: flex; align-items: center;">
+            <a href="javascript:void(0)" class="login-trigger" id="loginToggle"><i class="fas fa-user-shield"></i></a>
+            
+            <div class="login-dropdown" id="loginDropdown">
+                <div class="login-tabs">
+                    <button class="login-tab active" data-target="user-login">User</button>
+                    <button class="login-tab" data-target="admin-login">Admin</button>
+                </div>
+                
+                <form id="user-login" class="login-box active">
+                    <div class="input-group">
+                        <input type="text" placeholder="User Name" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" placeholder="Company Name" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" placeholder="User ID" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn-full login-submit">Login</button>
+                </form>
 
-        <a href="#" class="login-trigger"><i class="fas fa-user-shield"></i></a>
+                <form id="admin-login" class="login-box">
+                    <div class="input-group">
+                        <input type="text" placeholder="Admin Name" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn-full login-submit">Login</button>
+                </form>
+            </div>
+        </div>
     </nav>
 
 
     <!-- ================= HERO ================= -->
-    <section class="hero">
+    <section class="hero" id="home">
 
         <!-- Animated Floating Background Objects -->
         <div class="floating-circle small" style="top:20%; left:15%;"></div>
@@ -158,6 +193,7 @@
 
     <!-- Near You Deals Section -->
     <section class="nearby-section" style="padding: 40px 50px; background: #121212;">
+	<section class="nearby-section" id="deals">
         <h2 style="text-align: center; margin-bottom: 40px; font-family: 'Playfair Display', serif; font-size: 2.2rem;">
             📍 Deals Near You</h2>
         <div id="nearbyDeals" class="product-grid">
@@ -524,6 +560,77 @@ function revealContact() {
 }
 
 window.addEventListener("scroll", revealContact);
+
+/* ===== ACTIVE MENU ON SCROLL ===== */
+
+const sections = document.querySelectorAll("section");
+const navLinks = document.querySelectorAll(".nav-links a");
+
+window.addEventListener("scroll", () => {
+
+    let current = "";
+
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+
+        if (pageYOffset >= sectionTop - 150) {
+            current = section.getAttribute("id");
+        }
+    });
+
+    navLinks.forEach(link => {
+        link.classList.remove("active");
+
+        if (current !== "home" && link.getAttribute("href") === "#" + current) {
+            link.classList.add("active");
+        }
+    });
+
+});
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            contactSection.classList.add("show");
+        }
+    });
+}, { threshold: 0.2 });
+
+observer.observe(contactSection);
+
+        // ===== LOGIN DROPDOWN LOGIC =====
+        const loginToggle = document.getElementById('loginToggle');
+        const loginDropdown = document.getElementById('loginDropdown');
+
+        loginToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            loginDropdown.classList.toggle('show');
+        });
+
+        // Close dropdown if clicked outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.login-wrapper')) {
+                loginDropdown.classList.remove('show');
+            }
+        });
+
+        const loginTabs = document.querySelectorAll('.login-tab');
+        const loginBoxes = document.querySelectorAll('.login-box');
+
+        loginTabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Remove active class from all tabs and boxes
+                loginTabs.forEach(t => t.classList.remove('active'));
+                loginBoxes.forEach(b => b.classList.remove('active'));
+
+                // Add active class to clicked tab and corresponding box
+                tab.classList.add('active');
+                document.getElementById(tab.getAttribute('data-target')).classList.add('active');
+            });
+        });
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
 

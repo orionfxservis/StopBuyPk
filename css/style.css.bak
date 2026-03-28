@@ -26,7 +26,8 @@ body {
 
 /* ================= NAVBAR ================= */
 .navbar {
-    position: fixed;
+    position: relative;
+	align-items: center;
     width: 100%;
     top: 0;
     padding: 15px 40px;
@@ -53,6 +54,7 @@ body {
     padding: 8px 15px;
     border-radius: 8px;
     text-decoration: none;
+	padding: 6px 10px;
     font-weight: 500;
     transition: 0.3s;
 }
@@ -65,6 +67,7 @@ body {
 }
 
 .login-trigger {
+	margin-left: auto;
     width: 45px;
     height: 45px;
     border: 2px solid var(--primary-color);
@@ -770,32 +773,42 @@ body {
     margin-top: 15px;
 }
 
+/* ===== GLASS SOCIAL ICONS ===== */
+
 .social-circle {
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    
     display: flex;
     align-items: center;
     justify-content: center;
-    
-    text-decoration: none;
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    color: #fff;
     font-size: 18px;
 
-    position: relative;
-    overflow: hidden;
-
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
-/* ICON COLOR */
-.social-circle i {
-    z-index: 2;
-    transition: 0.3s;
-}
-
-/* HOVER SCALE */
+/* Hover glow effect */
 .social-circle:hover {
-    transform: translateY(-5px) scale(1.05);
+    transform: translateY(-6px) scale(1.08);
+    box-shadow: 0 0 15px rgba(255,255,255,0.2);
+}
+
+/* Icon smooth animation */
+.social-circle i {
+    transition: transform 0.3s ease;
+}
+
+.social-circle:hover i {
+    transform: scale(1.2) rotate(5deg);
 }
 
 /* ===== ANIMATED BACKGROUND EFFECT ===== */
@@ -863,4 +876,75 @@ body {
 
 .social-circle.instagram:hover::before {
     width: 100%;
+}
+
+/* ===== CONTACT SECTION ANIMATION ===== */
+
+.contact-section {
+    opacity: 0;
+    transform: translateY(60px);
+    transition: all 0.8s ease;
+}
+
+/* When visible */
+.contact-section.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Form inputs animation */
+.contact-form .input-group {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 0.5s ease;
+}
+
+.contact-section.show .input-group {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger effect */
+.contact-section.show .input-group:nth-child(1) { transition-delay: 0.2s; }
+.contact-section.show .input-group:nth-child(2) { transition-delay: 0.4s; }
+.contact-section.show .input-group:nth-child(3) { transition-delay: 0.6s; }
+
+/* Button animation */
+.contact-section .btn {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: 0.5s ease;
+}
+
+.contact-section.show .btn {
+    opacity: 1;
+    transform: scale(1);
+    transition-delay: 0.8s;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Active menu highlight */
+.nav-links a.active {
+    color: #fff;
+    position: relative;
+}
+
+.nav-links a.active::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+}
+
+/* NAV LINKS SPACING FIX */
+.nav-links {
+    display: flex;
+    gap: 15px; /* reduce space (adjust 12–18px as you like) */
+    align-items: center;
 }
