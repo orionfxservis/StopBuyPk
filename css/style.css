@@ -1093,12 +1093,22 @@ html {
     .navbar {
         flex-wrap: wrap;
         padding: 15px 20px;
+        justify-content: center;
+        gap: 15px;
     }
     .logo {
         font-size: 1.5rem;
     }
+    .login-wrapper {
+        margin-left: 0;
+    }
+    .login-trigger {
+        width: 38px;
+        height: 38px;
+        font-size: 0.9rem;
+    }
     .nav-links {
-        margin-top: 15px;
+        margin-top: 10px;
         order: 3;
         width: 100%;
         justify-content: space-evenly;
@@ -1108,9 +1118,6 @@ html {
     .nav-links a {
         font-size: 0.85rem;
         padding: 5px 8px;
-    }
-    .login-wrapper {
-        margin-left: auto;
     }
     .login-dropdown {
         position: fixed;
