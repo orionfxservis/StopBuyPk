@@ -392,10 +392,13 @@ body {
 /* ===== CATEGORY BAR ===== */
 .category-bar {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    justify-content: center; /* Centers items horizontally on large screens */
+    width: 100%;
+    gap: 8px; /* Slightly increased gap for better desktop view while remaining in 1 line */
     overflow-x: auto;
-    padding: 12px 20px;
-    margin-top: 10px;
+    padding: 15px 10px; /* Adjusted vertical padding */
+    margin: 10px auto;
 }
 
 .category-bar::-webkit-scrollbar {
@@ -404,11 +407,24 @@ body {
 
 .bar-item {
     background: rgba(255,255,255,0.06);
-    padding: 8px 14px;
+    padding: 8px 12px;
     border-radius: 20px;
     white-space: nowrap;
     cursor: pointer;
+    font-size: 0.9rem; /* Restored a slightly larger font size because of full-width */
     transition: 0.3s;
+}
+
+/* On smaller screens, allow scrolling from the left edge */
+@media(max-width: 1200px) {
+    .category-bar {
+        justify-content: flex-start;
+        padding: 12px 10px;
+    }
+    .bar-item {
+        font-size: 0.8rem;
+        padding: 6px 8px;
+    }
 }
 
 .bar-item:hover {
@@ -1236,5 +1252,165 @@ html {
     }
     .category-row {
         grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* ===== PREMIUM DROPDOWN (OLX STYLE) ===== */
+
+.category-dropdown {
+    position: relative;
+}
+
+/* Toggle Button */
+.dropdown-toggle {
+    cursor: pointer;
+    font-size: 20px;
+    color: #fff;
+    padding: 8px 10px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.dropdown-toggle:hover {
+    background: rgba(255, 140, 0, 0.15);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    position: absolute;
+    top: 45px;
+
+    left: 100%;      /* KEY: start from right edge of icon */
+    margin-left: 10px; /* small gap from icon */
+
+    width: 200px;
+    max-height: 350px;
+    overflow-y: auto;
+
+    background: rgba(18, 18, 18, 0.95);
+    backdrop-filter: blur(12px);
+
+    border-radius: 12px;
+    padding: 10px 0;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+    pointer-events: none;
+
+    transition: all 0.25s ease;
+    z-index: 9999;
+}
+
+/* SHOW STATE */
+.dropdown-menu.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* Items */
+.dropdown-item {
+    padding: 12px 18px;
+    color: #ddd;
+    cursor: pointer;
+    transition: 0.25s;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover */
+.dropdown-item:hover {
+    background: rgba(255, 140, 0, 0.08);
+    color: #fff;
+}
+
+/* Active */
+.dropdown-item.active {
+    color: #ff8c00;
+    background: rgba(255, 140, 0, 0.12);
+}
+
+/* Ripple Effect */
+.dropdown-item::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    background: rgba(255,140,0,0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+}
+
+.dropdown-item.ripple::after {
+    animation: rippleEffect 0.5s ease;
+}
+
+@keyframes rippleEffect {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 0.6;
+    }
+    100% {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+    }
+}
+
+/* Scrollbar (Premium look) */
+.dropdown-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+    background: rgba(255,140,0,0.4);
+    border-radius: 10px;
+}
+
+/* Disable page scroll when dropdown is open */
+body.dropdown-open {
+    overflow: hidden;
+}
+
+/* Flip to LEFT if needed */
+.dropdown-menu.left-open {
+    left: auto;
+    right: 100%;
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+/* ================= GLOBAL SCROLLBAR ================= */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* ===== FOOD MODAL RESPONSIVE GRID ===== */
+.food-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+@media (max-width: 600px) {
+    .food-grid {
+        grid-template-columns: 1fr;
     }
 }

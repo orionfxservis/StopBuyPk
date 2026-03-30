@@ -26,12 +26,13 @@ body {
 
 /* ================= NAVBAR ================= */
 .navbar {
-    position: relative;
-	align-items: center;
+    position: fixed;
+    align-items: center;
     width: 100%;
     top: 0;
     padding: 15px 40px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     z-index: 1000;
     background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
@@ -49,12 +50,13 @@ body {
 }
 
 .nav-links a {
+    display: flex;
+    align-items: center;
     color: rgba(255, 255, 255, 0.8);
-    margin: 0 10px;
-    padding: 8px 15px;
+    margin: 0;
+    padding: 6px 10px;
     border-radius: 8px;
     text-decoration: none;
-	padding: 6px 10px;
     font-weight: 500;
     transition: 0.3s;
 }
@@ -66,8 +68,25 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
+.nav-links {
+    position: relative;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.nav-indicator {
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    height: 3px;
+    background: var(--primary-color);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
 .login-trigger {
-	margin-left: auto;
     width: 45px;
     height: 45px;
     border: 2px solid var(--primary-color);
@@ -138,6 +157,7 @@ body {
 .hero-content {
     text-align: center;
     max-width: 900px;
+    transform: translateY(-20px);
 }
 
 /* Typed */
@@ -145,6 +165,8 @@ body {
     height: 140px;
     display: block;
     margin-top: 40px;
+    position: relative;
+    top: 10px;
 }
 
 .typed-text {
@@ -603,9 +625,125 @@ body {
 
 /* ---- Contact Section ---- */
 .contact-section {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.8s ease;
     padding: 80px 50px;
     display: flex;
     justify-content: center;
+}
+
+/* ===== LOGIN DROPDOWN ===== */
+.login-dropdown {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 280px;
+    background: #1c1c1c;
+    border: 1px solid rgba(204,164,59,0.3);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 2000;
+}
+
+.login-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.login-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.login-tab {
+    flex: 1;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    padding: 8px 0;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: 0.3s;
+    position: relative;
+    outline: none;
+}
+
+.login-tab:hover {
+    color: #fff;
+}
+
+.login-tab.active {
+    color: var(--primary-color);
+}
+
+.login-tab.active::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--primary-color);
+}
+
+.login-box {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.login-box.active {
+    display: block;
+}
+
+.login-box .input-group {
+    margin-bottom: 12px;
+}
+
+.login-box .input-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-size: 0.85rem;
+    outline: none;
+}
+
+.login-box .input-group input:focus {
+    border-color: var(--primary-color);
+}
+
+.login-submit {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: #000;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.login-submit:hover {
+    box-shadow: 0 4px 15px rgba(204,164,59,0.4);
+    transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .contact-container {
@@ -881,8 +1019,8 @@ body {
 /* ===== CONTACT SECTION ANIMATION ===== */
 
 .contact-section {
-    opacity: 0;
-    transform: translateY(60px);
+    opacity: 1;
+    transform: translateY(0);
     transition: all 0.8s ease;
 }
 
@@ -947,4 +1085,277 @@ html {
     display: flex;
     gap: 15px; /* reduce space (adjust 12–18px as you like) */
     align-items: center;
+}
+
+/* ================= GLOBAL MOBILE RESPONSIVENESS ================= */
+@media(max-width:992px) {
+    /* Navbar Wrapping */
+    .navbar {
+        flex-wrap: wrap;
+        padding: 15px 20px;
+        justify-content: center;
+        gap: 15px;
+    }
+    .logo {
+        font-size: 1.5rem;
+    }
+    .login-wrapper {
+        margin-left: 0;
+    }
+    .login-trigger {
+        width: 38px;
+        height: 38px;
+        font-size: 0.9rem;
+    }
+    .nav-links {
+        margin-top: 10px;
+        order: 3;
+        width: 100%;
+        justify-content: space-evenly;
+        margin-left: 0;
+        gap: 5px;
+    }
+    .nav-links a {
+        font-size: 0.85rem;
+        padding: 5px 8px;
+    }
+    .login-dropdown {
+        position: fixed;
+        left: 50%;
+        top: 90px;
+        transform: translate(-50%, -10px);
+        width: 90%;
+        max-width: 340px;
+    }
+    .login-dropdown.show {
+        transform: translate(-50%, 0);
+    }
+    
+    /* Hero Section Fixes */
+    .hero {
+        height: auto;
+        min-height: 100vh;
+        padding-top: 120px;
+        padding-bottom: 40px;
+    }
+    .hero-content {
+        transform: translateY(0);
+        margin-top: 0;
+        padding: 0 15px;
+    }
+    .typed-text {
+        font-size: 1.8rem;
+    }
+    .typed-subtext {
+        font-size: 0.95rem;
+    }
+    .typed-wrapper {
+        height: auto;
+        min-height: 90px;
+    }
+    .deal-hero-btn {
+        margin-top: 15px;
+    }
+
+    /* Adjust padding for Sections */
+    .products-section, .blog-section, .contact-section {
+        padding: 40px 20px;
+    }
+    
+    .products-section h2, .blog-section h2, .contact-container h2 {
+        font-size: 1.8rem;
+    }
+    
+    .contact-container {
+        padding: 20px;
+    }
+    
+    /* Search Panel Fixes */
+    .search-panel {
+        padding: 10px;
+        margin-top: 15px;
+    }
+    
+    .category-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .search-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .search-row input {
+        width: 100%;
+    }
+    .search-row select {
+        flex: 1 1 calc(50% - 10px);
+    }
+    .search-row button {
+        flex: 1;
+    }
+    .search-row .voice-btn {
+        flex: 0 0 auto;
+    }
+
+    /* Wrap the category bar so it fits on two lines without scrolling */
+    .category-bar {
+        flex-wrap: wrap;
+        overflow-x: visible;
+        justify-content: center;
+        margin-top: 15px;
+    }
+}
+
+@media(max-width:480px) {
+    /* Extra small mobile devices */
+    .navbar {
+        padding: 10px 15px;
+    }
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+        margin-top: 10px;
+    }
+    .nav-links a {
+        font-size: 0.75rem;
+        padding: 4px 5px;
+    }
+    .logo {
+        font-size: 1.25rem;
+        white-space: nowrap;
+    }
+    .login-trigger {
+        width: 35px;
+        height: 35px;
+        font-size: 0.85rem;
+    }
+    .typed-text {
+        font-size: 1.4rem;
+    }
+    .category-row {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* ===== PREMIUM DROPDOWN (OLX STYLE) ===== */
+
+.category-dropdown {
+    position: relative;
+}
+
+/* Toggle Button */
+.dropdown-toggle {
+    cursor: pointer;
+    font-size: 20px;
+    color: #fff;
+    padding: 8px 10px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.dropdown-toggle:hover {
+    background: rgba(255, 140, 0, 0.15);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    position: absolute;
+    top: 45px;
+
+    left: 100%;      /* KEY: start from right edge of icon */
+    margin-left: 10px; /* small gap from icon */
+
+    width: 200px;
+    max-height: 350px;
+    overflow-y: auto;
+
+    background: rgba(18, 18, 18, 0.95);
+    backdrop-filter: blur(12px);
+
+    border-radius: 12px;
+    padding: 10px 0;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+    pointer-events: none;
+
+    transition: all 0.25s ease;
+    z-index: 9999;
+}
+
+/* SHOW STATE */
+.dropdown-menu.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* Items */
+.dropdown-item {
+    padding: 12px 18px;
+    color: #ddd;
+    cursor: pointer;
+    transition: 0.25s;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover */
+.dropdown-item:hover {
+    background: rgba(255, 140, 0, 0.08);
+    color: #fff;
+}
+
+/* Active */
+.dropdown-item.active {
+    color: #ff8c00;
+    background: rgba(255, 140, 0, 0.12);
+}
+
+/* Ripple Effect */
+.dropdown-item::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    background: rgba(255,140,0,0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+}
+
+.dropdown-item.ripple::after {
+    animation: rippleEffect 0.5s ease;
+}
+
+@keyframes rippleEffect {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 0.6;
+    }
+    100% {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+    }
+}
+
+/* Scrollbar (Premium look) */
+.dropdown-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+    background: rgba(255,140,0,0.4);
+    border-radius: 10px;
+}
+
+/* Disable page scroll when dropdown is open */
+body.dropdown-open {
+    overflow: hidden;
 }

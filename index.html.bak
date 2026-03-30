@@ -1,191 +1,872 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Qeemat Point - Premium Deals</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qeemat Point - Premium Deals</title>
 
-<link rel="stylesheet" href="css/style.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-    <div class="logo">Qeemat Point</div>
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+        <div class="logo">Price Comparison</div>
 
-    <div class="nav-links">
-        <a href="#deals">🔥 Deals</a>
-        <a href="#products">Products</a>
-        <a href="#blog">Blog</a>
-        <a href="#contact">📞 Contact</a>
+        <div class="nav-links">
+            <a href="#home">🏠 Home</a>
+            <a href="#deals">🔥 Deals</a>
+            <a href="#products">Products</a>
+            <a href="#blog">Blog</a>
+            <a href="#contact">📞 Contact</a>
+        </div>
+		
+		<!-- ===== CATEGORY DROPDOWN ===== -->
+<div class="category-dropdown">
+    <div class="dropdown-toggle">
+        <i class="fas fa-bars"></i>
     </div>
 
-    <a href="#" class="login-trigger"><i class="fas fa-user-shield"></i></a>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-<div class="hero-content">
-
-<div class="typed-wrapper">
-<h1 class="typed-text"></h1>
-<p class="typed-subtext"></p>
+    <div class="dropdown-menu">
+        <div class="dropdown-item active"><span>📱 Mobiles</span></div>
+<div class="dropdown-item"><span>🚗 Cars</span></div>
+<div class="dropdown-item"><span>🏠 Property For Rent</span></div>
+<div class="dropdown-item"><span>🏠 Property For Sale</span></div>
+<div class="dropdown-item"><span>🔌 Electronics</span></div>
+<div class="dropdown-item"><span>💼 Jobs</span></div>
+<div class="dropdown-item"><span>🍔 Food</span></div>
+<div class="dropdown-item"><span>👕 Fashion</span></div>
+<div class="dropdown-item"><span>🛠 Services</span></div>
+<div class="dropdown-item"><span>📚 Books</span></div>
+<div class="dropdown-item"><span>🏍 Bikes</span></div>
+    </div>
 </div>
 
-<a href="#deals" class="deal-hero-btn">
-Explore Deals <i class="fas fa-fire"></i>
-</a>
+        <div class="login-wrapper" style="position: relative; display: flex; align-items: center;">
+            <a href="javascript:void(0)" class="login-trigger" id="loginToggle"><i class="fas fa-user-shield"></i></a>
 
-<div class="popular-searchs-top">
-<span>🔥 Popular:</span>
-<button onclick="quickSearch('iPhone')">iPhone</button>
-<button onclick="quickSearch('Cars')">Cars</button>
-<button onclick="quickSearch('Laptop')">Laptop</button>
-<button onclick="quickSearch('Apartments')">Apartments</button>
+            <div class="login-dropdown" id="loginDropdown">
+                <div class="login-tabs">
+                    <button class="login-tab active" data-target="user-login">User</button>
+                    <button class="login-tab" data-target="admin-login">Admin</button>
+                </div>
+
+                <form id="user-login" class="login-box active">
+                    <div class="input-group">
+                        <input type="text" placeholder="User Name" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" placeholder="Company Name" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" placeholder="User ID" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn-full login-submit">Login</button>
+                </form>
+
+                <form id="admin-login" class="login-box">
+                    <div class="input-group">
+                        <input type="text" placeholder="Admin Name" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn-full login-submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- ================= HERO ================= -->
+    <section class="hero" id="home">
+
+        <!-- Animated Floating Background Objects -->
+        <div class="floating-circle small" style="top:20%; left:15%;"></div>
+        <div class="floating-circle medium" style="top:30%; left:75%;"></div>
+        <div class="floating-circle large" style="top:60%; left:10%;"></div>
+        <div class="floating-circle small" style="top:80%; left:80%;"></div>
+        <div class="floating-circle large blur"
+            style="top:40%; left:50%; width:300px; height:300px; opacity:0.1; filter:blur(40px);"></div>
+
+        <div class="hero-content">
+
+            <!-- Typing Text -->
+            <div class="typed-wrapper">
+                <h1 class="typed-text"></h1>
+                <p class="typed-subtext"></p>
+            </div>
+
+            <!-- Explore Deals -->
+            <a href="#deals" class="deal-hero-btn">
+                Explore Deals <i class="fas fa-fire"></i>
+            </a>
+
+            <!-- Popular Searches (MOVED HERE) -->
+            <div class="popular-searchs-top">
+                <span>🔥 Popular:</span>
+                <button onclick="quickSearch('iPhone')">iPhone</button>
+                <button onclick="quickSearch('Cars')">Cars</button>
+                <button onclick="quickSearch('Laptop')">Laptop</button>
+                <button onclick="quickSearch('Apartments')">Apartments</button>
+            </div>
+
+            <!-- SEARCH PANEL -->
+            <div class="search-panel">
+
+                <!-- Categories -->
+                <div class="category-wrapper">
+
+                    <!-- Row 1 -->
+                    <div class="category-row single">
+                        <div class="cat-box active" data-value="All">🔥 All</div>
+                    </div>
+
+                    <!-- Row 2 -->
+                    <div class="category-row">
+                        <div class="cat-box" data-value="Food">🍔 Food</div>
+                        <div class="cat-box" data-value="Mobiles">📱 Mobiles</div>
+                        <div class="cat-box" data-value="Cars">🚗 Cars</div>
+                        <div class="cat-box" data-value="Property">🏠 Property</div>
+                        <div class="cat-box" data-value="Electronics">🔌 Electronics</div>
+                        <div class="cat-box" data-value="Jobs">💼 Jobs</div>
+                    </div>
+
+                    <!-- Row 3 -->
+                    <div class="category-row">
+                        <div class="cat-box" data-value="Fashion">👕 Fashion</div>
+                        <div class="cat-box" data-value="Services">🛠 Services</div>
+                        <div class="cat-box" data-value="Books">📚 Books</div>
+                        <div class="cat-box" data-value="Bikes">🏍 Bikes</div>
+                        <div class="cat-box" data-value="Gaming">🎮 Gaming</div>
+                        <div class="cat-box" data-value="Kids">🧸 Kids</div>
+                    </div>
+
+                </div>
+
+                <!-- Search Row -->
+                <div class="search-row">
+
+                    <input type="text" id="searchInput" placeholder="Search / تلاش کریں">
+
+                    <select id="area">
+                        <option>All Areas</option>
+                        <option>DHA</option>
+                        <option>Gulshan</option>
+                        <option>Saddar</option>
+                        <option>F. B. Area Block 16</option>
+                        <option>F. B. Area Block 17</option>
+                        <option>F. B. Area Block 18</option>
+                        <option>F. B. Area Block 19</option>
+                        <option>F. B. Area Block 20</option>
+                        <option>F. B. Area Block 21</option>
+                        <option>F. B. Area Block 22</option>
+                    </select>
+
+                    <select id="city">
+                        <option>Karachi</option>
+                        <option>Lahore</option>
+                        <option>Islamabad</option>
+                        <option>Faisalabad</option>
+                    </select>
+
+                    <button class="voice-btn" onclick="startVoice()">🎤</button>
+                    <button class="location-btn" onclick="getLocation()">📍</button>
+                    <button class="search-btn">Search</button>
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </section>
+
+
+    <!-- Horizontal Categories (NEW) -->
+    <div class="category-bar">
+		<div class="bar-item">🍔 Food</div>
+        <div class="bar-item">📱 Mobiles</div>
+        <div class="bar-item">🚗 Vehicles</div>
+		<div class="bar-item">🏍 Bikes</div>
+        <div class="bar-item">🏠 Property For Rent</div>
+		<div class="bar-item">🏠 Property For Sale</div>
+        <div class="bar-item">🔌 Electronics</div>
+        <div class="bar-item">💼 Jobs</div>
+        <div class="bar-item">👕 Fashion</div>
+        <div class="bar-item">🛠 Services</div>
+        <div class="bar-item">📚 Books</div>
+    </div>
+
+<!-- ===== FOOD POPUP MODAL ===== -->
+<div id="foodModal" class="deal-modal">
+    <div class="deal-modal-content" style="max-width:700px;">
+        <span class="close-btn" id="foodClose">&times;</span>
+        <h2 style="margin-bottom:20px;">🍔 Food Deals</h2>
+
+        <div id="foodProducts" class="product-grid"></div>
+    </div>
 </div>
 
-<div class="search-panel">
-<input type="text" id="searchInput" placeholder="Search / تلاش کریں">
-</div>
 
-</div>
-</section>
+    <!-- Near You Deals Section -->
+    <section class="nearby-section" style="padding: 40px 50px; background: #121212;">
+        <section class="nearby-section" id="deals">
+            <h2
+                style="text-align: center; margin-bottom: 40px; font-family: 'Playfair Display', serif; font-size: 2.2rem;">
+                📍 Deals Near You</h2>
+            <div id="nearbyDeals" class="product-grid">
+                <p style='text-align:center; width:100%; grid-column:1/-1; color: rgba(255,255,255,0.5);'>Click "Use My
+                    Location" to detect deals near you.</p>
+            </div>
+        </section>
 
-<!-- DEALS -->
-<section class="nearby-section" id="deals">
-<h2 style="text-align:center;">📍 Deals Near You</h2>
-<div id="nearbyDeals" class="product-grid"></div>
-</section>
 
-<!-- PRODUCTS -->
-<section class="products-section" id="products">
-<h2>Latest Products</h2>
-<div class="product-grid"></div>
-</section>
+        <!-- Products Section -->
+        <section class="products-section" id="products">
+            <h2>Latest Products</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <span class="badge">New</span>
+                    <img src="images/product1.jpg" alt="Honda Civic">
+                    <h3>Honda Civic 2015</h3>
+                    <p class="price">PKR 2,500,000</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Karachi</p>
+                    <div class="buttons">
+                        <button class="compare-btn">Compare</button>
+                        <a href="https://wa.me/923330360487" class="whatsapp-btn">WhatsApp</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="badge">Hot</span>
+                    <img src="images/product2.jpg" alt="iPhone 13">
+                    <h3>iPhone 13 Pro</h3>
+                    <p class="price">PKR 280,000</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Karachi</p>
+                    <div class="buttons">
+                        <button class="compare-btn">Compare</button>
+                        <a href="https://wa.me/923330360487" class="whatsapp-btn">WhatsApp</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="badge">Sale</span>
+                    <img src="images/product3.jpg" alt="Dell Laptop">
+                    <h3>Dell XPS 13</h3>
+                    <p class="price">PKR 180,000</p>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> Karachi</p>
+                    <div class="buttons">
+                        <button class="compare-btn">Compare</button>
+                        <a href="https://wa.me/923330360487" class="whatsapp-btn">WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<!-- BLOG -->
-<section class="blog-section" id="blog">
-<h2>Latest Blog Posts</h2>
-</section>
+        <!-- Deal of the Day Modal -->
+        <div id="dealModal" class="deal-modal">
+            <div class="deal-modal-content">
+                <span class="close-btn">&times;</span>
+                <img id="deal-img" src="images/product1.jpg" alt="Product">
+                <h2 id="deal-name">Honda Civic 2015</h2>
+                <p id="deal-price">PKR 2,500,000</p>
+                <a id="deal-whatsapp" href="https://wa.me/923330360487" class="btn-whatsapp">Contact via WhatsApp</a>
+            </div>
+        </div>
 
-<!-- CONTACT -->
-<section class="contact-section" id="contact">
-<div class="contact-container">
+        <!-- Blog Section -->
+        <section class="blog-section" id="blog">
+            <h2>Latest Blog Posts</h2>
+            <div class="blog-grid">
+                <div class="blog-card">
+                    <img src="images/blog1.jpg" alt="Blog 1">
+                    <div class="blog-info">
+                        <span class="blog-date">Mar 2026</span>
+                        <h3>How to Choose the Best Car</h3>
+                        <p>Tips and tricks to buy cars at best prices with full security.</p>
+                        <a href="#" class="btn-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="blog-card">
+                    <img src="images/blog2.jpg" alt="Blog 2">
+                    <div class="blog-info">
+                        <span class="blog-date">Feb 2026</span>
+                        <h3>Top Mobile Phones in 2026</h3>
+                        <p>Discover the hottest phones in Pakistan with premium deals.</p>
+                        <a href="#" class="btn-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<h2>Contact Us</h2>
+        <!-- Contact Section -->
+        <section class="contact-section" id="contact">
+            <div class="contact-container">
+                <h2>Contact Us</h2>
+                <p class="contact-subtitle">We are here to help you find the best deals.</p>
+                <form class="contact-form">
+                    <div class="input-group">
+                        <label>Name</label>
+                        <input type="text" placeholder="Your Name">
+                    </div>
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="Your Email">
+                    </div>
+                    <div class="input-group">
+                        <label>Message</label>
+                        <textarea rows="5" placeholder="Your Message"></textarea>
+                    </div>
+                    <button class="btn btn-primary btn-full">Send Message</button>
+                </form>
+                <div class="contact-social">
+                    <h3>Follow Us</h3>
 
-<form class="contact-form">
-<div class="input-group">
-<label>Name</label>
-<input type="text">
-</div>
+                    <div class="social-icons">
 
-<div class="input-group">
-<label>Email</label>
-<input type="email">
-</div>
+                        <a href="#" class="social-circle facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
 
-<div class="input-group">
-<label>Message</label>
-<textarea></textarea>
-</div>
+                        <a href="#" class="social-circle tiktok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
 
-<button class="btn btn-primary btn-full">Send Message</button>
-</form>
+                        <a href="#" class="social-circle instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
 
-<div class="social-icons">
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<a href="#" class="social-circle facebook">
-<i class="fab fa-facebook-f"></i>
-</a>
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <p>© 2026 Orion FX. All rights reserved.</p>
+                </div>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                Made with ❤️ by Orion FX Team
+            </div>
+        </footer>
 
-<a href="#" class="social-circle tiktok">
-<i class="fab fa-tiktok"></i>
-</a>
+        <!-- JS for Modal -->
+        <script>
+            const modal = document.getElementById("dealModal");
+            const closeBtn = document.querySelector(".close-btn");
+            const dealButtons = document.querySelectorAll(".deal-hero-btn");
 
-<a href="#" class="social-circle instagram">
-<i class="fab fa-instagram"></i>
-</a>
+            dealButtons.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    modal.style.display = "flex";
+                });
+            });
 
-</div>
+            closeBtn.onclick = () => { modal.style.display = "none"; }
+            window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; }
 
-</div>
-</section>
 
-<!-- FOOTER -->
-<footer class="footer">
-<p>© 2026 Orion FX</p>
-</footer>
 
-<!-- ================= JS ================= -->
-<script>
 
-// ===== NAV ACTIVE + INDICATOR =====
-const links = document.querySelectorAll(".nav-links a");
-const indicator = document.createElement("div");
-indicator.classList.add("nav-indicator");
-document.querySelector(".nav-links").appendChild(indicator);
+            const texts = [
+                { heading: "Deals You Can’t Resist", sub: "Grab Today’s Top Picks Before They’re Gone!" },
+                { heading: "ڈیلز جو آپ نظر انداز نہیں کر سکتے", sub: "آج کی بہترین پیشکشیں ابھی حاصل کریں!" }
+            ];
 
-links.forEach(link => {
-    link.addEventListener("mouseenter", () => {
-        const rect = link.getBoundingClientRect();
-        const parent = link.parentElement.getBoundingClientRect();
+            const typedHeading = document.querySelector(".typed-text");
+            const typedSubtext = document.querySelector(".typed-subtext");
 
-        indicator.style.width = rect.width + "px";
-        indicator.style.left = (rect.left - parent.left) + "px";
-    });
-});
+            let textIndex = 0;
+            let charIndex = 0;
+            let subCharIndex = 0;
+            let typingDelay = 70;
+            let pauseDelay = 2000;
 
-// ===== SCROLL ACTIVE MENU =====
-const sections = document.querySelectorAll("section");
+            function typeHeading() {
+                const current = texts[textIndex];
 
-window.addEventListener("scroll", () => {
-    let current = "";
+                if (charIndex < current.heading.length) {
+                    typedHeading.textContent += current.heading.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeHeading, typingDelay);
+                } else if (subCharIndex < current.sub.length) {
+                    // Start typing subtitle after heading
+                    typedSubtext.textContent += current.sub.charAt(subCharIndex);
+                    subCharIndex++;
+                    setTimeout(typeHeading, typingDelay);
+                } else {
+                    // Pause, then remove text
+                    setTimeout(eraseText, pauseDelay);
+                }
+            }
 
-    sections.forEach(section => {
-        if (pageYOffset >= section.offsetTop - 120) {
-            current = section.id;
-        }
-    });
+            function eraseText() {
+                const current = texts[textIndex];
 
-    links.forEach(link => {
-        link.classList.remove("active");
-        if (link.getAttribute("href") === "#" + current) {
-            link.classList.add("active");
+                if (subCharIndex > 0) {
+                    typedSubtext.textContent = current.sub.substring(0, subCharIndex - 1);
+                    subCharIndex--;
+                    setTimeout(eraseText, typingDelay / 2);
+                } else if (charIndex > 0) {
+                    typedHeading.textContent = current.heading.substring(0, charIndex - 1);
+                    charIndex--;
+                    setTimeout(eraseText, typingDelay / 2);
+                } else {
+                    // Move to next text
+                    textIndex = (textIndex + 1) % texts.length;
+                    setTimeout(typeHeading, typingDelay);
+                }
+            }
 
-            const rect = link.getBoundingClientRect();
-            const parent = link.parentElement.getBoundingClientRect();
+            // Start typing effect
+            document.addEventListener("DOMContentLoaded", typeHeading);
 
-            indicator.style.width = rect.width + "px";
-            indicator.style.left = (rect.left - parent.left) + "px";
-        }
-    });
-});
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(async function (position) {
 
-// ===== CONTACT ANIMATION (FIXED) =====
-const contactSection = document.querySelector(".contact-section");
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            contactSection.classList.add("show");
-        }
-    });
-}, { threshold: 0.2 });
+                        try {
+                            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=YOUR_API_KEY`);
+                            const data = await response.json();
 
-observer.observe(contactSection);
+                            if (data.results && data.results.length > 0) {
+                                const results = data.results[0].address_components;
 
-// ===== QUICK SEARCH =====
-function quickSearch(val){
-document.getElementById("searchInput").value = val;
+                                let city = "";
+                                let area = "";
+
+                                results.forEach(comp => {
+                                    if (comp.types.includes("locality")) {
+                                        city = comp.long_name;
+                                    }
+                                    if (comp.types.includes("sublocality") || comp.types.includes("neighborhood")) {
+                                        area = comp.long_name;
+                                    }
+                                });
+
+                                if (city) {
+                                    document.getElementById("city").value = city;
+                                    loadNearbyDeals(city);
+                                }
+                                if (area) {
+                                    const areaSelect = document.getElementById("area");
+                                    let optionExists = Array.from(areaSelect.options).some(opt => opt.text === area || opt.text.includes(area));
+                                    if (optionExists) areaSelect.value = area;
+                                    else {
+                                        areaSelect.add(new Option(area, area, true, true));
+                                    }
+                                }
+                                alert(`Location detected: ${area ? area + ', ' : ''}${city}`);
+                            } else {
+                                alert("Could not detect address from coordinates.");
+                            }
+                        } catch (error) {
+                            console.error("Geocoding failed:", error);
+                            alert("Location service completely failed.");
+                        }
+
+                    }, function () {
+                        alert("Location access denied.");
+                    });
+                } else {
+                    alert("Location not supported");
+                }
+            }
+
+            const boxes = document.querySelectorAll(".cat-box");
+
+            boxes.forEach(box => {
+                box.addEventListener("click", () => {
+                    boxes.forEach(b => b.classList.remove("active"));
+                    box.classList.add("active");
+                });
+            });
+
+            // Urdu Typing Detection
+            document.getElementById("searchInput").addEventListener("input", function (e) {
+                const value = e.target.value;
+                const isUrdu = /[\u0600-\u06FF]/.test(value);
+                if (isUrdu) {
+                    console.log("Urdu typing detected");
+                } else {
+                    console.log("English typing detected");
+                }
+            });
+
+            // Voice Search
+            function startVoice() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                    alert("Voice recognition not supported in this browser.");
+                    return;
+                }
+                const recognition = new SpeechRecognition();
+                recognition.lang = "ur-PK"; // Urdu + works for English too
+                recognition.start();
+
+                recognition.onresult = function (event) {
+                    const text = event.results[0][0].transcript;
+                    alert("You said: " + text);
+                    document.getElementById("searchInput").value = text;
+                    console.log("Voice Input:", text);
+                };
+            }
+
+            // Nearby Deals logic
+            window.products = [
+    { name: "Burger Deal", price: "1200", area: "DHA", city: "Karachi", image: "images/product1.jpg", category: "Food" },
+    { name: "Pizza Offer", price: "2500", area: "Gulshan", city: "Karachi", image: "images/product2.jpg", category: "Food" },
+    { name: "Biryani Pack", price: "500", area: "Saddar", city: "Karachi", image: "images/product3.jpg", category: "Food" },
+
+    { name: "Honda Civic 2015", price: "2,500,000", area: "DHA", city: "Karachi", image: "images/product1.jpg", category: "Cars" },
+    { name: "iPhone 13 Pro", price: "280,000", area: "Gulshan", city: "Karachi", image: "images/product2.jpg", category: "Mobiles" },
+    { name: "Dell XPS 13", price: "180,000", area: "Saddar", city: "Karachi", image: "images/product3.jpg", category: "Electronics" }
+];
+
+            function quickSearch(term) {
+                document.getElementById("searchInput").value = term;
+            }
+
+            function loadNearbyDeals(userCity) {
+                const allProducts = window.products || [];
+
+                const filtered = allProducts.filter(p =>
+                    p.city && p.city.toLowerCase().includes(userCity.toLowerCase())
+                );
+
+                const container = document.getElementById("nearbyDeals");
+                container.innerHTML = "";
+
+                if (filtered.length === 0) {
+                    container.innerHTML = "<p style='text-align:center; width:100%; grid-column:1/-1; color: rgba(255,255,255,0.7);'>No deals found near you right now.</p>";
+                    return;
+                }
+
+                filtered.forEach(p => {
+                    container.innerHTML += `
+            <div class="product-card">
+                <img src="${p.image}" />
+                <h3>${p.name}</h3>
+                <p class="price">PKR ${p.price}</p>
+                <p class="location"><i class="fas fa-map-marker-alt"></i> ${p.area}, ${p.city}</p>
+                <div class="buttons">
+                    <button class="compare-btn">Compare</button>
+                    <a href="https://wa.me/923330360487" class="whatsapp-btn">WhatsApp</a>
+                </div>
+            </div>
+        `;
+                });
+            }
+
+            /* ===== CONTACT SECTION SCROLL ANIMATION ===== */
+
+            const contactSection = document.querySelector(".contact-section");
+
+            function revealContact() {
+                const sectionTop = contactSection.getBoundingClientRect().top;
+                const screenHeight = window.innerHeight;
+
+                if (sectionTop < screenHeight - 100) {
+                    contactSection.classList.add("show");
+                }
+            }
+
+            window.addEventListener("scroll", revealContact);
+
+            /* ===== ACTIVE MENU ON SCROLL ===== */
+
+            const sections = document.querySelectorAll("section");
+            const navLinks = document.querySelectorAll(".nav-links a");
+
+            window.addEventListener("scroll", () => {
+
+                let current = "";
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+
+                    if (pageYOffset >= sectionTop - 150) {
+                        current = section.getAttribute("id");
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove("active");
+
+                    if (current !== "home" && link.getAttribute("href") === "#" + current) {
+                        link.classList.add("active");
+                    }
+                });
+
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        contactSection.classList.add("show");
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            observer.observe(contactSection);
+
+            // ===== LOGIN DROPDOWN LOGIC =====
+            const loginToggle = document.getElementById('loginToggle');
+            const loginDropdown = document.getElementById('loginDropdown');
+
+            loginToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                loginDropdown.classList.toggle('show');
+            });
+
+            // Close dropdown if clicked outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.login-wrapper')) {
+                    loginDropdown.classList.remove('show');
+                }
+            });
+
+            const loginTabs = document.querySelectorAll('.login-tab');
+            const loginBoxes = document.querySelectorAll('.login-box');
+
+            loginTabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Remove active class from all tabs and boxes
+                    loginTabs.forEach(t => t.classList.remove('active'));
+                    loginBoxes.forEach(b => b.classList.remove('active'));
+
+                    // Add active class to clicked tab and corresponding box
+                    tab.classList.add('active');
+                    document.getElementById(tab.getAttribute('data-target')).classList.add('active');
+                });
+            });
+
+            // ===== LOGIN AUTHENTICATION LOGIC =====
+            const adminLoginForm = document.getElementById('admin-login');
+            if (adminLoginForm) {
+                adminLoginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const inputs = adminLoginForm.querySelectorAll('input');
+                    const adminId = inputs[0].value;
+                    const adminPass = inputs[1].value;
+                    
+                    if ((adminId === 'admin' && adminPass === 'admin123') || (adminId === 'Faisal' && adminPass === '1234')) {
+                        window.location.href = 'pages/admin.html';
+                    } else {
+                        alert('Invalid Admin credentials!');
+                    }
+                });
+            }
+
+            const userLoginForm = document.getElementById('user-login');
+            if (userLoginForm) {
+                userLoginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const inputs = userLoginForm.querySelectorAll('input');
+                    const userName = inputs[0].value;
+                    const company = inputs[1].value;
+                    const userId = inputs[2].value;
+                    const userPass = inputs[3].value;
+                    
+                    if (userName === 'Faisal' && company === 'Orion Fx' && userId === 'Faisal' && userPass === '1234') {
+                        alert('User login successful! Welcome Faisal.');
+                        // Add redirection here when the user page is created!
+                    } else {
+                        alert('Invalid User credentials!');
+                    }
+                });
+            }
+			
+			/// ===== FINAL CLEAN CATEGORY SYSTEM =====
+
+// Elements
+const dropdownToggle = document.querySelector(".dropdown-toggle");
+const dropdownMenu = document.querySelector(".dropdown-menu");
+
+const dropdownItems = document.querySelectorAll(".dropdown-item");
+const categoryBoxes = document.querySelectorAll(".cat-box");
+const barItems = document.querySelectorAll(".bar-item");
+
+const allProducts = window.products || [];
+
+
+// ===== NORMALIZE CATEGORY =====
+function normalizeCategory(text) {
+    text = text.toLowerCase();
+
+    if (text.includes("car") || text.includes("vehicle")) return "Cars";
+    if (text.includes("mobile")) return "Mobiles";
+    if (text.includes("electronic")) return "Electronics";
+    if (text.includes("food")) return "Food";
+    if (text.includes("job")) return "Jobs";
+    if (text.includes("fashion")) return "Fashion";
+    if (text.includes("service")) return "Services";
+    if (text.includes("book")) return "Books";
+    if (text.includes("bike")) return "Bikes";
+    if (text.includes("property")) return "Property";
+
+    return "All";
 }
 
-</script>
+
+// ===== FILTER PRODUCTS =====
+function filterProducts(category) {
+
+    const container = document.querySelector(".products-section .product-grid");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    let filtered = allProducts;
+
+    if (category !== "All") {
+        filtered = allProducts.filter(p => p.category === category);
+    }
+
+    if (filtered.length === 0) {
+        container.innerHTML = "<p style='grid-column:1/-1;text-align:center;'>No products found</p>";
+        return;
+    }
+
+    filtered.forEach(p => {
+        container.innerHTML += `
+            <div class="product-card">
+                <img src="${p.image}" />
+                <h3>${p.name}</h3>
+                <p class="price">PKR ${p.price}</p>
+                <p class="location"><i class="fas fa-map-marker-alt"></i> ${p.area}, ${p.city}</p>
+                <div class="buttons">
+                    <button class="compare-btn">Compare</button>
+                    <a href="https://wa.me/923330360487" class="whatsapp-btn">WhatsApp</a>
+                </div>
+            </div>
+        `;
+    });
+}
+
+
+// ===== SYNC UI =====
+function setActive(category) {
+
+    dropdownItems.forEach(i => {
+        i.classList.toggle("active", normalizeCategory(i.innerText) === category);
+    });
+
+    categoryBoxes.forEach(b => {
+        b.classList.toggle("active", b.getAttribute("data-value") === category);
+    });
+
+    barItems.forEach(b => {
+        b.classList.toggle("active", normalizeCategory(b.innerText) === category);
+    });
+}
+
+
+// ===== DROPDOWN CLICK =====
+dropdownItems.forEach(item => {
+    item.addEventListener("click", (e) => {
+
+        const category = normalizeCategory(item.innerText);
+
+        // ripple
+        const rect = item.getBoundingClientRect();
+        item.style.setProperty('--x', e.clientX - rect.left + 'px');
+        item.style.setProperty('--y', e.clientY - rect.top + 'px');
+
+        item.classList.remove("ripple");
+        void item.offsetWidth;
+        item.classList.add("ripple");
+
+        setActive(category);
+        filterProducts(category);
+
+        dropdownMenu.classList.remove("show", "left-open");
+        document.body.classList.remove("dropdown-open");
+    });
+});
+
+
+// ===== CATEGORY BOX CLICK =====
+categoryBoxes.forEach(box => {
+    box.addEventListener("click", () => {
+
+        const category = box.getAttribute("data-value");
+
+        setActive(category);
+        filterProducts(category);
+    });
+});
+
+
+// ===== HORIZONTAL BAR CLICK =====
+barItems.forEach(item => {
+    item.addEventListener("click", () => {
+
+        const category = normalizeCategory(item.innerText);
+
+        setActive(category);
+        filterProducts(category);
+    });
+});
+
+
+// ===== SMART DROPDOWN =====
+dropdownToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    dropdownMenu.classList.remove("left-open");
+    dropdownMenu.classList.add("show");
+
+    setTimeout(() => {
+        const rect = dropdownMenu.getBoundingClientRect();
+
+        if (rect.right > window.innerWidth) {
+            dropdownMenu.classList.add("left-open");
+        }
+    }, 10);
+
+    document.body.classList.add("dropdown-open");
+});
+
+
+// ===== CLOSE DROPDOWN =====
+document.addEventListener("click", (e) => {
+    if (!e.target.closest(".category-dropdown")) {
+        dropdownMenu.classList.remove("show", "left-open");
+        document.body.classList.remove("dropdown-open");
+    }
+});
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
 
 </body>
+
 </html>

@@ -1,0 +1,403 @@
+/* Admin Specific Styles */
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #121212;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #1e1e1e;
+    border-right: 1px solid #333;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar .logo {
+    margin-bottom: 40px;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(to bottom, #cfc09f 22%, #634f2c 24%, #cfc09f 26%, #ffecb3 40%, #3a2c0f 78%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.menu {
+    list-style: none;
+}
+
+.menu li {
+    padding: 15px 20px;
+    color: #aaa;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu li:hover,
+.menu li.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Content */
+.content {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.admin-section {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.admin-section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h1 {
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    /* Auto-fit for better responsiveness */
+    gap: 15px;
+}
+
+.stat-card {
+    background: #1e1e1e;
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+    border: 1px solid #333;
+}
+
+.stat-card h3 {
+    color: #888;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+.stat-card p {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 1.2;
+}
+
+/* Forms */
+.form-container {
+    background: #1e1e1e;
+    padding: 20px;
+    /* Reduced from 30px */
+    border-radius: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #333;
+}
+
+.form-container h3 {
+    margin-bottom: 15px;
+    /* Reduced */
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-row .input-group {
+    flex: 1;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    /* Reduced from 20px */
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    /* Reduced from 8px */
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.form-container input,
+.form-container select {
+    width: 100%;
+    padding: 8px 12px;
+    /* Reduced vertical padding */
+    margin-bottom: 0;
+    background: #121212;
+    border: 1px solid #333;
+    color: white;
+    border-radius: 8px;
+}
+
+.form-container input:focus,
+.form-container select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+/* Field Rows for Dynamic Inputs */
+.field-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 40px;
+    gap: 10px;
+    margin-bottom: 5px;
+    /* Reduced */
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 40px;
+    gap: 10px;
+    margin-bottom: 8px;
+    /* Reduced */
+    align-items: center;
+}
+
+.field-row input,
+.field-row select {
+    width: 100%;
+    /* It's grid-controlled now */
+    margin-bottom: 0;
+}
+
+.remove-btn,
+.btn-secondary {
+    padding: 10px 15px;
+    background: #333;
+    border: 1px solid #555;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.remove-btn:hover {
+    background: #ff006e;
+    border-color: #ff006e;
+}
+
+.btn-secondary:hover {
+    background: #555;
+}
+
+/* Lists */
+.list-container {
+    background: #1e1e1e;
+    padding: 30px;
+    border-radius: 15px;
+}
+
+/* Admin Table */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    color: #e0e0e0;
+}
+
+.admin-table th {
+    text-align: left;
+    padding: 15px;
+    background: #252525;
+    color: #aaa;
+    font-weight: 600;
+    border-bottom: 2px solid #333;
+}
+
+.admin-table td {
+    padding: 15px;
+    border-bottom: 1px solid #333;
+    vertical-align: middle;
+}
+
+.admin-table tr:last-child td {
+    border-bottom: none;
+}
+
+.badge {
+    background: #333;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #444;
+}
+
+.field-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+/* Tables (General Grid, for Products) */
+.grid-table-header {
+    display: grid;
+    grid-template-columns: 80px 2fr 1fr 1fr 1fr;
+    background: #252525;
+    padding: 15px;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.product-row {
+    display: grid;
+    grid-template-columns: 80px 2fr 1fr 1fr 1fr;
+    padding: 15px;
+    border-bottom: 1px solid #333;
+    align-items: center;
+}
+
+.product-row img {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.admin-table td:last-child {
+    white-space: nowrap;
+    width: 1%;
+    /* Shrink to fit */
+}
+
+.delete-btn {
+    background: #8b0000;
+    /* Darker red */
+    padding: 5px 8px;
+    /* Reduced */
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s;
+    margin-left: 5px;
+    font-size: 0.8rem;
+}
+
+.delete-btn:hover {
+    background: #a91b1b;
+}
+
+.edit-btn {
+    background: var(--secondary-color);
+    padding: 5px 8px;
+    /* Reduced */
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s;
+    font-size: 0.8rem;
+}
+
+.edit-btn:hover {
+    background: #6d4c2a;
+}
+
+/* Banner Management */
+.banner-preview {
+    margin-top: 10px;
+    background: #121212;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #666;
+}
+
+.banner-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.banner-item {
+    background: #252525;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.banner-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.banner-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    word-break: break-all;
+}
+
+.banner-link:hover {
+    text-decoration: underline;
+}
+
+/* Base button and Primary button styling */
+.btn {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    box-shadow: 0 4px 15px rgba(204, 164, 59, 0.4);
+    transform: translateY(-2px);
+}

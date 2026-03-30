@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -31,6 +31,29 @@
             <a href="#blog">Blog</a>
             <a href="#contact">📞 Contact</a>
         </div>
+		
+		<!-- ===== CATEGORY DROPDOWN ===== -->
+<div class="category-dropdown">
+    <div class="dropdown-toggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <div class="dropdown-menu">
+        <div class="dropdown-item active"><span>🍔 Food</span></div>
+<div class="dropdown-item"><span>📱 Mobiles</span></div>
+<div class="dropdown-item"><span>🚗 Vehicles</span></div>
+<div class="dropdown-item"><span>🏠 Property</span></div>
+<div class="dropdown-item"><span>🔌 Electronics</span></div>
+<div class="dropdown-item"><span>💼 Jobs</span></div>
+<div class="dropdown-item"><span>👕 Fashion</span></div>
+<div class="dropdown-item"><span>🛠 Services</span></div>
+<div class="dropdown-item"><span>📚 Books</span></div>
+<div class="dropdown-item"><span>🏍 Bikes</span></div>
+<div class="dropdown-item"><span>🎮 Gaming</span></div>
+<div class="dropdown-item"><span>🧸 Kids</span></div>
+    </div>
+</div>
+
         <div class="login-wrapper" style="position: relative; display: flex; align-items: center;">
             <a href="javascript:void(0)" class="login-trigger" id="loginToggle"><i class="fas fa-user-shield"></i></a>
 
@@ -118,7 +141,7 @@
                     <div class="category-row">
                         <div class="cat-box" data-value="Food">🍔 Food</div>
                         <div class="cat-box" data-value="Mobiles">📱 Mobiles</div>
-                        <div class="cat-box" data-value="Cars">🚗 Cars</div>
+                        <div class="cat-box" data-value="Cars">🚗 Vehicles</div>
                         <div class="cat-box" data-value="Property">🏠 Property</div>
                         <div class="cat-box" data-value="Electronics">🔌 Electronics</div>
                         <div class="cat-box" data-value="Jobs">💼 Jobs</div>
@@ -178,18 +201,29 @@
 
     <!-- Horizontal Categories (NEW) -->
     <div class="category-bar">
+		<div class="bar-item">🍔 Food</div>
         <div class="bar-item">📱 Mobiles</div>
-        <div class="bar-item">🚗 Cars</div>
-        <div class="bar-item">🏠 Property</div>
-        <div class="bar-item">🔌 Electronics</div>
-        <div class="bar-item">💼 Jobs</div>
-        <div class="bar-item">🍔 Food</div>
-        <div class="bar-item">👕 Fashion</div>
+        <div class="bar-item">🚗 Vehicles</div>
+		<div class="bar-item">🏠 Property</div>
+		<div class="bar-item">🔌 Electronics</div>
+		<div class="bar-item">💼 Jobs</div>
+		<div class="bar-item">👕 Fashion</div>
         <div class="bar-item">🛠 Services</div>
         <div class="bar-item">📚 Books</div>
-        <div class="bar-item">🏍 Bikes</div>
+		<div class="bar-item">🏍 Bikes</div>
+        <div class="bar-item">🎮 Gaming</div>
+		<div class="bar-item">🧸 Kids</div>
     </div>
 
+<!-- ===== FOOD POPUP MODAL ===== -->
+<div id="foodModal" class="deal-modal">
+    <div class="deal-modal-content" style="max-width:550px; max-height:85vh; overflow-y:auto; padding:20px;">
+        <span class="close-btn" id="foodClose" style="top:10px; right:15px;"><i class="fas fa-times"></i></span>
+        <h2 style="margin-bottom:15px; font-size:1.5rem;">🍔 Food Deals</h2>
+
+        <div id="foodProducts" class="product-grid food-grid"></div>
+    </div>
+</div>
 
 
     <!-- Near You Deals Section -->
@@ -507,11 +541,14 @@
 
             // Nearby Deals logic
             window.products = [
-                { name: "Honda Civic 2015", price: "2,500,000", area: "DHA", city: "Karachi", image: "images/product1.jpg" },
-                { name: "iPhone 13 Pro", price: "280,000", area: "Gulshan", city: "Karachi", image: "images/product2.jpg" },
-                { name: "Dell XPS 13", price: "180,000", area: "Saddar", city: "Karachi", image: "images/product3.jpg" },
-                { name: "Toyota Corolla", price: "3,000,000", area: "DHA", city: "Lahore", image: "images/product1.jpg" }
-            ];
+    { name: "Burger Deal", price: "1200", area: "DHA", city: "Karachi", image: "images/product1.jpg", category: "Food" },
+    { name: "Pizza Offer", price: "2500", area: "Gulshan", city: "Karachi", image: "images/product2.jpg", category: "Food" },
+    { name: "Biryani Pack", price: "500", area: "Saddar", city: "Karachi", image: "images/product3.jpg", category: "Food" },
+
+    { name: "Honda Civic 2015", price: "2,500,000", area: "DHA", city: "Karachi", image: "images/product1.jpg", category: "Cars" },
+    { name: "iPhone 13 Pro", price: "280,000", area: "Gulshan", city: "Karachi", image: "images/product2.jpg", category: "Mobiles" },
+    { name: "Dell XPS 13", price: "180,000", area: "Saddar", city: "Karachi", image: "images/product3.jpg", category: "Electronics" }
+];
 
             function quickSearch(term) {
                 document.getElementById("searchInput").value = term;
@@ -633,6 +670,245 @@
                     document.getElementById(tab.getAttribute('data-target')).classList.add('active');
                 });
             });
+
+            // ===== LOGIN AUTHENTICATION LOGIC =====
+            const adminLoginForm = document.getElementById('admin-login');
+            if (adminLoginForm) {
+                adminLoginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const inputs = adminLoginForm.querySelectorAll('input');
+                    const adminId = inputs[0].value;
+                    const adminPass = inputs[1].value;
+                    
+                    if ((adminId === 'admin' && adminPass === 'admin123') || (adminId === 'Faisal' && adminPass === '1234')) {
+                        window.location.href = 'pages/admin.html';
+                    } else {
+                        alert('Invalid Admin credentials!');
+                    }
+                });
+            }
+
+            const userLoginForm = document.getElementById('user-login');
+            if (userLoginForm) {
+                userLoginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const inputs = userLoginForm.querySelectorAll('input');
+                    const userName = inputs[0].value;
+                    const company = inputs[1].value;
+                    const userId = inputs[2].value;
+                    const userPass = inputs[3].value;
+                    
+                    if (userName === 'Faisal' && company === 'Orion Fx' && userId === 'Faisal' && userPass === '1234') {
+                        alert('User login successful! Welcome Faisal.');
+                        // Add redirection here when the user page is created!
+                    } else {
+                        alert('Invalid User credentials!');
+                    }
+                });
+            }
+			
+			/// ===== FINAL CLEAN CATEGORY SYSTEM =====
+
+// Elements
+const dropdownToggle = document.querySelector(".dropdown-toggle");
+const dropdownMenu = document.querySelector(".dropdown-menu");
+
+const dropdownItems = document.querySelectorAll(".dropdown-item");
+const categoryBoxes = document.querySelectorAll(".cat-box");
+const barItems = document.querySelectorAll(".bar-item");
+
+const allProducts = window.products || [];
+
+
+// ===== NORMALIZE CATEGORY =====
+function normalizeCategory(text) {
+    text = text.toLowerCase();
+
+    if (text.includes("car") || text.includes("vehicle")) return "Cars";
+    if (text.includes("mobile")) return "Mobiles";
+    if (text.includes("electronic")) return "Electronics";
+    if (text.includes("food")) return "Food";
+    if (text.includes("job")) return "Jobs";
+    if (text.includes("fashion")) return "Fashion";
+    if (text.includes("service")) return "Services";
+    if (text.includes("book")) return "Books";
+    if (text.includes("bike")) return "Bikes";
+    if (text.includes("property")) return "Property";
+
+    return "All";
+}
+
+
+// ===== FILTER PRODUCTS =====
+function filterProducts(category) {
+
+    // --- Special Modal for Food ---
+    if (category === "Food") {
+        const foodModal = document.getElementById("foodModal");
+        const foodContainer = document.getElementById("foodProducts");
+        const foodClose = document.getElementById("foodClose");
+        
+        if (foodModal && foodContainer) {
+            foodContainer.innerHTML = "";
+            let foodItems = allProducts.filter(p => p.category === "Food");
+            
+            if (foodItems.length === 0) {
+                foodContainer.innerHTML = "<p style='grid-column:1/-1;text-align:center; color:#fff;'>No food deals found</p>";
+            } else {
+                foodItems.forEach(p => {
+                    foodContainer.innerHTML += `
+                        <div class="product-card">
+                            <img src="${p.image}" alt="${p.name}" />
+                            <h3>${p.name}</h3>
+                            <p class="price">PKR ${p.price}</p>
+                            <p class="location"><i class="fas fa-map-marker-alt"></i> ${p.area}, ${p.city}</p>
+                            <div class="buttons">
+                                <a href="https://wa.me/923330360487" class="whatsapp-btn btn-full" style="width:100%; text-decoration:none; text-align:center;">Order Now</a>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            foodModal.style.display = "flex";
+            
+            if (foodClose) {
+                foodClose.onclick = () => { foodModal.style.display = "none"; }
+            }
+            // Add click outside to close
+            window.addEventListener("click", (e) => {
+                if (e.target === foodModal) {
+                    foodModal.style.display = "none";
+                }
+            });
+        }
+        return; // Don't run standard grid filtering for Food
+    }
+    // ------------------------------
+
+    const container = document.querySelector(".products-section .product-grid");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    let filtered = allProducts;
+
+    if (category !== "All") {
+        filtered = allProducts.filter(p => p.category === category);
+    }
+
+    if (filtered.length === 0) {
+        container.innerHTML = "<p style='grid-column:1/-1;text-align:center;'>No products found</p>";
+        return;
+    }
+
+    filtered.forEach(p => {
+        container.innerHTML += `
+            <div class="product-card">
+                <img src="${p.image}" />
+                <h3>${p.name}</h3>
+                <p class="price">PKR ${p.price}</p>
+                <p class="location"><i class="fas fa-map-marker-alt"></i> ${p.area}, ${p.city}</p>
+                <div class="buttons">
+                    <button class="compare-btn">Compare</button>
+                    <a href="https://wa.me/923330360487" class="whatsapp-btn">WhatsApp</a>
+                </div>
+            </div>
+        `;
+    });
+}
+
+
+// ===== SYNC UI =====
+function setActive(category) {
+
+    dropdownItems.forEach(i => {
+        i.classList.toggle("active", normalizeCategory(i.innerText) === category);
+    });
+
+    categoryBoxes.forEach(b => {
+        b.classList.toggle("active", b.getAttribute("data-value") === category);
+    });
+
+    barItems.forEach(b => {
+        b.classList.toggle("active", normalizeCategory(b.innerText) === category);
+    });
+}
+
+
+// ===== DROPDOWN CLICK =====
+dropdownItems.forEach(item => {
+    item.addEventListener("click", (e) => {
+
+        const category = normalizeCategory(item.innerText);
+
+        // ripple
+        const rect = item.getBoundingClientRect();
+        item.style.setProperty('--x', e.clientX - rect.left + 'px');
+        item.style.setProperty('--y', e.clientY - rect.top + 'px');
+
+        item.classList.remove("ripple");
+        void item.offsetWidth;
+        item.classList.add("ripple");
+
+        setActive(category);
+        filterProducts(category);
+
+        dropdownMenu.classList.remove("show", "left-open");
+        document.body.classList.remove("dropdown-open");
+    });
+});
+
+
+// ===== CATEGORY BOX CLICK =====
+categoryBoxes.forEach(box => {
+    box.addEventListener("click", () => {
+
+        const category = box.getAttribute("data-value");
+
+        setActive(category);
+        filterProducts(category);
+    });
+});
+
+
+// ===== HORIZONTAL BAR CLICK =====
+barItems.forEach(item => {
+    item.addEventListener("click", () => {
+
+        const category = normalizeCategory(item.innerText);
+
+        setActive(category);
+        filterProducts(category);
+    });
+});
+
+
+// ===== SMART DROPDOWN =====
+dropdownToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    dropdownMenu.classList.remove("left-open");
+    dropdownMenu.classList.add("show");
+
+    setTimeout(() => {
+        const rect = dropdownMenu.getBoundingClientRect();
+
+        if (rect.right > window.innerWidth) {
+            dropdownMenu.classList.add("left-open");
+        }
+    }, 10);
+
+    document.body.classList.add("dropdown-open");
+});
+
+
+// ===== CLOSE DROPDOWN =====
+document.addEventListener("click", (e) => {
+    if (!e.target.closest(".category-dropdown")) {
+        dropdownMenu.classList.remove("show", "left-open");
+        document.body.classList.remove("dropdown-open");
+    }
+});
         </script>
         <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
 
