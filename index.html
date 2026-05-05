@@ -228,56 +228,79 @@
             </div>
 
         </div>
-    </nav>
+        <!-- Category Bar -->
+        <div class="bg-[#052C22] px-2 py-2 flex items-center relative z-50">
 
-
-
-
-
-    <!-- Category Bar -->
-    <div class="bg-[#052C22] px-2 py-3 flex items-center text-sm overflow-x-auto relative z-50">
-        <div class="flex items-center gap-x-1 overflow-x-auto whitespace-nowrap w-full no-scrollbar">
-            <div class="flex items-center gap-x-0.5 text-white flex-1 text-[13px] xl:text-sm justify-between">
-                <div onclick="showPage('home')"
-                    class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer font-medium">Home</div>
-                <div onclick="showPage('groceries')"
-                    class="px-1 py-1 bg-emerald-700 text-white rounded-2xl flex items-center cursor-pointer">
-                    <span class="px-2 text-[13px] xl:text-sm font-semibold">All Categories</span>
+            <!-- Quick Links Dropdown (Outside scrolling area) -->
+            <div class="relative group flex-shrink-0 text-white mr-1 z-[100000]">
+                <div
+                    class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer text-xs xl:text-[13px] font-medium flex items-center gap-1">
+                    <i class="fas fa-bars"></i>
+                    <span>Quick Links</span>
+                    <i class="fas fa-chevron-down text-[10px]"></i>
                 </div>
-                <div onclick="showPage('groceries')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Daily Groceries</div>
-                <div onclick="showPage('foodstuffs')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Food Stuffs</div>
-                <div onclick="showPage('electronics')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Electronics</div>
-                <div onclick="showPage('mobiles')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Mobiles</div>
-                <div onclick="showPage('laptops')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Laptops</div>
-                <div onclick="showPage('fashion')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Fashion
-                </div>
-                <div onclick="showPage('cosmetics')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Cosmetics
-                </div>
-                <div onclick="showPage('babycare')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Baby Care
+
+                <div
+                    class="absolute left-0 top-full mt-1 w-48 bg-white text-gray-800 rounded-xl shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <ul class="py-2 text-sm font-normal">
+                        <li><a href="#" onclick="showPage('home')"
+                                class="block px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">Home</a></li>
+                        <li><a href="#" onclick="showPage('groceries')"
+                                class="block px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">Categories</a></li>
+                        <li><a href="#" onclick="performGlobalSearch()"
+                                class="block px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">Price Comparison</a>
+                        </li>
+                        <li><a href="#" onclick="showSimplePage('travel')"
+                                class="block px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">Travel & Tours</a>
+                        </li>
+                        <li><a href="#" onclick="showSimplePage('blog')"
+                                class="block px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">Blogs</a></li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- Visitor Counter -->
-            <div class="hidden md:flex items-center ml-2 xl:ml-4">
-                <div class="animated-border-box">
-                    <div class="animated-border-content px-3 py-1.5 flex items-center gap-x-2 text-white">
-                        <span class="text-[13px] xl:text-sm text-emerald-100">Total Visitors</span>
-                        <span id="visitor-count"
-                            class="font-bold text-emerald-400 tracking-wider text-sm xl:text-base">5,076</span>
-                        <i class="fas fa-eye text-emerald-400 text-[13px] xl:text-sm"></i>
+            <div class="flex items-center gap-x-1 overflow-x-auto whitespace-nowrap w-full no-scrollbar">
+                <div class="flex items-center gap-x-0.5 text-white flex-1 text-xs xl:text-[13px] justify-between">
+                    <div onclick="showPage('groceries')"
+                        class="px-1 py-0.5 bg-emerald-700 text-white rounded-2xl flex items-center cursor-pointer">
+                        <span class="px-2 text-xs xl:text-[13px] font-semibold">All Categories</span>
+                    </div>
+                    <div onclick="showPage('groceries')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Daily Groceries</div>
+                    <div onclick="showPage('foodstuffs')"
+                        class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Food Stuffs</div>
+                    <div onclick="showPage('electronics')"
+                        class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Electronics</div>
+                    <div onclick="showPage('mobiles')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Mobiles</div>
+                    <div onclick="showPage('laptops')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Laptops</div>
+                    <div onclick="showPage('fashion')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Fashion
+                    </div>
+                    <div onclick="showPage('cosmetics')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Cosmetics
+                    </div>
+                    <div onclick="showPage('babycare')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Baby Care
+                    </div>
+                </div>
+
+                <!-- Visitor Counter -->
+                <div class="hidden md:flex items-center ml-2 xl:ml-4">
+                    <div class="animated-border-box">
+                        <div class="animated-border-content px-3 py-1 flex items-center gap-x-2 text-white">
+                            <span class="text-xs xl:text-[13px] text-emerald-100">Total Visitors</span>
+                            <span id="visitor-count"
+                                class="font-bold text-emerald-400 tracking-wider text-[13px] xl:text-sm">5,076</span>
+                            <i class="fas fa-eye text-emerald-400 text-xs xl:text-[13px]"></i>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </nav>
 
     <!-- HOME PAGE -->
@@ -1056,14 +1079,12 @@
                         <h3 class="text-[#eab308] font-semibold mb-5">Quick Links</h3>
                         <ul class="space-y-3 text-sm text-gray-400">
                             <li><a href="#" onclick="showPage('home')" class="hover:text-white">Home</a></li>
-                            <li><a href="#" onclick="showPage('groceries')" class="hover:text-white">Daily Groceries</a>
-                            </li>
-                            <li><a href="#" onclick="showPage('electronics')" class="hover:text-white">Electronics</a>
-                            </li>
-                            <li><a href="#" onclick="showPage('mobiles')" class="hover:text-white">Mobiles</a></li>
-                            <li><a href="#" onclick="showPage('laptops')" class="hover:text-white">Laptops</a></li>
+                            <li><a href="#" onclick="showPage('groceries')" class="hover:text-white">Categories</a></li>
+                            <li><a href="#" onclick="performGlobalSearch()" class="hover:text-white">Price
+                                    Comparison</a></li>
                             <li><a href="#" onclick="showSimplePage('travel')" class="hover:text-white">Travel &
                                     Tours</a></li>
+                            <li><a href="#" onclick="showSimplePage('blog')" class="hover:text-white">Blogs</a></li>
                         </ul>
                     </div>
 
@@ -1131,6 +1152,21 @@
 
             </div>
         </footer>
+
+        <!-- Floating Action Buttons -->
+        <div class="fixed bottom-6 right-6 z-[99999] flex flex-row items-center gap-3">
+            <!-- Go to Top Button -->
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" id="goTopBtn"
+                class="w-12 h-12 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 opacity-0 invisible transform translate-y-4">
+                <i class="fas fa-chevron-up text-lg"></i>
+            </button>
+
+            <!-- WhatsApp Button -->
+            <a href="https://wa.me/" target="_blank"
+                class="w-14 h-14 bg-[#25D366] hover:bg-[#1ebe57] text-white rounded-full shadow-lg flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                <i class="fab fa-whatsapp text-3xl"></i>
+            </a>
+        </div>
 
         <script>
             function animateVisitorCounter() {
@@ -1480,6 +1516,20 @@
                     }
                 });
             }
+
+            /* =========================
+               🚀 FLOATING BUTTONS LOGIC
+            ========================= */
+            window.addEventListener('scroll', () => {
+                const goTopBtn = document.getElementById('goTopBtn');
+                if (window.scrollY > 300) {
+                    goTopBtn.classList.remove('opacity-0', 'invisible', 'translate-y-4');
+                    goTopBtn.classList.add('opacity-100', 'visible', 'translate-y-0');
+                } else {
+                    goTopBtn.classList.add('opacity-0', 'invisible', 'translate-y-4');
+                    goTopBtn.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                }
+            });
         </script>
 </body>
 
