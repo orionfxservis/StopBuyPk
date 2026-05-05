@@ -52,6 +52,91 @@
             background: #059669;
             border-radius: 10px;
         }
+
+        /* Hide scrollbar for category navigation */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .filter-btn {
+            border-color: #d1d5db;
+        }
+
+        .filter-btn.active {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        /* Animated Border for Visitor Counter */
+        .animated-border-box {
+            position: relative;
+            border-radius: 9999px;
+            overflow: hidden;
+            padding: 1.5px;
+            display: inline-flex;
+        }
+
+        .animated-border-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, transparent, transparent, #34d399);
+            animation: border-rotate 3s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes border-rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animated-border-content {
+            position: relative;
+            background-color: #052C22;
+            border-radius: 9999px;
+            z-index: 1;
+        }
+
+        /* Login Icon Hover Animation */
+        .login-icon-container {
+            border: 2px solid #34d399;
+            transition: all 0.3s ease;
+        }
+
+        .login-icon-container:hover {
+            transform: scale(1.05);
+            background-color: rgba(52, 211, 153, 0.1);
+        }
+
+        .login-icon-container:hover i {
+            animation: icon-wiggle 0.3s ease-in-out infinite alternate;
+        }
+
+        @keyframes icon-wiggle {
+            0% {
+                transform: rotate(-15deg);
+            }
+
+            100% {
+                transform: rotate(15deg);
+            }
+        }
     </style>
 </head>
 
@@ -59,13 +144,15 @@
 
     <!-- Top Navigation Bar -->
     <nav class="bg-[#0A3D2A] text-white sticky top-0 z-[99999]">
-        <div class="max-w-screen-2xl mx-auto px-4 py-2 sm:py-0 sm:h-[60px] flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-3 gap-x-2 sm:gap-4">
+        <div
+            class="max-w-screen-2xl mx-auto px-4 py-2 sm:py-0 sm:h-[60px] flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-3 gap-x-2 sm:gap-4">
 
             <!-- LEFT: Logo -->
             <div class="flex items-center gap-2 flex-shrink-0 order-1 sm:order-none">
 
                 <div class="bg-white p-1 rounded-xl shadow-sm w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center">
-                    <img src="./images/logo/stopbuy-logo.png" alt="StopBuy" class="h-6 w-6 sm:h-7 sm:w-7 object-contain">
+                    <img src="./images/logo/stopbuy-logo.png" alt="StopBuy"
+                        class="h-6 w-6 sm:h-7 sm:w-7 object-contain">
                 </div>
 
                 <div class="flex flex-col leading-tight">
@@ -112,7 +199,8 @@
                     class="flex items-center gap-1.5 px-2 sm:px-3 h-[38px] hover:bg-white/10 rounded-xl cursor-pointer text-sm">
                     <i class="fas fa-balance-scale text-emerald-400"></i>
                     <span class="hidden md:inline">Compare</span>
-                    <span class="bg-emerald-600 text-white text-[10px] sm:text-xs font-bold px-1.5 py-0.5 rounded-full">3</span>
+                    <span
+                        class="bg-emerald-600 text-white text-[10px] sm:text-xs font-bold px-1.5 py-0.5 rounded-full">3</span>
                 </div>
 
                 <!-- Alerts -->
@@ -133,8 +221,8 @@
 
                 <!-- Login Profile Icon -->
                 <div onclick="showLoginModal()"
-                    class="flex items-center justify-center w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] border border-white/20 hover:bg-white/10 rounded-full cursor-pointer transition-colors">
-                    <i class="fas fa-user text-emerald-400 text-xs sm:text-base"></i>
+                    class="login-icon-container flex items-center justify-center w-[34px] h-[34px] sm:w-[42px] sm:h-[42px] rounded-full cursor-pointer bg-transparent">
+                    <i class="fas fa-user-shield text-emerald-400 text-sm sm:text-lg"></i>
                 </div>
 
             </div>
@@ -147,47 +235,44 @@
 
 
     <!-- Category Bar -->
-    <div class="bg-[#052C22] px-4 py-3 flex items-center text-sm overflow-x-auto relative z-50">
-        <div class="flex items-center gap-x-2 overflow-x-auto whitespace-nowrap w-full">
-            <div class="flex items-center gap-x-1 text-white flex-1">
+    <div class="bg-[#052C22] px-2 py-3 flex items-center text-sm overflow-x-auto relative z-50">
+        <div class="flex items-center gap-x-1 overflow-x-auto whitespace-nowrap w-full no-scrollbar">
+            <div class="flex items-center gap-x-0.5 text-white flex-1 text-[13px] xl:text-sm justify-between">
                 <div onclick="showPage('home')"
-                    class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer font-medium">Home</div>
+                    class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer font-medium">Home</div>
                 <div onclick="showPage('groceries')"
-                    class="px-3 py-1 bg-emerald-700 text-white rounded-2xl flex items-center cursor-pointer">
-                    <span class="px-3 text-sm font-semibold">All Categories</span>
+                    class="px-1 py-1 bg-emerald-700 text-white rounded-2xl flex items-center cursor-pointer">
+                    <span class="px-2 text-[13px] xl:text-sm font-semibold">All Categories</span>
                 </div>
-                <div onclick="showPage('groceries')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
+                <div onclick="showPage('groceries')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
                     Daily Groceries</div>
-                <div onclick="showPage('foodstuffs')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
+                <div onclick="showPage('foodstuffs')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
                     Food Stuffs</div>
-                <div onclick="showPage('electronics')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
+                <div onclick="showPage('electronics')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
                     Electronics</div>
-                <div onclick="showPage('mobiles')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
+                <div onclick="showPage('mobiles')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
                     Mobiles</div>
-                <div onclick="showPage('laptops')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
+                <div onclick="showPage('laptops')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
                     Laptops</div>
-
-
-                <div onclick="showPage('fashion')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
+                <div onclick="showPage('fashion')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
                     Fashion
                 </div>
-
-                <div onclick="showPage('cosmetics')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
+                <div onclick="showPage('cosmetics')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
                     Cosmetics
                 </div>
-
-                <div onclick="showPage('babycare')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
+                <div onclick="showPage('babycare')" class="px-2 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
                     Baby Care
                 </div>
             </div>
 
             <!-- Visitor Counter -->
-            <div class="hidden md:flex items-center ml-4">
-                <div class="flex items-center gap-x-2 px-4 py-1.5 bg-white/10 rounded-3xl">
-                    <i class="fas fa-users text-emerald-400"></i>
-                    <div>
-                        <span id="visitor-count" class="font-bold text-white">1,284,392</span>
-                        <span class="text-xs text-emerald-300 ml-1">visitors today</span>
+            <div class="hidden md:flex items-center ml-2 xl:ml-4">
+                <div class="animated-border-box">
+                    <div class="animated-border-content px-3 py-1.5 flex items-center gap-x-2 text-white">
+                        <span class="text-[13px] xl:text-sm text-emerald-100">Total Visitors</span>
+                        <span id="visitor-count"
+                            class="font-bold text-emerald-400 tracking-wider text-sm xl:text-base">5,076</span>
+                        <i class="fas fa-eye text-emerald-400 text-[13px] xl:text-sm"></i>
                     </div>
                 </div>
             </div>
@@ -210,7 +295,6 @@
 
                             <img src="images/banner/mobiles.jpg"
                                 class="w-full h-auto rounded-3xl shadow-md border border-emerald-200">
-
                             <img src="images/banner/food.jpg"
                                 class="w-full h-auto rounded-3xl shadow-md border border-emerald-200">
                             <img src="images/banner/vehicles.jpg"
@@ -231,7 +315,7 @@
                     <div
                         class="relative w-full rounded-3xl shadow-sm border border-emerald-200 overflow-hidden bg-[#F4F9F2] mb-6 group">
 
-                        <div id="promo-carousel" class="flex w-full transition-transform duration-500 ease-in-out">
+                        <div id="promo-carousel" class="flex w-full">
                             <!-- Slide 1 -->
                             <div class="w-full shrink-0">
                                 <img src="images/promotion/cattle-farm-advertisement-01.png"
@@ -245,7 +329,8 @@
                             </div>
                             <!-- Slide 3 -->
                             <div class="w-full shrink-0">
-                                <img src="images/promotion/go-electric-ride-the-future.png" alt="Go Electric Promo Banner"
+                                <img src="images/promotion/go-electric-ride-the-future.png"
+                                    alt="Go Electric Promo Banner"
                                     class="w-full h-[200px] sm:h-[250px] md:h-[320px] object-cover md:object-fill">
                             </div>
                         </div>
@@ -366,96 +451,243 @@
             </div>
         </div>
 
-        <!-- Top Price Comparison -->
-        <div class="max-w-screen-2xl mx-auto px-4 pt-9">
-            <div class="flex justify-between items-end mb-4">
-                <span class="section-header">Top Price Comparison</span>
-                <button onclick="showPage('mobiles')" class="text-sm text-emerald-700 hover:underline">View all</button>
-            </div>
 
-            <div class="bg-white rounded-3xl p-6 modern-shadow border border-emerald-100">
-                <div class="flex flex-col md:flex-row gap-6">
-                    <div class="md:w-56 flex-shrink-0">
-                        <div class="flex gap-4">
-                            <img src="https://picsum.photos/id/20/140/160" alt="iPhone 15"
-                                class="w-32 h-36 object-cover rounded-2xl border border-emerald-100">
-                            <div class="flex-1 pt-1">
-                                <div class="font-semibold text-xl">Apple iPhone 15 (128GB)</div>
-                                <div class="flex items-center gap-x-1 mt-1 text-amber-400"><i class="fas fa-star"></i><i
-                                        class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                        class="fas fa-star-half-alt"></i></div>
-                            </div>
+        <!-- AI Smart Recommendations -->
+        <div class="max-w-screen-2xl mx-auto px-4 pt-6">
+            <div
+                class="bg-gradient-to-r from-emerald-50 to-emerald-100 border border-emerald-200 rounded-3xl p-5 shadow-sm">
+
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-emerald-600 text-white flex items-center justify-center rounded-xl">
+                            <i class="fas fa-brain text-sm"></i>
                         </div>
+                        <span class="font-semibold text-lg text-emerald-800">Smart Recommendations</span>
                     </div>
 
-                    <div class="flex-1">
-                        <div class="text-xs text-emerald-700 font-semibold mb-3">Cheapest Today • <span
-                                class="text-emerald-500 font-bold">Rs. 257,999</span></div>
-
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            <div class="border border-emerald-100 bg-emerald-50 rounded-2xl p-3">
-                                <div class="flex items-center gap-x-2">
-                                    <div
-                                        class="w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                                        D</div>
-                                    <div>
-                                        <div class="font-semibold text-sm">Daraz</div>
-                                        <div class="font-bold text-emerald-700">Rs. 257,999</div>
-                                    </div>
-                                </div>
-                                <button
-                                    onclick="addToCompare({id:1,name:'Apple iPhone 15 (128GB)',price:257999,store:'Daraz'})"
-                                    class="mt-2 w-full py-1 text-xs bg-emerald-700 text-white font-medium rounded-2xl">Visit
-                                    Store</button>
-                            </div>
-                            <div class="border border-gray-200 rounded-2xl p-3">
-                                <div class="flex items-center gap-x-2">
-                                    <div
-                                        class="w-7 h-7 bg-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                                        P</div>
-                                    <div>
-                                        <div class="font-semibold text-sm">PriceOye</div>
-                                        <div class="font-bold">Rs. 259,999</div>
-                                    </div>
-                                </div>
-                                <button
-                                    onclick="addToCompare({id:2,name:'Apple iPhone 15 (128GB)',price:259999,store:'PriceOye'})"
-                                    class="mt-2 w-full py-1 text-xs border border-emerald-300 text-emerald-700 font-medium rounded-2xl">Visit
-                                    Store</button>
-                            </div>
-                            <div class="border border-gray-200 rounded-2xl p-3">
-                                <div class="flex items-center gap-x-2">
-                                    <div
-                                        class="w-7 h-7 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                                        M</div>
-                                    <div>
-                                        <div class="font-semibold text-sm">Mega.pk</div>
-                                        <div class="font-bold">Rs. 264,999</div>
-                                    </div>
-                                </div>
-                                <button
-                                    onclick="addToCompare({id:3,name:'Apple iPhone 15 (128GB)',price:264999,store:'Mega.pk'})"
-                                    class="mt-2 w-full py-1 text-xs border border-emerald-300 text-emerald-700 font-medium rounded-2xl">Visit
-                                    Store</button>
-                            </div>
-                            <div class="border border-gray-200 rounded-2xl p-3">
-                                <div class="flex items-center gap-x-2">
-                                    <div
-                                        class="w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                                        S</div>
-                                    <div>
-                                        <div class="font-semibold text-sm">Shophive</div>
-                                        <div class="font-bold">Rs. 271,999</div>
-                                    </div>
-                                </div>
-                                <button
-                                    onclick="addToCompare({id:4,name:'Apple iPhone 15 (128GB)',price:271999,store:'Shophive'})"
-                                    class="mt-2 w-full py-1 text-xs border border-emerald-300 text-emerald-700 font-medium rounded-2xl">Visit
-                                    Store</button>
-                            </div>
-                        </div>
+                    <div class="text-xs text-emerald-600 font-medium">
+                        Based on trends in Karachi
                     </div>
                 </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                    <!-- BEST DEAL -->
+                    <div class="bg-white rounded-2xl p-4 border border-emerald-100 hover:shadow-md transition">
+                        <div class="text-xs text-gray-500 mb-1">🔥 Best Deal Today</div>
+                        <div class="font-semibold">iPhone 15 (128GB)</div>
+                        <div class="text-emerald-700 font-bold text-lg">Rs. 257,999</div>
+                        <div class="text-xs text-gray-500">Available at Daraz</div>
+                    </div>
+
+                    <!-- BEST VALUE -->
+                    <div class="bg-white rounded-2xl p-4 border border-emerald-100 hover:shadow-md transition">
+                        <div class="text-xs text-gray-500 mb-1">💎 Best Value</div>
+                        <div class="font-semibold">Samsung A54</div>
+                        <div class="text-emerald-700 font-bold text-lg">Rs. 94,999</div>
+                        <div class="text-xs text-gray-500">Best performance/price</div>
+                    </div>
+
+                    <!-- TRENDING -->
+                    <div class="bg-white rounded-2xl p-4 border border-emerald-100 hover:shadow-md transition">
+                        <div class="text-xs text-gray-500 mb-1">📈 Trending Now</div>
+                        <div class="font-semibold">Air Fryer (Kenwood)</div>
+                        <div class="text-emerald-700 font-bold text-lg">Rs. 18,500</div>
+                        <div class="text-xs text-gray-500">High demand today</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- Top Price Comparison -->
+        <div class="max-w-screen-2xl mx-auto px-4 pt-9">
+
+            <!-- Header -->
+            <div class="mb-5">
+                <div class="text-xs text-red-500 tracking-widest font-bold mb-1">
+                    POWERED BY REAL-TIME DATA
+                </div>
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                    <div>
+                        <div class="text-3xl font-bold text-[#0A3D2A]">Price Comparison</div>
+                        <div class="text-gray-500 text-sm">Find the lowest prices near you</div>
+                    </div>
+
+                    <!-- Filters -->
+                    <!-- Filters -->
+                    <div class="flex flex-wrap items-center gap-2 w-full">
+
+                        <!-- Category Buttons -->
+                        <button onclick="filterCategory('all', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm bg-emerald-700 text-white">
+                            All
+                        </button>
+
+                        <button onclick="filterCategory('food', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm">
+                            Food
+                        </button>
+
+                        <button onclick="filterCategory('groceries', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm">
+                            Groceries
+                        </button>
+
+                        <button onclick="filterCategory('mobiles', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm">
+                            Mobiles
+                        </button>
+
+                        <!-- NEW (Moved from dropdown) -->
+                        <button onclick="filterCategory('electronics', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm">
+                            Electronics
+                        </button>
+
+                        <button onclick="filterCategory('fashion', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm">
+                            Fashion
+                        </button>
+
+                        <button onclick="filterCategory('appliances', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm">
+                            Home Appliances
+                        </button>
+
+                        <!-- 🔍 SEARCH BAR (NEW) -->
+                        <div class="relative ml-auto">
+                            <input type="text" id="productSearch" placeholder="Search products..."
+                                onkeyup="searchProducts(this.value)"
+                                class="pl-10 pr-3 py-1.5 rounded-full border text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
+
+                            <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                        </div>
+
+                        <!-- SORT -->
+                        <select onchange="sortProducts(this.value)"
+                            class="px-4 py-1.5 rounded-full border text-sm bg-white">
+                            <option value="low">Lowest Price</option>
+                            <option value="high">Highest Price</option>
+                            <option value="near">Closest First</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+
+                <!-- Card -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden shadow border" data-category="mobiles"
+                    data-price="229999" data-distance="3">
+
+                    <div class="relative">
+                        <img src="https://picsum.photos/400/250?random=1" class="w-full h-48 object-cover">
+
+                        <div
+                            class="absolute bottom-3 left-3 bg-white text-red-500 text-xs px-3 py-1 rounded-full font-bold">
+                            FROM Rs 229,999
+                        </div>
+
+                        <div
+                            class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow cursor-pointer">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+
+                    <div class="p-4">
+                        <div class="font-semibold text-lg">Samsung Galaxy S24</div>
+                        <div class="text-xs text-red-500 mt-1">MOBILES • Karachi</div>
+                    </div>
+                </div>
+
+                <!-- Card -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden shadow border" data-category="mobiles"
+                    data-price="444999" data-distance="5">
+
+                    <div class="relative">
+                        <img src="https://picsum.photos/400/250?random=2" class="w-full h-48 object-cover">
+
+                        <div
+                            class="absolute bottom-3 left-3 bg-white text-red-500 text-xs px-3 py-1 rounded-full font-bold">
+                            FROM Rs 444,999
+                        </div>
+
+                        <div
+                            class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+
+                    <div class="p-4">
+                        <div class="font-semibold text-lg">iPhone 16 Pro</div>
+                        <div class="text-xs text-red-500 mt-1">MOBILES • Karachi</div>
+                    </div>
+                </div>
+
+                <!-- Card -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden shadow border" data-category="mobiles"
+                    data-price="119999" data-distance="2">
+
+                    <div class="relative">
+                        <img src="https://picsum.photos/400/250?random=3" class="w-full h-48 object-cover">
+
+                        <div
+                            class="absolute bottom-3 left-3 bg-white text-red-500 text-xs px-3 py-1 rounded-full font-bold">
+                            FROM Rs 119,999
+                        </div>
+
+                        <div
+                            class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+
+                    <div class="p-4">
+                        <div class="font-semibold text-lg">Vivo V40 Pro</div>
+                        <div class="text-xs text-red-500 mt-1">MOBILES • Karachi</div>
+                    </div>
+                </div>
+
+                <!-- FOOD -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden shadow border" data-category="food"
+                    data-price="850" data-distance="1">
+
+                    <div class="relative">
+                        <img src="https://picsum.photos/400/250?food=1" class="w-full h-48 object-cover">
+
+                        <div
+                            class="absolute bottom-3 left-3 bg-white text-red-500 text-xs px-3 py-1 rounded-full font-bold">
+                            FROM Rs 850
+                        </div>
+                    </div>
+
+                    <div class="p-4">
+                        <div class="font-semibold text-lg">BBQ Platter Deal</div>
+                        <div class="text-xs text-red-500 mt-1">FOOD • Karachi</div>
+                    </div>
+                </div>
+
+                <!-- GROCERIES -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden shadow border" data-category="groceries"
+                    data-price="320" data-distance="2">
+
+                    <div class="relative">
+                        <img src="https://picsum.photos/400/250?grocery=1" class="w-full h-48 object-cover">
+
+                        <div
+                            class="absolute bottom-3 left-3 bg-white text-red-500 text-xs px-3 py-1 rounded-full font-bold">
+                            FROM Rs 320
+                        </div>
+                    </div>
+
+                    <div class="p-4">
+                        <div class="font-semibold text-lg">Cooking Oil 1L</div>
+                        <div class="text-xs text-red-500 mt-1">GROCERIES • Karachi</div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -904,7 +1136,7 @@
             function animateVisitorCounter() {
                 const el = document.getElementById('visitor-count');
                 if (!el) return;
-                let num = 1284392;
+                let num = 5076;
                 setInterval(() => {
                     num += Math.floor(Math.random() * 3) + 1;
                     el.innerHTML = num.toLocaleString();
@@ -999,65 +1231,170 @@
                 });
             }
 
-            let currentSlide = 0;
-            const totalSlides = 3;
+            /* =========================
+   🔥 GLOBAL STATE
+========================= */
+            let currentCategory = 'all';
+            let currentSort = 'low';
+            let allCards = [];
+
+            /* =========================
+               🚀 INIT WEBSITE
+            ========================= */
+            window.addEventListener('DOMContentLoaded', () => {
+
+                // Store all product cards once
+                allCards = Array.from(document.querySelectorAll('.product-card'));
+
+                updateUI();
+
+                initCarousel();
+                startAutoSlide();
+
+                startSyncedInfiniteScroll();
+
+            });
+
+            /* =========================
+               🧠 MAIN UI ENGINE
+            ========================= */
+            function updateUI() {
+
+                let filtered = allCards.filter(card => {
+                    return currentCategory === 'all' || card.dataset.category === currentCategory;
+                });
+
+                // SORTING
+                if (currentSort === 'low') {
+                    filtered.sort((a, b) => a.dataset.price - b.dataset.price);
+                } else if (currentSort === 'high') {
+                    filtered.sort((a, b) => b.dataset.price - a.dataset.price);
+                } else {
+                    filtered.sort((a, b) => a.dataset.distance - b.dataset.distance);
+                }
+
+                const grid = document.getElementById('product-grid');
+                grid.innerHTML = '';
+
+                if (filtered.length === 0) {
+                    grid.innerHTML = `
+            <div class="col-span-full text-center text-gray-400 py-10">
+                No products found
+            </div>`;
+                    return;
+                }
+
+                filtered.forEach(card => grid.appendChild(card));
+            }
+
+            /* =========================
+               🎯 CATEGORY BUTTON CLICK
+            ========================= */
+            function filterCategory(category, btn) {
+                currentCategory = category;
+
+                // reset search
+                document.getElementById('productSearch').value = "";
+
+                // reset buttons
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-emerald-700', 'text-white');
+                });
+
+                btn.classList.add('bg-emerald-700', 'text-white');
+
+                updateUI();
+            }
+
+            /* =========================
+               📂 DROPDOWN CATEGORY
+            ========================= */
+            function filterFromDropdown(value) {
+
+                currentCategory = value || 'all';
+
+                // Remove button highlight
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-emerald-700', 'text-white');
+                });
+
+                updateUI();
+            }
+
+            /* =========================
+               📊 SORT PRODUCTS
+            ========================= */
+            function sortProducts(value) {
+                currentSort = value;
+                updateUI();
+            }
+
+            /* =========================
+               🎞️ HERO CAROUSEL (FIXED)
+            ========================= */
+            let currentSlide = 1;
             let slideInterval;
+            let totalSlides = 3;
             let isTransitioning = false;
 
             function initCarousel() {
                 const carousel = document.getElementById('promo-carousel');
                 if (!carousel) return;
-                
-                const firstSlideClone = carousel.children[0].cloneNode(true);
-                const lastSlideClone = carousel.children[carousel.children.length - 1].cloneNode(true);
-                
-                carousel.appendChild(firstSlideClone);
-                carousel.insertBefore(lastSlideClone, carousel.children[0]);
-                
+
+                const slides = Array.from(carousel.children);
+                totalSlides = slides.length;
+
+                // Clone first and last slides for seamless looping
+                const firstClone = slides[0].cloneNode(true);
+                const lastClone = slides[totalSlides - 1].cloneNode(true);
+
+                carousel.appendChild(firstClone);
+                carousel.insertBefore(lastClone, slides[0]);
+
+                // Start at the first actual slide (index 1)
                 carousel.style.transition = 'none';
                 carousel.style.transform = `translateX(-100%)`;
-                
-                carousel.offsetHeight; // force reflow
-                carousel.style.transition = 'transform 500ms ease-in-out';
-                
+
+                // Handle smooth snapping after transition
                 carousel.addEventListener('transitionend', () => {
                     isTransitioning = false;
-                    if (currentSlide === totalSlides) {
+                    if (currentSlide === totalSlides + 1) {
                         carousel.style.transition = 'none';
-                        currentSlide = 0;
+                        currentSlide = 1;
                         carousel.style.transform = `translateX(-100%)`;
-                        carousel.offsetHeight; // force reflow
-                        carousel.style.transition = 'transform 500ms ease-in-out';
-                    } else if (currentSlide === -1) {
+                    }
+                    if (currentSlide === 0) {
                         carousel.style.transition = 'none';
-                        currentSlide = totalSlides - 1;
-                        carousel.style.transform = `translateX(-${(currentSlide + 1) * 100}%)`;
-                        carousel.offsetHeight; // force reflow
-                        carousel.style.transition = 'transform 500ms ease-in-out';
+                        currentSlide = totalSlides;
+                        carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
                     }
                 });
             }
 
             function updateCarousel() {
                 const carousel = document.getElementById('promo-carousel');
+                if (!carousel) return;
+
+                carousel.style.transition = 'transform 0.5s ease-in-out';
+                carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+                updateDots();
+            }
+
+            function updateDots() {
                 const dots = document.querySelectorAll('.promo-dot');
-                if (carousel) {
-                    carousel.style.transform = `translateX(-${(currentSlide + 1) * 100}%)`;
-                }
-                
-                let dotIndex = currentSlide;
+                dots.forEach(dot => {
+                    dot.classList.remove('bg-emerald-700');
+                    dot.classList.add('bg-black/20');
+                });
+
+                let dotIndex = currentSlide - 1;
                 if (dotIndex === totalSlides) dotIndex = 0;
                 if (dotIndex === -1) dotIndex = totalSlides - 1;
 
-                dots.forEach((dot, index) => {
-                    if (index === dotIndex) {
-                        dot.classList.replace('bg-black/20', 'bg-emerald-700');
-                        dot.classList.remove('hover:bg-black/40');
-                    } else {
-                        dot.classList.replace('bg-emerald-700', 'bg-black/20');
-                        dot.classList.add('hover:bg-black/40');
-                    }
-                });
+                if (dots[dotIndex]) {
+                    dots[dotIndex].classList.remove('bg-black/20', 'hover:bg-black/40');
+                    dots[dotIndex].classList.add('bg-emerald-700');
+                }
             }
 
             function nextSlide() {
@@ -1065,7 +1402,7 @@
                 isTransitioning = true;
                 currentSlide++;
                 updateCarousel();
-                resetSlideInterval();
+                startAutoSlide();
             }
 
             function prevSlide() {
@@ -1073,49 +1410,75 @@
                 isTransitioning = true;
                 currentSlide--;
                 updateCarousel();
-                resetSlideInterval();
+                startAutoSlide();
             }
 
             function goToSlide(index) {
                 if (isTransitioning) return;
-                currentSlide = index;
+                currentSlide = index + 1;
                 updateCarousel();
-                resetSlideInterval();
+                startAutoSlide();
             }
 
-            function resetSlideInterval() {
+            function startAutoSlide() {
                 clearInterval(slideInterval);
-                slideInterval = setInterval(nextSlide, 5000);
+                slideInterval = setInterval(nextSlide, 4000);
             }
 
+            /* =========================
+               🔥 VERTICAL BANNER SCROLL (FIXED)
+            ========================= */
+            function startVerticalScroll() {
+                const container = document.getElementById('vertical-scroll');
+                if (!container) return;
+
+                let scrollAmount = 0;
+
+                setInterval(() => {
+                    scrollAmount += 1;
+                    container.scrollTop = scrollAmount;
+
+                    // Reset scroll (loop)
+                    if (scrollAmount >= container.scrollHeight / 2) {
+                        scrollAmount = 0;
+                    }
+
+                }, 30);
+            }
+
+            /* =========================
+               📍 LOCATION (OPTIONAL)
+            ========================= */
             function requestUserLocation() {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            console.log("Location access granted. Lat:", position.coords.latitude, "Lon:", position.coords.longitude);
-                            // Can add reverse geocoding logic here later to update the 'current-location' element
-                        },
-                        (error) => {
-                            console.error("Location access denied or failed.", error);
-                        }
+                        (pos) => console.log("Location:", pos.coords),
+                        () => console.log("Location denied")
                     );
                 }
             }
 
-            function showLocationModal() {
-                alert("Location selection modal coming soon!");
-            }
-
-            window.onload = () => {
-                initializeWebsite();
-                startSyncedInfiniteScroll();
-                initCarousel();
-                resetSlideInterval();
-                setTimeout(requestUserLocation, 500); // Ask shortly after page load
-            };
-
+            /* =========================
+               📩 NEWSLETTER
+            ========================= */
             function subscribeUser() {
                 alert("Subscribed successfully!");
+            }
+
+            function searchProducts(query) {
+                query = query.toLowerCase();
+
+                const cards = document.querySelectorAll('.product-card');
+
+                cards.forEach(card => {
+                    const name = card.innerText.toLowerCase();
+
+                    if (name.includes(query)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
             }
         </script>
 </body>
