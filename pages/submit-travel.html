@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Travel Package - Qeemat Point</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .submit-container {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="submit-container">
+    <a href="../index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+    <h1>Submit a Travel Package</h1>
+    
+    <form id="userTravelForm" style="display:flex; flex-direction:column; gap:10px;">
+        <!-- Package Details -->
+        <div style="display:flex; gap:10px;">
+            <input type="text" id="travelTitle" placeholder="Package Title *" required class="admin-input" style="flex:1;">
+            <select id="travelCategory" required class="admin-input" style="flex:1;">
+                <option value="">Category *</option>
+                <option value="Hajj">Hajj</option>
+                <option value="Umrah">Umrah</option>
+                <option value="Pakistan Tour">Pakistan Tour</option>
+                <option value="International Tour">International Tour</option>
+            </select>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <input type="text" id="travelDeparture" placeholder="Departure City *" required class="admin-input" style="flex:1;">
+            <input type="text" id="travelDestination" placeholder="Destination *" required class="admin-input" style="flex:1;">
+        </div>
+        
+        <!-- Pricing & Duration -->
+        <div style="display:flex; gap:10px;">
+            <input type="number" id="travelDuration" placeholder="Duration (Days) *" required class="admin-input" style="flex:1;">
+            <input type="number" id="travelPrice" placeholder="Price (PKR) *" required class="admin-input" style="flex:1;">
+            <select id="travelPriceType" class="admin-input" style="flex:1;">
+                <option value="Per Person">Per Person</option>
+                <option value="Per Family">Per Family</option>
+            </select>
+        </div>
+        
+        <!-- Travel Details -->
+        <div style="display:flex; gap:10px;">
+            <div id="travelTransportContainer" class="admin-input" style="flex:1; display:flex; align-items:center; gap:10px; padding: 0 10px; min-height: 40px; background-color: var(--input-bg, rgba(15, 23, 42, 0.5)); border: 1px solid var(--border-color, #334155); border-radius: 6px;">
+                <span style="color: #94a3b8; font-size: 0.9rem;">Transport:</span>
+                <label style="display:flex; align-items:center; gap:5px; font-size: 0.9rem; cursor:pointer;"><input type="checkbox" name="transportOption" value="Air"> Air</label>
+                <label style="display:flex; align-items:center; gap:5px; font-size: 0.9rem; cursor:pointer;"><input type="checkbox" name="transportOption" value="Bus"> Bus</label>
+                <label style="display:flex; align-items:center; gap:5px; font-size: 0.9rem; cursor:pointer;"><input type="checkbox" name="transportOption" value="Private"> Private</label>
+            </div>
+            <select id="travelHotel" class="admin-input" style="flex:1;">
+                <option value="None">Hotel Type</option>
+                <option value="3 Star">3 Star</option>
+                <option value="4 Star">4 Star</option>
+                <option value="5 Star">5 Star</option>
+            </select>
+            <select id="travelMeals" class="admin-input" style="flex:1;">
+                <option value="No">Meals Included: No</option>
+                <option value="Yes">Meals Included: Yes</option>
+            </select>
+        </div>
+        
+        <!-- Extra Features -->
+        <div style="display:flex; gap:10px;">
+            <select id="travelGuide" class="admin-input" style="flex:1;">
+                <option value="No">Guide Included: No</option>
+                <option value="Yes">Guide Included: Yes</option>
+            </select>
+            <input type="text" id="travelZiyarat" placeholder="Ziyarat / Tour Points" class="admin-input" style="flex:2;">
+        </div>
+        
+        <!-- Media -->
+        <div style="display:flex; gap:10px;">
+            <input type="url" id="travelImage" placeholder="Upload Image URL *" required class="admin-input" style="flex:1;">
+            <input type="url" id="travelBrochure" placeholder="Brochure URL (Optional)" class="admin-input" style="flex:1;">
+        </div>
+        
+        <!-- Description -->
+        <textarea id="travelDetails" rows="3" placeholder="Full Details *" required class="admin-input"></textarea>
+
+        <!-- Company Info -->
+        <div style="display:flex; gap:10px; margin-top: 5px;">
+            <input type="text" id="travelCompany" placeholder="Company Name *" required class="admin-input" style="flex:1;">
+            <input type="text" id="travelContact" placeholder="Contact Number *" required class="admin-input" style="flex:1;">
+        </div>
+        <div style="display:flex; gap:10px;">
+            <input type="text" id="travelWhatsapp" placeholder="WhatsApp Number" class="admin-input" style="flex:1;">
+            <input type="email" id="travelEmail" placeholder="Email" class="admin-input" style="flex:1;">
+        </div>
+        
+        <div style="margin-top: 15px;">
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px; font-weight: bold; font-size: 16px;">
+                Submit for Approval
+            </button>
+        </div>
+    </form>
+</div>
+
+<script src="../js/data-service.js"></script>
+<script src="../js/submit-travel.js"></script>
+</body>
+</html>

@@ -6,9 +6,11 @@ let products = [];
 let banners = [];
 let deals = [];
 let users = [];
+let blogs = [];
 let editIndex = -1; // State to track editing
 let userEditIndex = -1; // State to track user editing
 let dealEditIndex = -1; // State to track deal editing
+let blogEditIndex = -1; // State to track blog editing
 let broadcasts = [];
 let broadcastEditIndex = -1;
 
@@ -23,7 +25,6 @@ const btnSaveCategory = document.getElementById('btnSaveCategory');
 const btnCancelCategory = document.getElementById('btnCancelCategory');
 
 // Banner DOM
-let bannerEditIndex = -1;
 const bannerForm = document.getElementById('bannerForm');
 const bannerList = document.getElementById('bannerList');
 const bannerImageInput = document.getElementById('bannerImage');
@@ -241,10 +242,7 @@ function renderBanners() {
             </div>
             <img src="${banner.image}" alt="Banner" style="${displayType === 'vertical' ? 'object-fit: contain; max-height: 150px;' : ''}">
             ${displayLink ? `<a href="${displayLink}" target="_blank" class="banner-link"><i class="fa-solid fa-link"></i> ${displayLink}</a>` : ''}
-            <div style="margin-top: 10px; display: flex; gap: 5px; justify-content: center;">
-                <button class="edit-btn" onclick="editBanner(${index})"><i class="fa-solid fa-pen"></i> Edit</button>
-                <button class="delete-btn" onclick="deleteBanner(${index})"><i class="fa-solid fa-trash"></i> Delete</button>
-            </div>
+            <button class="delete-btn" onclick="deleteBanner(${index})" style="margin-top: 10px;"><i class="fa-solid fa-trash"></i> Delete</button>
         </div>
         `;
     }).join('');
@@ -256,47 +254,6 @@ async function deleteBanner(index) {
         await saveBanners();
     }
 }
-
-window.editBanner = (index) => {
-    bannerEditIndex = index;
-    const banner = banners[index];
-    
-    let displayType = banner.type;
-    let displayLink = banner.link;
-    if (displayLink && typeof displayLink === 'string' && displayLink.includes('|')) {
-        const parts = displayLink.split('|');
-        if (parts[0] === 'vertical' || parts[0] === 'horizontal') {
-            displayType = parts[0];
-            displayLink = parts.slice(1).join('|');
-        }
-    }
-
-    document.getElementById('bannerImage').value = banner.image || '';
-    if (document.getElementById('bannerLink')) document.getElementById('bannerLink').value = displayLink || '';
-    if (document.getElementById('bannerType')) document.getElementById('bannerType').value = displayType || 'horizontal';
-    
-    const btnSaveBanner = document.getElementById('btnSaveBanner');
-    if (btnSaveBanner) btnSaveBanner.textContent = "Update Banner";
-    const btnCancelBanner = document.getElementById('btnCancelBanner');
-    if (btnCancelBanner) btnCancelBanner.style.display = "inline-block";
-    
-    updateBannerPreview();
-    document.querySelector('#banners .form-container').scrollIntoView({ behavior: 'smooth' });
-};
-
-window.cancelBannerEdit = () => {
-    bannerEditIndex = -1;
-    if (bannerForm) bannerForm.reset();
-    document.getElementById('bannerImage').value = '';
-    if (document.getElementById('bannerImageUpload')) document.getElementById('bannerImageUpload').value = '';
-    
-    const btnSaveBanner = document.getElementById('btnSaveBanner');
-    if (btnSaveBanner) btnSaveBanner.textContent = "Add Banner";
-    const btnCancelBanner = document.getElementById('btnCancelBanner');
-    if (btnCancelBanner) btnCancelBanner.style.display = "none";
-    
-    updateBannerPreview();
-};
 
 function updateBannerPreview() {
     if (!bannerImageInput || !bannerPreview) return;
@@ -312,70 +269,20 @@ if (bannerImageInput) {
     bannerImageInput.addEventListener('input', updateBannerPreview);
 }
 
-const bannerImageUpload = document.getElementById('bannerImageUpload');
-if (bannerImageUpload) {
-    bannerImageUpload.addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            document.getElementById('bannerImage').value = '/images/banner/' + file.name;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const bannerPreview = document.getElementById('bannerPreview');
-                if (bannerPreview) {
-                    bannerPreview.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-width: 100%; border-radius: 10px;">`;
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-}
-
 if (bannerForm) {
-    bannerForm.addEventListener('submit', function (e) {
+    bannerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const image = document.getElementById('bannerImage').value;
         const rawLink = document.getElementById('bannerLink').value;
         const type = document.getElementById('bannerType') ? document.getElementById('bannerType').value : 'horizontal';
 
-        const img = new Image();
-        
-        const fileInput = document.getElementById('bannerImageUpload');
-        if (fileInput && fileInput.files && fileInput.files[0]) {
-            img.src = URL.createObjectURL(fileInput.files[0]);
-        } else {
-            img.src = image;
-        }
+        // Workaround: Backend might drop the 'type' field, so we pack it into the 'link' field
+        const link = `${type}|${rawLink}`;
 
-        img.onload = async function () {
-            if (type === "horizontal") {
-                if (img.width !== 720 || img.height !== 120) {
-                    alert("Recommended size: 720x120");
-                    return;
-                }
-            }
-
-            // Workaround: Backend might drop the 'type' field, so we pack it into the 'link' field
-            const link = `${type}|${rawLink}`;
-
-            if (bannerEditIndex === -1) {
-                banners.push({ image, link, type });
-            } else {
-                banners[bannerEditIndex] = { image, link, type };
-                cancelBannerEdit();
-            }
-            
-            await saveBanners();
-            if (bannerEditIndex === -1) {
-                bannerForm.reset();
-                document.getElementById('bannerImage').value = '';
-                if (document.getElementById('bannerImageUpload')) document.getElementById('bannerImageUpload').value = '';
-            }
-            updateBannerPreview();
-        };
-
-        img.onerror = function () {
-            alert("Invalid image URL");
-        };
+        banners.push({ image, link, type });
+        await saveBanners();
+        bannerForm.reset();
+        updateBannerPreview();
     });
 }
 
@@ -1327,3 +1234,606 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+// --- Blogs Functions ---
+const blogForm = document.getElementById('blogForm');
+const blogList = document.getElementById('blogList');
+const blogFormTitle = document.getElementById('blogFormTitle');
+const btnCancelBlog = document.getElementById('btnCancelBlog');
+const btnSaveBlog = document.getElementById('btnSaveBlog');
+
+const blogSearchInput = document.getElementById('blogSearchInput');
+const blogCategoryFilter = document.getElementById('blogCategoryFilter');
+
+if (blogSearchInput) {
+    blogSearchInput.addEventListener('input', renderBlogs);
+}
+if (blogCategoryFilter) {
+    blogCategoryFilter.addEventListener('change', renderBlogs);
+}
+
+const blogTitleEnInput = document.getElementById('blogTitleEn');
+const blogSlugInput = document.getElementById('blogSlug');
+
+if (blogTitleEnInput && blogSlugInput) {
+    blogTitleEnInput.addEventListener('input', (e) => {
+        const title = e.target.value;
+        const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+        blogSlugInput.value = slug;
+    });
+}
+
+async function saveBlogs() {
+    await DataService.saveBlogs(blogs);
+    renderBlogs();
+}
+
+function renderBlogs() {
+    if (!blogList) return;
+    
+    let filteredBlogs = blogs;
+    if (blogSearchInput && blogSearchInput.value) {
+        const searchTerm = blogSearchInput.value.toLowerCase();
+        filteredBlogs = filteredBlogs.filter(b => 
+            (b.titleEn && b.titleEn.toLowerCase().includes(searchTerm)) || 
+            (b.author && b.author.toLowerCase().includes(searchTerm))
+        );
+    }
+    
+    if (blogCategoryFilter && blogCategoryFilter.value !== 'All') {
+        filteredBlogs = filteredBlogs.filter(b => b.categoryEn === blogCategoryFilter.value);
+    }
+
+    blogList.innerHTML = filteredBlogs.map((blog, index) => {
+        const originalIndex = blogs.findIndex(b => b.id === blog.id);
+        
+        const catClass = blog.categoryEn ? blog.categoryEn.toLowerCase().replace(/\s+/g, '') : '';
+        const statusClass = blog.status ? blog.status.toLowerCase() : 'publish';
+        const displayStatus = blog.status || 'Publish';
+        const displayViews = blog.views || 0;
+
+        return `
+        <div class="product-row blog-row" style="padding: 10px 15px; align-items: center;">
+            <div><input type="checkbox" class="blog-checkbox" value="${blog.id}"></div>
+            <img src="${blog.image}" alt="Blog" style="width: 50px; height: 35px; object-fit: cover; border-radius: 4px;">
+            <div>
+                <span style="font-weight: 500;">${blog.titleEn}</span>
+                ${blog.slug ? `<br><small style="color:#aaa;">/${blog.slug}</small>` : ''}
+            </div>
+            <div>
+                <span class="category-tag ${catClass}">${blog.categoryEn || 'Uncategorized'}</span>
+            </div>
+            <div>
+                <span class="status-tag ${statusClass}">${displayStatus}</span>
+            </div>
+            <div>
+                <span style="color: #94a3b8;"><i class="fa-solid fa-eye" style="margin-right:5px;"></i>${displayViews}</span>
+            </div>
+            <div style="padding-left: 25px;">
+                <span style="color: var(--primary-color);">${blog.author}</span><br>
+                <small style="color: #aaa;">${new Date(blog.date).toLocaleDateString()}</small>
+            </div>
+            <div>
+                <button class="edit-btn" onclick="editBlog(${originalIndex})"><i class="fa-solid fa-pen"></i></button>
+                <button class="delete-btn" onclick="deleteBlog(${originalIndex})"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>
+    `}).join('');
+}
+
+window.deleteBlog = async (index) => {
+    if (confirm('Delete this blog post?')) {
+        blogs.splice(index, 1);
+        await saveBlogs();
+    }
+};
+
+window.editBlog = (index) => {
+    blogEditIndex = index;
+    const blog = blogs[index];
+
+    document.getElementById('blogImage').value = blog.image || '';
+    document.getElementById('blogAuthor').value = blog.author || '';
+    document.getElementById('blogCategoryDropdown').value = blog.categoryEn || '';
+    document.getElementById('blogCategoryUr').value = blog.categoryUr || '';
+    document.getElementById('blogTitleEn').value = blog.titleEn || '';
+    document.getElementById('blogSlug').value = blog.slug || '';
+    document.getElementById('blogTitleUr').value = blog.titleUr || '';
+    document.getElementById('blogSeoTitle').value = blog.seoTitle || '';
+    document.getElementById('blogMetaDesc').value = blog.metaDesc || '';
+    document.getElementById('blogStatus').value = blog.status || 'Publish';
+    document.getElementById('blogDescEn').value = blog.descEn || '';
+    document.getElementById('blogDescUr').value = blog.descUr || '';
+    document.getElementById('blogContentEn').value = blog.contentEn || '';
+    document.getElementById('blogContentUr').value = blog.contentUr || '';
+
+    if (blogFormTitle) blogFormTitle.textContent = "Edit Blog Post";
+    if (btnSaveBlog) btnSaveBlog.textContent = "Update Publish";
+    if (btnCancelBlog) btnCancelBlog.style.display = 'inline-block';
+
+    document.getElementById('blogs').querySelector('.form-container').scrollIntoView({ behavior: 'smooth' });
+};
+
+window.cancelBlogEdit = () => {
+    blogEditIndex = -1;
+    if (blogForm) blogForm.reset();
+    if (blogFormTitle) blogFormTitle.textContent = "Add New Blog Post";
+    if (btnSaveBlog) btnSaveBlog.textContent = "Publish";
+    if (btnCancelBlog) btnCancelBlog.style.display = 'none';
+};
+
+if (blogForm) {
+    blogForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const newBlog = {
+            id: blogEditIndex === -1 ? Date.now() : blogs[blogEditIndex].id,
+            image: document.getElementById('blogImage').value,
+            author: document.getElementById('blogAuthor').value,
+            categoryEn: document.getElementById('blogCategoryDropdown').value,
+            categoryUr: document.getElementById('blogCategoryUr').value,
+            titleEn: document.getElementById('blogTitleEn').value,
+            slug: document.getElementById('blogSlug').value,
+            titleUr: document.getElementById('blogTitleUr').value,
+            seoTitle: document.getElementById('blogSeoTitle').value,
+            metaDesc: document.getElementById('blogMetaDesc').value,
+            status: document.getElementById('blogStatus').value,
+            descEn: document.getElementById('blogDescEn').value,
+            descUr: document.getElementById('blogDescUr').value,
+            contentEn: document.getElementById('blogContentEn').value,
+            contentUr: document.getElementById('blogContentUr').value,
+            views: blogEditIndex === -1 ? 0 : (blogs[blogEditIndex].views || 0),
+            date: blogEditIndex === -1 ? Date.now() : blogs[blogEditIndex].date
+        };
+
+        if (blogEditIndex === -1) {
+            blogs.push(newBlog);
+        } else {
+            blogs[blogEditIndex] = newBlog;
+            cancelBlogEdit();
+        }
+
+        await saveBlogs();
+        if (blogEditIndex === -1) blogForm.reset();
+        alert('Blog saved successfully!');
+    });
+}
+
+// --- Travel Packages Functions ---
+let travelPackages = [];
+let travelEditIndex = -1;
+
+const travelForm = document.getElementById('travelForm');
+const travelList = document.getElementById('travelList');
+const travelFormTitle = document.getElementById('travelFormTitle');
+const btnCancelTravel = document.getElementById('btnCancelTravel');
+const btnSaveTravel = document.getElementById('btnSaveTravel');
+
+async function loadTravelData() {
+    try {
+        travelPackages = await DataService.getTravelPackages() || [];
+    } catch (e) {
+        console.warn("API failed for travel, using local storage");
+        travelPackages = JSON.parse(localStorage.getItem('travelpackages')) || [];
+    }
+    renderTravelPackages();
+}
+
+async function saveTravelPackages() {
+    await DataService.saveTravelPackages(travelPackages);
+    renderTravelPackages();
+    if(typeof updateAdminAlerts === 'function') updateAdminAlerts();
+}
+
+function renderTravelPackages() {
+    if (!travelList) return;
+    travelList.innerHTML = travelPackages.map((pkg, index) => {
+        const catClass = pkg.category ? pkg.category.toLowerCase().replace(/\s+/g, '') : '';
+        const levelBadge = pkg.listingType === 'Featured' ? '<span class="status-tag publish">⭐ Featured</span>' : '<span class="status-tag" style="background:#334155; color:#cbd5e1;">Basic</span>';
+        const verifiedBadge = pkg.verified === 'Yes' ? '<span style="color:#10b981; font-size:12px;">✅ Verified</span>' : '';
+        let statusBadge = '';
+        if (pkg.status === 'Draft') statusBadge = '<span class="status-tag draft">Draft</span>';
+        else if (pkg.status === 'Pending') statusBadge = '<span class="status-tag" style="background:#eab308; color:#fff;">Pending</span>';
+        else statusBadge = '<span class="status-tag publish">Publish</span>';
+
+        return `
+        <div class="product-row" style="grid-template-columns: 80px 2fr 1fr 1fr 1fr 1fr 80px; padding: 10px 15px; align-items: center;">
+            <img src="${pkg.image}" alt="Travel" style="width: 70px; height: 50px; object-fit: cover; border-radius: 6px;">
+            <div>
+                <span style="font-weight: 600; color:var(--primary-color);">${pkg.company} ${verifiedBadge}</span><br>
+                <span style="font-size:0.9rem;">${pkg.title}</span>
+            </div>
+            <div>
+                <span class="category-tag ${catClass}">${pkg.category}</span><br>
+                <small style="color:#aaa;">${pkg.departure} → ${pkg.destination}</small>
+            </div>
+            <div>
+                <span>${pkg.duration} Days</span>
+            </div>
+            <div>
+                <span style="font-weight:600; color:#4ade80;">Rs ${Number(pkg.price).toLocaleString()}</span><br>
+                <small style="color:#aaa;">${pkg.priceType}</small>
+            </div>
+            <div>
+                ${levelBadge}<br>
+                ${statusBadge}
+            </div>
+            <div>
+                ${pkg.status === 'Pending' ? `
+                    <button class="btn btn-primary" style="padding:4px 8px; font-size:10px; border-radius:4px;" onclick="updateTravelStatus(${index}, 'Publish')">Approve</button>
+                    <button class="btn btn-secondary" style="padding:4px 8px; font-size:10px; border-radius:4px; margin-top:5px; background:#ef4444;" onclick="updateTravelStatus(${index}, 'Draft')">Reject</button>
+                ` : `
+                    <button class="edit-btn" onclick="editTravel(${index})"><i class="fa-solid fa-pen"></i></button>
+                    <button class="delete-btn" onclick="deleteTravel(${index})"><i class="fa-solid fa-trash"></i></button>
+                `}
+            </div>
+        </div>
+    `}).join('');
+}
+
+window.updateTravelStatus = async (index, newStatus) => {
+    if (confirm(`Are you sure you want to ${newStatus === 'Publish' ? 'Approve' : 'Reject'} this package?`)) {
+        travelPackages[index].status = newStatus;
+        await saveTravelPackages();
+        updateAdminAlerts(); // Update dashboard alerts
+    }
+};
+
+window.updateAdminAlerts = () => {
+    const pendingCount = travelPackages.filter(p => p.status === 'Pending').length;
+    const badge = document.getElementById('travelPendingBadge');
+    if (badge) {
+        badge.textContent = pendingCount;
+        badge.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+    }
+};
+
+window.deleteTravel = async (index) => {
+    if (confirm('Delete this travel package?')) {
+        travelPackages.splice(index, 1);
+        await saveTravelPackages();
+    }
+};
+
+window.editTravel = (index) => {
+    travelEditIndex = index;
+    const pkg = travelPackages[index];
+
+    document.getElementById('travelCompany').value = pkg.company || '';
+    document.getElementById('travelContact').value = pkg.contact || '';
+    document.getElementById('travelWhatsapp').value = pkg.whatsapp || '';
+    document.getElementById('travelEmail').value = pkg.email || '';
+    document.getElementById('travelTitle').value = pkg.title || '';
+    document.getElementById('travelCategory').value = pkg.category || '';
+    document.getElementById('travelDeparture').value = pkg.departure || '';
+    document.getElementById('travelDestination').value = pkg.destination || '';
+    document.getElementById('travelDuration').value = pkg.duration || '';
+    document.getElementById('travelPrice').value = pkg.price || '';
+    document.getElementById('travelPriceType').value = pkg.priceType || 'Per Person';
+    document.getElementById('travelTransport').value = pkg.transport || 'Air';
+    document.getElementById('travelHotel').value = pkg.hotel || '3 Star';
+    document.getElementById('travelMeals').value = pkg.meals || 'No';
+    document.getElementById('travelGuide').value = pkg.guide || 'No';
+    document.getElementById('travelZiyarat').value = pkg.ziyarat || '';
+    document.getElementById('travelImage').value = pkg.image || '';
+    document.getElementById('travelBrochure').value = pkg.brochure || '';
+    document.getElementById('travelDetails').value = pkg.details || '';
+    document.getElementById('travelListingType').value = pkg.listingType || 'Basic';
+    document.getElementById('travelVerified').value = pkg.verified || 'No';
+    document.getElementById('travelStatus').value = pkg.status || 'Publish';
+
+    if (travelFormTitle) travelFormTitle.textContent = "Edit Travel Package";
+    if (btnSaveTravel) btnSaveTravel.textContent = "Update Package";
+    if (btnCancelTravel) btnCancelTravel.style.display = 'inline-block';
+
+    document.getElementById('travel').querySelector('.form-container').scrollIntoView({ behavior: 'smooth' });
+};
+
+window.cancelTravelEdit = () => {
+    travelEditIndex = -1;
+    if (travelForm) travelForm.reset();
+    if (travelFormTitle) travelFormTitle.textContent = "Add New Package";
+    if (btnSaveTravel) btnSaveTravel.textContent = "Publish Package";
+    if (btnCancelTravel) btnCancelTravel.style.display = 'none';
+};
+
+if (travelForm) {
+    travelForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const newPkg = {
+            id: travelEditIndex === -1 ? Date.now() : travelPackages[travelEditIndex].id,
+            company: document.getElementById('travelCompany').value,
+            contact: document.getElementById('travelContact').value,
+            whatsapp: document.getElementById('travelWhatsapp').value,
+            email: document.getElementById('travelEmail').value,
+            title: document.getElementById('travelTitle').value,
+            category: document.getElementById('travelCategory').value,
+            departure: document.getElementById('travelDeparture').value,
+            destination: document.getElementById('travelDestination').value,
+            duration: document.getElementById('travelDuration').value,
+            price: document.getElementById('travelPrice').value,
+            priceType: document.getElementById('travelPriceType').value,
+            transport: document.getElementById('travelTransport').value,
+            hotel: document.getElementById('travelHotel').value,
+            meals: document.getElementById('travelMeals').value,
+            guide: document.getElementById('travelGuide').value,
+            ziyarat: document.getElementById('travelZiyarat').value,
+            image: document.getElementById('travelImage').value,
+            brochure: document.getElementById('travelBrochure').value,
+            details: document.getElementById('travelDetails').value,
+            listingType: document.getElementById('travelListingType').value,
+            verified: document.getElementById('travelVerified').value,
+            status: document.getElementById('travelStatus').value,
+            dateAdded: travelEditIndex === -1 ? Date.now() : travelPackages[travelEditIndex].dateAdded
+        };
+
+        if (travelEditIndex === -1) {
+            travelPackages.push(newPkg);
+        } else {
+            travelPackages[travelEditIndex] = newPkg;
+            cancelTravelEdit();
+        }
+
+        await saveTravelPackages();
+        if (travelEditIndex === -1) travelForm.reset();
+        alert('Travel package saved successfully!');
+    });
+}
+
+// --- Daily Price Table Logic ---
+async function loadDailyPrices() {
+  if (typeof supabase === 'undefined') {
+    console.warn("Supabase is not loaded yet.");
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from('pdf_sources')
+    .select('*')
+    .order('uploaded_at', { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  const tableBody = document.getElementById("dailyPriceTable");
+  if (!tableBody) return;
+
+  tableBody.innerHTML =
+    data.map(file => {
+
+      let statusColor = "text-yellow-400";
+      if (file.status === "processed") statusColor = "text-green-400";
+      if (file.status === "downloaded") statusColor = "text-blue-400";
+
+      let priceStatus = "⏳ Pending";
+      if (file.status === "processed") priceStatus = "✔ Processed";
+
+      return `
+        <tr class="border-b border-slate-800">
+          <td class="py-2">${new Date(file.uploaded_at).toLocaleDateString()}</td>
+          <td>${file.title || 'DC Price List'}</td>
+          <td class="${statusColor}">
+            ${file.status}
+          </td>
+          <td>
+            ${priceStatus}
+          </td>
+          <td class="text-right">
+            ${file.status !== "processed" ? `
+              <button onclick="processFile(${file.id})"
+                class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs">
+                Process
+              </button>
+            ` : `
+              <span class="text-slate-500 text-xs">Done</span>
+            `}
+          </td>
+        </tr>
+      `;
+    }).join('');
+}
+
+loadDailyPrices();
+
+window.processFile = async function(id) {
+  if (typeof supabase === 'undefined') return;
+
+  // 1. Get file info
+  const { data } = await supabase
+    .from('pdf_sources')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  // 2. SIMPLE LOGIC (for now manual comparison later)
+  console.log("Processing:", data);
+  // System will check: IF new_price == old_price -> show "Price Remains Same", ELSE -> update + log change
+
+  // 3. Mark as processed
+  await supabase
+    .from('pdf_sources')
+    .update({ status: 'processed' })
+    .eq('id', id);
+
+  // 4. Refresh table
+  loadDailyPrices();
+
+  alert("✔ DC Price List processed successfully");
+}
+
+// --- Click Sound Logic ---
+const sound = document.getElementById("clickSound");
+
+if (sound) {
+  document.querySelectorAll(".sidebar ul li").forEach(item => {
+    item.addEventListener("click", () => {
+      sound.currentTime = 0;
+      sound.play().catch(e => console.log("Audio play failed:", e));
+    });
+  });
+}
+
+// --- Broadcast Management ---
+
+const broadcastForm = document.getElementById('broadcastForm');
+const broadcastList = document.getElementById('broadcastList');
+const broadcastFormTitle = document.getElementById('broadcastFormTitle');
+const btnSaveBroadcast = document.getElementById('btnSaveBroadcast');
+const btnCancelBroadcast = document.getElementById('btnCancelBroadcast');
+
+async function saveBroadcasts() {
+    await DataService.saveBroadcasts(broadcasts);
+    renderBroadcasts();
+    updateGlobalTicker();
+}
+
+function renderBroadcasts() {
+    if (!broadcastList) return;
+    broadcastList.innerHTML = broadcasts.map((b, index) => {
+        const targetLabel = b.audience === 'all' ? 'All Users' : (b.specificUser || 'Specific User');
+        const statusColor = b.status === 'active' ? '#2ecc71' : '#f1c40f';
+        const shortMsg = b.message.length > 50 ? b.message.substring(0, 47) + '...' : b.message;
+        const dateStr = new Date(b.date || Date.now()).toLocaleDateString();
+
+        return `
+        <div class="product-row" style="grid-template-columns: 1fr 2fr 100px 100px 100px; font-size: 0.9rem; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <div><span class="badge" style="background:#3b82f6; color:white;">${targetLabel}</span></div>
+            <div style="color: #cbd5e1;" title="${b.message}">${shortMsg}</div>
+            <div style="color: #94a3b8;">${dateStr}</div>
+            <div><span class="badge" style="background:${statusColor}; color:white;">${b.status}</span></div>
+            <div>
+                <button class="edit-btn" onclick="editBroadcast(${index})"><i class="fa-solid fa-pen"></i></button>
+                <button class="delete-btn" onclick="deleteBroadcast(${index})"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>
+        `;
+    }).join('');
+}
+
+async function deleteBroadcast(index) {
+    if (confirm('Are you sure you want to delete this broadcast message?')) {
+        broadcasts.splice(index, 1);
+        await saveBroadcasts();
+    }
+}
+
+window.editBroadcast = (index) => {
+    broadcastEditIndex = index;
+    const b = broadcasts[index];
+
+    document.getElementById('broadcastAudience').value = b.audience || 'all';
+    document.getElementById('broadcastStatus').value = b.status || 'active';
+    document.getElementById('broadcastMessage').value = b.message || '';
+    
+    toggleSpecificUserField(); // update UI based on audience
+
+    if (b.audience === 'specific') {
+        document.getElementById('broadcastSpecificUser').value = b.specificUser || '';
+    }
+
+    if (broadcastFormTitle) broadcastFormTitle.textContent = "Edit Broadcast";
+    if (btnSaveBroadcast) btnSaveBroadcast.textContent = "Update Broadcast";
+    if (btnCancelBroadcast) btnCancelBroadcast.style.display = 'inline-block';
+
+    document.getElementById('broadcasts').querySelector('.form-container').scrollIntoView({ behavior: 'smooth' });
+};
+
+window.cancelBroadcastEdit = () => {
+    broadcastEditIndex = -1;
+    if (broadcastForm) broadcastForm.reset();
+    toggleSpecificUserField();
+    if (broadcastFormTitle) broadcastFormTitle.textContent = "Create New Broadcast";
+    if (btnSaveBroadcast) btnSaveBroadcast.textContent = "Save Broadcast";
+    if (btnCancelBroadcast) btnCancelBroadcast.style.display = 'none';
+};
+
+window.toggleSpecificUserField = () => {
+    const audience = document.getElementById('broadcastAudience').value;
+    const specificGroup = document.getElementById('specificUserGroup');
+    const specificSelect = document.getElementById('broadcastSpecificUser');
+    
+    if (audience === 'specific') {
+        specificGroup.style.display = 'block';
+        specificSelect.setAttribute('required', 'true');
+        // Populate specific users if not already done
+        if (specificSelect.options.length <= 1) {
+            populateUserDropdownForBroadcast();
+        }
+    } else {
+        specificGroup.style.display = 'none';
+        specificSelect.removeAttribute('required');
+    }
+};
+
+function populateUserDropdownForBroadcast() {
+    const specificSelect = document.getElementById('broadcastSpecificUser');
+    if (!specificSelect) return;
+    
+    // Clear existing except first
+    specificSelect.innerHTML = '<option value="">-- Choose User --</option>';
+    
+    // Add all registered users
+    users.forEach(u => {
+        const option = document.createElement('option');
+        option.value = u.username;
+        option.textContent = `${u.username} (${u.role})`;
+        specificSelect.appendChild(option);
+    });
+}
+
+function updateGlobalTicker() {
+    const ticker = document.getElementById('broadcastText');
+    if (!ticker) return;
+    
+    const activeGlobal = broadcasts.filter(b => b.audience === 'all' && b.status === 'active');
+    
+    if (activeGlobal.length > 0) {
+        ticker.innerHTML = activeGlobal.map(b => b.message).join(' &nbsp;|&nbsp; ');
+    } else {
+        ticker.innerHTML = 'Welcome to Qeemat Point Admin! &nbsp;|&nbsp; System Running Smoothly &nbsp;|&nbsp; New Products Registered!';
+    }
+}
+
+if (broadcastForm) {
+    broadcastForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const status = document.getElementById('broadcastStatus').value;
+
+        if (status === 'delete') {
+            if (broadcastEditIndex !== -1) {
+                broadcasts.splice(broadcastEditIndex, 1);
+            }
+            await saveBroadcasts();
+            broadcastForm.reset();
+            cancelBroadcastEdit();
+            toggleSpecificUserField(); // Reset UI
+            alert('Broadcast deleted successfully!');
+            return;
+        }
+
+        const audience = document.getElementById('broadcastAudience').value;
+        const newBroadcast = {
+            id: broadcastEditIndex === -1 ? Date.now() : broadcasts[broadcastEditIndex].id,
+            audience: audience,
+            specificUser: audience === 'specific' ? document.getElementById('broadcastSpecificUser').value : null,
+            status: status,
+            message: document.getElementById('broadcastMessage').value,
+            date: broadcastEditIndex === -1 ? Date.now() : broadcasts[broadcastEditIndex].date
+        };
+
+        if (broadcastEditIndex === -1) {
+            broadcasts.push(newBroadcast);
+        } else {
+            broadcasts[broadcastEditIndex] = newBroadcast;
+            cancelBroadcastEdit();
+        }
+
+        await saveBroadcasts();
+        if (broadcastEditIndex === -1) broadcastForm.reset();
+        toggleSpecificUserField(); // Reset UI
+        alert('Broadcast saved successfully!');
+    });
+}

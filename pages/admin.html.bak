@@ -18,10 +18,8 @@
     <div class="admin-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="logo"
-                style="padding: 10px 0; display: flex; flex-direction: column; align-items: center; gap: 5px;">
-                <img src="../images/logo/stopbuy-logo.png" alt="StopBuy Admin Pannel"
-                    style="max-width: 20%; height: auto; border-radius: 8px;">
+            <div class="logo" style="padding: 10px 0; display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                <img src="../images/logo/stopbuy-logo.png" alt="StopBuy Admin Pannel" style="max-width: 20%; height: auto; border-radius: 8px;">
                 <span style="font-size: 14px; color: #cbd5e1; font-weight: bold;">StopBuy Admin Panel</span>
             </div>
             <ul class="menu">
@@ -34,10 +32,7 @@
                 <li onclick="showSection('banners')"><i class="fa-solid fa-image"></i> Manage Banners</li>
                 <li onclick="showSection('blogs')"><i class="fa-solid fa-blog"></i> Manage Blogs</li>
                 <li onclick="showSection('broadcasts')"><i class="fa-solid fa-bullhorn"></i> Manage Broadcasts</li>
-                <li onclick="showSection('travel')"><i class="fa-solid fa-plane"></i> Manage Travel <span
-                        id="travelPendingBadge"
-                        style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span>
-                </li>
+                <li onclick="showSection('travel')"><i class="fa-solid fa-plane"></i> Manage Travel <span id="travelPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
                 <li onclick="showSection('daily-prices')"><i class="fa-solid fa-chart-bar"></i> Manage Daily Prices</li>
                 <li onclick="logout()"><i class="fa-solid fa-sign-out-alt"></i> Logout</li>
             </ul>
@@ -48,124 +43,99 @@
             <!-- Dashboard Overview -->
             <section id="dashboard" class="admin-section active">
                 <h1>Dashboard Overview</h1>
-
+                
                 <!-- Four Stat Boxes -->
                 <div class="stats-grid section-spacing" style="margin-bottom: 2rem;">
-                    <div class="stat-card blue">
-                        <div class="stat-content">
-                            <h3 class="stat-label">Total Registered Companies</h3>
-                            <p class="stat-value"><span id="totalCompanies">5</span> <span class="stat-link"
-                                    style="font-size:0.7rem; color:var(--primary-color); cursor:pointer; margin-left: 10px;">View
-                                    Details</span></p>
-                        </div>
+                  <div class="stat-card blue">
+                    <div class="stat-content">
+                      <h3 class="stat-label">Total Registered Companies</h3>
+                      <p class="stat-value"><span id="totalCompanies">5</span> <span class="stat-link" style="font-size:0.7rem; color:var(--primary-color); cursor:pointer; margin-left: 10px;">View Details</span></p>
                     </div>
-                    <div class="stat-card teal">
-                        <div class="stat-content">
-                            <h3 class="stat-label">Total Products</h3>
-                            <p class="stat-value"><span id="totalProducts">0</span> <span class="stat-link"
-                                    style="font-size:0.7rem; color:var(--primary-color); cursor:pointer; margin-left: 10px;">View
-                                    Details</span></p>
-                        </div>
+                  </div>
+                  <div class="stat-card teal">
+                    <div class="stat-content">
+                      <h3 class="stat-label">Total Products</h3>
+                      <p class="stat-value"><span id="totalProducts">0</span> <span class="stat-link" style="font-size:0.7rem; color:var(--primary-color); cursor:pointer; margin-left: 10px;">View Details</span></p>
                     </div>
-                    <div class="stat-card yellow">
-                        <div class="stat-content">
-                            <h3 class="stat-label">Total Users</h3>
-                            <p class="stat-value"><span id="totalUsers">12</span> <span class="stat-link"
-                                    style="font-size:0.7rem; color:var(--primary-color); cursor:pointer; margin-left: 10px;">View
-                                    Records</span></p>
-                        </div>
+                  </div>
+                  <div class="stat-card yellow">
+                    <div class="stat-content">
+                      <h3 class="stat-label">Total Users</h3>
+                      <p class="stat-value"><span id="totalUsers">12</span> <span class="stat-link" style="font-size:0.7rem; color:var(--primary-color); cursor:pointer; margin-left: 10px;">View Records</span></p>
                     </div>
-                    <div class="stat-card red">
-                        <div class="stat-content">
-                            <h3 class="stat-label">Total Categories</h3>
-                            <p class="stat-value"><span id="totalCategories">0</span> <span class="stat-link"
-                                    style="font-size:0.7rem; color:var(--primary-color); cursor:pointer; margin-left: 10px;">Review
-                                    Lists</span></p>
-                        </div>
+                  </div>
+                  <div class="stat-card red">
+                    <div class="stat-content">
+                      <h3 class="stat-label">Total Categories</h3>
+                      <p class="stat-value"><span id="totalCategories">0</span> <span class="stat-link" style="font-size:0.7rem; color:var(--primary-color); cursor:pointer; margin-left: 10px;">Review Lists</span></p>
                     </div>
+                  </div>
                 </div>
 
                 <!-- Broadcast Scroll Bar -->
                 <div id="broadcastContainer" class="broadcast-container section-spacing">
-                    <div class="broadcast-icon" style="color: #f59e0b;"><i class="fa-solid fa-bullhorn"></i></div>
-                    <div class="broadcast-wrapper">
-                        <div class="broadcast-content" id="broadcastText">
-                            Welcome to Qeemat Point Admin! &nbsp;|&nbsp; System Running Smoothly &nbsp;|&nbsp; New
-                            Products Registered!
-                        </div>
+                  <div class="broadcast-icon" style="color: #f59e0b;"><i class="fa-solid fa-bullhorn"></i></div>
+                  <div class="broadcast-wrapper">
+                    <div class="broadcast-content" id="broadcastText">
+                      Welcome to Qeemat Point Admin! &nbsp;|&nbsp; System Running Smoothly &nbsp;|&nbsp; New Products Registered!
                     </div>
+                  </div>
                 </div>
 
                 <!-- Quick Actions -->
                 <div class="quick-actions-grid section-spacing">
-                    <div class="quick-action" data-target="purchase.html">New Purchase <i
-                            class="fa-solid fa-cart-shopping"></i></div>
-                    <div class="quick-action" data-target="sales.html">New Sale <i
-                            class="fa-solid fa-cash-register"></i></div>
-                    <div class="quick-action" data-target="expenses.html">Add Expense <i
-                            class="fa-solid fa-money-bill-wave"></i></div>
-                    <div class="quick-action" data-target="inventory.html">Inventory <i
-                            class="fa-solid fa-boxes-stacked"></i></div>
-                    <div class="quick-action" data-target="reports.html">Report <i class="fa-solid fa-file-invoice"></i>
-                    </div>
+                  <div class="quick-action" data-target="purchase.html">New Purchase <i class="fa-solid fa-cart-shopping"></i></div>
+                  <div class="quick-action" data-target="sales.html">New Sale <i class="fa-solid fa-cash-register"></i></div>
+                  <div class="quick-action" data-target="expenses.html">Add Expense <i class="fa-solid fa-money-bill-wave"></i></div>
+                  <div class="quick-action" data-target="inventory.html">Inventory <i class="fa-solid fa-boxes-stacked"></i></div>
+                  <div class="quick-action" data-target="reports.html">Report <i class="fa-solid fa-file-invoice"></i></div>
                 </div>
 
 
                 <!-- Charts & Low Stock -->
                 <div class="chart-row section-spacing">
-                    <div class="chart-col">
-                        <div class="form-container chart-container-fixed">
-                            <h3 style="margin-bottom: 5px;">Total Sale</h3>
-                            <div style="position: relative; height:200px; width:100%;"><canvas
-                                    id="pharaSalesChart"></canvas></div>
-                        </div>
-                        <div class="form-container">
-                            <h3 style="color:#f59e0b;"><i class="fa-solid fa-triangle-exclamation"></i> Low Stock Alerts
-                            </h3>
-                            <table class="admin-table">
-                                <tbody id="lowStockTableBody">
-                                    <tr>
-                                        <td style="color:#aaa; text-align:center;">Working On It</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                  <div class="chart-col">
+                    <div class="form-container chart-container-fixed">
+                      <h3 style="margin-bottom: 5px;">Total Sale</h3>
+                      <div style="position: relative; height:200px; width:100%;"><canvas id="pharaSalesChart"></canvas></div>
                     </div>
+                    <div class="form-container">
+                      <h3 style="color:#f59e0b;"><i class="fa-solid fa-triangle-exclamation"></i> Low Stock Alerts</h3>
+                      <table class="admin-table">
+                        <tbody id="lowStockTableBody">
+                          <tr><td style="color:#aaa; text-align:center;">Working On It</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
 
-                    <div class="chart-col">
-                        <div class="form-container chart-container-fixed">
-                            <h3 style="margin-bottom: 5px;">Credit Tracking</h3>
-                            <div style="position: relative; height:200px; width:100%;"><canvas
-                                    id="pharaCreditChart"></canvas></div>
-                        </div>
-                        <div class="form-container">
-                            <h3 style="color:#38bdf8;"><i class="fa-solid fa-clock"></i> Recent Activity</h3>
-                            <div id="recentActivity">
-                                <ul style="list-style:none; padding:0; margin:0; font-size:0.9rem;">
-                                    <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.1);">🧾 Sale
-                                        recorded - Rs 5,000</li>
-                                    <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.1);">📦
-                                        Purchase added - 20 items</li>
-                                    <li style="padding:6px 0;">💸 Expense added - Rs 1,200</li>
-                                </ul>
-                            </div>
-                        </div>
+                  <div class="chart-col">
+                    <div class="form-container chart-container-fixed">
+                      <h3 style="margin-bottom: 5px;">Credit Tracking</h3>
+                      <div style="position: relative; height:200px; width:100%;"><canvas id="pharaCreditChart"></canvas></div>
                     </div>
+                    <div class="form-container">
+                      <h3 style="color:#38bdf8;"><i class="fa-solid fa-clock"></i> Recent Activity</h3>
+                      <div id="recentActivity">
+                        <ul style="list-style:none; padding:0; margin:0; font-size:0.9rem;">
+                          <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.1);">🧾 Sale recorded - Rs 5,000</li>
+                          <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.1);">📦 Purchase added - 20 items</li>
+                          <li style="padding:6px 0;">💸 Expense added - Rs 1,200</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
 
-                    <div class="chart-col">
-                        <div class="form-container chart-container-fixed">
-                            <h3 style="margin-bottom: 5px;">Inventory</h3>
-                            <div style="position: relative; height:200px; width:100%;"><canvas
-                                    id="pharaInventoryChart"></canvas></div>
-                        </div>
-                        <div class="form-container">
-                            <h3 style="color:#22c55e;"><i class="fa-solid fa-arrow-trend-up"></i> Top Selling Products
-                            </h3>
-                            <div id="topSellingList">
-                                <p style="color:#aaa;">No sales data available</p>
-                            </div>
-                        </div>
+                  <div class="chart-col">
+                    <div class="form-container chart-container-fixed">
+                      <h3 style="margin-bottom: 5px;">Inventory</h3>
+                      <div style="position: relative; height:200px; width:100%;"><canvas id="pharaInventoryChart"></canvas></div>
                     </div>
+                    <div class="form-container">
+                      <h3 style="color:#22c55e;"><i class="fa-solid fa-arrow-trend-up"></i> Top Selling Products</h3>
+                      <div id="topSellingList"><p style="color:#aaa;">No sales data available</p></div>
+                    </div>
+                  </div>
                 </div>
             </section>
 
@@ -179,8 +149,7 @@
                         <div class="form-row">
                             <div class="input-group">
                                 <label>Category Name</label>
-                                <input type="text" id="catName" placeholder="e.g., Electronics" required
-                                    style="max-width: 300px;">
+                                <input type="text" id="catName" placeholder="e.g., Electronics" required style="max-width: 300px;">
                             </div>
                         </div>
                         <div id="fieldsContainer" style="margin-top: 20px;">
@@ -189,8 +158,7 @@
                         <div class="form-actions" style="margin-top: 15px;">
                             <button type="button" class="btn btn-secondary" onclick="addField()">+ Add Field</button>
                             <button type="submit" class="btn btn-primary" id="btnSaveCategory">Add Category</button>
-                            <button type="button" class="btn btn-secondary" id="btnCancelCategory" style="display:none;"
-                                onclick="cancelCategoryEdit()">Cancel Edit</button>
+                            <button type="button" class="btn btn-secondary" id="btnCancelCategory" style="display:none;" onclick="cancelCategoryEdit()">Cancel Edit</button>
                         </div>
                     </form>
                 </div>
@@ -293,8 +261,7 @@
                         <div class="form-row">
                             <div class="input-group" style="flex: 1;">
                                 <label>Deal Title / Name</label>
-                                <input type="text" id="dealName" placeholder="e.g., Nike Running Shoes" required
-                                    style="width: 100%;">
+                                <input type="text" id="dealName" placeholder="e.g., Nike Running Shoes" required style="width: 100%;">
                             </div>
                         </div>
                         <div class="form-row">
@@ -427,11 +394,7 @@
                     <form id="bannerForm">
                         <div class="input-group">
                             <label>Banner Image URL</label>
-                            <div style="display: flex; gap: 10px;">
-                                <input type="text" id="bannerImage" placeholder="/images/banner/banner.jpg" required style="flex: 1;">
-                                <input type="file" id="bannerImageUpload" accept="image/*" style="display: none;">
-                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('bannerImageUpload').click()" style="padding: 10px 15px;"><i class="fa-solid fa-upload"></i></button>
-                            </div>
+                            <input type="url" id="bannerImage" placeholder="https://example.com/banner.jpg" required>
                         </div>
                         <div class="input-group">
                             <label>Banner Type</label>
@@ -450,10 +413,7 @@
                                 <p>Image preview will appear here</p>
                             </div>
                         </div>
-                        <div class="form-actions" style="margin-top: 15px; display: flex; gap: 10px;">
-                            <button type="submit" class="btn btn-primary" id="btnSaveBanner">Add Banner</button>
-                            <button type="button" class="btn btn-secondary" id="btnCancelBanner" style="display:none;" onclick="cancelBannerEdit()">Cancel Edit</button>
-                        </div>
+                        <button type="submit" class="btn btn-primary">Add Banner</button>
                     </form>
                 </div>
 
@@ -474,20 +434,17 @@
                         <div class="form-row">
                             <div class="input-group" style="flex: 1;">
                                 <label>Title (English) <span style="color:var(--accent-color);">*</span></label>
-                                <input type="text" id="blogTitleEn" placeholder="e.g., How to save money on groceries"
-                                    required>
+                                <input type="text" id="blogTitleEn" placeholder="e.g., How to save money on groceries" required>
                             </div>
                             <div class="input-group" style="flex: 1;">
                                 <label>Slug (Auto-generated) <span style="color:var(--accent-color);">*</span></label>
-                                <input type="text" id="blogSlug" placeholder="how-to-save-money-on-groceries" readonly
-                                    required style="background: rgba(0,0,0,0.2); color:#94a3b8; cursor: not-allowed;">
+                                <input type="text" id="blogSlug" placeholder="how-to-save-money-on-groceries" readonly required style="background: rgba(0,0,0,0.2); color:#94a3b8; cursor: not-allowed;">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="input-group" style="flex: 1;">
                                 <label>Title (Urdu) <span style="color:var(--accent-color);">*</span></label>
-                                <input type="text" id="blogTitleUr" placeholder="e.g., گروسری پر پیسے کیسے بچائیں"
-                                    required dir="rtl">
+                                <input type="text" id="blogTitleUr" placeholder="e.g., گروسری پر پیسے کیسے بچائیں" required dir="rtl">
                             </div>
                             <div class="input-group" style="flex: 1;">
                                 <label>Author Name <span style="color:var(--accent-color);">*</span></label>
@@ -496,20 +453,26 @@
                         </div>
                         <div class="form-row">
                             <div class="input-group" style="flex: 1;">
-                                <label>Category (English) <span style="color:var(--accent-color);">*</span></label>
-                                <input type="text" id="blogCategoryDropdown" placeholder="e.g., Grocery" required>
+                                <label>Category (Dropdown) <span style="color:var(--accent-color);">*</span></label>
+                                <select id="blogCategoryDropdown" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Grocery">Grocery</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Fashion">Fashion</option>
+                                    <option value="Inflation Insight">Inflation Insight</option>
+                                    <option value="News">News</option>
+                                    <option value="Tips">Tips</option>
+                                </select>
                             </div>
                             <div class="input-group" style="flex: 1;">
                                 <label>Category (Urdu) <span style="color:var(--accent-color);">*</span></label>
-                                <input type="text" id="blogCategoryUr" placeholder="e.g., مہنگائی کا رجحان" required
-                                    dir="rtl">
+                                <input type="text" id="blogCategoryUr" placeholder="e.g., مہنگائی کا رجحان" required dir="rtl">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="input-group" style="flex: 1;">
                                 <label>Blog Image URL <span style="color:var(--accent-color);">*</span></label>
-                                <input type="url" id="blogImage" placeholder="https://example.com/blog-image.jpg"
-                                    required>
+                                <input type="url" id="blogImage" placeholder="https://example.com/blog-image.jpg" required>
                                 <small style="color:#aaa;">Recommended aspect ratio: 16:9</small>
                             </div>
                             <div class="input-group" style="flex: 1;">
@@ -523,8 +486,7 @@
                         <div class="form-row">
                             <div class="input-group" style="flex: 1;">
                                 <label>SEO Title</label>
-                                <input type="text" id="blogSeoTitle"
-                                    placeholder="Optimized title for search engines...">
+                                <input type="text" id="blogSeoTitle" placeholder="Optimized title for search engines...">
                             </div>
                             <div class="input-group" style="flex: 1;">
                                 <label>Meta Description</label>
@@ -533,50 +495,37 @@
                         </div>
                         <div class="form-row">
                             <div class="input-group" style="flex: 1;">
-                                <label>Short Description (English) <span
-                                        style="color:var(--accent-color);">*</span></label>
+                                <label>Short Description (English) <span style="color:var(--accent-color);">*</span></label>
                                 <input type="text" id="blogDescEn" placeholder="Brief summary for the card..." required>
                             </div>
                             <div class="input-group" style="flex: 1;">
-                                <label>Short Description (Urdu) <span
-                                        style="color:var(--accent-color);">*</span></label>
+                                <label>Short Description (Urdu) <span style="color:var(--accent-color);">*</span></label>
                                 <input type="text" id="blogDescUr" placeholder="مختصر تفصیل..." required dir="rtl">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="input-group" style="flex: 1;">
                                 <label>Content (English) <span style="color:var(--accent-color);">*</span></label>
-                                <textarea id="blogContentEn" rows="6" placeholder="Write your blog content here..."
-                                    required
-                                    style="width: 100%; border: 1px solid var(--border-color); background: var(--bg-dark); color: var(--text-color); padding: 10px; border-radius: 5px;"></textarea>
+                                <textarea id="blogContentEn" rows="6" placeholder="Write your blog content here..." required style="width: 100%; border: 1px solid var(--border-color); background: var(--bg-dark); color: var(--text-color); padding: 10px; border-radius: 5px;"></textarea>
                             </div>
                             <div class="input-group" style="flex: 1;">
                                 <label>Content (Urdu) <span style="color:var(--accent-color);">*</span></label>
-                                <textarea id="blogContentUr" rows="6" placeholder="یہاں اپنا بلاگ لکھیں..." required
-                                    dir="rtl"
-                                    style="width: 100%; border: 1px solid var(--border-color); background: var(--bg-dark); color: var(--text-color); padding: 10px; border-radius: 5px;"></textarea>
+                                <textarea id="blogContentUr" rows="6" placeholder="یہاں اپنا بلاگ لکھیں..." required dir="rtl" style="width: 100%; border: 1px solid var(--border-color); background: var(--bg-dark); color: var(--text-color); padding: 10px; border-radius: 5px;"></textarea>
                             </div>
                         </div>
-                        <div class="form-actions" style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
+                        <div class="form-actions" style="margin-top: 15px;">
                             <button type="submit" class="btn btn-primary" id="btnSaveBlog">Publish</button>
-                            <button type="button" class="btn btn-info" id="btnPublishFacebook" onclick="shareAdminBlogToFacebook()" style="background: #1877f2; border-color: #1877f2; color: white;">
-                                <i class="fab fa-facebook"></i> Publish on Facebook
-                            </button>
-                            <button type="button" class="btn btn-secondary" id="btnCancelBlog" style="display:none;"
-                                onclick="cancelBlogEdit()">Cancel Edit</button>
+                            <button type="button" class="btn btn-secondary" id="btnCancelBlog" style="display:none;" onclick="cancelBlogEdit()">Cancel Edit</button>
                         </div>
                     </form>
                 </div>
 
                 <div class="list-container">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                         <h3 style="margin: 0;">Existing Blogs</h3>
                         <div class="search-filter-bar" style="display: flex; gap: 10px;">
-                            <input type="text" id="blogSearchInput" placeholder="Search blog..."
-                                style="padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.8); color: white;">
-                            <select id="blogCategoryFilter"
-                                style="padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.8); color: white;">
+                            <input type="text" id="blogSearchInput" placeholder="Search blog..." style="padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.8); color: white;">
+                            <select id="blogCategoryFilter" style="padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.8); color: white;">
                                 <option value="All">All Categories</option>
                                 <option value="Grocery">Grocery</option>
                                 <option value="Electronics">Electronics</option>
@@ -587,8 +536,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="grid-table-header"
-                        style="grid-template-columns: 40px 60px 2fr 1fr 1fr 80px 100px 120px; gap: 15px;">
+                    <div class="grid-table-header" style="grid-template-columns: 40px 60px 2fr 1fr 1fr 80px 100px 100px;">
                         <div><input type="checkbox" id="selectAllBlogs"></div>
                         <div>Image</div>
                         <div>Title</div>
@@ -613,9 +561,7 @@
                         <div class="form-row">
                             <div class="input-group" style="flex: 1;">
                                 <label>Message Content <span style="color:var(--accent-color);">*</span></label>
-                                <textarea id="broadcastMessage" rows="4" placeholder="Enter your message here..."
-                                    required
-                                    style="width: 100%; border: 1px solid var(--border-color); background: var(--bg-dark); color: var(--text-color); padding: 10px; border-radius: 5px;"></textarea>
+                                <textarea id="broadcastMessage" rows="4" placeholder="Enter your message here..." required style="width: 100%; border: 1px solid var(--border-color); background: var(--bg-dark); color: var(--text-color); padding: 10px; border-radius: 5px;"></textarea>
                             </div>
                         </div>
                         <div class="form-row">
@@ -646,8 +592,7 @@
                         </div>
                         <div class="form-actions" style="margin-top: 15px;">
                             <button type="submit" class="btn btn-primary" id="btnSaveBroadcast">Save Broadcast</button>
-                            <button type="button" class="btn btn-secondary" id="btnCancelBroadcast"
-                                style="display:none;" onclick="cancelBroadcastEdit()">Cancel Edit</button>
+                            <button type="button" class="btn btn-secondary" id="btnCancelBroadcast" style="display:none;" onclick="cancelBroadcastEdit()">Cancel Edit</button>
                         </div>
                     </form>
                 </div>
@@ -671,13 +616,21 @@
             <section id="travel" class="admin-section">
                 <h1>Manage Travel Packages</h1>
                 <div class="travel-form">
-                    <h2 id="travelFormTitle" style="color:var(--primary-color); margin-bottom: 20px;">Add Travel Package
-                    </h2>
+                    <h2 id="travelFormTitle" style="color:var(--primary-color); margin-bottom: 20px;">Add Travel Package</h2>
                     <form id="travelForm" style="display:flex; flex-direction:column; gap:10px;">
+                        <!-- Company Info -->
+                        <div style="display:flex; gap:10px;">
+                            <input type="text" id="travelCompany" placeholder="Company Name *" required class="admin-input" style="flex:1;">
+                            <input type="text" id="travelContact" placeholder="Contact Number *" required class="admin-input" style="flex:1;">
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <input type="text" id="travelWhatsapp" placeholder="WhatsApp Number" class="admin-input" style="flex:1;">
+                            <input type="email" id="travelEmail" placeholder="Email" class="admin-input" style="flex:1;">
+                        </div>
+                        
                         <!-- Package Details -->
                         <div style="display:flex; gap:10px;">
-                            <input type="text" id="travelTitle" placeholder="Package Title *" required
-                                class="admin-input" style="flex:1;">
+                            <input type="text" id="travelTitle" placeholder="Package Title *" required class="admin-input" style="flex:1;">
                             <select id="travelCategory" required class="admin-input" style="flex:1;">
                                 <option value="">Category *</option>
                                 <option value="Hajj">Hajj</option>
@@ -687,39 +640,28 @@
                             </select>
                         </div>
                         <div style="display:flex; gap:10px;">
-                            <input type="text" id="travelDeparture" placeholder="Departure City *" required
-                                class="admin-input" style="flex:1;">
-                            <input type="text" id="travelDestination" placeholder="Destination *" required
-                                class="admin-input" style="flex:1;">
+                            <input type="text" id="travelDeparture" placeholder="Departure City *" required class="admin-input" style="flex:1;">
+                            <input type="text" id="travelDestination" placeholder="Destination *" required class="admin-input" style="flex:1;">
                         </div>
-
+                        
                         <!-- Pricing & Duration -->
                         <div style="display:flex; gap:10px;">
-                            <input type="number" id="travelDuration" placeholder="Duration (Days) *" required
-                                class="admin-input" style="flex:1;">
-                            <input type="number" id="travelPrice" placeholder="Price (PKR) *" required
-                                class="admin-input" style="flex:1;">
+                            <input type="number" id="travelDuration" placeholder="Duration (Days) *" required class="admin-input" style="flex:1;">
+                            <input type="number" id="travelPrice" placeholder="Price (PKR) *" required class="admin-input" style="flex:1;">
                             <select id="travelPriceType" class="admin-input" style="flex:1;">
                                 <option value="Per Person">Per Person</option>
                                 <option value="Per Family">Per Family</option>
                             </select>
                         </div>
-
+                        
                         <!-- Travel Details -->
                         <div style="display:flex; gap:10px;">
-                            <div id="travelTransportContainer" class="admin-input"
-                                style="flex:1; display:flex; align-items:center; gap:10px; padding: 0 10px; min-height: 40px; background-color: var(--input-bg, rgba(15, 23, 42, 0.5)); border: 1px solid var(--border-color, #334155); border-radius: 6px;">
-                                <span style="color: #94a3b8; font-size: 0.9rem;">Transport:</span>
-                                <label
-                                    style="display:flex; align-items:center; gap:5px; font-size: 0.9rem; cursor:pointer;"><input
-                                        type="checkbox" name="transportOption" value="Air"> Air</label>
-                                <label
-                                    style="display:flex; align-items:center; gap:5px; font-size: 0.9rem; cursor:pointer;"><input
-                                        type="checkbox" name="transportOption" value="Bus"> Bus</label>
-                                <label
-                                    style="display:flex; align-items:center; gap:5px; font-size: 0.9rem; cursor:pointer;"><input
-                                        type="checkbox" name="transportOption" value="Private"> Private</label>
-                            </div>
+                            <select id="travelTransport" class="admin-input" style="flex:1;">
+                                <option value="None">Transport</option>
+                                <option value="Air">Air</option>
+                                <option value="Bus">Bus</option>
+                                <option value="Private">Private</option>
+                            </select>
                             <select id="travelHotel" class="admin-input" style="flex:1;">
                                 <option value="None">Hotel Type</option>
                                 <option value="3 Star">3 Star</option>
@@ -731,43 +673,25 @@
                                 <option value="Yes">Meals Included: Yes</option>
                             </select>
                         </div>
-
+                        
                         <!-- Extra Features -->
                         <div style="display:flex; gap:10px;">
                             <select id="travelGuide" class="admin-input" style="flex:1;">
                                 <option value="No">Guide Included: No</option>
                                 <option value="Yes">Guide Included: Yes</option>
                             </select>
-                            <input type="text" id="travelZiyarat" placeholder="Ziyarat / Tour Points"
-                                class="admin-input" style="flex:2;">
+                            <input type="text" id="travelZiyarat" placeholder="Ziyarat / Tour Points" class="admin-input" style="flex:2;">
                         </div>
-
+                        
                         <!-- Media -->
                         <div style="display:flex; gap:10px;">
-                            <input type="url" id="travelImage" placeholder="Upload Image URL *" required
-                                class="admin-input" style="flex:1;">
-                            <input type="url" id="travelBrochure" placeholder="Brochure URL (Optional)"
-                                class="admin-input" style="flex:1;">
+                            <input type="url" id="travelImage" placeholder="Upload Image URL *" required class="admin-input" style="flex:1;">
+                            <input type="url" id="travelBrochure" placeholder="Brochure URL (Optional)" class="admin-input" style="flex:1;">
                         </div>
-
+                        
                         <!-- Description -->
-                        <textarea id="travelDetails" rows="3" placeholder="Full Details *" required
-                            class="admin-input"></textarea>
-
-                        <!-- Company Info -->
-                        <div style="display:flex; gap:10px; margin-top: 5px;">
-                            <input type="text" id="travelCompany" placeholder="Company Name *" required
-                                class="admin-input" style="flex:1;">
-                            <input type="text" id="travelContact" placeholder="Contact Number *" required
-                                class="admin-input" style="flex:1;">
-                        </div>
-                        <div style="display:flex; gap:10px;">
-                            <input type="text" id="travelWhatsapp" placeholder="WhatsApp Number" class="admin-input"
-                                style="flex:1;">
-                            <input type="email" id="travelEmail" placeholder="Email" class="admin-input"
-                                style="flex:1;">
-                        </div>
-
+                        <textarea id="travelDetails" rows="3" placeholder="Full Details *" required class="admin-input"></textarea>
+                        
                         <!-- Status -->
                         <div style="display:flex; gap:10px;">
                             <select id="travelListingType" class="admin-input" style="flex:1;">
@@ -783,13 +707,10 @@
                                 <option value="Draft">Status: Draft</option>
                             </select>
                         </div>
-
+                        
                         <div style="display:flex; gap:10px; margin-top: 5px;">
-                            <button type="submit" id="btnSaveTravel" class="btn btn-primary"
-                                style="flex:1; padding:10px; font-weight:bold;">Submit Package</button>
-                            <button type="button" id="btnCancelTravel" class="btn btn-secondary"
-                                style="display:none; flex:1; padding:10px; font-weight:bold;"
-                                onclick="cancelTravelEdit()">Cancel Edit</button>
+                            <button type="submit" id="btnSaveTravel" class="btn btn-primary" style="flex:1; padding:10px; font-weight:bold;">Submit Package</button>
+                            <button type="button" id="btnCancelTravel" class="btn btn-secondary" style="display:none; flex:1; padding:10px; font-weight:bold;" onclick="cancelTravelEdit()">Cancel Edit</button>
                         </div>
                     </form>
                 </div>
@@ -839,7 +760,7 @@
 
     <script src="../js/data-service.js"></script>
     <script src="../js/admin.js"></script>
-    <script src="../js/blog-manager.js"></script>
+	<script src="../js/blog-manager.js"></script>
 </body>
 
 </html>

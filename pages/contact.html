@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact StopBuy - اسٹاپ بائے | Smart Commodity Price Comparison Pakistan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+
+<body class="text-slate-100 bg-slate-50">
+
+  <!-- NAVBAR -->
+  <header class="header sticky top-0 z-30">
+    <nav class="container flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <a href="../index.html">
+          <img src="../images/logo/stopbuy-logo.png" alt="StopBuy Logo" class="h-10 w-auto object-contain rounded-lg p-1">
+        </a>
+        <div class="leading-tight hidden sm:block">
+          <div class="flex items-center gap-2">
+            <span class="text-lg sm:text-xl font-bold text-slate-800"><span class="lang-en">StopBuy</span><span
+                class="lang-ur">اسٹاپ بائے</span></span>
+          </div>
+          <p class="text-[0.65rem] text-slate-500 mt-0.5"><span class="lang-en">Smart Price Comparison</span><span class="lang-ur">اسمارٹ پرائس کمپیرزن</span></p>
+        </div>
+      </div>
+      
+      <div class="hidden lg:flex items-center gap-4 flex-1 justify-center max-w-2xl">
+        <div class="flex items-center gap-1 text-slate-700 text-sm bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 cursor-pointer hover:bg-slate-200 transition whitespace-nowrap">
+          <span>📍</span>
+          <span class="font-medium">Karachi</span>
+          <span class="text-[0.6rem] ml-1">▼</span>
+        </div>
+        
+        <div class="flex-1 relative w-full">
+          <input type="text" placeholder="Search products..." class="w-full bg-white border border-slate-300 rounded-full px-4 py-1.5 text-sm text-slate-800 outline-none focus:ring-1 focus:ring-emerald-500/70 focus:border-emerald-400 placeholder:text-slate-400">
+          <span class="absolute right-3 top-1.5 text-slate-400 text-sm">🔍</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button id="langToggleBtn"
+          class="px-2.5 py-1.5 rounded-full border border-slate-300 bg-white text-xs text-slate-700 hover:bg-slate-50 transition">
+          <span class="lang-ur">English</span><span class="lang-en">اردو</span>
+        </button>
+      </div>
+    </nav>
+    
+    <!-- Second Row (Main Navigation) -->
+    <div class="menu-bar hidden lg:flex">
+      <div class="container w-full flex items-center justify-start gap-8">
+        
+        <div class="menu-dropdown">
+          <button class="menu-btn">
+            ☰ Menu <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+
+          <div class="menu-content text-sm">
+            <a href="../index.html"><i class="fa fa-home w-5 text-center"></i> Home</a>
+            <a href="about.html"><i class="fa fa-info-circle w-5 text-center"></i> About Us</a>
+            <a href="contact.html"><i class="fa fa-envelope w-5 text-center"></i> Contact Us</a>
+          </div>
+        </div>
+
+        <ul class="flex items-center m-0 p-0 list-none">
+          <li class="menu-item"><a href="../index.html">Home</a></li>
+          <li class="menu-item"><a href="about.html">About Us</a></li>
+          <li class="menu-item"><a href="contact.html" class="text-emerald-600">Contact</a></li>
+        </ul>
+
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 py-10 bg-[#070b14] min-h-screen">
+    <section class="section">
+      <div class="container px-4 max-w-3xl mx-auto">
+        <div class="bg-[#0b121c] border border-slate-800 p-8 sm:p-10 rounded-3xl shadow-2xl">
+          
+          <div class="mb-8 border-b border-slate-800/50 pb-4 inline-block border-b-2 border-b-emerald-500">
+            <h1 class="text-3xl sm:text-4xl font-bold">
+              <span class="lang-en">
+                <span class="text-emerald-500">Contact</span> <span class="text-[#eab308]">Us</span>
+              </span>
+              <span class="lang-ur text-[#6da9d5]">
+                رابطہ
+              </span>
+            </h1>
+          </div>
+
+          <p class="lang-en text-gray-300 mb-8 text-[0.95rem] leading-relaxed">
+            👉 If you are a retailer, supermarket, or brand looking to showcase your prices or offers, please complete the form below. Our team will get in touch with you soon.
+          </p>
+          <p class="lang-ur text-gray-300 mb-8 text-[0.95rem] leading-relaxed">
+            اگر آپ دکاندار، سپر اسٹور، یا برانڈ ہیں اور اپنی قیمتیں / آفرز دکھانا چاہتے ہیں تو نیچے فارم فل کریں۔ ہم آپ سے جلد رابطہ کریں گے۔
+          </p>
+
+          <form class="space-y-6">
+            <div class="grid sm:grid-cols-2 gap-6">
+              <div>
+                <label class="block mb-2 text-sm text-gray-400">
+                  <span class="lang-en">Name</span><span class="lang-ur">نام</span>
+                </label>
+                <input type="text" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-4 py-2.5 text-gray-200 outline-none focus:ring-1 focus:ring-emerald-500/50 focus:border-emerald-500 transition-colors" />
+              </div>
+              <div>
+                <label class="block mb-2 text-sm text-gray-400">
+                  <span class="lang-en">Email</span><span class="lang-ur">ای میل</span>
+                </label>
+                <input type="email" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-4 py-2.5 text-gray-200 outline-none focus:ring-1 focus:ring-emerald-500/50 focus:border-emerald-500 transition-colors" />
+              </div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-6">
+              <div>
+                <label class="block mb-2 text-sm text-gray-400">
+                  <span class="lang-en">City</span><span class="lang-ur">شہر</span>
+                </label>
+                <input type="text" placeholder="Karachi, Lahore, Islamabad..." class="w-full bg-[#030712] border border-slate-800 rounded-xl px-4 py-2.5 text-gray-200 outline-none focus:ring-1 focus:ring-emerald-500/50 focus:border-emerald-500 placeholder:text-slate-600 transition-colors" />
+              </div>
+              <div>
+                <label class="block mb-2 text-sm text-gray-400">
+                  <span class="lang-en">You are</span><span class="lang-ur">آپ کون ہیں؟</span>
+                </label>
+                <select class="w-full bg-[#030712] border border-slate-800 rounded-xl px-4 py-2.5 text-gray-200 outline-none focus:ring-1 focus:ring-emerald-500/50 focus:border-emerald-500 transition-colors appearance-none" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239CA3AF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 1rem top 50%; background-size: 0.65rem auto;">
+                  <option>Retail Shop / جنرل اسٹور</option>
+                  <option>Super Store / سپر اسٹور</option>
+                  <option>Brand / برانڈ</option>
+                  <option>Wholesale / ہول سیل</option>
+                  <option>Other / دیگر</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block mb-2 text-sm text-gray-400">
+                <span class="lang-en">Message</span><span class="lang-ur">پیغام</span>
+              </label>
+              <textarea rows="4" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-4 py-2.5 text-gray-200 outline-none focus:ring-1 focus:ring-emerald-500/50 focus:border-emerald-500 transition-colors"></textarea>
+            </div>
+
+            <button type="button" class="px-8 py-3 mt-2 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-500 text-[#070b14] font-bold hover:opacity-90 transition shadow-lg shadow-emerald-500/20">
+              <span class="lang-en">Send Message</span><span class="lang-ur">پیغام بھیجیں</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-200 bg-white mt-10">
+    <div class="container py-8">
+      <div class="flex flex-col md:flex-row gap-6 md:items-center md:justify-between">
+        <div class="flex flex-col gap-3">
+          <div class="font-bold text-xl text-slate-800">StopBuy</div>
+          <div class="flex flex-wrap gap-4 text-sm text-slate-600 font-medium">
+            <a href="../index.html" class="hover:text-emerald-600 transition">Home</a>
+            <a href="about.html" class="hover:text-emerald-600 transition">About</a>
+            <a href="contact.html" class="hover:text-emerald-600 transition">Contact</a>
+          </div>
+        </div>
+        <div class="flex flex-col gap-3 md:items-end">
+          <div class="text-xs text-slate-500">
+            © <span id="year"></span> StopBuy. All rights reserved. | Built for Pakistan 🇵🇰
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+</body>
+</html>

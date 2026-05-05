@@ -43,15 +43,14 @@
             background-color: #059669;
             border-radius: 20px;
         }
-
-        ::-webkit-scrollbar {
-            height: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #059669;
-            border-radius: 10px;
-        }
+		
+		::-webkit-scrollbar {
+    height: 4px;
+}
+::-webkit-scrollbar-thumb {
+    background: #059669;
+    border-radius: 5px;
+}
     </style>
 </head>
 
@@ -69,34 +68,26 @@
                 </div>
 
                 <div class="flex flex-col leading-tight">
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-1.5">
                         <span class="font-bold text-xl tracking-tight">
                             <span class="text-[#8CC63F]">Stop</span><span class="text-[#5B9BD5]">Buy</span>
                         </span>
 
                         <div
-                            class="border border-[#24533e] bg-emerald-900/20 text-[#58b284] px-2 py-[2px] rounded text-[10px] font-semibold tracking-wide">
-                            Price Smart, Save More
+                            class="bg-emerald-600/20 text-emerald-300 px-2 py-[2px] rounded-full text-[9px] font-semibold">
+                            LIVE
                         </div>
                     </div>
 
-                    <span class="text-[11px] text-gray-300 mt-0.5">
-                        Smart Price Comparison for Pakistan
+                    <span class="text-[10px] text-gray-300">
+                        Smart Price Comparison
                     </span>
                 </div>
             </div>
 
             <!-- CENTER: Search Bar -->
-            <div class="flex-1 max-w-xl flex items-center gap-3">
-                <!-- Location -->
-                <div class="hidden md:flex items-center gap-x-2 bg-white/10 hover:bg-white/15 px-4 py-1.5 rounded-3xl text-sm cursor-pointer"
-                    onclick="showLocationModal()">
-                    <i class="fas fa-map-marker-alt text-emerald-400"></i>
-                    <span id="current-location">Karachi</span>
-                    <i class="fas fa-chevron-down text-xs ml-1"></i>
-                </div>
-
-                <div class="relative flex-1">
+            <div class="flex-1 max-w-xl">
+                <div class="relative">
                     <input type="text" placeholder="Search product, brand or store..."
                         onkeyup="if (event.key === 'Enter') performGlobalSearch()"
                         class="w-full h-[38px] bg-white text-[#1F2937] pl-9 pr-3 rounded-xl text-sm border border-white/20 focus:outline-none focus:ring-2 focus:ring-emerald-400 shadow-sm">
@@ -124,17 +115,11 @@
                         class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">12</span>
                 </div>
 
-                <!-- Language Toggle -->
-                <div onclick="toggleLanguage()"
-                    class="flex items-center justify-center px-4 h-[38px] bg-white/10 hover:bg-white/20 rounded-full text-sm font-medium cursor-pointer transition-colors"
-                    title="Switch Language">
-                    <span id="lang-toggle-text">اردو</span>
-                </div>
-
-                <!-- Login Profile Icon -->
+                <!-- Login -->
                 <div onclick="showLoginModal()"
-                    class="flex items-center justify-center w-[38px] h-[38px] border border-white/20 hover:bg-white/10 rounded-full cursor-pointer transition-colors">
-                    <i class="fas fa-user text-emerald-400"></i>
+                    class="flex items-center gap-2 px-4 h-[38px] bg-white text-[#0A3D2A] hover:bg-white/90 rounded-xl text-sm font-semibold cursor-pointer">
+                    <i class="fas fa-user"></i>
+                    <span class="hidden md:inline">Login</span>
                 </div>
 
             </div>
@@ -166,20 +151,26 @@
                     Mobiles</div>
                 <div onclick="showPage('laptops')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
                     Laptops</div>
+				<div onclick="showPage('electronics')"
+    class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
+    Home Appliances
+</div>
 
+<div onclick="showPage('fashion')"
+    class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
+    Fashion
+</div>
 
-                <div onclick="showPage('fashion')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Fashion
-                </div>
+<div onclick="showPage('cosmetics')"
+    class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
+    Cosmetics
+</div>
 
-                <div onclick="showPage('cosmetics')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Cosmetics
-                </div>
-
-                <div onclick="showPage('babycare')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Baby Care
-                </div>
-            </div>
+<div onclick="showPage('babycare')"
+    class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
+    Baby Care
+</div>
+</div>
 
             <!-- Visitor Counter -->
             <div class="hidden md:flex items-center ml-4">
@@ -245,8 +236,10 @@
                             </div>
                             <!-- Slide 3 -->
                             <div class="min-w-full flex-shrink-0">
-                                <img src="images/promotion/go-electric-ride-the-future.png" alt="Go Electric Promo Banner"
-                                    class="w-full h-[200px] sm:h-[250px] md:h-[320px] object-cover md:object-fill">
+                                <div
+                                    class="w-full h-[200px] sm:h-[250px] md:h-[320px] bg-emerald-50 flex items-center justify-center text-emerald-800 font-bold text-2xl border border-emerald-200">
+                                    Another Promo Banner Here
+                                </div>
                             </div>
                         </div>
 
@@ -768,137 +761,127 @@
 
         <!-- FOOTER -->
         <!-- FOOTER -->
-        <footer class="bg-[#1e2330] text-gray-300 pt-14 pb-6 mt-12">
-            <div class="max-w-screen-2xl mx-auto px-4">
+<footer class="bg-[#1e2330] text-gray-300 pt-14 pb-6 mt-12">
+    <div class="max-w-screen-2xl mx-auto px-4">
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
 
-                    <!-- Col 1 -->
-                    <div class="space-y-5">
-                        <div class="flex items-center gap-3">
-                            <img src="images/logo/stopbuy-logo.png"
-                                class="w-11 h-11 bg-white rounded-xl object-contain p-1">
+            <!-- Col 1 -->
+            <div class="space-y-5">
+                <div class="flex items-center gap-3">
+                    <img src="images/logo/stopbuy-logo.png"
+                        class="w-11 h-11 bg-white rounded-xl object-contain p-1">
 
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <div class="text-xl font-bold leading-none">
-                                        <span class="text-[#8CC63F]">Stop</span><span class="text-[#5B9BD5]">Buy</span>
-                                    </div>
-                                    <span
-                                        class="border border-[#24533e] bg-emerald-900/20 text-[#58b284] px-2 py-[2px] rounded text-[10px] font-semibold tracking-wide">
-                                        Price Smart, Save More
-                                    </span>
-                                </div>
-                                <div class="text-[11px] text-gray-400 mt-1">Smart Price Comparison for Pakistan</div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <div class="text-xl font-bold leading-none">
+                                <span class="text-[#a3cf53]">Stop</span><span class="text-[#6da9d5]">Buy</span>
                             </div>
+                            <span class="bg-emerald-600/20 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                LIVE
+                            </span>
                         </div>
-
-                        <p class="text-sm text-gray-400 leading-relaxed">
-                            Pakistan's most trusted price comparison platform helping you find the best deals across
-                            stores.
-                        </p>
-
-                        <!-- Social -->
-                        <div class="flex gap-2">
-                            <a href="#"
-                                class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
-                                <i class="fab fa-facebook-f text-white text-xs"></i>
-                            </a>
-                            <a href="#"
-                                class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
-                                <i class="fab fa-twitter text-white text-xs"></i>
-                            </a>
-                            <a href="#"
-                                class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
-                                <i class="fab fa-instagram text-white text-xs"></i>
-                            </a>
-                            <a href="#"
-                                class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
-                                <i class="fab fa-youtube text-white text-xs"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Col 2 -->
-                    <div>
-                        <h3 class="text-[#eab308] font-semibold mb-5">Quick Links</h3>
-                        <ul class="space-y-3 text-sm text-gray-400">
-                            <li><a href="#" onclick="showPage('home')" class="hover:text-white">Home</a></li>
-                            <li><a href="#" onclick="showPage('groceries')" class="hover:text-white">Daily Groceries</a>
-                            </li>
-                            <li><a href="#" onclick="showPage('electronics')" class="hover:text-white">Electronics</a>
-                            </li>
-                            <li><a href="#" onclick="showPage('mobiles')" class="hover:text-white">Mobiles</a></li>
-                            <li><a href="#" onclick="showPage('laptops')" class="hover:text-white">Laptops</a></li>
-                            <li><a href="#" onclick="showSimplePage('travel')" class="hover:text-white">Travel &
-                                    Tours</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Col 3 -->
-                    <div>
-                        <h3 class="text-[#eab308] font-semibold mb-5">Company</h3>
-                        <ul class="space-y-3 text-sm text-gray-400">
-                            <li><a href="pages/about.html" class="hover:text-white">About Us</a></li>
-                            <li><a href="#" onclick="showSimplePage('blog')" class="hover:text-white">Blog</a></li>
-                            <li><a href="pages/contact.html" class="hover:text-white">Contact</a></li>
-                            <li><a href="#" class="hover:text-white">Careers</a></li>
-                            <li><a href="#" class="hover:text-white">Press</a></li>
-                            <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Col 4 (UPDATED with Newsletter) -->
-                    <div>
-                        <h3 class="text-[#eab308] font-semibold mb-5">Stay Updated</h3>
-
-                        <!-- Newsletter -->
-                        <div class="mb-6">
-                            <p class="text-sm text-gray-400 mb-3">Get latest deals & price alerts</p>
-
-                            <div class="flex bg-[#2b3544] rounded-lg overflow-hidden">
-                                <input type="email" placeholder="Enter email"
-                                    class="flex-1 px-3 py-2 text-sm bg-transparent text-white outline-none">
-                                <button onclick="subscribeUser()"
-                                    class="bg-emerald-600 hover:bg-emerald-700 px-3 text-sm font-semibold">
-                                    Subscribe
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Contact -->
-                        <ul class="space-y-3 text-sm text-gray-400">
-                            <li class="flex items-start gap-2">
-                                <i class="fas fa-map-marker-alt text-emerald-500 mt-1"></i>
-                                <span>Block 7, Clifton, Karachi</span>
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <i class="fas fa-phone-alt text-emerald-500"></i>
-                                <span>+92 21 111 786 786</span>
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <i class="fas fa-envelope text-emerald-500"></i>
-                                <span>support@stopbuy.pk</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-
-                <!-- Bottom -->
-                <div
-                    class="pt-6 border-t border-[#2b3544] flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-gray-500">
-                    <div>© 2026 StopBuy. All rights reserved - Pakistan’s most trusted price comparison
-                        platform.</div>
-                    <div class="flex gap-5">
-                        <a href="#" class="hover:text-white">Terms</a>
-                        <a href="#" class="hover:text-white">Privacy</a>
-                        <a href="#" class="hover:text-white">Cookies</a>
+                        <div class="text-[11px] text-gray-400 mt-1">Smart Price Comparison</div>
                     </div>
                 </div>
 
+                <p class="text-sm text-gray-400 leading-relaxed">
+                    Pakistan's most trusted price comparison platform helping you find the best deals across stores.
+                </p>
+
+                <!-- Social -->
+                <div class="flex gap-2">
+                    <a href="#" class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
+                        <i class="fab fa-facebook-f text-white text-xs"></i>
+                    </a>
+                    <a href="#" class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
+                        <i class="fab fa-twitter text-white text-xs"></i>
+                    </a>
+                    <a href="#" class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
+                        <i class="fab fa-instagram text-white text-xs"></i>
+                    </a>
+                    <a href="#" class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
+                        <i class="fab fa-youtube text-white text-xs"></i>
+                    </a>
+                </div>
             </div>
-        </footer>
+
+            <!-- Col 2 -->
+            <div>
+                <h3 class="text-[#eab308] font-semibold mb-5">Quick Links</h3>
+                <ul class="space-y-3 text-sm text-gray-400">
+                    <li><a href="#" onclick="showPage('home')" class="hover:text-white">Home</a></li>
+                    <li><a href="#" onclick="showPage('groceries')" class="hover:text-white">Daily Groceries</a></li>
+                    <li><a href="#" onclick="showPage('electronics')" class="hover:text-white">Electronics</a></li>
+                    <li><a href="#" onclick="showPage('mobiles')" class="hover:text-white">Mobiles</a></li>
+                    <li><a href="#" onclick="showPage('laptops')" class="hover:text-white">Laptops</a></li>
+                    <li><a href="#" onclick="showSimplePage('travel')" class="hover:text-white">Travel & Tours</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 3 -->
+            <div>
+                <h3 class="text-[#eab308] font-semibold mb-5">Company</h3>
+                <ul class="space-y-3 text-sm text-gray-400">
+                    <li><a href="pages/about.html" class="hover:text-white">About Us</a></li>
+                    <li><a href="#" onclick="showSimplePage('blog')" class="hover:text-white">Blog</a></li>
+                    <li><a href="pages/contact.html" class="hover:text-white">Contact</a></li>
+                    <li><a href="#" class="hover:text-white">Careers</a></li>
+                    <li><a href="#" class="hover:text-white">Press</a></li>
+                    <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 4 (UPDATED with Newsletter) -->
+            <div>
+                <h3 class="text-[#eab308] font-semibold mb-5">Stay Updated</h3>
+
+                <!-- Newsletter -->
+                <div class="mb-6">
+                    <p class="text-sm text-gray-400 mb-3">Get latest deals & price alerts</p>
+
+                    <div class="flex bg-[#2b3544] rounded-lg overflow-hidden">
+                        <input type="email"
+                            placeholder="Enter email"
+                            class="flex-1 px-3 py-2 text-sm bg-transparent text-white outline-none">
+                        <button onclick="subscribeUser()"
+                            class="bg-emerald-600 hover:bg-emerald-700 px-3 text-sm font-semibold">
+                            Subscribe
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Contact -->
+                <ul class="space-y-3 text-sm text-gray-400">
+                    <li class="flex items-start gap-2">
+                        <i class="fas fa-map-marker-alt text-emerald-500 mt-1"></i>
+                        <span>Block 7, Clifton, Karachi</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fas fa-phone-alt text-emerald-500"></i>
+                        <span>+92 21 111 786 786</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fas fa-envelope text-emerald-500"></i>
+                        <span>support@stopbuy.pk</span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Bottom -->
+        <div class="pt-6 border-t border-[#2b3544] flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-gray-500">
+            <div>© 2026 StopBuy. All rights reserved.</div>
+            <div class="flex gap-5">
+                <a href="#" class="hover:text-white">Terms</a>
+                <a href="#" class="hover:text-white">Privacy</a>
+                <a href="#" class="hover:text-white">Cookies</a>
+            </div>
+        </div>
+
+    </div>
+</footer>
 
         <script>
             function animateVisitorCounter() {
@@ -1002,55 +985,15 @@
             let currentSlide = 0;
             const totalSlides = 3;
             let slideInterval;
-            let isTransitioning = false;
-
-            function initCarousel() {
-                const carousel = document.getElementById('promo-carousel');
-                if (!carousel) return;
-                
-                const firstSlideClone = carousel.children[0].cloneNode(true);
-                const lastSlideClone = carousel.children[carousel.children.length - 1].cloneNode(true);
-                
-                carousel.appendChild(firstSlideClone);
-                carousel.insertBefore(lastSlideClone, carousel.children[0]);
-                
-                carousel.style.transition = 'none';
-                carousel.style.transform = `translateX(-100%)`;
-                
-                carousel.offsetHeight; // force reflow
-                carousel.style.transition = 'transform 500ms ease-in-out';
-                
-                carousel.addEventListener('transitionend', () => {
-                    isTransitioning = false;
-                    if (currentSlide === totalSlides) {
-                        carousel.style.transition = 'none';
-                        currentSlide = 0;
-                        carousel.style.transform = `translateX(-100%)`;
-                        carousel.offsetHeight; // force reflow
-                        carousel.style.transition = 'transform 500ms ease-in-out';
-                    } else if (currentSlide === -1) {
-                        carousel.style.transition = 'none';
-                        currentSlide = totalSlides - 1;
-                        carousel.style.transform = `translateX(-${(currentSlide + 1) * 100}%)`;
-                        carousel.offsetHeight; // force reflow
-                        carousel.style.transition = 'transform 500ms ease-in-out';
-                    }
-                });
-            }
 
             function updateCarousel() {
                 const carousel = document.getElementById('promo-carousel');
                 const dots = document.querySelectorAll('.promo-dot');
                 if (carousel) {
-                    carousel.style.transform = `translateX(-${(currentSlide + 1) * 100}%)`;
+                    carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
                 }
-                
-                let dotIndex = currentSlide;
-                if (dotIndex === totalSlides) dotIndex = 0;
-                if (dotIndex === -1) dotIndex = totalSlides - 1;
-
                 dots.forEach((dot, index) => {
-                    if (index === dotIndex) {
+                    if (index === currentSlide) {
                         dot.classList.replace('bg-black/20', 'bg-emerald-700');
                         dot.classList.remove('hover:bg-black/40');
                     } else {
@@ -1061,23 +1004,18 @@
             }
 
             function nextSlide() {
-                if (isTransitioning) return;
-                isTransitioning = true;
-                currentSlide++;
+                currentSlide = (currentSlide + 1) % totalSlides;
                 updateCarousel();
                 resetSlideInterval();
             }
 
             function prevSlide() {
-                if (isTransitioning) return;
-                isTransitioning = true;
-                currentSlide--;
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
                 updateCarousel();
                 resetSlideInterval();
             }
 
             function goToSlide(index) {
-                if (isTransitioning) return;
                 currentSlide = index;
                 updateCarousel();
                 resetSlideInterval();
@@ -1088,35 +1026,15 @@
                 slideInterval = setInterval(nextSlide, 5000);
             }
 
-            function requestUserLocation() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            console.log("Location access granted. Lat:", position.coords.latitude, "Lon:", position.coords.longitude);
-                            // Can add reverse geocoding logic here later to update the 'current-location' element
-                        },
-                        (error) => {
-                            console.error("Location access denied or failed.", error);
-                        }
-                    );
-                }
-            }
-
-            function showLocationModal() {
-                alert("Location selection modal coming soon!");
-            }
-
             window.onload = () => {
                 initializeWebsite();
                 startSyncedInfiniteScroll();
-                initCarousel();
                 resetSlideInterval();
-                setTimeout(requestUserLocation, 500); // Ask shortly after page load
             };
-
-            function subscribeUser() {
-                alert("Subscribed successfully!");
-            }
+			
+			function subscribeUser() {
+    alert("Subscribed successfully!");
+}
         </script>
 </body>
 

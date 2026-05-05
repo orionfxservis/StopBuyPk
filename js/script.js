@@ -1,0 +1,984 @@
+// Language Setup (runs immediately)
+const currentLang = localStorage.getItem('qeematLang') || 'ur';
+
+document.documentElement.lang = currentLang;
+document.documentElement.dir = currentLang === 'ur' ? 'rtl' : 'ltr';
+
+// Function to update visible language content
+function updateLanguageUI(lang) {
+  // English text
+  document.querySelectorAll('.lang-en').forEach(el => {
+    el.style.display = (lang === 'en') ? '' : 'none';
+  });
+
+  // Urdu text
+  document.querySelectorAll('.lang-ur').forEach(el => {
+    el.style.display = (lang === 'ur') ? '' : 'none';
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const toggleBtn = document.getElementById('langToggleBtn');
+
+  // Apply language on page load
+  updateLanguageUI(currentLang);
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      const newLang = document.documentElement.lang === 'ur' ? 'en' : 'ur';
+
+      // Update HTML attributes
+      document.documentElement.lang = newLang;
+      document.documentElement.dir = newLang === 'ur' ? 'rtl' : 'ltr';
+
+      // Save preference
+      localStorage.setItem('qeematLang', newLang);
+
+      // Update UI text
+      updateLanguageUI(newLang);
+    });
+  }
+});
+
+// Mobile menu toggle
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+if (mobileMenuBtn) {
+  mobileMenuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
+}
+
+// Login Dropdown toggle
+const loginToggleBtn = document.getElementById('loginToggleBtn');
+const loginDropdown = document.getElementById('loginDropdown');
+const loginTabUser = document.getElementById('loginTabUser');
+const loginTabAdmin = document.getElementById('loginTabAdmin');
+const loginInputUserName = document.getElementById('loginInputUserName');
+const loginInputCompany = document.getElementById('loginInputCompany');
+const loginInputUserId = document.getElementById('loginInputUserId');
+const loginInputPassword = document.getElementById('loginInputPassword');
+const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+let currentLoginMode = 'user';
+
+if (loginToggleBtn && loginDropdown) {
+  loginToggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    loginDropdown.classList.toggle('hidden');
+  });
+  loginDropdown.addEventListener('click', (e) => {
+    e.stopPropagation(); // prevent closing when clicking inside
+  });
+  document.addEventListener('click', () => {
+    loginDropdown.classList.add('hidden');
+  });
+}
+
+if (loginTabUser && loginTabAdmin && loginInputUserName && loginInputCompany) {
+  // Toggle to User mode
+  loginTabUser.addEventListener('click', () => {
+    currentLoginMode = 'user';
+    // Update Buttons
+    loginTabUser.className = "flex-[1.2] pb-2 text-emerald-400 border-b-2 border-emerald-400 font-semibold text-sm";
+    loginTabAdmin.className = "flex-[1] pb-2 text-slate-400 font-medium text-sm hover:text-slate-200 border-b-2 border-transparent";
+    // Show user specific fields
+    loginInputUserName.classList.remove('hidden');
+    loginInputCompany.classList.remove('hidden');
+  });
+
+  // Toggle to Admin mode
+  loginTabAdmin.addEventListener('click', () => {
+    currentLoginMode = 'admin';
+    // Update Buttons
+    loginTabAdmin.className = "flex-[1] pb-2 text-emerald-400 border-b-2 border-emerald-400 font-semibold text-sm";
+    loginTabUser.className = "flex-[1.2] pb-2 text-slate-400 font-medium text-sm hover:text-slate-200 border-b-2 border-transparent";
+    // Hide user specific fields
+    loginInputUserName.classList.add('hidden');
+    loginInputCompany.classList.add('hidden');
+  });
+}
+
+if (loginSubmitBtn) {
+  loginSubmitBtn.addEventListener('click', () => {
+    if (currentLoginMode === 'admin') {
+      const userId = loginInputUserId.value.trim();
+      const pass = loginInputPassword.value;
+
+      const isFaisal = userId.toLowerCase() === 'faisal' && pass === '1234';
+      const isAshraf = userId.toLowerCase() === 'ashraf taj' && pass === '1234';
+
+      if (isFaisal || isAshraf) {
+        // Check if we are currently inside the 'pages' directory
+        const isInPages = window.location.pathname.includes('/pages/');
+        const adminPath = isInPages ? 'admin.html' : 'pages/admin.html';
+        window.location.href = adminPath;
+      } else {
+        alert('Invalid Admin credentials!');
+      }
+    } else {
+      alert('User login successful (demo)');
+      loginDropdown.classList.add('hidden');
+    }
+  });
+}
+
+// Category dropdown
+const categoryToggle = document.getElementById('categoryToggle');
+const categoryMenu = document.getElementById('categoryMenu');
+const categoryLabel = document.getElementById('categoryLabel');
+let currentCategory = 'all';
+
+if (categoryToggle) {
+  categoryToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    categoryMenu.classList.toggle('hidden');
+  });
+  document.addEventListener('click', () => {
+    categoryMenu.classList.add('hidden');
+  });
+  categoryMenu.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const btn = e.target.closest('button[data-category]');
+    if (!btn) return;
+    currentCategory = btn.getAttribute('data-category');
+
+    if (currentCategory === 'food') {
+      window.location.href = 'pages/food.html';
+      return;
+    }
+
+    categoryLabel.textContent = btn.textContent.trim();
+    categoryMenu.classList.add('hidden');
+    renderProducts();
+  });
+}
+
+let allProducts = [];
+
+const productRowsEl = document.getElementById('productRows');
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+
+function renderProducts() {
+  if (!productRowsEl) return;
+  const q = searchInput.value.trim().toLowerCase();
+  let filtered = allProducts.slice();
+
+  if (currentCategory !== 'all') {
+    filtered = filtered.filter(p => p.category === currentCategory);
+  }
+  if (q) {
+    filtered = filtered.filter(p => (p.name || '').toLowerCase().includes(q));
+  }
+
+  // sort by distance first, then price
+  filtered.sort((a, b) => {
+    const distA = a.distanceKm || 0;
+    const distB = b.distanceKm || 0;
+    if (distA === distB) return (a.price || 0) - (b.price || 0);
+    return distA - distB;
+  });
+
+  productRowsEl.innerHTML = filtered.map(item => {
+    const prev = item.previous_price ? Number(item.previous_price) : null;
+    const current = item.price ? Number(item.price) : 0;
+
+    let priceColor = "text-emerald-400";
+    let changeText = "";
+
+    if (prev !== null && prev > 0) {
+      if (current > prev) {
+        priceColor = "text-red-400";
+        changeText = `🔴 +${(current - prev).toFixed(0)}`;
+      } else if (current < prev) {
+        priceColor = "text-green-400";
+        changeText = `🟢 -${(prev - current).toFixed(0)}`;
+      }
+    }
+
+    const rowBg = (prev !== null && prev !== current) ? "bg-slate-900/30" : "";
+
+    return `
+        <div class="grid grid-cols-12 px-2 sm:px-3 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800 hover:shadow-md hover:shadow-emerald-500/10 hover:-translate-y-0.5 transition-all duration-300 ${rowBg}">
+          <div class="col-span-4 flex flex-col justify-center">
+            <span class="text-slate-100 font-medium leading-tight truncate" title="${item.name || ''}"><span class="lang-en">${(item.name || '').split(' / ')[0] || item.name}</span><span class="lang-ur">${(item.name || '').split(' / ')[1] || (item.name || '')}</span></span>
+            <span class="text-slate-500 text-[0.65rem]">${item.city || ''}</span>
+          </div>
+          <div class="col-span-2 flex items-center justify-center text-center">
+            <span class="text-slate-300 text-[0.7rem] sm:text-xs truncate" title="${item.area || ''}">${item.area || '-'}</span>
+          </div>
+          <div class="col-span-2 flex items-center justify-center text-center">
+            <span class="text-slate-400 text-[0.7rem] sm:text-xs">${item.unit || '-'}</span>
+          </div>
+          <div class="col-span-2 flex flex-col items-center justify-center text-center">
+            <span class="${priceColor} font-bold text-[0.75rem] sm:text-sm">Rs ${current.toLocaleString()}</span>
+            ${changeText ? `<span class="text-[10px] ${priceColor} mt-0.5">${changeText}</span>` : ''}
+          </div>
+          <div class="col-span-2 flex items-center justify-end text-right">
+            ${prev !== null && prev > 0 ? `<span class="text-slate-500 line-through text-[0.7rem] sm:text-xs">Rs ${prev.toLocaleString()}</span>` : '<span class="text-slate-600">-</span>'}
+          </div>
+        </div>
+      `}).join('') || `
+        <div class="px-3 py-4 text-center text-[0.75rem] text-slate-500">
+          <span class="lang-en">No items found for your search</span><span class="lang-ur">ابھی اس تلاش کے لیے ڈیٹا موجود نہیں</span>
+        </div>
+      `;
+}
+
+if (typeof DataService !== 'undefined') {
+  DataService.getProducts().then(products => {
+    if (products && products.length > 0) {
+      allProducts = products;
+    } else {
+      // Fallback dummy products if fetch returns empty
+      allProducts = [
+        { name: 'Sugar 1kg / چینی 1 کلو', category: 'grocery', city: 'Karachi', area: 'Gulshan-e-Iqbal', unit: '1 kg', previous_price: 160, price: 155 },
+        { name: 'Milk 1L Pack / دودھ 1 لیٹر', category: 'grocery', city: 'Lahore', area: 'Model Town', unit: '1 Liter', previous_price: 235, price: 235 },
+        { name: 'Tomato 1kg / ٹماٹر 1 کلو', category: 'vegetables', city: 'Karachi', area: 'Saddar', unit: '1 kg', previous_price: 110, price: 95 },
+        { name: 'Chicken 1kg / چکن 1 کلو', category: 'meat', city: 'Lahore', area: 'Township', unit: '1 kg', previous_price: 520, price: 495 }
+      ];
+    }
+    renderProducts();
+  }).catch(e => {
+    console.error("Failed to fetch products", e);
+  });
+}
+
+if (searchBtn) {
+  searchBtn.addEventListener('click', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    const foodKeywords = ['burger', 'pizza', 'food', 'zinger', 'broast', 'haleem', 'fast food', 'fries', 'desi', 'karahi', 'biryani'];
+    if (foodKeywords.some(kw => q.includes(kw))) {
+      window.location.href = `pages/food.html?search=${encodeURIComponent(searchInput.value.trim())}`;
+      return;
+    }
+    renderProducts();
+  });
+}
+if (searchInput) {
+  searchInput.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') {
+      const q = searchInput.value.trim().toLowerCase();
+      const foodKeywords = ['burger', 'pizza', 'food', 'zinger', 'broast', 'haleem', 'fast food', 'fries', 'desi', 'karahi', 'biryani'];
+      if (foodKeywords.some(kw => q.includes(kw))) {
+        window.location.href = `pages/food.html?search=${encodeURIComponent(searchInput.value.trim())}`;
+        return;
+      }
+      renderProducts();
+    }
+  });
+}
+
+// Initial render
+renderProducts();
+
+// Dynamic year
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// Check User Location on Load
+function checkUserLocation() {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        console.log("User location detected:", lat, lon);
+
+        const btn = document.getElementById('headerLocationBtn');
+        if (btn) {
+          btn.innerHTML = '\uD83D\uDCCD Location Active';
+          btn.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 shadow-md transition';
+        }
+        // In a real app, send these coordinates to your backend
+        // or use reverse-geocoding to set the user's city/area.
+      },
+      (error) => {
+        console.warn("Location access denied or unavailable:", error.message);
+        const btn = document.getElementById('headerLocationBtn');
+        if (btn) {
+          btn.innerHTML = '\uD83C\uDDF5\uD83C\uDDF0 Default View';
+          btn.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-800 border border-slate-700 text-slate-400 shadow-md transition';
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  } else {
+    console.warn("Geolocation is not supported by this browser.");
+  }
+}
+
+// Request location when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', checkUserLocation);
+} else {
+  checkUserLocation();
+}
+
+// Balloons generation
+const balloonLayer = document.querySelector('.balloon-layer');
+const commodityIcons = ['\uD83C\uDF45', '\uD83E\uDD54', '\uD83C\uDF57', '\uD83E\uDD5B', '\uD83C\uDF5A', '\uD83D\uDCF1', '\uD83E\uDDF4', '\uD83E\uDDFC', '\uD83E\uDD66', '\uD83C\uDF4A', '\uD83E\uDD69', '\uD83D\uDEE2\uFE0F'];
+
+function createBalloon() {
+  if (!balloonLayer) return;
+  const b = document.createElement('div');
+  b.className = 'balloon';
+  const icon = document.createElement('div');
+  icon.className = 'balloon-icon';
+  icon.textContent = commodityIcons[Math.floor(Math.random() * commodityIcons.length)];
+  b.style.left = Math.random() * 100 + 'vw';
+  const duration = 12 + Math.random() * 8;
+  b.style.animationDuration = duration + 's';
+  balloonLayer.appendChild(b);
+  b.appendChild(icon);
+
+  // Blow near top
+  const blowTime = (duration - 1.2) * 1000;
+  const timer = setTimeout(() => {
+    b.classList.add('blow');
+  }, blowTime);
+
+  b.addEventListener('animationend', () => {
+    clearTimeout(timer);
+    b.remove();
+  });
+}
+
+// Initial balloons
+for (let i = 0; i < 8; i++) {
+  setTimeout(createBalloon, i * 1200);
+}
+// Continuous balloons
+setInterval(createBalloon, 2800);
+
+// Active Navigation Link Highlight on Scroll
+const navLinks = document.querySelectorAll('.nav-link');
+const targetIDs = Array.from(navLinks).map(link => link.getAttribute('href')).filter(href => href && href.startsWith('#'));
+// Deduplicate IDs in case desktop and mobile menus share them
+const uniqueIDs = [...new Set(targetIDs)];
+const targetElements = uniqueIDs.map(id => document.querySelector(id)).filter(el => el);
+
+window.addEventListener('scroll', () => {
+  const scrollY = window.pageYOffset;
+  let current = '';
+
+  targetElements.forEach((el) => {
+    // get offsetTop of the element from the document body
+    let top = el.offsetTop;
+    let parent = el.offsetParent;
+    while (parent) {
+      top += parent.offsetTop;
+      parent = parent.offsetParent;
+    }
+
+    top = top - 120; // adjust for sticky header height + padding
+    const height = el.offsetHeight;
+
+    if (scrollY >= top && scrollY < top + height) {
+      current = el.getAttribute('id');
+    }
+  });
+
+  // Special case for reaching the bottom of the page
+  if ((window.innerHeight + scrollY) >= document.body.offsetHeight - 50) {
+    if (targetElements.length > 0) {
+      const lastEl = targetElements[targetElements.length - 1];
+
+      current = lastEl ? lastEl.getAttribute('id') : '';
+    }
+  }
+
+  navLinks.forEach((link) => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === `#${current}`) {
+      link.classList.add('active');
+    }
+  });
+});
+
+// Dynamic Add-ons (Categories & Banners)
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Dynamic Categories Mapping
+  const catGrid = document.getElementById('dynamicCategoryGrid');
+  const topPills = document.getElementById('dynamicTopPills');
+  if ((catGrid || topPills) && typeof DataService !== 'undefined') {
+    DataService.getCategories().then(categories => {
+      if (categories && categories.length > 0) {
+        const visibleCategories = categories.filter(cat => cat.showOnMainPage !== false);
+        const iconMap = {
+          'food': '\uD83C\uDF54',
+          'vehicle': '\uD83D\uDE97',
+          'vehicles': '\uD83D\uDE97',
+          'grocery': '\uD83D\uDED2',
+          'fruits': '🥦',
+          'fruit': '🥦',
+          'electronics': '\uD83D\uDCF1',
+          'mobile': '\uD83D\uDCF1',
+          'mobiles': '\uD83D\uDCF1',
+          'clothing': '\uD83D\uDC55',
+          'housing': '\uD83C\uDFE0',
+          'home': '\uD83C\uDFE0',
+          'properties': '\uD83C\uDFE0',
+          'property': '\uD83C\uDFE0',
+          'personal care': '🧴',
+          'kids': '🧸'
+        };
+        // if (catGrid) {
+        //     catGrid.innerHTML = visibleCategories.map(cat => {
+        //         const icon = iconMap[cat.name.toLowerCase()] || '📦';
+        //         const link = cat.name.toLowerCase() === 'food' ? 'pages/food.html' : 'javascript:void(0)';
+        //         return `
+        //         <article class="glass-card p-4 hover:-translate-y-1 transition transform" style="cursor: pointer;" onclick="window.location.href='${link}'">
+        //             <div class="flex items-center justify-between mb-2">
+        //                 <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-xl">${icon}</div>
+        //             </div>
+        //             <h3 class="font-semibold mb-1 text-slate-50">${cat.name}</h3>
+        //             <button class="text-xs font-semibold text-emerald-300 hover:text-emerald-200 mt-2 flex items-center gap-1">
+        //                 Explore / دیکھیں <span>→</span>
+        //             </button>
+        //         </article>
+        //     `}).join('');
+        // }
+
+        if (topPills) {
+          const topStyles = [
+            { bg: 'bg-yellow-500', text: 'text-yellow-950', shadow: 'shadow-yellow-500/30', hover: 'hover:bg-yellow-400' },
+            { bg: 'bg-rose-500', text: 'text-white', shadow: 'shadow-rose-500/30', hover: 'hover:bg-rose-400' },
+            { bg: 'bg-emerald-500', text: 'text-emerald-950', shadow: 'shadow-emerald-500/30', hover: 'hover:bg-emerald-400' },
+            { bg: 'bg-orange-500', text: 'text-white', shadow: 'shadow-orange-500/30', hover: 'hover:bg-orange-400' },
+            { bg: 'bg-sky-500', text: 'text-sky-950', shadow: 'shadow-sky-500/30', hover: 'hover:bg-sky-400' },
+            { bg: 'bg-indigo-500', text: 'text-white', shadow: 'shadow-indigo-500/30', hover: 'hover:bg-indigo-400' },
+            { bg: 'bg-fuchsia-500', text: 'text-white', shadow: 'shadow-fuchsia-500/30', hover: 'hover:bg-fuchsia-400' },
+            { bg: 'bg-teal-500', text: 'text-teal-950', shadow: 'shadow-teal-500/30', hover: 'hover:bg-teal-400' }
+          ];
+
+          topPills.innerHTML = visibleCategories.map((cat, idx) => {
+            const icon = iconMap[cat.name.toLowerCase()] || '\uD83D\uDCE6';
+            const link = cat.name.toLowerCase() === 'food' ? 'pages/food.html' : 'javascript:void(0)';
+            const styleArgs = topStyles[idx % topStyles.length];
+            const className = `shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${styleArgs.bg} ${styleArgs.text} shadow-md ${styleArgs.shadow} ${styleArgs.hover} transition`;
+
+            if (link !== 'javascript:void(0)') {
+              return `<a href="${link}" class="${className}">${icon} ${cat.name}</a>`;
+            } else {
+              return `<button class="${className}">${icon} ${cat.name}</button>`;
+            }
+          }).join('');
+        }
+      }
+    }).catch(e => {
+      console.error("Failed to map dynamic categories", e);
+    });
+  }
+
+  // 2. Dynamic Banner Rotation
+  const adBanner = document.getElementById('dynamicHorizontalBanner');
+  const vertBanner = document.getElementById('dynamicVerticalBanner');
+
+  if (typeof DataService !== 'undefined') {
+    DataService.getBanners().then(allBannersRaw => {
+      if (allBannersRaw && allBannersRaw.length > 0) {
+        // Unpack type from link if the backend dropped it
+        const allBanners = allBannersRaw.map(b => {
+          let displayType = b.type;
+          let displayLink = b.link;
+          if (displayLink && typeof displayLink === 'string' && displayLink.includes('|')) {
+            const parts = displayLink.split('|');
+            if (parts[0] === 'vertical' || parts[0] === 'horizontal') {
+              displayType = parts[0];
+              displayLink = parts.slice(1).join('|');
+            }
+          }
+          return { ...b, type: displayType, link: displayLink };
+        });
+
+        // Separate by type, default to horizontal if missing
+        const horizBanners = allBanners.filter(b => !b.type || b.type === 'horizontal');
+        const vertBanners = allBanners.filter(b => b.type === 'vertical');
+
+        // Render Horizontal Banners
+        if (adBanner && horizBanners.length > 0) {
+          adBanner.style.padding = '0';
+          adBanner.style.display = 'block';
+          adBanner.style.background = 'transparent';
+          adBanner.style.border = 'none';
+          adBanner.style.color = 'transparent';
+          adBanner.style.overflow = 'hidden';
+          adBanner.setAttribute('dir', 'ltr');
+
+          const bannersToShow = horizBanners.slice(0, 4);
+
+          // Ensure we have enough banners to cover ultra-wide screens smoothly
+          let loopingBanners = [...bannersToShow];
+          while (loopingBanners.length < 4) {
+            loopingBanners = loopingBanners.concat(bannersToShow);
+          }
+
+          const generateHorizontalHTML = () => {
+            return loopingBanners.map(b => {
+              const clickTarget = b.link ? b.link : 'javascript:void(0)';
+              const cursor = b.link ? 'pointer' : 'default';
+              return `
+                              <div style="width: 720px; height: 100%; flex-shrink: 0; padding-right: 16px; box-sizing: border-box;">
+                                <a href="${clickTarget}" style="display:block; width:100%; height:100%; overflow:hidden; border-radius: 1rem; cursor: ${cursor}; text-decoration: none;">
+                                   <img src="${b.image}" alt="Promotional Banner" style="width:100%; height:100%; object-fit: fill; border-radius: 1rem;" onerror="this.src='https://placehold.co/720x120?text=Banner+Ad'"/>
+                                </a>
+                              </div>
+                            `;
+            }).join('');
+          };
+
+          adBanner.innerHTML = `
+                      <style>
+                        @keyframes horizontalLoopAnim {
+                          0% { transform: translateX(0); }
+                          100% { transform: translateX(-50%); }
+                        }
+                        .banner-horizontal-track {
+                          display: flex;
+                          direction: ltr;
+                          height: 100%;
+                          width: max-content;
+                          animation: horizontalLoopAnim ${loopingBanners.length * 5}s linear infinite;
+                          will-change: transform;
+                        }
+                        .banner-horizontal-track:hover {
+                          animation-play-state: paused;
+                        }
+                      </style>
+                      <div class="banner-horizontal-track">
+                        ${generateHorizontalHTML()}
+                        ${generateHorizontalHTML()}
+                      </div>
+                    `;
+        }
+
+        // Render Vertical Banners
+        if (vertBanner && vertBanners.length > 0) {
+          const generateVerticalHTML = () => {
+            return vertBanners.map((b, i) => {
+              const clickTarget = b.link ? b.link : 'javascript:void(0)';
+              const cursor = b.link ? 'pointer' : 'default';
+              // We use .banner-item styling, overriding background
+              return `
+                              <div class="vertical-banner" style="flex-shrink:0; margin-bottom: 10px;">
+                                <a href="${clickTarget}" style="display:block; width:100%; cursor:${cursor}; text-decoration:none;">
+                                  <img src="${b.image}" alt="Vertical Ad" onerror="this.src='https://placehold.co/120x600?text=Vertical+Ad'"/>
+                                </a>
+                              </div>
+                            `;
+            }).join('');
+          };
+
+          // We need the first half of the track to be at least 720px tall (the container height)
+          // Each banner is 600px tall, so a full set is vertBanners.length * 600
+          const setHeight = vertBanners.length * 600;
+          const setsNeededForHalf = Math.max(1, Math.ceil(720 / setHeight));
+
+          let singleHalfHTML = '';
+          for (let i = 0; i < setsNeededForHalf; i++) {
+            singleHalfHTML += generateVerticalHTML();
+          }
+
+          // For seamless scrolling (translateY(-50%)), we duplicate the exact half
+          vertBanner.innerHTML = `
+            <style>
+              @keyframes verticalLoopAnim {
+                0% { transform: translateY(0); }
+                100% { transform: translateY(-50%); }
+              }
+              .banner-vertical-track {
+                display: flex;
+                flex-direction: column;
+                height: max-content;
+                width: 100%;
+                animation: verticalLoopAnim ${vertBanners.length * 10}s linear infinite;
+                will-change: transform;
+              }
+              .banner-vertical-track:hover {
+                animation-play-state: paused;
+              }
+            </style>
+            <div class="banner-vertical-track">
+              ${singleHalfHTML + singleHalfHTML}
+            </div>
+          `;
+        } else if (vertBanner) {
+          // Fallback dummy content if no vertical banners yet
+          const fallbackHTML = `
+            <div class="vertical-banner" style="flex-shrink:0; margin-bottom: 10px;">
+              <a href="javascript:void(0)" style="display:block; width:100%; cursor:default; text-decoration:none;">
+                <img src="https://placehold.co/120x600?text=Your+Ad+Here" alt="Vertical Ad" />
+              </a>
+            </div>
+            <div class="vertical-banner" style="flex-shrink:0; margin-bottom: 10px;">
+              <a href="javascript:void(0)" style="display:block; width:100%; cursor:default; text-decoration:none;">
+                <img src="https://placehold.co/120x600?text=Vertical+Banner" alt="Vertical Ad" />
+              </a>
+            </div>
+          `;
+          vertBanner.innerHTML = `
+            <style>
+              @keyframes verticalLoopAnim {
+                0% { transform: translateY(0); }
+                100% { transform: translateY(-50%); }
+              }
+              .banner-vertical-track {
+                display: flex;
+                flex-direction: column;
+                height: max-content;
+                width: 100%;
+                animation: verticalLoopAnim 20s linear infinite;
+                will-change: transform;
+              }
+              .banner-vertical-track:hover {
+                animation-play-state: paused;
+              }
+            </style>
+            <div class="banner-vertical-track w-full">
+              ${fallbackHTML + fallbackHTML}
+            </div>
+          `;
+        }
+      }
+    }).catch(e => {
+      console.error("Failed to map banners", e);
+    });
+  }
+
+  // --- Dynamic Blog Injection ---
+  if (document.getElementById('dynamicBlogGrid')) {
+    DataService.getBlogs().then(blogs => {
+      const container = document.getElementById('dynamicBlogGrid');
+      const viewAllBtn = document.getElementById('viewAllBlogsBtn');
+      let showingAll = false;
+      
+      if (blogs && blogs.length > 0) {
+        
+        // Show blinking button if more than 3
+        if (blogs.length > 3 && viewAllBtn) {
+            viewAllBtn.style.display = 'inline-block';
+            viewAllBtn.classList.add('animate-pulse');
+            
+            viewAllBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showingAll = !showingAll;
+                renderBlogCards(showingAll ? blogs : blogs.slice(0, 3));
+                
+                if (showingAll) {
+                    viewAllBtn.classList.remove('animate-pulse');
+                    viewAllBtn.innerHTML = '<span class="lang-en">Show Less</span><span class="lang-ur">کم دکھائیں</span>';
+                    if (typeof updateLanguageDisplay === 'function') updateLanguageDisplay();
+                } else {
+                    viewAllBtn.classList.add('animate-pulse');
+                    viewAllBtn.innerHTML = '<span class="lang-en">View All Posts</span><span class="lang-ur">تمام پوسٹس</span>';
+                    if (typeof updateLanguageDisplay === 'function') updateLanguageDisplay();
+                    // Scroll back to top of blog section smoothly
+                    document.getElementById('blog').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+            
+            // Clicking outside blog section resets to 3
+            document.addEventListener('click', (e) => {
+                const blogSection = document.getElementById('blog');
+                if (showingAll && blogSection && !blogSection.contains(e.target)) {
+                    showingAll = false;
+                    renderBlogCards(blogs.slice(0, 3));
+                    viewAllBtn.classList.add('animate-pulse');
+                    viewAllBtn.innerHTML = '<span class="lang-en">View All Posts</span><span class="lang-ur">تمام پوسٹس</span>';
+                    if (typeof updateLanguageDisplay === 'function') updateLanguageDisplay();
+                }
+            });
+        }
+        
+        function renderBlogCards(blogsToRender) {
+            const htmlStr = blogsToRender.map(b => {
+              const safeObj = encodeURIComponent(JSON.stringify(b));
+              return `
+                          <article class="glass-card p-0 overflow-hidden hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-900/80 transition flex flex-col">
+                            <div class="w-full aspect-video">
+                              <img src="${b.image}" alt="Blog Image" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4 flex-1 flex flex-col">
+                                <p class="text-[0.65rem] text-sky-300 mb-1">
+                                    <span class="lang-en">${b.categoryEn || 'Uncategorized'}</span>
+                                    <span class="lang-ur">${b.categoryUr || 'غیر درجہ بند'}</span>
+                                </p>
+                                <h3 class="font-semibold text-sm text-slate-50 mb-1">
+                                    <span class="lang-en">${b.titleEn}</span><span class="lang-ur">${b.titleUr}</span>
+                                </h3>
+                                <p class="text-[0.7rem] text-slate-400 mb-2">
+                                    <span class="lang-en">${b.descEn || ''}</span><span class="lang-ur">${b.descUr || ''}</span>
+                                </p>
+                                <button onclick="openBlogModal('${safeObj}')" class="mt-auto self-start text-[0.7rem] text-sky-300 hover:text-sky-200">
+                                    <span class="lang-en">Read More &rarr;</span><span class="lang-ur">مزید پڑھیں &larr;</span>
+                                </button>
+                            </div>
+                          </article>
+                        `;
+            }).join('');
+            container.innerHTML = htmlStr;
+        }
+
+        // Initial render: show up to 3
+        renderBlogCards(blogs.slice(0, 3));
+        
+      } else {
+        container.innerHTML = `
+                    <p class="text-slate-500 col-span-full text-center py-4">
+                        <span class="lang-en">No blogs available at the moment.</span><span class="lang-ur">فی الحال کوئی بلاگ دستیاب نہیں ہے۔</span>
+                    </p>`;
+      }
+    }).catch(e => {
+      console.error("Failed to load blogs", e);
+    });
+  }
+});
+
+// --- Blog Modal Functions ---
+window.openBlogModal = function (safeObj) {
+  const blogData = JSON.parse(decodeURIComponent(safeObj));
+  const modal = document.getElementById('blogModal');
+
+  document.getElementById('modalBlogImage').src = blogData.image;
+
+  // Switch title and content based on current language
+  const currentLang = document.documentElement.lang || 'en';
+  if (currentLang === 'ur') {
+    document.getElementById('modalBlogTitle').textContent = blogData.titleUr;
+    document.getElementById('modalBlogContent').textContent = blogData.contentUr;
+    document.getElementById('modalBlogContent').setAttribute('dir', 'rtl');
+    document.getElementById('modalBlogTitle').setAttribute('dir', 'rtl');
+  } else {
+    document.getElementById('modalBlogTitle').textContent = blogData.titleEn;
+    document.getElementById('modalBlogContent').textContent = blogData.contentEn;
+    document.getElementById('modalBlogContent').setAttribute('dir', 'ltr');
+    document.getElementById('modalBlogTitle').setAttribute('dir', 'ltr');
+  }
+
+  document.getElementById('modalBlogAuthor').textContent = blogData.author;
+
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden'; // Prevent background scrolling
+};
+
+window.closeBlogModal = function () {
+  const modal = document.getElementById('blogModal');
+  modal.classList.add('hidden');
+  document.body.style.overflow = 'auto'; // Restore background scrolling
+};
+
+window.shareToFacebook = function () {
+  // We use the current URL. Since this is a modal, the URL is the current page.
+  const url = encodeURIComponent(window.location.href);
+  const titleEl = document.getElementById('modalBlogTitle');
+  const title = titleEl ? encodeURIComponent(titleEl.textContent) : '';
+  // Open Facebook Sharer in a popup window
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${title}`, 'facebook-share-dialog', 'width=800,height=600');
+  return false;
+};
+
+// Close modal when clicking outside the content area
+document.addEventListener('click', function (e) {
+  const blogModal = document.getElementById('blogModal');
+  const travelModal = document.getElementById('travelModal');
+  if (blogModal && !blogModal.classList.contains('hidden') && e.target === blogModal) {
+    closeBlogModal();
+  }
+  if (travelModal && !travelModal.classList.contains('hidden') && e.target === travelModal) {
+    closeTravelModal();
+  }
+});
+
+window.openTravelModal = function (safeObj) {
+  const p = JSON.parse(decodeURIComponent(safeObj));
+  const modal = document.getElementById('travelModal');
+  const tbody = document.getElementById('modalTravelTableBody');
+
+  if (tbody) {
+    tbody.innerHTML = `
+            <tr class="border-b border-slate-700/50 bg-slate-800/30">
+                <td colspan="2" class="py-3 px-4 font-bold text-lg text-emerald-400 text-center">${p.title || '-'} ${p.verified === 'Yes' ? '✅' : ''}</td>
+            </tr>
+            <tr class="border-b border-slate-700/50">
+                <td class="py-3 px-4 font-semibold w-1/3 border-r border-slate-700/50">Category</td>
+                <td class="py-3 px-4">${p.category || '-'}</td>
+            </tr>
+            <tr class="border-b border-slate-700/50">
+                <td class="py-3 px-4 font-semibold w-1/3 border-r border-slate-700/50">Departure</td>
+                <td class="py-3 px-4">${p.departure || '-'}</td>
+            </tr>
+            <tr class="border-b border-slate-700/50">
+                <td class="py-3 px-4 font-semibold w-1/3 border-r border-slate-700/50">Destination</td>
+                <td class="py-3 px-4">${p.destination || '-'}</td>
+            </tr>
+            <tr class="border-b border-slate-700/50">
+                <td class="py-3 px-4 font-semibold w-1/3 border-r border-slate-700/50">Duration</td>
+                <td class="py-3 px-4">${p.duration ? p.duration + ' Days' : '-'}</td>
+            </tr>
+            <tr class="border-b border-slate-700/50">
+                <td class="py-3 px-4 font-semibold w-1/3 border-r border-slate-700/50">Price</td>
+                <td class="py-3 px-4 font-bold text-sky-400">Rs ${Number(p.price || 0).toLocaleString()} <span class="text-xs font-normal text-slate-400">(${p.priceType || 'Per Person'})</span></td>
+            </tr>
+            <tr class="border-b border-slate-700/50">
+                <td class="py-3 px-4 font-semibold w-1/3 border-r border-slate-700/50">Transport</td>
+                <td class="py-3 px-4">${p.transport || '-'}</td>
+            </tr>
+            <tr class="border-b border-slate-700/50">
+                <td class="py-3 px-4 font-semibold w-1/3 border-r border-slate-700/50">Hotel Type</td>
+                <td class="py-3 px-4">${p.hotel || '-'}</td>
+            </tr>
+            <tr class="border-b border-slate-700/50">
+                <td class="py-3 px-4 font-semibold w-1/3 border-r border-slate-700/50">Meals Included</td>
+                <td class="py-3 px-4">${p.meals || '-'}</td>
+            </tr>
+            <tr class="border-b border-slate-700/50">
+                <td class="py-3 px-4 font-semibold w-1/3 border-r border-slate-700/50">Guide Included</td>
+                <td class="py-3 px-4">${p.guide || '-'}</td>
+            </tr>
+            <tr class="border-b border-slate-700/50">
+                <td class="py-3 px-4 font-semibold w-1/3 border-r border-slate-700/50">Ziyarat / Tour Points</td>
+                <td class="py-3 px-4">${p.ziyarat || '-'}</td>
+            </tr>
+            <tr class="border-b border-slate-700/50 bg-slate-800/30">
+                <td colspan="2" class="py-3 px-4 font-bold text-slate-200">Full Details</td>
+            </tr>
+            <tr class="border-b border-slate-700/50">
+                <td colspan="2" class="py-3 px-4 text-slate-300 leading-relaxed whitespace-pre-line">${p.details || '-'}</td>
+            </tr>
+            <tr class="border-b border-slate-700/50 bg-slate-800/30">
+                <td colspan="2" class="py-3 px-4 font-bold text-slate-200">Contact Information</td>
+            </tr>
+            <tr class="border-b border-slate-700/50">
+                <td class="py-3 px-4 font-semibold w-1/3 border-r border-slate-700/50">Company Name</td>
+                <td class="py-3 px-4">${p.company || '-'}</td>
+            </tr>
+            <tr class="border-b border-slate-700/50">
+                <td class="py-3 px-4 font-semibold w-1/3 border-r border-slate-700/50">Contact No</td>
+                <td class="py-3 px-4">${p.contact || '-'}</td>
+            </tr>
+            <tr class="border-b border-slate-700/50">
+                <td class="py-3 px-4 font-semibold w-1/3 border-r border-slate-700/50">WhatsApp</td>
+                <td class="py-3 px-4">${p.whatsapp || '-'}</td>
+            </tr>
+            <tr>
+                <td class="py-3 px-4 font-semibold w-1/3 border-r border-slate-700/50">Email</td>
+                <td class="py-3 px-4">${p.email || '-'}</td>
+            </tr>
+        `;
+  }
+
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeTravelModal = function () {
+  const modal = document.getElementById('travelModal');
+  modal.classList.add('hidden');
+  document.body.style.overflow = 'auto';
+};
+
+
+// --- Dynamic Travel Section Injection ---
+document.addEventListener('DOMContentLoaded', () => {
+  const travelSection = document.getElementById('travelSection');
+  const travelFilterCategory = document.getElementById('travelFilterCategory');
+  const travelFilterCity = document.getElementById('travelFilterCity');
+
+  if (travelSection && typeof DataService !== 'undefined') {
+    let allPackages = [];
+
+    function renderTravelUI() {
+      if (!allPackages || allPackages.length === 0) {
+        travelSection.innerHTML = `<p class="text-slate-500 text-sm px-2">No travel packages available.</p>`;
+        return;
+      }
+
+      const catFilter = travelFilterCategory ? travelFilterCategory.value : 'All';
+      const cityFilter = travelFilterCity ? travelFilterCity.value : 'All';
+
+      let filtered = allPackages.filter(p => p.status === 'Publish');
+
+      if (catFilter !== 'All') {
+        filtered = filtered.filter(p => p.category === catFilter);
+      }
+      if (cityFilter !== 'All') {
+        filtered = filtered.filter(p => p.departure === cityFilter);
+      }
+
+      const featured = filtered.filter(p => p.listingType === 'Featured');
+      const normal = filtered.filter(p => p.listingType !== 'Featured');
+
+      const travelSection = document.getElementById('travelSection');
+      if (travelSection) {
+        if (filtered.length === 0) {
+          travelSection.innerHTML = `<p class="text-slate-500 text-sm px-2">No travel packages found.</p>`;
+        } else {
+          travelSection.innerHTML = filtered.map(p => {
+            const safeObj = encodeURIComponent(JSON.stringify(p));
+            const cleanWhatsapp = String(p.whatsapp || '').replace(/\D/g, '');
+            return `
+               <div class="shrink-0 w-[240px] sm:w-[260px] snap-center cursor-pointer group" onclick="openTravelModal('${safeObj}')">
+                  <div class="relative w-full h-[140px] rounded-2xl overflow-hidden mb-3 border border-slate-700/50 shadow-lg group-hover:shadow-emerald-500/20 transition-all duration-300">
+                     <img src="${p.image || 'https://via.placeholder.com/260x140'}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent opacity-90"></div>
+                     <div class="absolute bottom-3 left-3 right-3">
+                         <h3 class="text-sm font-bold text-white truncate drop-shadow-md">${p.title} ${p.verified === 'Yes' ? '✅' : ''}</h3>
+                     </div>
+                  </div>
+                  <div class="px-2">
+                     <div class="flex items-center gap-1.5 text-[0.7rem] text-slate-400 mb-1">
+                        <i class="fas fa-map-marker-alt text-emerald-400/80"></i>
+                        <span class="truncate">${p.departure} &rarr; ${p.destination}</span>
+                     </div>
+                     <div class="flex items-center justify-between gap-1 mt-1">
+                        <div class="flex items-center gap-1.5 text-[0.65rem] text-emerald-500 font-semibold shrink-0">
+                           <i class="fas fa-box text-sky-400/80"></i>
+                           <span>Pkg • ${p.duration} D</span>
+                        </div>
+                        <div class="flex items-center gap-1 shrink-0">
+                           <button onclick="event.stopPropagation(); window.open('https://wa.me/${cleanWhatsapp}','_blank')" class="px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded text-[0.55rem] font-bold hover:bg-emerald-500 hover:text-slate-900 transition">Contact</button>
+                           <button onclick="event.stopPropagation(); openTravelModal('${safeObj}')" class="px-1.5 py-0.5 bg-sky-500/10 text-sky-400 border border-sky-500/30 rounded text-[0.55rem] font-bold hover:bg-sky-500 hover:text-slate-900 transition">View Details</button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            `;
+          }).join('');
+        }
+      }
+    }
+
+    DataService.getTravelPackages().then(packages => {
+      allPackages = packages || [];
+
+      // Populate dynamic cities in filter
+      if (travelFilterCity && allPackages.length > 0) {
+        const cities = [...new Set(allPackages.map(p => p.departure))];
+        let cityOptions = '<option value="All">All Cities</option>';
+        cities.forEach(city => {
+          if (city) cityOptions += `<option value="${city}">${city}</option>`;
+        });
+        travelFilterCity.innerHTML = cityOptions;
+      }
+
+      renderTravelUI();
+
+      if (travelFilterCategory) travelFilterCategory.addEventListener('change', renderTravelUI);
+      if (travelFilterCity) travelFilterCity.addEventListener('change', renderTravelUI);
+
+    }).catch(e => {
+      console.error("Failed to load travel packages", e);
+    });
+  }
+});
+
+const track = document.getElementById("adTrack");
+
+// duplicate content for seamless loop
+if (track) {
+  track.innerHTML += track.innerHTML;
+}
