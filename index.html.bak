@@ -43,14 +43,99 @@
             background-color: #059669;
             border-radius: 20px;
         }
-		
-		::-webkit-scrollbar {
-    height: 4px;
-}
-::-webkit-scrollbar-thumb {
-    background: #059669;
-    border-radius: 5px;
-}
+
+        ::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #059669;
+            border-radius: 10px;
+        }
+
+        /* Hide scrollbar for category navigation */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .filter-btn {
+            border-color: #d1d5db;
+        }
+
+        .filter-btn.active {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        /* Animated Border for Visitor Counter */
+        .animated-border-box {
+            position: relative;
+            border-radius: 9999px;
+            overflow: hidden;
+            padding: 1.5px;
+            display: inline-flex;
+        }
+
+        .animated-border-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, transparent, transparent, #34d399);
+            animation: border-rotate 3s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes border-rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animated-border-content {
+            position: relative;
+            background-color: #052C22;
+            border-radius: 9999px;
+            z-index: 1;
+        }
+
+        /* Login Icon Hover Animation */
+        .login-icon-container {
+            border: 2px solid #34d399;
+            transition: all 0.3s ease;
+        }
+
+        .login-icon-container:hover {
+            transform: scale(1.05);
+            background-color: rgba(52, 211, 153, 0.1);
+        }
+
+        .login-icon-container:hover i {
+            animation: icon-rotate-y 2s linear infinite;
+        }
+
+        @keyframes icon-rotate-y {
+            from {
+                transform: rotateY(0deg);
+            }
+            to {
+                transform: rotateY(360deg);
+            }
+        }
     </style>
 </head>
 
@@ -58,36 +143,46 @@
 
     <!-- Top Navigation Bar -->
     <nav class="bg-[#0A3D2A] text-white sticky top-0 z-[99999]">
-        <div class="max-w-screen-2xl mx-auto px-4 h-[60px] flex items-center justify-between gap-4">
+        <div
+            class="max-w-screen-2xl mx-auto px-4 py-2 sm:py-0 sm:h-[60px] flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-3 gap-x-2 sm:gap-4">
 
             <!-- LEFT: Logo -->
-            <div class="flex items-center gap-2 flex-shrink-0">
+            <div class="flex items-center gap-2 flex-shrink-0 order-1 sm:order-none">
 
-                <div class="bg-white p-1 rounded-xl shadow-sm w-10 h-10 flex items-center justify-center">
-                    <img src="./images/logo/stopbuy-logo.png" alt="StopBuy" class="h-7 w-7 object-contain">
+                <div class="bg-white p-1 rounded-xl shadow-sm w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center">
+                    <img src="./images/logo/stopbuy-logo.png" alt="StopBuy"
+                        class="h-6 w-6 sm:h-7 sm:w-7 object-contain">
                 </div>
 
                 <div class="flex flex-col leading-tight">
-                    <div class="flex items-center gap-1.5">
-                        <span class="font-bold text-xl tracking-tight">
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-lg sm:text-xl tracking-tight">
                             <span class="text-[#8CC63F]">Stop</span><span class="text-[#5B9BD5]">Buy</span>
                         </span>
 
                         <div
-                            class="bg-emerald-600/20 text-emerald-300 px-2 py-[2px] rounded-full text-[9px] font-semibold">
-                            LIVE
+                            class="hidden md:block border border-[#24533e] bg-emerald-900/20 text-[#58b284] px-2 py-[2px] rounded text-[10px] font-semibold tracking-wide">
+                            Price Smart, Save More
                         </div>
                     </div>
 
-                    <span class="text-[10px] text-gray-300">
-                        Smart Price Comparison
+                    <span class="hidden md:block text-[11px] text-gray-300 mt-0.5">
+                        Smart Price Comparison for Pakistan
                     </span>
                 </div>
             </div>
 
             <!-- CENTER: Search Bar -->
-            <div class="flex-1 max-w-xl">
-                <div class="relative">
+            <div class="order-3 sm:order-none w-full sm:w-auto sm:flex-1 max-w-xl flex items-center gap-3">
+                <!-- Location -->
+                <div class="hidden md:flex items-center gap-x-2 bg-white/10 hover:bg-white/15 px-4 py-1.5 rounded-3xl text-sm cursor-pointer"
+                    onclick="showLocationModal()">
+                    <i class="fas fa-map-marker-alt text-emerald-400"></i>
+                    <span id="current-location">Karachi</span>
+                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                </div>
+
+                <div class="relative flex-1">
                     <input type="text" placeholder="Search product, brand or store..."
                         onkeyup="if (event.key === 'Enter') performGlobalSearch()"
                         class="w-full h-[38px] bg-white text-[#1F2937] pl-9 pr-3 rounded-xl text-sm border border-white/20 focus:outline-none focus:ring-2 focus:ring-emerald-400 shadow-sm">
@@ -96,102 +191,171 @@
             </div>
 
             <!-- RIGHT: Actions -->
-            <div class="flex items-center gap-2 flex-shrink-0">
+            <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0 order-2 sm:order-none">
 
                 <!-- Compare -->
                 <div onclick="showCompareModal()"
-                    class="flex items-center gap-1.5 px-3 h-[38px] hover:bg-white/10 rounded-xl cursor-pointer text-sm">
+                    class="flex items-center gap-1.5 px-2 sm:px-3 h-[38px] hover:bg-white/10 rounded-xl cursor-pointer text-sm">
                     <i class="fas fa-balance-scale text-emerald-400"></i>
                     <span class="hidden md:inline">Compare</span>
-                    <span class="bg-emerald-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">3</span>
+                    <span
+                        class="bg-emerald-600 text-white text-[10px] sm:text-xs font-bold px-1.5 py-0.5 rounded-full">3</span>
                 </div>
 
                 <!-- Alerts -->
                 <div onclick="showAlertsModal()"
-                    class="relative flex items-center gap-1.5 px-3 h-[38px] hover:bg-white/10 rounded-xl cursor-pointer text-sm">
+                    class="relative flex items-center gap-1.5 px-2 sm:px-3 h-[38px] hover:bg-white/10 rounded-xl cursor-pointer text-sm">
                     <i class="fas fa-bell text-emerald-400"></i>
                     <span class="hidden md:inline">Alerts</span>
                     <span
-                        class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">12</span>
+                        class="absolute top-0 sm:-top-1 right-0 sm:-right-1 bg-red-500 text-white text-[9px] sm:text-[10px] w-3.5 h-3.5 sm:w-4 sm:h-4 flex items-center justify-center rounded-full">12</span>
                 </div>
 
-                <!-- Login -->
+                <!-- Language Toggle -->
+                <div onclick="toggleLanguage()"
+                    class="flex items-center justify-center px-3 sm:px-4 h-[34px] sm:h-[38px] bg-white/10 hover:bg-white/20 rounded-full text-xs sm:text-sm font-medium cursor-pointer transition-colors"
+                    title="Switch Language">
+                    <span id="lang-toggle-text">اردو</span>
+                </div>
+
+                <!-- Login Profile Icon -->
                 <div onclick="showLoginModal()"
-                    class="flex items-center gap-2 px-4 h-[38px] bg-white text-[#0A3D2A] hover:bg-white/90 rounded-xl text-sm font-semibold cursor-pointer">
-                    <i class="fas fa-user"></i>
-                    <span class="hidden md:inline">Login</span>
+                    class="login-icon-container flex items-center justify-center w-[34px] h-[34px] sm:w-[42px] sm:h-[42px] rounded-full cursor-pointer bg-transparent">
+                    <i class="fas fa-user-shield text-emerald-400 text-sm sm:text-lg"></i>
                 </div>
 
             </div>
 
         </div>
-    </nav>
+        <!-- Category Bar -->
+        <div class="bg-[#052C22] px-2 py-2 flex items-center relative z-50">
 
+            <!-- Quick Links Dropdown -->
+<div class="relative group flex-shrink-0 text-white mr-1 z-[100000]">
+    
+    <!-- Trigger -->
+    <div class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer text-xs xl:text-[13px] font-medium flex items-center gap-1">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+        <i class="fas fa-chevron-down text-[10px]"></i>
+    </div>
 
+    <!-- Dropdown -->
+    <div class="absolute left-0 top-full mt-2 w-52 bg-white text-gray-800 rounded-xl shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
 
+        <ul class="py-2 text-sm font-normal">
 
+            <li>
+                <a href="index.html"
+                   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                    <i class="fas fa-home text-xs"></i> Home
+                </a>
+            </li>
 
-    <!-- Category Bar -->
-    <div class="bg-[#052C22] px-4 py-3 flex items-center text-sm overflow-x-auto relative z-50">
-        <div class="flex items-center gap-x-2 overflow-x-auto whitespace-nowrap w-full">
-            <div class="flex items-center gap-x-1 text-white flex-1">
-                <div onclick="showPage('home')"
-                    class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer font-medium">Home</div>
-                <div onclick="showPage('groceries')"
-                    class="px-3 py-1 bg-emerald-700 text-white rounded-2xl flex items-center cursor-pointer">
-                    <span class="px-3 text-sm font-semibold">All Categories</span>
+            <li>
+				<a href="./pages/categories.html"
+				   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+					<i class="fas fa-layer-group text-xs"></i> Categories
+				</a>
+			</li>
+
+            <li>
+                <a href="#price-comparison"
+                   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                    <i class="fas fa-scale-balanced text-xs"></i> Price Comparison
+                </a>
+            </li>
+
+            <li>
+                <a href="#travel-section"
+					class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+					<i class="fas fa-plane text-xs"></i> Travel & Tours
+				</a>
+            </li>
+
+            <li>
+                <a href="pages/blog.html"
+                   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                    <i class="fas fa-blog text-xs"></i> Blogs
+                </a>
+            </li>
+
+            <li>
+                <a href="pages/about.html"
+                   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                    <i class="fas fa-circle-info text-xs"></i> About Us
+                </a>
+            </li>
+
+            <li>
+                <a href="pages/contact.html"
+                   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                    <i class="fas fa-envelope text-xs"></i> Contact Us
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+</div>
+
+            <div class="flex items-center gap-x-1 overflow-x-auto whitespace-nowrap w-full no-scrollbar">
+                <div class="flex items-center gap-x-0.5 text-white flex-1 text-xs xl:text-[13px] justify-between">
+                    <div onclick="showPage('groceries')"
+                        class="px-1 py-0.5 bg-emerald-700 text-white rounded-2xl flex items-center cursor-pointer">
+                        <span class="px-2 text-xs xl:text-[13px] font-semibold">All Categories</span>
+                    </div>
+                    <div onclick="showPage('groceries')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Daily Groceries</div>
+                    <div onclick="showPage('foodstuffs')"
+                        class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Food Stuffs</div>
+                    <div onclick="showPage('electronics')"
+                        class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Electronics</div>
+                    <div onclick="showPage('mobiles')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Mobiles</div>
+                    <div onclick="showPage('laptops')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Laptops</div>
+                    <div onclick="showPage('fashion')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Fashion
+                    </div>
+                    <div onclick="showPage('cosmetics')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Cosmetics
+                    </div>
+                    <div onclick="showPage('babycare')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
+                        Baby Care
+                    </div>
                 </div>
-                <div onclick="showPage('groceries')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Daily Groceries</div>
-                <div onclick="showPage('foodstuffs')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Food Stuffs</div>
-                <div onclick="showPage('electronics')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Electronics</div>
-                <div onclick="showPage('mobiles')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Mobiles</div>
-                <div onclick="showPage('laptops')" class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-                    Laptops</div>
-				<div onclick="showPage('electronics')"
-    class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-    Home Appliances
-</div>
 
-<div onclick="showPage('fashion')"
-    class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-    Fashion
-</div>
-
-<div onclick="showPage('cosmetics')"
-    class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-    Cosmetics
-</div>
-
-<div onclick="showPage('babycare')"
-    class="px-4 py-1.5 hover:bg-white/10 rounded-2xl cursor-pointer">
-    Baby Care
-</div>
-</div>
-
-            <!-- Visitor Counter -->
-            <div class="hidden md:flex items-center ml-4">
-                <div class="flex items-center gap-x-2 px-4 py-1.5 bg-white/10 rounded-3xl">
-                    <i class="fas fa-users text-emerald-400"></i>
-                    <div>
-                        <span id="visitor-count" class="font-bold text-white">1,284,392</span>
-                        <span class="text-xs text-emerald-300 ml-1">visitors today</span>
+                <!-- Visitor Counter -->
+                <div class="hidden md:flex items-center ml-2 xl:ml-4">
+                    <div class="animated-border-box">
+                        <div class="animated-border-content px-3 py-1 flex items-center gap-x-2 text-white">
+                            <span class="text-xs xl:text-[13px] text-emerald-100">Total Visitors</span>
+                            <span id="visitor-count"
+                                class="font-bold text-emerald-400 tracking-wider text-[13px] xl:text-sm">5,076</span>
+                            <i class="fas fa-eye text-emerald-400 text-xs xl:text-[13px]"></i>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </nav>
 
-    <!-- HOME PAGE -->
-    <div id="home" class="page active">
+				<!-- HOME PAGE -->
+				<div id="home" class="page active">
 
-        <!-- Hero Banner -->
-        <div class="max-w-screen-2xl mx-auto px-4 py-2 flex items-center justify-between">
-            <div class="flex gap-4 items-start">
+				<!-- Trends Box (Centered above banner) -->
+				<div class="w-full text-center pt-6 pb-2">
+					<div class="px-8 py-3 rounded-3xl bg-emerald-700 text-white font-semibold shadow-lg border-2 border-emerald-400 inline-block cursor-default">
+					Trends
+					</div>
+				</div>
+
+		<!-- Hero Banner -->
+		<div class="max-w-screen-2xl mx-auto px-4 pb-2 flex items-center justify-between">
+			<div class="flex gap-4 items-start">
 
                 <div class="hidden lg:block w-[120px] flex-shrink-0">
                     <div class="sticky top-24 max-h-[720px] overflow-hidden deal-banner">
@@ -201,7 +365,6 @@
 
                             <img src="images/banner/mobiles.jpg"
                                 class="w-full h-auto rounded-3xl shadow-md border border-emerald-200">
-
                             <img src="images/banner/food.jpg"
                                 class="w-full h-auto rounded-3xl shadow-md border border-emerald-200">
                             <img src="images/banner/vehicles.jpg"
@@ -222,24 +385,23 @@
                     <div
                         class="relative w-full rounded-3xl shadow-sm border border-emerald-200 overflow-hidden bg-[#F4F9F2] mb-6 group">
 
-                        <div id="promo-carousel" class="flex w-full transition-transform duration-500 ease-in-out">
+                        <div id="promo-carousel" class="flex w-full">
                             <!-- Slide 1 -->
-                            <div class="min-w-full flex-shrink-0">
+                            <div class="w-full shrink-0">
                                 <img src="images/promotion/cattle-farm-advertisement-01.png"
                                     alt="Cattler Farm Promo Banner"
                                     class="w-full h-[200px] sm:h-[250px] md:h-[320px] object-cover md:object-fill">
                             </div>
                             <!-- Slide 2 -->
-                            <div class="min-w-full flex-shrink-0">
+                            <div class="w-full shrink-0">
                                 <img src="images/promotion/premium-goat-farm.png" alt="Goat Farm Promo Banner"
                                     class="w-full h-[200px] sm:h-[250px] md:h-[320px] object-cover md:object-fill">
                             </div>
                             <!-- Slide 3 -->
-                            <div class="min-w-full flex-shrink-0">
-                                <div
-                                    class="w-full h-[200px] sm:h-[250px] md:h-[320px] bg-emerald-50 flex items-center justify-center text-emerald-800 font-bold text-2xl border border-emerald-200">
-                                    Another Promo Banner Here
-                                </div>
+                            <div class="w-full shrink-0">
+                                <img src="images/promotion/go-electric-ride-the-future.png"
+                                    alt="Go Electric Promo Banner"
+                                    class="w-full h-[200px] sm:h-[250px] md:h-[320px] object-cover md:object-fill">
                             </div>
                         </div>
 
@@ -359,96 +521,243 @@
             </div>
         </div>
 
-        <!-- Top Price Comparison -->
-        <div class="max-w-screen-2xl mx-auto px-4 pt-9">
-            <div class="flex justify-between items-end mb-4">
-                <span class="section-header">Top Price Comparison</span>
-                <button onclick="showPage('mobiles')" class="text-sm text-emerald-700 hover:underline">View all</button>
-            </div>
 
-            <div class="bg-white rounded-3xl p-6 modern-shadow border border-emerald-100">
-                <div class="flex flex-col md:flex-row gap-6">
-                    <div class="md:w-56 flex-shrink-0">
-                        <div class="flex gap-4">
-                            <img src="https://picsum.photos/id/20/140/160" alt="iPhone 15"
-                                class="w-32 h-36 object-cover rounded-2xl border border-emerald-100">
-                            <div class="flex-1 pt-1">
-                                <div class="font-semibold text-xl">Apple iPhone 15 (128GB)</div>
-                                <div class="flex items-center gap-x-1 mt-1 text-amber-400"><i class="fas fa-star"></i><i
-                                        class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                        class="fas fa-star-half-alt"></i></div>
-                            </div>
+        <!-- AI Smart Recommendations -->
+        <div class="max-w-screen-2xl mx-auto px-4 pt-6">
+            <div
+                class="bg-gradient-to-r from-emerald-50 to-emerald-100 border border-emerald-200 rounded-3xl p-5 shadow-sm">
+
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-emerald-600 text-white flex items-center justify-center rounded-xl">
+                            <i class="fas fa-brain text-sm"></i>
                         </div>
+                        <span class="font-semibold text-lg text-emerald-800">Smart Recommendations</span>
                     </div>
 
-                    <div class="flex-1">
-                        <div class="text-xs text-emerald-700 font-semibold mb-3">Cheapest Today • <span
-                                class="text-emerald-500 font-bold">Rs. 257,999</span></div>
-
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            <div class="border border-emerald-100 bg-emerald-50 rounded-2xl p-3">
-                                <div class="flex items-center gap-x-2">
-                                    <div
-                                        class="w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                                        D</div>
-                                    <div>
-                                        <div class="font-semibold text-sm">Daraz</div>
-                                        <div class="font-bold text-emerald-700">Rs. 257,999</div>
-                                    </div>
-                                </div>
-                                <button
-                                    onclick="addToCompare({id:1,name:'Apple iPhone 15 (128GB)',price:257999,store:'Daraz'})"
-                                    class="mt-2 w-full py-1 text-xs bg-emerald-700 text-white font-medium rounded-2xl">Visit
-                                    Store</button>
-                            </div>
-                            <div class="border border-gray-200 rounded-2xl p-3">
-                                <div class="flex items-center gap-x-2">
-                                    <div
-                                        class="w-7 h-7 bg-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                                        P</div>
-                                    <div>
-                                        <div class="font-semibold text-sm">PriceOye</div>
-                                        <div class="font-bold">Rs. 259,999</div>
-                                    </div>
-                                </div>
-                                <button
-                                    onclick="addToCompare({id:2,name:'Apple iPhone 15 (128GB)',price:259999,store:'PriceOye'})"
-                                    class="mt-2 w-full py-1 text-xs border border-emerald-300 text-emerald-700 font-medium rounded-2xl">Visit
-                                    Store</button>
-                            </div>
-                            <div class="border border-gray-200 rounded-2xl p-3">
-                                <div class="flex items-center gap-x-2">
-                                    <div
-                                        class="w-7 h-7 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                                        M</div>
-                                    <div>
-                                        <div class="font-semibold text-sm">Mega.pk</div>
-                                        <div class="font-bold">Rs. 264,999</div>
-                                    </div>
-                                </div>
-                                <button
-                                    onclick="addToCompare({id:3,name:'Apple iPhone 15 (128GB)',price:264999,store:'Mega.pk'})"
-                                    class="mt-2 w-full py-1 text-xs border border-emerald-300 text-emerald-700 font-medium rounded-2xl">Visit
-                                    Store</button>
-                            </div>
-                            <div class="border border-gray-200 rounded-2xl p-3">
-                                <div class="flex items-center gap-x-2">
-                                    <div
-                                        class="w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                                        S</div>
-                                    <div>
-                                        <div class="font-semibold text-sm">Shophive</div>
-                                        <div class="font-bold">Rs. 271,999</div>
-                                    </div>
-                                </div>
-                                <button
-                                    onclick="addToCompare({id:4,name:'Apple iPhone 15 (128GB)',price:271999,store:'Shophive'})"
-                                    class="mt-2 w-full py-1 text-xs border border-emerald-300 text-emerald-700 font-medium rounded-2xl">Visit
-                                    Store</button>
-                            </div>
-                        </div>
+                    <div class="text-xs text-emerald-600 font-medium">
+                        Based on trends in Karachi
                     </div>
                 </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                    <!-- BEST DEAL -->
+                    <div class="bg-white rounded-2xl p-4 border border-emerald-100 hover:shadow-md transition">
+                        <div class="text-xs text-gray-500 mb-1">🔥 Best Deal Today</div>
+                        <div class="font-semibold">iPhone 15 (128GB)</div>
+                        <div class="text-emerald-700 font-bold text-lg">Rs. 257,999</div>
+                        <div class="text-xs text-gray-500">Available at Daraz</div>
+                    </div>
+
+                    <!-- BEST VALUE -->
+                    <div class="bg-white rounded-2xl p-4 border border-emerald-100 hover:shadow-md transition">
+                        <div class="text-xs text-gray-500 mb-1">💎 Best Value</div>
+                        <div class="font-semibold">Samsung A54</div>
+                        <div class="text-emerald-700 font-bold text-lg">Rs. 94,999</div>
+                        <div class="text-xs text-gray-500">Best performance/price</div>
+                    </div>
+
+                    <!-- TRENDING -->
+                    <div class="bg-white rounded-2xl p-4 border border-emerald-100 hover:shadow-md transition">
+                        <div class="text-xs text-gray-500 mb-1">📈 Trending Now</div>
+                        <div class="font-semibold">Air Fryer (Kenwood)</div>
+                        <div class="text-emerald-700 font-bold text-lg">Rs. 18,500</div>
+                        <div class="text-xs text-gray-500">High demand today</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- Top Price Comparison -->
+        <div class="max-w-screen-2xl mx-auto px-4 pt-9">
+
+            <!-- Header -->
+            <div class="mb-5">
+                <div class="text-xs text-red-500 tracking-widest font-bold mb-1">
+                    POWERED BY REAL-TIME DATA
+                </div>
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                    <div>
+                        <div class="text-3xl font-bold text-[#0A3D2A]">Price Comparison</div>
+                        <div class="text-gray-500 text-sm">Find the lowest prices near you</div>
+                    </div>
+
+                    <!-- Filters -->
+                    <!-- Filters -->
+                    <div class="flex flex-wrap items-center gap-2 w-full">
+
+                        <!-- Category Buttons -->
+                        <button onclick="filterCategory('all', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm bg-emerald-700 text-white">
+                            All
+                        </button>
+
+                        <button onclick="filterCategory('food', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm">
+                            Food
+                        </button>
+
+                        <button onclick="filterCategory('groceries', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm">
+                            Groceries
+                        </button>
+
+                        <button onclick="filterCategory('mobiles', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm">
+                            Mobiles
+                        </button>
+
+                        <!-- NEW (Moved from dropdown) -->
+                        <button onclick="filterCategory('electronics', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm">
+                            Electronics
+                        </button>
+
+                        <button onclick="filterCategory('fashion', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm">
+                            Fashion
+                        </button>
+
+                        <button onclick="filterCategory('appliances', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm">
+                            Home Appliances
+                        </button>
+
+                        <!-- 🔍 SEARCH BAR (NEW) -->
+                        <div class="relative ml-auto">
+                            <input type="text" id="productSearch" placeholder="Search products..."
+                                onkeyup="searchProducts(this.value)"
+                                class="pl-10 pr-3 py-1.5 rounded-full border text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
+
+                            <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                        </div>
+
+                        <!-- SORT -->
+                        <select onchange="sortProducts(this.value)"
+                            class="px-4 py-1.5 rounded-full border text-sm bg-white">
+                            <option value="low">Lowest Price</option>
+                            <option value="high">Highest Price</option>
+                            <option value="near">Closest First</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+
+                <!-- Card -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden shadow border" data-category="mobiles"
+                    data-price="229999" data-distance="3">
+
+                    <div class="relative">
+                        <img src="https://picsum.photos/400/250?random=1" class="w-full h-48 object-cover">
+
+                        <div
+                            class="absolute bottom-3 left-3 bg-white text-red-500 text-xs px-3 py-1 rounded-full font-bold">
+                            FROM Rs 229,999
+                        </div>
+
+                        <div
+                            class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow cursor-pointer">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+
+                    <div class="p-4">
+                        <div class="font-semibold text-lg">Samsung Galaxy S24</div>
+                        <div class="text-xs text-red-500 mt-1">MOBILES • Karachi</div>
+                    </div>
+                </div>
+
+                <!-- Card -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden shadow border" data-category="mobiles"
+                    data-price="444999" data-distance="5">
+
+                    <div class="relative">
+                        <img src="https://picsum.photos/400/250?random=2" class="w-full h-48 object-cover">
+
+                        <div
+                            class="absolute bottom-3 left-3 bg-white text-red-500 text-xs px-3 py-1 rounded-full font-bold">
+                            FROM Rs 444,999
+                        </div>
+
+                        <div
+                            class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+
+                    <div class="p-4">
+                        <div class="font-semibold text-lg">iPhone 16 Pro</div>
+                        <div class="text-xs text-red-500 mt-1">MOBILES • Karachi</div>
+                    </div>
+                </div>
+
+                <!-- Card -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden shadow border" data-category="mobiles"
+                    data-price="119999" data-distance="2">
+
+                    <div class="relative">
+                        <img src="https://picsum.photos/400/250?random=3" class="w-full h-48 object-cover">
+
+                        <div
+                            class="absolute bottom-3 left-3 bg-white text-red-500 text-xs px-3 py-1 rounded-full font-bold">
+                            FROM Rs 119,999
+                        </div>
+
+                        <div
+                            class="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+
+                    <div class="p-4">
+                        <div class="font-semibold text-lg">Vivo V40 Pro</div>
+                        <div class="text-xs text-red-500 mt-1">MOBILES • Karachi</div>
+                    </div>
+                </div>
+
+                <!-- FOOD -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden shadow border" data-category="food"
+                    data-price="850" data-distance="1">
+
+                    <div class="relative">
+                        <img src="https://picsum.photos/400/250?food=1" class="w-full h-48 object-cover">
+
+                        <div
+                            class="absolute bottom-3 left-3 bg-white text-red-500 text-xs px-3 py-1 rounded-full font-bold">
+                            FROM Rs 850
+                        </div>
+                    </div>
+
+                    <div class="p-4">
+                        <div class="font-semibold text-lg">BBQ Platter Deal</div>
+                        <div class="text-xs text-red-500 mt-1">FOOD • Karachi</div>
+                    </div>
+                </div>
+
+                <!-- GROCERIES -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden shadow border" data-category="groceries"
+                    data-price="320" data-distance="2">
+
+                    <div class="relative">
+                        <img src="https://picsum.photos/400/250?grocery=1" class="w-full h-48 object-cover">
+
+                        <div
+                            class="absolute bottom-3 left-3 bg-white text-red-500 text-xs px-3 py-1 rounded-full font-bold">
+                            FROM Rs 320
+                        </div>
+                    </div>
+
+                    <div class="p-4">
+                        <div class="font-semibold text-lg">Cooking Oil 1L</div>
+                        <div class="text-xs text-red-500 mt-1">GROCERIES • Karachi</div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -608,6 +917,9 @@
         <div class="flex-1">
 
             <!-- Travel & Tours Section -->
+			<section id="travel-section">
+				<!-- Your Travel & Tours Content -->
+			</section>
             <div class="max-w-screen-2xl mx-auto px-4 pt-9">
                 <div class="flex justify-between items-center mb-4">
                     <span class="section-header">Travel &amp; Tours</span>
@@ -761,133 +1073,156 @@
 
         <!-- FOOTER -->
         <!-- FOOTER -->
-<footer class="bg-[#1e2330] text-gray-300 pt-14 pb-6 mt-12">
-    <div class="max-w-screen-2xl mx-auto px-4">
+        <footer class="bg-[#1e2330] text-gray-300 pt-14 pb-6 mt-12">
+            <div class="max-w-screen-2xl mx-auto px-4">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
 
-            <!-- Col 1 -->
-            <div class="space-y-5">
-                <div class="flex items-center gap-3">
-                    <img src="images/logo/stopbuy-logo.png"
-                        class="w-11 h-11 bg-white rounded-xl object-contain p-1">
+                    <!-- Col 1 -->
+                    <div class="space-y-5">
+                        <div class="flex items-center gap-3">
+                            <img src="images/logo/stopbuy-logo.png"
+                                class="w-11 h-11 bg-white rounded-xl object-contain p-1">
 
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <div class="text-xl font-bold leading-none">
-                                <span class="text-[#a3cf53]">Stop</span><span class="text-[#6da9d5]">Buy</span>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <div class="text-xl font-bold leading-none">
+                                        <span class="text-[#8CC63F]">Stop</span><span class="text-[#5B9BD5]">Buy</span>
+                                    </div>
+                                    <span
+                                        class="border border-[#24533e] bg-emerald-900/20 text-[#58b284] px-2 py-[2px] rounded text-[10px] font-semibold tracking-wide">
+                                        Price Smart, Save More
+                                    </span>
+                                </div>
+                                <div class="text-[11px] text-gray-400 mt-1">Smart Price Comparison for Pakistan</div>
                             </div>
-                            <span class="bg-emerald-600/20 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                                LIVE
-                            </span>
                         </div>
-                        <div class="text-[11px] text-gray-400 mt-1">Smart Price Comparison</div>
+
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            Pakistan's most trusted price comparison platform helping you find the best deals across
+                            stores.
+                        </p>
+
+                        <!-- Social -->
+                        <div class="flex gap-2">
+                            <a href="#"
+                                class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
+                                <i class="fab fa-facebook-f text-white text-xs"></i>
+                            </a>
+                            <a href="#"
+                                class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
+                                <i class="fab fa-twitter text-white text-xs"></i>
+                            </a>
+                            <a href="#"
+                                class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
+                                <i class="fab fa-instagram text-white text-xs"></i>
+                            </a>
+                            <a href="#"
+                                class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
+                                <i class="fab fa-youtube text-white text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Col 2 -->
+                    <div>
+                        <h3 class="text-[#eab308] font-semibold mb-5">Quick Links</h3>
+                        <ul class="space-y-3 text-sm text-gray-400">
+                            <li><a href="#" onclick="showPage('home')" class="hover:text-white">Home</a></li>
+                            <li><a href="#" onclick="showPage('groceries')" class="hover:text-white">Categories</a></li>
+                            <li><a href="#" onclick="performGlobalSearch()" class="hover:text-white">Price
+                                    Comparison</a></li>
+                            <li><a href="#" onclick="showSimplePage('travel')" class="hover:text-white">Travel &
+                                    Tours</a></li>
+                            <li><a href="#" onclick="showSimplePage('blog')" class="hover:text-white">Blogs</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Col 3 -->
+                    <div>
+                        <h3 class="text-[#eab308] font-semibold mb-5">Company</h3>
+                        <ul class="space-y-3 text-sm text-gray-400">
+                            <li><a href="pages/about.html" class="hover:text-white">About Us</a></li>
+                            <li><a href="#" onclick="showSimplePage('blog')" class="hover:text-white">Blog</a></li>
+                            <li><a href="pages/contact.html" class="hover:text-white">Contact</a></li>
+                            <li><a href="#" class="hover:text-white">Careers</a></li>
+                            <li><a href="#" class="hover:text-white">Press</a></li>
+                            <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Col 4 (UPDATED with Newsletter) -->
+                    <div>
+                        <h3 class="text-[#eab308] font-semibold mb-5">Stay Updated</h3>
+
+                        <!-- Newsletter -->
+                        <div class="mb-6">
+                            <p class="text-sm text-gray-400 mb-3">Get latest deals & price alerts</p>
+
+                            <div class="flex bg-[#2b3544] rounded-lg overflow-hidden">
+                                <input type="email" placeholder="Enter email"
+                                    class="flex-1 px-3 py-2 text-sm bg-transparent text-white outline-none">
+                                <button onclick="subscribeUser()"
+                                    class="bg-emerald-600 hover:bg-emerald-700 px-3 text-sm font-semibold">
+                                    Subscribe
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Contact -->
+                        <ul class="space-y-3 text-sm text-gray-400">
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-map-marker-alt text-emerald-500 mt-1"></i>
+                                <span>Block 7, Clifton, Karachi</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="fas fa-phone-alt text-emerald-500"></i>
+                                <span>+92 21 111 786 786</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="fas fa-envelope text-emerald-500"></i>
+                                <span>support@stopbuy.pk</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <!-- Bottom -->
+                <div
+                    class="pt-6 border-t border-[#2b3544] flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-gray-500">
+                    <div>© 2026 StopBuy. All rights reserved - Pakistan’s most trusted price comparison
+                        platform.</div>
+                    <div class="flex gap-5">
+                        <a href="#" class="hover:text-white">Terms</a>
+                        <a href="#" class="hover:text-white">Privacy</a>
+                        <a href="#" class="hover:text-white">Cookies</a>
                     </div>
                 </div>
 
-                <p class="text-sm text-gray-400 leading-relaxed">
-                    Pakistan's most trusted price comparison platform helping you find the best deals across stores.
-                </p>
-
-                <!-- Social -->
-                <div class="flex gap-2">
-                    <a href="#" class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
-                        <i class="fab fa-facebook-f text-white text-xs"></i>
-                    </a>
-                    <a href="#" class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
-                        <i class="fab fa-twitter text-white text-xs"></i>
-                    </a>
-                    <a href="#" class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
-                        <i class="fab fa-instagram text-white text-xs"></i>
-                    </a>
-                    <a href="#" class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition">
-                        <i class="fab fa-youtube text-white text-xs"></i>
-                    </a>
-                </div>
             </div>
+        </footer>
 
-            <!-- Col 2 -->
-            <div>
-                <h3 class="text-[#eab308] font-semibold mb-5">Quick Links</h3>
-                <ul class="space-y-3 text-sm text-gray-400">
-                    <li><a href="#" onclick="showPage('home')" class="hover:text-white">Home</a></li>
-                    <li><a href="#" onclick="showPage('groceries')" class="hover:text-white">Daily Groceries</a></li>
-                    <li><a href="#" onclick="showPage('electronics')" class="hover:text-white">Electronics</a></li>
-                    <li><a href="#" onclick="showPage('mobiles')" class="hover:text-white">Mobiles</a></li>
-                    <li><a href="#" onclick="showPage('laptops')" class="hover:text-white">Laptops</a></li>
-                    <li><a href="#" onclick="showSimplePage('travel')" class="hover:text-white">Travel & Tours</a></li>
-                </ul>
-            </div>
+        <!-- Floating Action Buttons -->
+        <div class="fixed bottom-6 right-6 z-[99999] flex flex-row items-center gap-3">
+            <!-- Go to Top Button -->
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" id="goTopBtn"
+                class="w-12 h-12 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 opacity-0 invisible transform translate-y-4">
+                <i class="fas fa-chevron-up text-lg"></i>
+            </button>
 
-            <!-- Col 3 -->
-            <div>
-                <h3 class="text-[#eab308] font-semibold mb-5">Company</h3>
-                <ul class="space-y-3 text-sm text-gray-400">
-                    <li><a href="pages/about.html" class="hover:text-white">About Us</a></li>
-                    <li><a href="#" onclick="showSimplePage('blog')" class="hover:text-white">Blog</a></li>
-                    <li><a href="pages/contact.html" class="hover:text-white">Contact</a></li>
-                    <li><a href="#" class="hover:text-white">Careers</a></li>
-                    <li><a href="#" class="hover:text-white">Press</a></li>
-                    <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
-                </ul>
-            </div>
-
-            <!-- Col 4 (UPDATED with Newsletter) -->
-            <div>
-                <h3 class="text-[#eab308] font-semibold mb-5">Stay Updated</h3>
-
-                <!-- Newsletter -->
-                <div class="mb-6">
-                    <p class="text-sm text-gray-400 mb-3">Get latest deals & price alerts</p>
-
-                    <div class="flex bg-[#2b3544] rounded-lg overflow-hidden">
-                        <input type="email"
-                            placeholder="Enter email"
-                            class="flex-1 px-3 py-2 text-sm bg-transparent text-white outline-none">
-                        <button onclick="subscribeUser()"
-                            class="bg-emerald-600 hover:bg-emerald-700 px-3 text-sm font-semibold">
-                            Subscribe
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Contact -->
-                <ul class="space-y-3 text-sm text-gray-400">
-                    <li class="flex items-start gap-2">
-                        <i class="fas fa-map-marker-alt text-emerald-500 mt-1"></i>
-                        <span>Block 7, Clifton, Karachi</span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="fas fa-phone-alt text-emerald-500"></i>
-                        <span>+92 21 111 786 786</span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="fas fa-envelope text-emerald-500"></i>
-                        <span>support@stopbuy.pk</span>
-                    </li>
-                </ul>
-            </div>
-
+            <!-- WhatsApp Button -->
+            <a href="https://wa.me/" target="_blank"
+                class="w-14 h-14 bg-[#25D366] hover:bg-[#1ebe57] text-white rounded-full shadow-lg flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                <i class="fab fa-whatsapp text-3xl"></i>
+            </a>
         </div>
-
-        <!-- Bottom -->
-        <div class="pt-6 border-t border-[#2b3544] flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-gray-500">
-            <div>© 2026 StopBuy. All rights reserved.</div>
-            <div class="flex gap-5">
-                <a href="#" class="hover:text-white">Terms</a>
-                <a href="#" class="hover:text-white">Privacy</a>
-                <a href="#" class="hover:text-white">Cookies</a>
-            </div>
-        </div>
-
-    </div>
-</footer>
 
         <script>
             function animateVisitorCounter() {
                 const el = document.getElementById('visitor-count');
                 if (!el) return;
-                let num = 1284392;
+                let num = 5076;
                 setInterval(() => {
                     num += Math.floor(Math.random() * 3) + 1;
                     el.innerHTML = num.toLocaleString();
@@ -982,59 +1317,269 @@
                 });
             }
 
-            let currentSlide = 0;
-            const totalSlides = 3;
-            let slideInterval;
+            /* =========================
+   🔥 GLOBAL STATE
+========================= */
+            let currentCategory = 'all';
+            let currentSort = 'low';
+            let allCards = [];
 
-            function updateCarousel() {
-                const carousel = document.getElementById('promo-carousel');
-                const dots = document.querySelectorAll('.promo-dot');
-                if (carousel) {
-                    carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+            /* =========================
+               🚀 INIT WEBSITE
+            ========================= */
+            window.addEventListener('DOMContentLoaded', () => {
+
+                // Store all product cards once
+                allCards = Array.from(document.querySelectorAll('.product-card'));
+
+                updateUI();
+
+                initCarousel();
+                startAutoSlide();
+
+                startSyncedInfiniteScroll();
+
+            });
+
+            /* =========================
+               🧠 MAIN UI ENGINE
+            ========================= */
+            function updateUI() {
+
+                let filtered = allCards.filter(card => {
+                    return currentCategory === 'all' || card.dataset.category === currentCategory;
+                });
+
+                // SORTING
+                if (currentSort === 'low') {
+                    filtered.sort((a, b) => a.dataset.price - b.dataset.price);
+                } else if (currentSort === 'high') {
+                    filtered.sort((a, b) => b.dataset.price - a.dataset.price);
+                } else {
+                    filtered.sort((a, b) => a.dataset.distance - b.dataset.distance);
                 }
-                dots.forEach((dot, index) => {
-                    if (index === currentSlide) {
-                        dot.classList.replace('bg-black/20', 'bg-emerald-700');
-                        dot.classList.remove('hover:bg-black/40');
-                    } else {
-                        dot.classList.replace('bg-emerald-700', 'bg-black/20');
-                        dot.classList.add('hover:bg-black/40');
+
+                const grid = document.getElementById('product-grid');
+                grid.innerHTML = '';
+
+                if (filtered.length === 0) {
+                    grid.innerHTML = `
+            <div class="col-span-full text-center text-gray-400 py-10">
+                No products found
+            </div>`;
+                    return;
+                }
+
+                filtered.forEach(card => grid.appendChild(card));
+            }
+
+            /* =========================
+               🎯 CATEGORY BUTTON CLICK
+            ========================= */
+            function filterCategory(category, btn) {
+                currentCategory = category;
+
+                // reset search
+                document.getElementById('productSearch').value = "";
+
+                // reset buttons
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-emerald-700', 'text-white');
+                });
+
+                btn.classList.add('bg-emerald-700', 'text-white');
+
+                updateUI();
+            }
+
+            /* =========================
+               📂 DROPDOWN CATEGORY
+            ========================= */
+            function filterFromDropdown(value) {
+
+                currentCategory = value || 'all';
+
+                // Remove button highlight
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-emerald-700', 'text-white');
+                });
+
+                updateUI();
+            }
+
+            /* =========================
+               📊 SORT PRODUCTS
+            ========================= */
+            function sortProducts(value) {
+                currentSort = value;
+                updateUI();
+            }
+
+            /* =========================
+               🎞️ HERO CAROUSEL (FIXED)
+            ========================= */
+            let currentSlide = 1;
+            let slideInterval;
+            let totalSlides = 3;
+            let isTransitioning = false;
+
+            function initCarousel() {
+                const carousel = document.getElementById('promo-carousel');
+                if (!carousel) return;
+
+                const slides = Array.from(carousel.children);
+                totalSlides = slides.length;
+
+                // Clone first and last slides for seamless looping
+                const firstClone = slides[0].cloneNode(true);
+                const lastClone = slides[totalSlides - 1].cloneNode(true);
+
+                carousel.appendChild(firstClone);
+                carousel.insertBefore(lastClone, slides[0]);
+
+                // Start at the first actual slide (index 1)
+                carousel.style.transition = 'none';
+                carousel.style.transform = `translateX(-100%)`;
+
+                // Handle smooth snapping after transition
+                carousel.addEventListener('transitionend', () => {
+                    isTransitioning = false;
+                    if (currentSlide === totalSlides + 1) {
+                        carousel.style.transition = 'none';
+                        currentSlide = 1;
+                        carousel.style.transform = `translateX(-100%)`;
+                    }
+                    if (currentSlide === 0) {
+                        carousel.style.transition = 'none';
+                        currentSlide = totalSlides;
+                        carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
                     }
                 });
             }
 
+            function updateCarousel() {
+                const carousel = document.getElementById('promo-carousel');
+                if (!carousel) return;
+
+                carousel.style.transition = 'transform 0.5s ease-in-out';
+                carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+                updateDots();
+            }
+
+            function updateDots() {
+                const dots = document.querySelectorAll('.promo-dot');
+                dots.forEach(dot => {
+                    dot.classList.remove('bg-emerald-700');
+                    dot.classList.add('bg-black/20');
+                });
+
+                let dotIndex = currentSlide - 1;
+                if (dotIndex === totalSlides) dotIndex = 0;
+                if (dotIndex === -1) dotIndex = totalSlides - 1;
+
+                if (dots[dotIndex]) {
+                    dots[dotIndex].classList.remove('bg-black/20', 'hover:bg-black/40');
+                    dots[dotIndex].classList.add('bg-emerald-700');
+                }
+            }
+
             function nextSlide() {
-                currentSlide = (currentSlide + 1) % totalSlides;
+                if (isTransitioning) return;
+                isTransitioning = true;
+                currentSlide++;
                 updateCarousel();
-                resetSlideInterval();
+                startAutoSlide();
             }
 
             function prevSlide() {
-                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                if (isTransitioning) return;
+                isTransitioning = true;
+                currentSlide--;
                 updateCarousel();
-                resetSlideInterval();
+                startAutoSlide();
             }
 
             function goToSlide(index) {
-                currentSlide = index;
+                if (isTransitioning) return;
+                currentSlide = index + 1;
                 updateCarousel();
-                resetSlideInterval();
+                startAutoSlide();
             }
 
-            function resetSlideInterval() {
+            function startAutoSlide() {
                 clearInterval(slideInterval);
-                slideInterval = setInterval(nextSlide, 5000);
+                slideInterval = setInterval(nextSlide, 4000);
             }
 
-            window.onload = () => {
-                initializeWebsite();
-                startSyncedInfiniteScroll();
-                resetSlideInterval();
-            };
-			
-			function subscribeUser() {
-    alert("Subscribed successfully!");
-}
+            /* =========================
+               🔥 VERTICAL BANNER SCROLL (FIXED)
+            ========================= */
+            function startVerticalScroll() {
+                const container = document.getElementById('vertical-scroll');
+                if (!container) return;
+
+                let scrollAmount = 0;
+
+                setInterval(() => {
+                    scrollAmount += 1;
+                    container.scrollTop = scrollAmount;
+
+                    // Reset scroll (loop)
+                    if (scrollAmount >= container.scrollHeight / 2) {
+                        scrollAmount = 0;
+                    }
+
+                }, 30);
+            }
+
+            /* =========================
+               📍 LOCATION (OPTIONAL)
+            ========================= */
+            function requestUserLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => console.log("Location:", pos.coords),
+                        () => console.log("Location denied")
+                    );
+                }
+            }
+
+            /* =========================
+               📩 NEWSLETTER
+            ========================= */
+            function subscribeUser() {
+                alert("Subscribed successfully!");
+            }
+
+            function searchProducts(query) {
+                query = query.toLowerCase();
+
+                const cards = document.querySelectorAll('.product-card');
+
+                cards.forEach(card => {
+                    const name = card.innerText.toLowerCase();
+
+                    if (name.includes(query)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            /* =========================
+               🚀 FLOATING BUTTONS LOGIC
+            ========================= */
+            window.addEventListener('scroll', () => {
+                const goTopBtn = document.getElementById('goTopBtn');
+                if (window.scrollY > 300) {
+                    goTopBtn.classList.remove('opacity-0', 'invisible', 'translate-y-4');
+                    goTopBtn.classList.add('opacity-100', 'visible', 'translate-y-0');
+                } else {
+                    goTopBtn.classList.add('opacity-0', 'invisible', 'translate-y-4');
+                    goTopBtn.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                }
+            });
         </script>
 </body>
 

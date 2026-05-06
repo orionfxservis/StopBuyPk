@@ -125,16 +125,15 @@
         }
 
         .login-icon-container:hover i {
-            animation: icon-wiggle 0.3s ease-in-out infinite alternate;
+            animation: icon-rotate-y 2s linear infinite;
         }
 
-        @keyframes icon-wiggle {
-            0% {
-                transform: rotate(-15deg);
+        @keyframes icon-rotate-y {
+            from {
+                transform: rotateY(0deg);
             }
-
-            100% {
-                transform: rotate(15deg);
+            to {
+                transform: rotateY(360deg);
             }
         }
     </style>
@@ -231,33 +230,74 @@
         <!-- Category Bar -->
         <div class="bg-[#052C22] px-2 py-2 flex items-center relative z-50">
 
-            <!-- Quick Links Dropdown (Outside scrolling area) -->
-            <div class="relative group flex-shrink-0 text-white mr-1 z-[100000]">
-                <div
-                    class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer text-xs xl:text-[13px] font-medium flex items-center gap-1">
-                    <i class="fas fa-bars"></i>
-                    <span>Quick Links</span>
-                    <i class="fas fa-chevron-down text-[10px]"></i>
-                </div>
+            <!-- Quick Links Dropdown -->
+<div class="relative group flex-shrink-0 text-white mr-1 z-[100000]">
+    
+    <!-- Trigger -->
+    <div class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer text-xs xl:text-[13px] font-medium flex items-center gap-1">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+        <i class="fas fa-chevron-down text-[10px]"></i>
+    </div>
 
-                <div
-                    class="absolute left-0 top-full mt-1 w-48 bg-white text-gray-800 rounded-xl shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                    <ul class="py-2 text-sm font-normal">
-                        <li><a href="#" onclick="showPage('home')"
-                                class="block px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">Home</a></li>
-                        <li><a href="#" onclick="showPage('groceries')"
-                                class="block px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">Categories</a></li>
-                        <li><a href="#" onclick="performGlobalSearch()"
-                                class="block px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">Price Comparison</a>
-                        </li>
-                        <li><a href="#" onclick="showSimplePage('travel')"
-                                class="block px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">Travel & Tours</a>
-                        </li>
-                        <li><a href="#" onclick="showSimplePage('blog')"
-                                class="block px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">Blogs</a></li>
-                    </ul>
-                </div>
-            </div>
+    <!-- Dropdown -->
+    <div class="absolute left-0 top-full mt-2 w-52 bg-white text-gray-800 rounded-xl shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+
+        <ul class="py-2 text-sm font-normal">
+
+            <li>
+                <a href="index.html"
+                   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                    <i class="fas fa-home text-xs"></i> Home
+                </a>
+            </li>
+
+            <li>
+				<a href="./pages/categories.html"
+				   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+					<i class="fas fa-layer-group text-xs"></i> Categories
+				</a>
+			</li>
+
+            <li>
+                <a href="#price-comparison"
+                   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                    <i class="fas fa-scale-balanced text-xs"></i> Price Comparison
+                </a>
+            </li>
+
+            <li>
+                <a href="#travel-section"
+					class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+					<i class="fas fa-plane text-xs"></i> Travel & Tours
+				</a>
+            </li>
+
+            <li>
+                <a href="pages/blog.html"
+                   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                    <i class="fas fa-blog text-xs"></i> Blogs
+                </a>
+            </li>
+
+            <li>
+                <a href="pages/about.html"
+                   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                    <i class="fas fa-circle-info text-xs"></i> About Us
+                </a>
+            </li>
+
+            <li>
+                <a href="pages/contact.html"
+                   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                    <i class="fas fa-envelope text-xs"></i> Contact Us
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+</div>
 
             <div class="flex items-center gap-x-1 overflow-x-auto whitespace-nowrap w-full no-scrollbar">
                 <div class="flex items-center gap-x-0.5 text-white flex-1 text-xs xl:text-[13px] justify-between">
@@ -303,12 +343,19 @@
         </div>
     </nav>
 
-    <!-- HOME PAGE -->
-    <div id="home" class="page active">
+				<!-- HOME PAGE -->
+				<div id="home" class="page active">
 
-        <!-- Hero Banner -->
-        <div class="max-w-screen-2xl mx-auto px-4 py-2 flex items-center justify-between">
-            <div class="flex gap-4 items-start">
+				<!-- Trends Box (Centered above banner) -->
+				<div class="w-full text-center pt-6 pb-2">
+					<div class="px-8 py-3 rounded-3xl bg-emerald-700 text-white font-semibold shadow-lg border-2 border-emerald-400 inline-block cursor-default">
+					Trends
+					</div>
+				</div>
+
+		<!-- Hero Banner -->
+		<div class="max-w-screen-2xl mx-auto px-4 pb-2 flex items-center justify-between">
+			<div class="flex gap-4 items-start">
 
                 <div class="hidden lg:block w-[120px] flex-shrink-0">
                     <div class="sticky top-24 max-h-[720px] overflow-hidden deal-banner">
@@ -537,7 +584,6 @@
                     </div>
 
                     <!-- Filters -->
-                    <!-- Filters -->
                     <div class="flex flex-wrap items-center gap-2 w-full">
 
                         <!-- Category Buttons -->
@@ -577,23 +623,7 @@
                             Home Appliances
                         </button>
 
-                        <!-- 🔍 SEARCH BAR (NEW) -->
-                        <div class="relative ml-auto">
-                            <input type="text" id="productSearch" placeholder="Search products..."
-                                onkeyup="searchProducts(this.value)"
-                                class="pl-10 pr-3 py-1.5 rounded-full border text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
-
-                            <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
-                        </div>
-
-                        <!-- SORT -->
-                        <select onchange="sortProducts(this.value)"
-                            class="px-4 py-1.5 rounded-full border text-sm bg-white">
-                            <option value="low">Lowest Price</option>
-                            <option value="high">Highest Price</option>
-                            <option value="near">Closest First</option>
-                        </select>
-
+                        
                     </div>
                 </div>
             </div>
@@ -870,6 +900,9 @@
         <div class="flex-1">
 
             <!-- Travel & Tours Section -->
+			<section id="travel-section">
+				<!-- Your Travel & Tours Content -->
+			</section>
             <div class="max-w-screen-2xl mx-auto px-4 pt-9">
                 <div class="flex justify-between items-center mb-4">
                     <span class="section-header">Travel &amp; Tours</span>
