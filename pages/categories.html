@@ -7,8 +7,6 @@
 <title>Categories - StopBuy</title>
 
 <style>
-
-/* ===== THEME ===== */
 :root {
   --primary: #16a34a;
   --primary-dark: #065f46;
@@ -18,7 +16,7 @@
   --border: #e5e7eb;
 }
 
-/* ===== BODY ===== */
+/* ===== BASE ===== */
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
@@ -27,31 +25,16 @@ body {
 }
 
 /* ===== HEADER ===== */
-.header {
-  background: linear-gradient(90deg, #065f46, #16a34a);
-  color: white;
-  padding: 12px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.header a {
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-/* 🔷 HEADER BASE */
+/* ===== GLOBAL HEADER ===== */
 .main-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(90deg, #065f46, #16a34a);
+
+  background: linear-gradient(90deg, #065f46, #16a34a); /* ✅ same color */
   padding: 10px 20px;
+
   color: white;
-  gap: 15px;
-  flex-wrap: wrap;
 }
 
 /* LEFT */
@@ -61,125 +44,151 @@ body {
   gap: 8px;
 }
 
+/* LOGO */
 .logo {
-  height: 34px;
+  height: 34px;   /* ✅ consistent size */
 }
 
+/* BRAND */
 .brand-name {
   font-size: 18px;
   font-weight: 600;
 }
 
-/* CENTER SEARCH */
-.header-center {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.header-center input {
-  width: 100%;
-  max-width: 420px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  font-size: 14px;
-}
-
-/* RIGHT ACTIONS */
+/* RIGHT */
 .header-right {
   display: flex;
-  align-items: center;
   gap: 8px;
 }
 
+/* BUTTON */
 .header-right button {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.15);
   border: none;
   color: white;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 13px;
-  transition: 0.25s;
 }
 
-.header-right button:hover {
-  background: rgba(255,255,255,0.25);
+/* ===== PAGE BAR ===== */
+.page-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* equal left, center, right */
+  align-items: center;
+
+  background: #fff;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
 }
 
-/* LOGIN BUTTON */
-.login-btn {
-  background: white !important;
-  color: #065f46 !important;
+.page-bar a {
+  text-decoration: none;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* LEFT */
+.page-bar .left {
+  justify-self: start;
+}
+
+/* CENTER (Perfectly centered) */
+.page-bar .center {
+  justify-self: center;
   font-weight: 600;
 }
 
-/* LANGUAGE BUTTON */
-.lang-toggle {
-  font-weight: 500;
+/* RIGHT */
+.page-bar .right {
+  justify-self: end;
 }
 
 /* ===== HERO ===== */
 .category-hero {
-  background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
-  padding: 30px;
-  border-radius: 16px;
+  padding: 25px;
   margin: 20px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
 }
 
-/* ===== CATEGORY STRIP ===== */
-.category-strip {
+/* ===== TOP SECTION ===== */
+.top-section {
+  background: #fff;
+  margin: 20px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+/* CATEGORY BUTTONS */
+.category-row {
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  padding: 10px 20px;
+  padding-bottom: 10px;
 }
 
-.category-strip button {
-  background: #fff;
+.category-row button {
   border: 1px solid var(--border);
-  padding: 8px 16px;
+  background: #fff;
+  padding: 6px 14px;
   border-radius: 999px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
-.category-strip button:hover {
+.category-row button:hover {
   background: #ecfdf5;
   border-color: var(--primary);
 }
 
-/* ===== SECTIONS ===== */
+/* SEARCH */
+.search-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.search-row input,
+.search-row select {
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+/* ===== SECTION ===== */
 .category-section {
   padding: 20px;
 }
 
 .section-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; align-items: center;
   margin-bottom: 10px;
 }
 
 .view-more {
   color: var(--primary);
   cursor: pointer;
-  font-weight: 500;
+  font-size: 14px;
 }
 
-/* ===== CARDS ===== */
+/* ===== GRID ===== */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
   gap: 15px;
+  margin-top: 10px;
 }
 
 .card {
   background: #fff;
   border-radius: 12px;
   border: 1px solid var(--border);
-  padding: 12px;
-  transition: 0.3s;
+  padding: 10px;
+  transition: 0.25s;
 }
 
 .card:hover {
@@ -193,243 +202,30 @@ body {
   border-radius: 8px;
 }
 
-.card h4 {
-  margin: 8px 0 4px;
-}
+.card h4 { margin: 6px 0; }
+.card p { color: var(--primary); font-weight: bold; }
 
-.card p {
-  color: #16a34a;
-  font-weight: bold;
+.section-box {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 15px;
+  margin: 20px;
 }
 
 /* ===== FOOTER ===== */
 .footer {
   background: linear-gradient(90deg, #065f46, #022c22);
   color: white;
-  padding: 20px;
+  padding: 8px 10px;
+  font-size: 12px;
   text-align: center;
-  margin-top: 40px;
+  margin-top: 30px;     /* optional */
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .card-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .card-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* 🔷 TOP BAR */
-.top-bar {
-  display: flex;
-  align-items: center;           /* ✅ vertical center fix */
-  justify-content: space-between;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 10px 15px;
-  margin-bottom: 20px;
-  gap: 10px;
-}
-
-/* CATEGORY ICONS */
-.category-icons {
-  display: flex;
-  align-items: center;           /* ✅ vertical center */
-  gap: 8px;
-  overflow-x: auto;
-  flex: 1;                       /* ✅ take left space */
-}
-
-/* BUTTON STYLE */
-.category-icons button {
-  display: flex;
-  align-items: center;           /* ✅ icon + text center */
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: #fff;
-  font-size: 13px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: 0.25s;
-}
-
-.category-icons button:hover {
-  background: #ecfdf5;
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-/* RIGHT SIDE (SEARCH + FILTER) */
-.right-controls {
-  display: flex;
-  align-items: center;           /* ✅ vertical center */
-  gap: 8px;
-  flex-shrink: 0;                /* ✅ stay on right */
-}
-
-/* SEARCH */
-.right-controls input {
-  height: 34px;
-  padding: 0 10px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 13px;
-  outline: none;
-}
-
-/* DROPDOWN */
-.right-controls select {
-  height: 34px;
-  padding: 0 10px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-/* SEARCH + FILTER */
-.search-filter {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.search-filter input {
-  padding: 7px 10px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 13px;
-  outline: none;
-  width: 180px;
-}
-
-.search-filter select {
-  padding: 7px 10px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-@media (max-width: 768px) {
-  .top-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .search-filter {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .search-filter input {
-    width: 100%;
-  }
-}
-
-  .category-icons {
-    width: 100%;
-  }
-
-  .right-controls {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .right-controls input {
-    width: 100%;
-  }
-}
-
-/* 🔷 TOP SECTION BOX */
-.top-section {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 20px;
-}
-
-/* 🔹 CATEGORY ROW (LINE 1) */
-.category-row {
-  display: flex;
-  align-items: center;          /* ✅ vertical center */
-  justify-content: center;      /* ✅ equal left-right spacing */
-  gap: 12px;
-
-  max-width: 1200px;            /* ✅ controls layout width */
-  margin: 0 auto;               /* ✅ center the whole row */
-
-  padding: 10px 16px;
-  overflow-x: auto;
-}
-
-/* Hide scrollbar (clean UI) */
-.category-row::-webkit-scrollbar {
-  display: none;
-}
-.category-row {
-  scrollbar-width: none;
-}
-
-/* BUTTON STYLE */
-.category-row button {
-  display: flex;
-  align-items: center;          /* ✅ icon + text vertical center */
-  gap: 6px;
-
-  padding: 7px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: #fff;
-
-  font-size: 13px;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: 0.25s ease;
-}
-
-.category-row button:hover {
-  background: #ecfdf5;
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-/* 🔹 SEARCH ROW (LINE 2 RIGHT SIDE) */
-.search-row {
-  display: flex;
-  justify-content: flex-end;   /* ✅ push to RIGHT */
-  align-items: center;
-  gap: 8px;
-}
-
-/* SEARCH INPUT */
-.search-row input {
-  height: 34px;
-  padding: 0 10px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 13px;
-  outline: none;
-  width: 200px;
-}
-
-/* DROPDOWN */
-.search-row select {
-  height: 34px;
-  padding: 0 10px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 13px;
-  cursor: pointer;
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+  .search-row { flex-direction: column; }
 }
 </style>
 </head>
@@ -437,22 +233,29 @@ body {
 <body>
 
 <!-- HEADER -->
-<!-- 🔷 GLOBAL HEADER -->
 <header class="main-header">
 
-    <!-- LEFT: LOGO + NAME -->
-    <div class="header-left">
-        <img src="../images/logo.png" alt="StopBuy" class="logo">
-        <span class="brand-name">StopBuy</span>
-    </div>
-
-    
+  <!-- LEFT: LOGO + NAME -->
+  <div class="header-left">
+    <img src="../images/logo/stopbuy-logo.png" alt="StopBuy" class="logo">
+    <span class="brand-name">StopBuyPk</span>
+  </div>
 
 </header>
 
-<div class="header">
-  <div><a href="../index.html">← Home</a></div>
-  <div>Categories</div>
+<!-- PAGE BAR -->
+<div class="page-bar">
+
+  <div class="left">
+    <a href="../index.html">← Home</a>
+  </div>
+
+  <div class="center">
+    Categories
+  </div>
+
+  <div class="right"></div>
+
 </div>
 
 <!-- HERO -->
@@ -461,157 +264,439 @@ body {
   <p>Compare prices across Pakistan</p>
 </div>
 
-<!-- 🔷 TOP SECTION -->
+<!-- TOP FILTER -->
 <div class="top-section">
 
-    <!-- 🔹 LINE 1: CATEGORY ICONS -->
-    <div class="category-row">
-    <button>🍲 Food Stuffs</button>
-    <button>🛒 Daily Groceries</button>
-    <button>🔌 Electronics</button>
-    <button>📱 Mobiles</button>
-    <button>💻 Laptops</button>
-    <button>🏠 Property</button>
-    <button>👕 Fashion</button>
-    <button>💄 Cosmetics</button>
-    <button>🍼 Baby Care</button>
-</div>
+  <div class="category-row">
 
-    <!-- 🔹 LINE 2: SEARCH + FILTER (RIGHT SIDE) -->
-    <div class="search-row">
-        <input type="text" placeholder="Search products...">
-        <select>
-            <option>Lowest Price</option>
-            <option>Highest Price</option>
-            <option>Closest Price</option>
-        </select>
-    </div>
+  <button onclick="go('food')">🍲 Food Stuffs</button>
+
+  <button onclick="go('groceries')">🛒 Daily Groceries</button>
+
+  <button onclick="go('electronics')">🔌 Electronics</button>
+
+  <button onclick="go('mobiles')">📱 Mobiles</button>
+
+  <button onclick="go('laptops')">💻 Laptops</button>
+
+  <button onclick="go('property')">🏠 Property</button>
+
+  <button onclick="go('fashion')">👕 Fashion</button>
+
+  <button onclick="go('cosmetics')">💄 Personal Care</button>
+
+  <button onclick="go('baby')">🍼 Kids</button>
 
 </div>
 
-<!-- CATEGORY: GROCERIES -->
+  <div class="search-row">
+    <input type="text" placeholder="Search products...">
+    <select>
+      <option>Lowest Price</option>
+      <option>Highest Price</option>
+    </select>
+  </div>
+
+</div>
+
+<!-- SECTIONS -->
+
 <section id="groceries" class="category-section">
+<div class="section-box">
+
   <div class="section-header">
-    <h2>Groceries</h2>
+    <h2>🍲 Food Stuffs</h2>
     <span class="view-more">View More →</span>
   </div>
 
   <div class="card-grid">
+
+    <!-- CARD 1 -->
     <div class="card">
-      <img src="../images/oil.jpg">
-      <h4>Cooking Oil</h4>
-      <p>Rs. 389</p>
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
     </div>
 
+    <!-- CARD 2 -->
     <div class="card">
-      <img src="../images/flour.jpg">
-      <h4>Flour 10kg</h4>
-      <p>Rs. 1250</p>
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
     </div>
 
+    <!-- CARD 3 -->
     <div class="card">
-      <img src="../images/sugar.jpg">
-      <h4>Sugar 1kg</h4>
-      <p>Rs. 145</p>
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
     </div>
+	
+	<!-- CARD 4 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
   </div>
+
+</div>
 </section>
 
-<!-- CATEGORY: MOBILES -->
 <section id="mobiles" class="category-section">
+<div class="section-box">
+
   <div class="section-header">
-    <h2>Mobiles</h2>
+    <h2>🛒 Daily Groceries</h2>
     <span class="view-more">View More →</span>
   </div>
 
   <div class="card-grid">
+
+    <!-- CARD 1 -->
     <div class="card">
-      <img src="../images/mobile1.jpg">
-      <h4>iPhone 15</h4>
-      <p>Rs. 257,999</p>
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
     </div>
 
+    <!-- CARD 2 -->
     <div class="card">
-      <img src="../images/mobile2.jpg">
-      <h4>Samsung S23</h4>
-      <p>Rs. 210,000</p>
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
     </div>
 
+    <!-- CARD 3 -->
     <div class="card">
-      <img src="../images/mobile3.jpg">
-      <h4>Infinix Note</h4>
-      <p>Rs. 45,000</p>
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
     </div>
+	
+	<!-- CARD 4 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
   </div>
+
+</div>
 </section>
 
-<!-- CATEGORY: ELECTRONICS -->
 <section id="electronics" class="category-section">
+<div class="section-box">
+
   <div class="section-header">
-    <h2>Electronics</h2>
+    <h2>🔌 Electronics</h2>
     <span class="view-more">View More →</span>
   </div>
 
   <div class="card-grid">
+
+    <!-- CARD 1 -->
     <div class="card">
-      <img src="../images/tv.jpg">
-      <h4>LED TV</h4>
-      <p>Rs. 85,000</p>
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
     </div>
 
+    <!-- CARD 2 -->
     <div class="card">
-      <img src="../images/laptop.jpg">
-      <h4>Laptop</h4>
-      <p>Rs. 120,000</p>
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
     </div>
 
+    <!-- CARD 3 -->
     <div class="card">
-      <img src="../images/fridge.jpg">
-      <h4>Refrigerator</h4>
-      <p>Rs. 95,000</p>
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
     </div>
+	
+	<!-- CARD 4 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
   </div>
+
+</div>
 </section>
 
-<!-- CATEGORY: FASHION -->
 <section id="fashion" class="category-section">
+<div class="section-box">
+
   <div class="section-header">
-    <h2>Fashion</h2>
+    <h2>📱 Mobiles</h2>
     <span class="view-more">View More →</span>
   </div>
 
   <div class="card-grid">
+
+    <!-- CARD 1 -->
     <div class="card">
-      <img src="../images/shirt.jpg">
-      <h4>Men Shirt</h4>
-      <p>Rs. 2,500</p>
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
     </div>
 
+    <!-- CARD 2 -->
     <div class="card">
-      <img src="../images/shoes.jpg">
-      <h4>Shoes</h4>
-      <p>Rs. 4,000</p>
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
     </div>
 
+    <!-- CARD 3 -->
     <div class="card">
-      <img src="../images/bag.jpg">
-      <h4>Handbag</h4>
-      <p>Rs. 3,200</p>
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
     </div>
+	
+	<!-- CARD 4 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
   </div>
+
+</div>
+</section>
+
+<section id="fashion" class="category-section">
+<div class="section-box">
+
+  <div class="section-header">
+    <h2>💻 Laptops</h2>
+    <span class="view-more">View More →</span>
+  </div>
+
+  <div class="card-grid">
+
+    <!-- CARD 1 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+	
+	<!-- CARD 4 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+  </div>
+
+</div>
+</section>
+
+<section id="fashion" class="category-section">
+<div class="section-box">
+
+  <div class="section-header">
+    <h2>🏠 Property</h2>
+    <span class="view-more">View More →</span>
+  </div>
+
+  <div class="card-grid">
+
+    <!-- CARD 1 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+	
+	<!-- CARD 4 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+  </div>
+
+</div>
+</section>
+
+<section id="fashion" class="category-section">
+<div class="section-box">
+
+  <div class="section-header">
+    <h2>👕 Fashion</h2>
+    <span class="view-more">View More →</span>
+  </div>
+
+  <div class="card-grid">
+
+    <!-- CARD 1 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+	
+	<!-- CARD 4 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+  </div>
+
+</div>
+</section>
+
+<section id="fashion" class="category-section">
+<div class="section-box">
+
+  <div class="section-header">
+    <h2>💄 Personal Care</h2>
+    <span class="view-more">View More →</span>
+  </div>
+
+  <div class="card-grid">
+
+    <!-- CARD 1 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+	
+	<!-- CARD 4 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+  </div>
+
+</div>
+</section>
+
+<section id="fashion" class="category-section">
+<div class="section-box">
+
+  <div class="section-header">
+    <h2>🍼 Kids</h2>
+    <span class="view-more">View More →</span>
+  </div>
+
+  <div class="card-grid">
+
+    <!-- CARD 1 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+	
+	<!-- CARD 4 -->
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+  </div>
+
+</div>
 </section>
 
 <!-- FOOTER -->
 <div class="footer">
-  © 2026 StopBuy - Smart Price Comparison
+  <p>© 2026 StopBuyPk</p>
+  <p>Smart Price Comparison Platform in Pakistan</p>
 </div>
 
-<!-- SCRIPT -->
 <script>
-function scrollToSection(id) {
-  document.getElementById(id).scrollIntoView({
-    behavior: 'smooth'
-  });
+function go(id){
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
 }
 </script>
 
