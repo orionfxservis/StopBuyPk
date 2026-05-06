@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Fashion - StopBuy</title>
+
+<link rel="stylesheet" href="../css/style.css">
+
+<!-- ✅ Tailwind for navbar -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+/* HERO */
+.category-hero {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  margin: 20px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.hero-banner {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* PAGE BAR */
+.page-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  padding: 8px 20px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.page-bar a {
+  color: #16a34a;
+  text-decoration: none;
+}
+
+.page-bar .center {
+  text-align: center;
+  font-weight: 600;
+}
+
+/* SECTION */
+.section-box {
+  margin: 20px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #fff;
+  border-left: 6px solid #ec4899; /* 🌸 fashion color */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+  gap: 15px;
+}
+
+.card {
+  background: #fff;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.card h4 {
+  margin: 6px 0;
+}
+
+.card p {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+/* FOOTER */
+.footer {
+  background: linear-gradient(90deg, #065f46, #022c22);
+  color: white;
+  padding: 8px;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 30px;
+}
+
+/* FIX LOGO SIZE */
+.logo-fix {
+  height: 40px !important;
+  width: auto !important;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ✅ STANDARD NAVBAR -->
+<header class="sticky top-0 z-30 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+    
+    <div class="flex items-center gap-3">
+      <a href="../index.html" class="flex items-center gap-3">
+        
+        <img src="../images/logo/stopbuy-logo.png" 
+             alt="StopBuy Logo"
+             class="logo-fix object-contain rounded-lg bg-white p-1 shadow-lg shadow-emerald-500/20">
+
+        <div class="leading-tight">
+          <div class="flex items-end gap-1">
+            <span class="text-lg sm:text-xl font-bold gradient-text">
+              <span class="lang-en">StopBuy</span>
+              <span class="lang-ur">اسٹاپ بائے</span>
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">
+            <span class="lang-en">Smart Price Comparison for Pakistan</span>
+            <span class="lang-ur">پاکستان کے لیے اسمارٹ پرائس کمپیرزن</span>
+          </p>
+        </div>
+      </a>
+    </div>
+
+  </nav>
+</header>
+
+<!-- PAGE BAR -->
+<div class="page-bar">
+  <div><a href="categories.html">← Categories</a></div>
+  <div class="center">Fashion</div>
+  <div></div>
+</div>
+
+<!-- HERO -->
+<div class="category-hero">
+  <img src="../images/grafix/PAGE_BANNER.png" class="hero-banner">
+</div>
+
+<!-- CONTENT -->
+<section class="section-box">
+  <h2>👕 Fashion</h2>
+
+  <div class="card-grid">
+
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+    <div class="card">
+      <img src="../images/placeholder.jpg">
+      <h4>Product Name</h4>
+      <p>Rs. ---</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="footer">
+  © 2026 StopBuyPk - Smart Price Comparison
+</div>
+
+</body>
+</html>
