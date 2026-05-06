@@ -20,7 +20,7 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: var(--bg);
+  background: linear-gradient(180deg, #f5f7f6, #eef7f2);
   color: var(--text);
 }
 
@@ -106,15 +106,46 @@ body {
 
 /* ===== HERO ===== */
 .category-hero {
-  padding: 25px;
+  position: relative;
+  height: 220px;
   margin: 20px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+  border-radius: 16px;
+  overflow: hidden;
+
+  /* 🔥 MULTI-PRODUCT BACKGROUND */
+  background: 
+    linear-gradient(rgba(6,95,70,0.7), rgba(22,163,74,0.7)),
+    url('https://images.unsplash.com/photo-1607082349566-187342175e2f');
+
+  background-size: cover;
+  background-position: center;
+}
+
+/* OVERLAY TEXT */
+.hero-overlay {
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  transform: translateY(-50%);
+  color: white;
+}
+
+.hero-overlay h1 {
+  font-size: 28px;
+  margin: 0;
+}
+
+.hero-overlay p {
+  margin-top: 6px;
+  font-size: 14px;
+  opacity: 0.9;
 }
 
 /* ===== TOP SECTION ===== */
 .top-section {
-  background: #fff;
+  background: 
+  linear-gradient(rgba(6,95,70,0.75), rgba(22,163,74,0.75)),
+  url('https://images.unsplash.com/photo-1557821552-17105176677c'); /* mixed products */
   margin: 20px;
   padding: 12px;
   border-radius: 12px;
@@ -163,10 +194,17 @@ body {
   padding: 20px;
 }
 
+.section-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
 .section-header {
   display: flex;
-  justify-content: space-between; align-items: center;
-  margin-bottom: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
 .view-more {
@@ -185,32 +223,94 @@ body {
 
 .card {
   background: #fff;
-  border-radius: 12px;
   border: 1px solid var(--border);
+  border-radius: 14px;
   padding: 10px;
   transition: 0.25s;
+
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
 }
 
 .card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
 }
 
 .card img {
   width: 100%;
-  height: 120px;
+  height: 130px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 .card h4 { margin: 6px 0; }
 .card p { color: var(--primary); font-weight: bold; }
 
 .section-box {
-  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 18px;
+
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 15px;
-  margin: 20px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+
+  transition: 0.3s ease;
+}
+
+/* ===== DIFFERENT COLORS PER SECTION ===== */
+
+/* Food */
+#food .section-box {
+  background: linear-gradient(135deg, #fff7ed, #ffffff);
+  border-left: 6px solid #f97316;
+}
+
+/* Groceries */
+#groceries .section-box {
+  background: linear-gradient(135deg, #ecfdf5, #ffffff);
+  border-left: 6px solid #16a34a;
+}
+
+/* Electronics */
+#electronics .section-box {
+  background: linear-gradient(135deg, #eff6ff, #ffffff);
+  border-left: 6px solid #3b82f6;
+}
+
+/* Mobiles */
+#mobiles .section-box {
+  background: linear-gradient(135deg, #f5f3ff, #ffffff);
+  border-left: 6px solid #8b5cf6;
+}
+
+/* Laptops */
+#laptops .section-box {
+  background: linear-gradient(135deg, #f0fdfa, #ffffff);
+  border-left: 6px solid #14b8a6;
+}
+
+/* Property */
+#property .section-box {
+  background: linear-gradient(135deg, #fef2f2, #ffffff);
+  border-left: 6px solid #ef4444;
+}
+
+/* Fashion */
+#fashion .section-box {
+  background: linear-gradient(135deg, #fff1f2, #ffffff);
+  border-left: 6px solid #ec4899;
+}
+
+/* Cosmetics */
+#cosmetics .section-box {
+  background: linear-gradient(135deg, #fdf4ff, #ffffff);
+  border-left: 6px solid #a855f7;
+}
+
+/* Baby */
+#baby .section-box {
+  background: linear-gradient(135deg, #fefce8, #ffffff);
+  border-left: 6px solid #eab308;
 }
 
 /* ===== FOOTER ===== */
@@ -227,18 +327,47 @@ body {
 @media(max-width:768px){
   .search-row { flex-direction: column; }
 }
+
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.upload-btn {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  padding: 7px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.3s;
+}
+
+.upload-btn:hover {
+  background: rgba(255,255,255,0.25);
+}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <header class="main-header">
 
   <!-- LEFT: LOGO + NAME -->
   <div class="header-left">
     <img src="../images/logo/stopbuy-logo.png" alt="StopBuy" class="logo">
     <span class="brand-name">StopBuyPk</span>
+  </div>
+
+  <!-- CENTER: BANNER UPLOADER -->
+  <div class="header-center">
+
+    <label class="upload-btn">
+      📤 Upload Category Banner
+      <input type="file" id="bannerUpload" accept="image/grafix/categories-banner.png" hidden>
+    </label>
+
   </div>
 
 </header>
@@ -260,8 +389,12 @@ body {
 
 <!-- HERO -->
 <div class="category-hero">
-  <h1>Browse Categories</h1>
-  <p>Compare prices across Pakistan</p>
+
+  <div class="hero-overlay">
+    <h1>Browse Categories</h1>
+    <p>Compare prices across Pakistan</p>
+  </div>
+
 </div>
 
 <!-- TOP FILTER -->
@@ -294,6 +427,7 @@ body {
     <select>
       <option>Lowest Price</option>
       <option>Highest Price</option>
+	  <option>Closest Price</option>
     </select>
   </div>
 
@@ -301,7 +435,8 @@ body {
 
 <!-- SECTIONS -->
 
-<section id="groceries" class="category-section">
+<!-- ================= FOOD STUFFS ================= -->
+<section id="food" class="category-section">
 <div class="section-box">
 
   <div class="section-header">
@@ -310,41 +445,16 @@ body {
   </div>
 
   <div class="card-grid">
-
-    <!-- CARD 1 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 2 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 3 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-	
-	<!-- CARD 4 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
+    <div class="card"><img src="../images/categories/food/zinger-burger.png"><h4>Zinger Burger</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/food/pizza.jpg"><h4>Pizza</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/food/pizza-fries.jpg"><h4>Pizza Fries</h4><p>Rs. ---</p></div>
   </div>
 
 </div>
 </section>
 
-<section id="mobiles" class="category-section">
+<!-- ================= GROCERIES ================= -->
+<section id="groceries" class="category-section">
 <div class="section-box">
 
   <div class="section-header">
@@ -353,40 +463,15 @@ body {
   </div>
 
   <div class="card-grid">
-
-    <!-- CARD 1 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 2 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 3 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-	
-	<!-- CARD 4 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
+    <div class="card"><img src="../images/categories/grocery/daily-grocery.jpg"><h4>Daily Grocery</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/grocery/daily-grocery-02.jpg"><h4>Product</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/grocery/daily-grocery-03.jpg"><h4>Product</h4><p>Rs. ---</p></div>
   </div>
 
 </div>
 </section>
 
+<!-- ================= ELECTRONICS ================= -->
 <section id="electronics" class="category-section">
 <div class="section-box">
 
@@ -396,41 +481,16 @@ body {
   </div>
 
   <div class="card-grid">
-
-    <!-- CARD 1 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 2 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 3 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-	
-	<!-- CARD 4 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
+    <div class="card"><img src="../images/categories/electronics/mix-items.jpeg"><h4>Mix Items</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/electronics/mobile-phones.jpg"><h4>Mobile Phones</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/electronics/tv-deals.jpg"><h4>Tv</h4><p>Rs. ---</p></div>
   </div>
 
 </div>
 </section>
 
-<section id="fashion" class="category-section">
+<!-- ================= MOBILES ================= -->
+<section id="mobiles" class="category-section">
 <div class="section-box">
 
   <div class="section-header">
@@ -439,41 +499,16 @@ body {
   </div>
 
   <div class="card-grid">
-
-    <!-- CARD 1 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 2 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 3 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-	
-	<!-- CARD 4 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
+    <div class="card"><img src="../images/categories/mobile-phones/01.jpg"><h4>Product</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/mobile-phones/mix-phones.jpg"><h4>Mix Phones</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/mobile-phones/samsung-galaxy-s24-qmart-5.jpg"><h4>Product</h4><p>Rs. ---</p></div>
   </div>
 
 </div>
 </section>
 
-<section id="fashion" class="category-section">
+<!-- ================= LAPTOPS ================= -->
+<section id="laptops" class="category-section">
 <div class="section-box">
 
   <div class="section-header">
@@ -482,41 +517,16 @@ body {
   </div>
 
   <div class="card-grid">
-
-    <!-- CARD 1 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 2 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 3 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-	
-	<!-- CARD 4 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
+    <div class="card"><img src="../images/categories/laptops/acer.jpg"><h4>Acer</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/laptops/best-laptops.jpg"><h4>Best Laptops</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/laptops/hp.jpg"><h4>Hp</h4><p>Rs. ---</p></div>
   </div>
 
 </div>
 </section>
 
-<section id="fashion" class="category-section">
+<!-- ================= PROPERTY ================= -->
+<section id="property" class="category-section">
 <div class="section-box">
 
   <div class="section-header">
@@ -525,40 +535,15 @@ body {
   </div>
 
   <div class="card-grid">
-
-    <!-- CARD 1 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 2 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 3 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-	
-	<!-- CARD 4 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
+    <div class="card"><img src="../images/categories/property/buying-a-house.jpg"><h4>Product</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/property/house-for-sale.jpg"><h4>House for Sale</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/property/images.jpg"><h4>Product</h4><p>Rs. ---</p></div>
   </div>
 
 </div>
 </section>
 
+<!-- ================= FASHION ================= -->
 <section id="fashion" class="category-section">
 <div class="section-box">
 
@@ -568,41 +553,16 @@ body {
   </div>
 
   <div class="card-grid">
-
-    <!-- CARD 1 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 2 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 3 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-	
-	<!-- CARD 4 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
+    <div class="card"><img src="../images/categories/fashion/ladies.jpg"><h4>Ladies</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/fashion/mens.jpg"><h4>Mens</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/fashion/kids.jpg"><h4>Kids</h4><p>Rs. ---</p></div>
   </div>
 
 </div>
 </section>
 
-<section id="fashion" class="category-section">
+<!-- ================= COSMETICS ================= -->
+<section id="cosmetics" class="category-section">
 <div class="section-box">
 
   <div class="section-header">
@@ -611,41 +571,16 @@ body {
   </div>
 
   <div class="card-grid">
-
-    <!-- CARD 1 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 2 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 3 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-	
-	<!-- CARD 4 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
+    <div class="card"><img src="../images/categories/cosmetics/images-01.jpg"><h4>Makeup Mix Items</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/cosmetics/images-02.jpg"><h4>Product</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/categories/cosmetics/images-03.jpg"><h4>Product</h4><p>Rs. ---</p></div>
   </div>
 
 </div>
 </section>
 
-<section id="fashion" class="category-section">
+<!-- ================= BABY CARE ================= -->
+<section id="baby" class="category-section">
 <div class="section-box">
 
   <div class="section-header">
@@ -654,35 +589,9 @@ body {
   </div>
 
   <div class="card-grid">
-
-    <!-- CARD 1 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 2 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <!-- CARD 3 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-	
-	<!-- CARD 4 -->
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
+    <div class="card"><img src="../images/placeholder.jpg"><h4>Product</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/placeholder.jpg"><h4>Product</h4><p>Rs. ---</p></div>
+    <div class="card"><img src="../images/placeholder.jpg"><h4>Product</h4><p>Rs. ---</p></div>
   </div>
 
 </div>
