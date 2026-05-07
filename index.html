@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StopBuy - Pakistan's Smartest Price Comparison Platform</title>
+    <title>StopBuyPk - Pakistan's Smartest Price Comparison Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -136,6 +136,15 @@
                 transform: rotateY(360deg);
             }
         }
+		
+		@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-in-out;
+}
     </style>
 </head>
 
@@ -301,31 +310,55 @@
 
             <div class="flex items-center gap-x-1 overflow-x-auto whitespace-nowrap w-full no-scrollbar">
                 <div class="flex items-center gap-x-0.5 text-white flex-1 text-xs xl:text-[13px] justify-between">
-                    <div onclick="showPage('groceries')"
-                        class="px-1 py-0.5 bg-emerald-700 text-white rounded-2xl flex items-center cursor-pointer">
-                        <span class="px-2 text-xs xl:text-[13px] font-semibold">All Categories</span>
-                    </div>
-                    <div onclick="showPage('groceries')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
-                        Daily Groceries</div>
-                    <div onclick="showPage('foodstuffs')"
-                        class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
-                        Food Stuffs</div>
-                    <div onclick="showPage('electronics')"
-                        class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
-                        Electronics</div>
-                    <div onclick="showPage('mobiles')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
-                        Mobiles</div>
-                    <div onclick="showPage('laptops')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
-                        Laptops</div>
-                    <div onclick="showPage('fashion')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
-                        Fashion
-                    </div>
-                    <div onclick="showPage('cosmetics')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
-                        Cosmetics
-                    </div>
-                    <div onclick="showPage('babycare')" class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer">
-                        Baby Care
-                    </div>
+                    
+                    <div class="flex items-center gap-x-0.5 text-white flex-1 text-xs xl:text-[13px] justify-between">
+
+    <a href="/pages/categories.html"
+       class="px-1 py-0.5 bg-emerald-700 text-white rounded-2xl flex items-center">
+        <span class="px-2 text-xs xl:text-[13px] font-semibold">All Categories</span>
+    </a>
+
+    <a href="/pages/food.html"
+       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
+        Food Stuffs
+    </a>
+
+    <a href="/pages/grocery.html"
+       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
+        Daily Groceries
+    </a>
+
+    <a href="/pages/electronics.html"
+       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
+        Electronics
+    </a>
+
+    <a href="/pages/mobiles.html"
+       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
+        Mobiles
+    </a>
+
+    <a href="/pages/laptops.html"
+       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
+        Laptops
+    </a>
+
+    <a href="/pages/fashion.html"
+       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
+        Fashion
+    </a>
+
+    <a href="/pages/personal-care.html"
+       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
+        Personal Care
+    </a>
+
+    <a href="/pages/kids.html"
+       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
+        Kids
+    </a>
+
+</div>
                 </div>
 
                 <!-- Visitor Counter -->
@@ -483,41 +516,83 @@
         <!-- Features Row -->
         <div class="max-w-screen-2xl mx-auto px-4 pt-7">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <div class="bg-white rounded-3xl p-5 flex gap-x-4 items-start modern-shadow border border-emerald-50">
-                    <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center">
-                        <i class="fas fa-store text-xl"></i>
-                    </div>
-                    <div>
-                        <div class="font-semibold">Compare Across 500+ Stores</div>
-                        <div class="text-xs text-emerald-600 mt-1">Find the lowest price instantly</div>
-                    </div>
-                </div>
-                <div class="bg-white rounded-3xl p-5 flex gap-x-4 items-start modern-shadow border border-emerald-50">
-                    <div class="w-10 h-10 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center"><i
-                            class="fas fa-chart-line text-xl"></i></div>
-                    <div>
-                        <div class="font-semibold">Price History &amp; Trends</div>
-                        <div class="text-xs text-emerald-600 mt-1">Buy at the right time</div>
-                    </div>
-                </div>
-                <div class="bg-white rounded-3xl p-5 flex gap-x-4 items-start modern-shadow border border-emerald-50">
-                    <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center">
-                        <i class="fas fa-shopping-basket text-xl"></i>
-                    </div>
-                    <div>
-                        <div class="font-semibold">Nearby-First Comparison</div>
-                        <div class="text-xs text-emerald-600 mt-1">Prioritize stores near you</div>
-                    </div>
-                </div>
-                <div class="bg-white rounded-3xl p-5 flex gap-x-4 items-start modern-shadow border border-emerald-50">
-                    <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center">
-                        <i class="fas fa-sync text-xl"></i>
-                    </div>
-                    <div>
-                        <div class="font-semibold">Real-time Updates Everyday</div>
-                        <div class="text-xs text-emerald-600 mt-1">Always up to date</div>
-                    </div>
-                </div>
+			
+		<!-- Card -->
+<div class="feature-card bg-white rounded-3xl p-5 flex gap-x-4 items-start modern-shadow border border-emerald-50 
+cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-emerald-200"
+
+data-title="Compare Across 500+ Stores"
+data-description="Compare prices across 500+ stores in seconds and always get the best deal. Our platform scans multiple retailers instantly, so you don’t have to jump between sites. You’ll see the lowest available price, discover better offers, and shop with confidence knowing you’re saving both time and money.">
+    
+
+    <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center">
+        <i class="fas fa-store text-xl"></i>
+    </div>
+
+    <div>
+        <div class="font-semibold">Compare Across 500+ Stores</div>
+        <div class="text-xs text-emerald-600 mt-1">Find the lowest price instantly</div>
+    </div>
+</div>
+
+
+                <div class="feature-card bg-white rounded-3xl p-5 flex gap-x-4 items-start modern-shadow border border-emerald-50 
+    cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-emerald-200"
+    
+    data-title="Price History & Trends"
+    data-description="Track price history and trends to make smarter buying decisions. See how prices change over time, identify the best moments to purchase, and avoid overpaying. With clear insights and data, you can confidently buy at the right time and get the best value.">
+
+    <div class="w-10 h-10 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center">
+        <i class="fas fa-chart-line text-xl"></i>
+    </div>
+
+    <div>
+        <div class="font-semibold">Price History &amp; Trends</div>
+        <div class="text-xs text-emerald-600 mt-1">Buy at the right time</div>
+    </div>
+</div>
+
+                <div class="feature-card bg-white rounded-3xl p-5 flex gap-x-4 items-start modern-shadow border border-emerald-50 
+    cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-emerald-200"
+
+    data-title="Nearby-First Comparison"
+    data-description="Compare prices with a focus on stores near you to save more than just money. Discover nearby retailers offering the best deals, reduce delivery time, and even explore convenient in-store options. With location-based results, you get faster, smarter, and more practical shopping choices tailored to where you are.">
+
+    <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center">
+        <i class="fas fa-shopping-basket text-xl"></i>
+    </div>
+
+    <div>
+        <div class="font-semibold">Nearby-First Comparison</div>
+        <div class="text-xs text-emerald-600 mt-1">Prioritize stores near you</div>
+    </div>
+</div>
+
+<div id="popupModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl max-w-md w-full relative">
+        <button id="closeModal" class="absolute top-2 right-3 text-xl">&times;</button>
+
+        <h2 id="modalTitle" class="font-semibold mb-2"></h2>
+        <p id="modalDesc" class="text-sm text-gray-600"></p>
+    </div>
+</div>
+
+
+                <div class="feature-card bg-white rounded-3xl p-5 flex gap-x-4 items-start modern-shadow border border-emerald-50 
+    cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-emerald-200"
+
+    data-title="Real-time Updates Everyday"
+    data-description="Stay ahead with real-time updates that keep prices fresh and accurate every day. Our system continuously monitors changes across stores, so you always see the latest deals, discounts, and availability without any delay. No more relying on outdated information or missing out on better offers—everything is updated as it happens. With reliable, up-to-date data at your fingertips, you can shop smarter, act faster, and always make well-informed decisions.">
+
+    <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center">
+        <i class="fas fa-sync text-xl"></i>
+    </div>
+
+    <div>
+        <div class="font-semibold">Real-time Updates Everyday</div>
+        <div class="text-xs text-emerald-600 mt-1">Always up to date</div>
+    </div>
+</div>
             </div>
         </div>
 
@@ -577,9 +652,11 @@
                 <div class="text-xs text-red-500 tracking-widest font-bold mb-1">
                     POWERED BY REAL-TIME DATA
                 </div>
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
                     <div>
-                        <div class="text-3xl font-bold text-[#0A3D2A]">Price Comparison</div>
+                        <div class="text-3xl font-bold text-[#0A3D2A] whitespace-nowrap">
+    Price Comparison
+</div>
                         <div class="text-gray-500 text-sm">Find the lowest prices near you</div>
                     </div>
 
@@ -1563,6 +1640,93 @@
                     goTopBtn.classList.remove('opacity-100', 'visible', 'translate-y-0');
                 }
             });
+			
+			/* =========================
+               🚀 1st Card
+            ========================= */
+document.addEventListener("DOMContentLoaded", function () {
+    const card = document.getElementById("priceCard");
+    const modal = document.getElementById("popupModal");
+    const closeBtn = document.getElementById("closeModal");
+
+    if (!card || !modal || !closeBtn) {
+        console.error("Elements not found");
+        return;
+    }
+
+    card.addEventListener("click", () => {
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+    });
+
+    closeBtn.addEventListener("click", () => {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+    });
+
+    modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        }
+    });
+});
+	
+			/* =========================
+               🚀 2nd Card
+            ========================= */
+document.addEventListener("DOMContentLoaded", function () {
+    const cards = document.querySelectorAll(".feature-card");
+    const modal = document.getElementById("popupModal");
+    const closeBtn = document.getElementById("closeModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalDesc = document.getElementById("modalDesc");
+
+    cards.forEach(card => {
+        card.addEventListener("click", () => {
+            modalTitle.textContent = card.dataset.title;
+            modalDesc.textContent = card.dataset.description;
+
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        });
+    });
+
+    closeBtn.addEventListener("click", () => {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+    });
+
+    modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        }
+    });
+});
+
+			/* =========================
+               🚀 3rd Card
+            ========================= */
+const cards = document.querySelectorAll(".feature-card");
+const modal = document.getElementById("popupModal");
+const closeBtn = document.getElementById("closeModal");
+const modalTitle = document.getElementById("modalTitle");
+const modalDesc = document.getElementById("modalDesc");
+
+cards.forEach(card => {
+    card.onclick = function () {
+        modalTitle.innerText = this.dataset.title;
+        modalDesc.innerText = this.dataset.description;
+        modal.style.display = "flex";
+    };
+});
+
+closeBtn.onclick = () => modal.style.display = "none";
+
+modal.onclick = (e) => {
+    if (e.target === modal) modal.style.display = "none";
+};
         </script>
 </body>
 
