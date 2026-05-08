@@ -1327,3 +1327,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Global Click Sound Logic
+document.addEventListener('DOMContentLoaded', () => {
+    const clickSound = document.getElementById('clickSound');
+    if (clickSound) {
+        document.body.addEventListener('click', (e) => {
+            const target = e.target.closest('button, .menu li, .quick-action, .stat-link, a, input[type="submit"]');
+            if (target) {
+                clickSound.currentTime = 0; // Reset sound to start
+                clickSound.play().catch(err => console.log('Audio play error (user interaction needed first):', err));
+            }
+        });
+    }
+});

@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Food Deals - Qeemat Point - قِیمَت پوائنٹ</title>
+  <title>Food Deals - StopBuy - اسٹاپ بائے</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,29 +40,18 @@
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <a href="../index.html" class="flex items-center gap-3">
-          <div
-            class="w-9 h-9 rounded-2xl bg-gradient-to-br from-emerald-400 to-sky-500 flex items-center justify-center shadow-lg shadow-emerald-500/40">
-            <span class="text-xl font-black text-slate-950">Q</span>
-          </div>
+          <img src="../images/logo/stopbuy-logo.png" alt="StopBuy Logo" class="h-10 w-auto object-contain rounded-lg bg-white p-1 shadow-lg shadow-emerald-500/20">
           <div class="leading-tight">
             <div class="flex items-end gap-1">
-              <span class="text-lg sm:text-xl font-bold gradient-text"><span class="lang-en">Qeemat Point</span><span class="lang-ur">قِیمَت پوائنٹ</span></span>
-              <span class="text-xs text-slate-400 hidden sm:inline"><span class="lang-en">قِیمَت پوائنٹ</span><span class="lang-ur">Qeemat Point</span></span>
+              <span class="text-lg sm:text-xl font-bold gradient-text"><span class="lang-en">StopBuy</span><span class="lang-ur">اسٹاپ بائے</span></span>
             </div>
-            <p class="text-xs text-slate-400 hidden sm:block"><span class="lang-en">Smart Price Comparison</span><span class="lang-ur">اسمارٹ پرائس کمپیرزن</span></p>
+            <p class="text-xs text-slate-400 hidden sm:block"><span class="lang-en">Smart Price Comparison for Pakistan</span><span class="lang-ur">پاکستان کے لیے اسمارٹ پرائس کمپیرزن</span></p>
           </div>
         </a>
       </div>
-      <div class="hidden md:flex items-center gap-6 text-sm font-medium">
-        <a href="../index.html#home" class="nav-link hover:text-emerald-400 transition text-slate-200"><span class="lang-en">Home</span><span class="lang-ur">ہوم</span></a>
-        <a href="../index.html#categories" class="nav-link hover:text-sky-300 text-slate-200 transition"><span class="lang-en">Categories</span><span class="lang-ur">کیٹگریز</span></a>
-        <a href="../index.html#deals" class="nav-link hover:text-sky-300 text-slate-200 transition"><span class="lang-en">Best Prices</span><span class="lang-ur">بہترین قیمتیں</span></a>
-        <a href="../index.html#blog" class="nav-link hover:text-sky-300 text-slate-200 transition"><span class="lang-en">Blog</span><span class="lang-ur">بلاگ</span></a>
-      </div>
+      
       <div class="flex items-center gap-3">
-        <button id="langToggleBtn" class="px-2.5 py-1.5 rounded-full border border-slate-700 bg-slate-800 text-xs text-slate-200 hover:bg-slate-700 transition">
-          <span class="lang-ur">English</span><span class="lang-en">اردو</span>
-        </button>
+        
         <div class="relative">
           <button id="loginToggleBtn"
             class="inline-flex items-center justify-center w-9 h-9 rounded-full border border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 transition shadow-md" title="Login">
@@ -80,28 +69,7 @@
             </svg>
           </button>
           
-          <!-- Login Dropdown Box -->
-          <div id="loginDropdown" class="hidden absolute ltr:right-0 rtl:left-0 top-[110%] mt-2 w-[17rem] rounded-2xl border border-slate-700 bg-slate-950 p-4 shadow-2xl shadow-slate-900/90 z-50">
-            <!-- Tabs -->
-            <div class="flex border-b border-slate-700/50 mb-4 mx-1">
-              <button id="loginTabUser" class="flex-[1.2] pb-2 text-emerald-400 border-b-2 border-emerald-400 font-semibold text-sm">User</button>
-              <button id="loginTabAdmin" class="flex-[1] pb-2 text-slate-400 font-medium text-sm hover:text-slate-200 border-b-2 border-transparent">Admin</button>
-            </div>
-            
-            <!-- Form -->
-            <form class="space-y-3" dir="ltr">
-              <input id="loginInputUserName" type="text" placeholder="User Name" class="w-full bg-slate-900/70 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 text-sm outline-none focus:ring-2 focus:ring-emerald-500/70 focus:border-emerald-400 transition placeholder:text-slate-500">
-              <input id="loginInputCompany" type="text" placeholder="Company Name" class="w-full bg-slate-900/70 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 text-sm outline-none focus:ring-2 focus:ring-emerald-500/70 focus:border-emerald-400 transition placeholder:text-slate-500">
-              <input id="loginInputUserId" type="text" placeholder="User ID" class="w-full bg-slate-900/70 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 text-sm outline-none focus:ring-2 focus:ring-emerald-500/70 focus:border-emerald-400 transition placeholder:text-slate-500">
-              <input id="loginInputPassword" type="password" placeholder="Password" class="w-full bg-slate-900/70 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 text-sm outline-none focus:ring-2 focus:ring-emerald-500/70 focus:border-emerald-400 transition placeholder:text-slate-500">
-              
-              <div class="pt-2">
-                <button id="loginSubmitBtn" type="button" class="w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-sky-500 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/40 hover:from-emerald-400 hover:to-sky-400 transition">
-                  Login
-                </button>
-              </div>
-            </form>
-          </div>
+          
         </div>
         <button id="mobileMenuBtn"
           class="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-full border border-slate-700 bg-slate-900/70 text-slate-100">
@@ -116,6 +84,9 @@
         <a href="../index.html#home" class="nav-link w-fit py-1 text-slate-200"><span class="lang-en">Home</span><span class="lang-ur">ہوم</span></a>
         <a href="../index.html#categories" class="nav-link w-fit py-1 text-slate-200"><span class="lang-en">Categories</span><span class="lang-ur">کیٹگریز</span></a>
         <a href="../index.html#deals" class="nav-link w-fit py-1 text-slate-200"><span class="lang-en">Best Prices</span><span class="lang-ur">بہترین قیمتیں</span></a>
+        <a href="../index.html#blog" class="nav-link w-fit py-1 text-slate-200"><span class="lang-en">Blog</span><span class="lang-ur">بلاگ</span></a>
+        <a href="../index.html#about" class="nav-link w-fit py-1 text-slate-200"><span class="lang-en">About</span><span class="lang-ur">ہمارے بارے میں</span></a>
+        <a href="../index.html#contact" class="nav-link w-fit py-1 text-slate-200"><span class="lang-en">Contact</span><span class="lang-ur">رابطہ</span></a>
       </div>
     </div>
   </header>
@@ -131,7 +102,7 @@
               Food Deals & Restaurants
             </h2>
             <p class="text-[0.75rem] text-slate-400">
-              Nearby places first. We display trusted and verified listings around you.
+              <span class="lang-en">Nearby places first. We display trusted and verified listings around you.</span><span class="lang-ur">سب سے پہلے آپ کے قریب کی جگہیں۔ ہم آپ کو آپ کے اردگرد قابلِ اعتماد اور تصدیق شدہ مقامات دکھاتے ہیں۔</span>
             </p>
           </div>
           <button id="headerLocationBtn"
@@ -326,7 +297,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
         <div class="text-[0.75rem] text-slate-500">
-          © <span id="year"></span> Qeemat Point. All rights reserved. | Built for Pakistan 🇵🇰
+          © <span id="year"></span> StopBuy. All rights reserved. | Built for Pakistan 🇵🇰
         </div>
       </div>
     </div>
@@ -444,7 +415,9 @@
   </div>
 
   <!-- Scripts -->
-  // ===== CATEGORY DATA =====
+  <script>
+
+// ===== CATEGORY DATA =====
 const categoryData = {
   Food: {
     "Fast Food": {
@@ -585,6 +558,8 @@ document.getElementById("clearFilters").addEventListener("click", () => {
   });
   applyFilters();
 });
+
+</script>
 
   <script src="../js/script.js"></script>
   <script src="../js/food.js"></script>

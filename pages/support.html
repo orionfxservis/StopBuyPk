@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Support Center - StopBuy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <style>
+
+    body{
+      background:
+      radial-gradient(circle at top left, rgba(16,185,129,.12), transparent 30%),
+      radial-gradient(circle at bottom right, rgba(14,165,233,.10), transparent 30%),
+      #f8fafc;
+    }
+
+    .support-hero{
+      background:
+      linear-gradient(135deg, rgba(5,150,105,.92), rgba(14,165,233,.88)),
+      url('../images/support/support-banner.jpg');
+
+      background-size: cover;
+      background-position: center;
+
+      border-radius: 32px;
+
+      overflow: hidden;
+      position: relative;
+    }
+
+    .glass-card{
+      background: rgba(255,255,255,.72);
+      backdrop-filter: blur(14px);
+
+      border: 1px solid rgba(255,255,255,.55);
+
+      box-shadow:
+      0 10px 30px rgba(15,23,42,.08);
+
+      transition: .35s ease;
+    }
+
+    .glass-card:hover{
+      transform: translateY(-8px);
+      box-shadow:
+      0 18px 45px rgba(16,185,129,.18);
+    }
+
+    .support-icon{
+      width: 72px;
+      height: 72px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 24px;
+
+      font-size: 28px;
+
+      background:
+      linear-gradient(135deg,#10b981,#06b6d4);
+
+      color: white;
+
+      box-shadow:
+      0 10px 25px rgba(16,185,129,.30);
+    }
+
+    .floating{
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float{
+      0%{transform: translateY(0px);}
+      50%{transform: translateY(-10px);}
+      100%{transform: translateY(0px);}
+    }
+
+    .support-btn{
+      transition: .3s ease;
+    }
+
+    .support-btn:hover{
+      transform: scale(1.04);
+    }
+
+  </style>
+
+</head>
+
+<body class="text-slate-800">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200">
+    <nav class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+
+      <!-- Logo -->
+      <div class="flex items-center gap-3">
+        <a href="../index.html">
+          <img src="../images/logo/stopbuy-logo.png"
+            class="h-10 w-auto rounded-xl bg-white p-1 shadow-lg">
+        </a>
+
+        <div class="leading-tight hidden sm:block">
+          <div class="text-xl font-bold text-slate-800">
+            StopBuy
+          </div>
+
+          <div class="text-[11px] text-slate-500">
+            Smart Price Comparison
+          </div>
+        </div>
+      </div>
+
+      <!-- Right -->
+      <div class="flex items-center gap-3">
+
+        <button class="px-3 py-1.5 rounded-full border border-slate-300 bg-white text-sm hover:bg-slate-100 transition">
+          اردو
+        </button>
+
+      </div>
+
+    </nav>
+  </header>
+
+  <!-- MAIN -->
+  <main class="max-w-7xl mx-auto px-4 py-8">
+
+    <!-- HERO -->
+    <section class="support-hero p-8 md:p-14 mb-10 text-white">
+
+      <div class="max-w-3xl">
+
+        <div class="inline-flex items-center gap-2 bg-white/15 border border-white/20 px-4 py-2 rounded-full text-sm mb-5 backdrop-blur-md">
+          🎧 24/7 Customer Assistance
+        </div>
+
+        <h1 class="text-4xl md:text-6xl font-black leading-tight mb-5">
+          How Can We Help You?
+        </h1>
+
+        <p class="text-white/90 text-lg leading-relaxed max-w-2xl">
+          Get instant support for pricing, orders, vendor issues,
+          account help, and marketplace assistance across Pakistan.
+        </p>
+
+        <div class="flex flex-wrap gap-4 mt-8">
+
+          <button class="support-btn px-6 py-3 rounded-2xl bg-white text-emerald-700 font-semibold shadow-xl">
+            Start Live Chat
+          </button>
+
+          <button class="support-btn px-6 py-3 rounded-2xl border border-white/40 bg-white/10 backdrop-blur-md">
+            Contact Support
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- SUPPORT GRID -->
+    <section>
+
+      <div class="flex justify-between items-center mb-6">
+
+        <div>
+          <h2 class="text-3xl font-bold text-slate-800">
+            Customer Support Services
+          </h2>
+
+          <p class="text-slate-500 mt-1">
+            Multiple ways to reach StopBuy support team
+          </p>
+        </div>
+
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+        <!-- CARD 1 -->
+        <div class="glass-card rounded-3xl p-7 relative overflow-hidden">
+
+          <div class="support-icon floating mb-6">
+            💬
+          </div>
+
+          <h3 class="text-xl font-bold mb-3">
+            Live Chat Support
+          </h3>
+
+          <p class="text-slate-600 text-sm leading-relaxed mb-5">
+            Chat with our support team in real-time for instant
+            assistance with pricing, vendors, and orders.
+          </p>
+
+          <button class="support-btn w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold shadow-lg">
+            Start Chat
+          </button>
+
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="glass-card rounded-3xl p-7 relative overflow-hidden">
+
+          <div class="support-icon floating mb-6">
+            📞
+          </div>
+
+          <h3 class="text-xl font-bold mb-3">
+            Call Us Anytime
+          </h3>
+
+          <p class="text-slate-600 text-sm leading-relaxed mb-5">
+            Reach our support center from 9 AM to 9 PM,
+            seven days a week across Pakistan.
+          </p>
+
+          <div class="text-emerald-700 font-bold text-lg mb-5">
+            +92 300 1234567
+          </div>
+
+          <button class="support-btn w-full py-3 rounded-2xl border border-emerald-300 text-emerald-700 font-semibold hover:bg-emerald-50">
+            Call Support
+          </button>
+
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="glass-card rounded-3xl p-7 relative overflow-hidden">
+
+          <div class="support-icon floating mb-6">
+            ✉️
+          </div>
+
+          <h3 class="text-xl font-bold mb-3">
+            Email Support
+          </h3>
+
+          <p class="text-slate-600 text-sm leading-relaxed mb-5">
+            Send us detailed queries and receive professional
+            assistance within 24 hours.
+          </p>
+
+          <div class="text-sky-700 font-semibold mb-5 break-all text-sm">
+            support@stopbuypk.com
+          </div>
+
+          <button class="support-btn w-full py-3 rounded-2xl bg-gradient-to-r from-sky-500 to-cyan-500 text-white font-semibold">
+            Send Email
+          </button>
+
+        </div>
+
+        <!-- CARD 4 -->
+        <div class="glass-card rounded-3xl p-7 relative overflow-hidden">
+
+          <div class="support-icon floating mb-6">
+            ❓
+          </div>
+
+          <h3 class="text-xl font-bold mb-3">
+            Help Center
+          </h3>
+
+          <p class="text-slate-600 text-sm leading-relaxed mb-5">
+            Browse FAQs, tutorials, and guides for quick answers
+            to common customer questions.
+          </p>
+
+          <button class="support-btn w-full py-3 rounded-2xl bg-slate-900 text-white font-semibold hover:bg-slate-800">
+            Open Help Center
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- CONTACT BAR -->
+    <section class="mt-12">
+
+      <div class="rounded-[32px] overflow-hidden bg-gradient-to-r from-slate-900 via-emerald-900 to-sky-900 p-8 md:p-10 text-white relative">
+
+        <div class="absolute top-0 left-0 w-full h-full opacity-10">
+          <div class="absolute w-64 h-64 rounded-full bg-white blur-3xl -top-20 -left-20"></div>
+          <div class="absolute w-72 h-72 rounded-full bg-emerald-400 blur-3xl bottom-0 right-0"></div>
+        </div>
+
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+
+          <div>
+            <h3 class="text-3xl font-bold mb-2">
+              Need Instant Assistance?
+            </h3>
+
+            <p class="text-white/80">
+              Our team is ready to help you anytime.
+            </p>
+          </div>
+
+          <div class="flex flex-wrap gap-4">
+
+            <button class="support-btn px-6 py-3 rounded-2xl bg-white text-emerald-700 font-bold shadow-xl">
+              📞 Call Now
+            </button>
+
+            <button class="support-btn px-6 py-3 rounded-2xl border border-white/30 bg-white/10 backdrop-blur-md">
+              💬 Live Support
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-12 border-t border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center gap-3">
+
+      <div class="text-sm text-slate-500">
+        © 2026 StopBuyPk — Smart Price Comparison Platform
+      </div>
+
+      <div class="flex items-center gap-4 text-sm text-slate-600">
+        <a href="../index.html" class="hover:text-emerald-600">Home</a>
+        <a href="#" class="hover:text-emerald-600">Support</a>
+        <a href="#" class="hover:text-emerald-600">Contact</a>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>

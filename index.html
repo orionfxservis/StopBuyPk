@@ -7,145 +7,7 @@
     <title>StopBuyPk - Pakistan's Smartest Price Comparison Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Inter', system_ui, sans-serif;
-        }
-
-        .section-header {
-            font-size: 1.35rem;
-            font-weight: 600;
-            color: #0A3D2A;
-        }
-
-        .modern-shadow {
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
-        }
-
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        .deal-banner {
-            scrollbar-width: thin;
-            scrollbar-color: #059669 #f1f5f9;
-        }
-
-        .deal-banner::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .deal-banner::-webkit-scrollbar-thumb {
-            background-color: #059669;
-            border-radius: 20px;
-        }
-
-        ::-webkit-scrollbar {
-            height: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #059669;
-            border-radius: 10px;
-        }
-
-        /* Hide scrollbar for category navigation */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            /* IE and Edge */
-            scrollbar-width: none;
-            /* Firefox */
-        }
-
-        .filter-btn {
-            border-color: #d1d5db;
-        }
-
-        .filter-btn.active {
-            background: #ef4444;
-            color: white;
-            border-color: #ef4444;
-        }
-
-        /* Animated Border for Visitor Counter */
-        .animated-border-box {
-            position: relative;
-            border-radius: 9999px;
-            overflow: hidden;
-            padding: 1.5px;
-            display: inline-flex;
-        }
-
-        .animated-border-box::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(transparent, transparent, transparent, #34d399);
-            animation: border-rotate 3s linear infinite;
-            z-index: 0;
-        }
-
-        @keyframes border-rotate {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .animated-border-content {
-            position: relative;
-            background-color: #052C22;
-            border-radius: 9999px;
-            z-index: 1;
-        }
-
-        /* Login Icon Hover Animation */
-        .login-icon-container {
-            border: 2px solid #34d399;
-            transition: all 0.3s ease;
-        }
-
-        .login-icon-container:hover {
-            transform: scale(1.05);
-            background-color: rgba(52, 211, 153, 0.1);
-        }
-
-        .login-icon-container:hover i {
-            animation: icon-rotate-y 2s linear infinite;
-        }
-
-        @keyframes icon-rotate-y {
-            from {
-                transform: rotateY(0deg);
-            }
-            to {
-                transform: rotateY(360deg);
-            }
-        }
-		
-		@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-.animate-fadeIn {
-    animation: fadeIn 0.3s ease-in-out;
-}
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body class="bg-[#F8FAF9] text-[#1F2937]">
@@ -181,21 +43,13 @@
                 </div>
             </div>
 
-            <!-- CENTER: Search Bar -->
-            <div class="order-3 sm:order-none w-full sm:w-auto sm:flex-1 max-w-xl flex items-center gap-3">
-                <!-- Location -->
-                <div class="hidden md:flex items-center gap-x-2 bg-white/10 hover:bg-white/15 px-4 py-1.5 rounded-3xl text-sm cursor-pointer"
-                    onclick="showLocationModal()">
-                    <i class="fas fa-map-marker-alt text-emerald-400"></i>
-                    <span id="current-location">Karachi</span>
-                    <i class="fas fa-chevron-down text-xs ml-1"></i>
-                </div>
-
-                <div class="relative flex-1">
-                    <input type="text" placeholder="Search product, brand or store..."
-                        onkeyup="if (event.key === 'Enter') performGlobalSearch()"
-                        class="w-full h-[38px] bg-white text-[#1F2937] pl-9 pr-3 rounded-xl text-sm border border-white/20 focus:outline-none focus:ring-2 focus:ring-emerald-400 shadow-sm">
-                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-emerald-600 text-sm"></i>
+            <!-- CENTER: Location -->
+            <div class="order-3 sm:order-none w-full sm:w-auto flex justify-center sm:flex-1">
+                <div class="hidden lg:flex items-center gap-1 text-slate-700 text-sm bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 cursor-pointer hover:bg-slate-200 transition whitespace-nowrap"
+                    onclick="showLocationModal()" id="locationBox">
+                    <span>📍</span>
+                    <span class="font-medium" id="current-location">Detecting...</span>
+                    <span class="text-[0.6rem] ml-1">▼</span>
                 </div>
             </div>
 
@@ -221,180 +75,197 @@
                 </div>
 
                 <!-- Language Toggle -->
-                <div onclick="toggleLanguage()"
-                    class="flex items-center justify-center px-3 sm:px-4 h-[34px] sm:h-[38px] bg-white/10 hover:bg-white/20 rounded-full text-xs sm:text-sm font-medium cursor-pointer transition-colors"
-                    title="Switch Language">
-                    <span id="lang-toggle-text">اردو</span>
+                <div onclick="toggleLanguage()" id="lang-toggle-btn"
+                    class="flex items-center justify-center w-[60px] sm:w-[70px] h-[34px] sm:h-[38px] bg-white/10 hover:bg-white/20 rounded-full text-[13px] sm:text-sm font-medium cursor-pointer transition-colors"
+                    title="Switch to Urdu">
+                    <span id="lang-toggle-text" class="text-center">اردو</span>
                 </div>
 
                 <!-- Login Profile Icon -->
-                <div onclick="showLoginModal()"
-                    class="login-icon-container flex items-center justify-center w-[34px] h-[34px] sm:w-[42px] sm:h-[42px] rounded-full cursor-pointer bg-transparent">
-                    <i class="fas fa-user-shield text-emerald-400 text-sm sm:text-lg"></i>
+                <div class="relative group z-[100000]">
+                    <div class="login-icon-container flex items-center justify-center w-[34px] h-[34px] sm:w-[42px] sm:h-[42px] rounded-full cursor-pointer bg-transparent hover:bg-white/10 transition-colors">
+                        <i class="fas fa-user-shield text-emerald-400 text-sm sm:text-lg"></i>
+                    </div>
+
+                    <!-- Dropdown -->
+                    <div class="absolute right-0 top-full mt-2 w-[280px] bg-[#0B1120] rounded-2xl shadow-2xl border border-gray-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible focus-within:opacity-100 focus-within:visible transition-all duration-300 overflow-hidden text-left z-50">
+                        
+                        <!-- Tabs -->
+                        <div class="flex border-b border-gray-800/50">
+                            <div class="flex-1 text-center py-3 text-sm font-medium text-emerald-400 border-b-2 border-emerald-400 cursor-pointer">
+                                User
+                            </div>
+                            <div onclick="window.location.href='pages/admin.html'" class="flex-1 text-center py-3 text-sm font-medium text-gray-400 cursor-pointer hover:text-gray-200 transition-colors">
+                                Admin
+                            </div>
+                        </div>
+
+                        <!-- Form Area -->
+                        <div class="p-5 space-y-3.5">
+                            <input type="text" placeholder="User Name" 
+                                class="w-full bg-[#131A2B] border border-gray-800/80 rounded-xl px-4 py-2.5 text-[13px] text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors">
+                            
+                            <input type="text" placeholder="Company Name" 
+                                class="w-full bg-[#131A2B] border border-gray-800/80 rounded-xl px-4 py-2.5 text-[13px] text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors">
+                            
+                            <input type="text" placeholder="User ID" 
+                                class="w-full bg-[#131A2B] border border-gray-800/80 rounded-xl px-4 py-2.5 text-[13px] text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors">
+                            
+                            <input type="password" placeholder="Password" 
+                                class="w-full bg-[#131A2B] border border-gray-800/80 rounded-xl px-4 py-2.5 text-[13px] text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors">
+                            
+                            <button class="w-full mt-2 bg-gradient-to-r from-emerald-400 to-cyan-500 text-gray-900 font-bold py-2.5 rounded-xl hover:opacity-90 transition-opacity text-sm shadow-[0_4px_15px_rgba(52,211,153,0.3)]">
+                                Login
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
             </div>
 
         </div>
         <!-- Category Bar -->
-        <div class="bg-[#052C22] px-2 py-2 flex items-center relative z-50">
+        <div class="bg-[#052C22] px-4 py-2 flex items-center relative z-50">
 
             <!-- Quick Links Dropdown -->
-<div class="relative group flex-shrink-0 text-white mr-1 z-[100000]">
-    
-    <!-- Trigger -->
-    <div class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer text-xs xl:text-[13px] font-medium flex items-center gap-1">
-        <i class="fas fa-bars"></i>
-        <span>Menu</span>
-        <i class="fas fa-chevron-down text-[10px]"></i>
-    </div>
-
-    <!-- Dropdown -->
-    <div class="absolute left-0 top-full mt-2 w-52 bg-white text-gray-800 rounded-xl shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-
-        <ul class="py-2 text-sm font-normal">
-
-            <li>
-                <a href="index.html"
-                   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
-                    <i class="fas fa-home text-xs"></i> Home
-                </a>
-            </li>
-
-            <li>
-				<a href="./pages/categories.html"
-				   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
-					<i class="fas fa-layer-group text-xs"></i> Categories
-				</a>
-			</li>
-
-            <li>
-                <a href="#price-comparison"
-                   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
-                    <i class="fas fa-scale-balanced text-xs"></i> Price Comparison
-                </a>
-            </li>
-
-            <li>
-                <a href="#travel-section"
-					class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
-					<i class="fas fa-plane text-xs"></i> Travel & Tours
-				</a>
-            </li>
-
-            <li>
-                <a href="pages/blog.html"
-                   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
-                    <i class="fas fa-blog text-xs"></i> Blogs
-                </a>
-            </li>
-
-            <li>
-                <a href="pages/about.html"
-                   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
-                    <i class="fas fa-circle-info text-xs"></i> About Us
-                </a>
-            </li>
-
-            <li>
-                <a href="pages/contact.html"
-                   class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
-                    <i class="fas fa-envelope text-xs"></i> Contact Us
-                </a>
-            </li>
-
-        </ul>
-
-    </div>
-</div>
-
-            <div class="flex items-center gap-x-1 overflow-x-auto whitespace-nowrap w-full no-scrollbar">
-                <div class="flex items-center gap-x-0.5 text-white flex-1 text-xs xl:text-[13px] justify-between">
-                    
-                    <div class="flex items-center gap-x-0.5 text-white flex-1 text-xs xl:text-[13px] justify-between">
-
-    <a href="/pages/categories.html"
-       class="px-1 py-0.5 bg-emerald-700 text-white rounded-2xl flex items-center">
-        <span class="px-2 text-xs xl:text-[13px] font-semibold">All Categories</span>
-    </a>
-
-    <a href="/pages/food.html"
-       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
-        Food Stuffs
-    </a>
-
-    <a href="/pages/grocery.html"
-       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
-        Daily Groceries
-    </a>
-
-    <a href="/pages/electronics.html"
-       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
-        Electronics
-    </a>
-
-    <a href="/pages/mobiles.html"
-       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
-        Mobiles
-    </a>
-
-    <a href="/pages/laptops.html"
-       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
-        Laptops
-    </a>
-
-    <a href="/pages/fashion.html"
-       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
-        Fashion
-    </a>
-
-    <a href="/pages/personal-care.html"
-       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
-        Personal Care
-    </a>
-
-    <a href="/pages/kids.html"
-       class="px-2 py-1 hover:bg-white/10 rounded-2xl">
-        Kids
-    </a>
-
-</div>
+            <div class="relative group flex-shrink-0 text-white mr-4 z-[100000]">
+                <!-- Trigger -->
+                <div
+                    class="px-2 py-1 hover:bg-white/10 rounded-2xl cursor-pointer text-xs xl:text-[13px] font-medium flex items-center gap-1">
+                    <i class="fas fa-bars"></i>
+                    <span>Menu</span>
+                    <i class="fas fa-chevron-down text-[10px]"></i>
                 </div>
 
-                <!-- Visitor Counter -->
-                <div class="hidden md:flex items-center ml-2 xl:ml-4">
-                    <div class="animated-border-box">
-                        <div class="animated-border-content px-3 py-1 flex items-center gap-x-2 text-white">
-                            <span class="text-xs xl:text-[13px] text-emerald-100">Total Visitors</span>
-                            <span id="visitor-count"
-                                class="font-bold text-emerald-400 tracking-wider text-[13px] xl:text-sm">5,076</span>
-                            <i class="fas fa-eye text-emerald-400 text-xs xl:text-[13px]"></i>
-                        </div>
+                <!-- Dropdown -->
+                <div
+                    class="absolute left-0 top-full mt-2 w-52 bg-white text-gray-800 rounded-xl shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <ul class="py-2 text-sm font-normal">
+                        <li>
+                            <a href="index.html"
+                                class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                                <i class="fas fa-home text-xs"></i> Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="./pages/categories.html"
+                                class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                                <i class="fas fa-layer-group text-xs"></i> Categories
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#price-comparison"
+                                class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                                <i class="fas fa-scale-balanced text-xs"></i> Price Comparison
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#travel-section"
+                                class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                                <i class="fas fa-plane text-xs"></i> Travel & Tours
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#blogs-section"
+                                class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                                <i class="fas fa-blog text-xs"></i> Blogs
+                            </a>
+                        </li>
+                        <li>
+                            <a href="pages/about.html"
+                                class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                                <i class="fas fa-circle-info text-xs"></i> About Us
+                            </a>
+                        </li>
+                        <li>
+                            <a href="pages/contact.html"
+                                class="flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 hover:text-emerald-700">
+                                <i class="fas fa-envelope text-xs"></i> Contact Us
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div
+                class="flex items-center gap-x-4 sm:gap-x-6 lg:gap-x-8 text-white flex-1 text-xs xl:text-[13px] whitespace-nowrap overflow-x-auto pb-1">
+
+                <a href="./pages/categories.html"
+                    class="px-5 py-1.5 bg-emerald-700 text-white rounded-full flex items-center shrink-0 hover:bg-emerald-600 transition">
+                    <span class="font-semibold tracking-wide">All Categories</span>
+                </a>
+
+                <a href="./pages/food.html" class="hover:text-emerald-300 transition font-medium">
+                    Food Stuffs
+                </a>
+
+                <a href="./pages/grocery.html" class="hover:text-emerald-300 transition font-medium">
+                    Daily Groceries
+                </a>
+
+                <a href="./pages/electronics.html" class="hover:text-emerald-300 transition font-medium">
+                    Electronics
+                </a>
+
+                <a href="./pages/mobiles.html" class="hover:text-emerald-300 transition font-medium">
+                    Mobiles
+                </a>
+
+                <a href="./pages/laptops.html" class="hover:text-emerald-300 transition font-medium">
+                    Laptops
+                </a>
+
+                <a href="./pages/property.html" class="hover:text-emerald-300 transition font-medium">
+                    Property
+                </a>
+
+                <a href="./pages/fashion.html" class="hover:text-emerald-300 transition font-medium">
+                    Fashion
+                </a>
+
+                <a href="./pages/personal-care.html" class="hover:text-emerald-300 transition font-medium">
+                    Personal Care
+                </a>
+
+                <a href="./pages/kids.html" class="hover:text-emerald-300 transition font-medium">
+                    Kids
+                </a>
+
+            </div>
+
+            <!-- Visitor Counter -->
+            <div class="hidden md:flex items-center ml-2 xl:ml-4">
+                <div class="animated-border-box">
+                    <div class="animated-border-content px-2.5 py-1 flex items-center gap-x-1.5 text-white shrink-0">
+                        <span class="text-[11px] xl:text-xs text-emerald-100 whitespace-nowrap">
+                            Total Visitors
+                        </span>
+
+                        <span id="visitor-count"
+                            class="font-bold text-emerald-400 tracking-wide text-xs xl:text-[13px]">
+                            5,090
+                        </span>
+
+                        <i class="fas fa-eye text-emerald-400 text-[11px] xl:text-xs"></i>
                     </div>
                 </div>
             </div>
         </div>
+        </div>
     </nav>
 
-				<!-- HOME PAGE -->
-				<div id="home" class="page active">
+    <!-- HOME PAGE -->
+    <div id="home" class="page active">
 
-				<!-- Trends Box (Centered above banner) -->
-				<div class="w-full text-center pt-6 pb-2">
-					<div class="px-8 py-3 rounded-3xl bg-emerald-700 text-white font-semibold shadow-lg border-2 border-emerald-400 inline-block cursor-default">
-					Trends
-					</div>
-				</div>
-
-		<!-- Hero Banner -->
-		<div class="max-w-screen-2xl mx-auto px-4 pb-2 flex items-center justify-between">
-			<div class="flex gap-4 items-start">
+        <!-- Hero Banner -->
+        <div class="max-w-screen-2xl mx-auto px-4 pt-6 pb-2 flex items-center justify-between">
+            <div class="flex gap-4 items-start w-full">
 
                 <div class="hidden lg:block w-[120px] flex-shrink-0">
                     <div class="sticky top-24 max-h-[720px] overflow-hidden deal-banner">
 
                         <!-- Vertical Banner Left -->
-                        <div class="flex flex-col gap-4">
+                        <div id="vertical-banner-left" class="flex flex-col gap-4">
 
                             <img src="images/banner/mobiles.jpg"
                                 class="w-full h-auto rounded-3xl shadow-md border border-emerald-200">
@@ -414,8 +285,16 @@
 
                 <div class="flex-1">
 
+                    <!-- Trends Box (Centered above banner) -->
+                    <div class="w-full text-center pb-2">
+                        <div
+                            class="px-8 py-3 rounded-3xl bg-emerald-700 text-white font-semibold shadow-lg border-2 border-emerald-400 inline-block cursor-default">
+                            Trends
+                        </div>
+                    </div>
+
                     <!-- Promotional Banners Carousel -->
-                    <div
+                    <div dir="ltr"
                         class="relative w-full rounded-3xl shadow-sm border border-emerald-200 overflow-hidden bg-[#F4F9F2] mb-6 group">
 
                         <div id="promo-carousel" class="flex w-full">
@@ -439,7 +318,7 @@
                         </div>
 
                         <!-- Carousel Dots -->
-                        <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+                        <div id="promo-carousel-dots" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
                             <button onclick="goToSlide(0)"
                                 class="w-2.5 h-2.5 rounded-full bg-emerald-700 transition-colors promo-dot"></button>
                             <button onclick="goToSlide(1)"
@@ -493,7 +372,7 @@
                     <div class="sticky top-24 max-h-[720px] overflow-hidden deal-banner">
 
                         <!-- Vertical Banner Right -->
-                        <div class="flex flex-col gap-4">
+                        <div id="vertical-banner-right" class="flex flex-col gap-4">
 
                             <img src="images/banner/mobiles.jpg"
                                 class="w-full h-auto rounded-3xl shadow-md border border-emerald-200">
@@ -516,83 +395,94 @@
         <!-- Features Row -->
         <div class="max-w-screen-2xl mx-auto px-4 pt-7">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-			
-		<!-- Card -->
-<div class="feature-card bg-white rounded-3xl p-5 flex gap-x-4 items-start modern-shadow border border-emerald-50 
+
+                <!-- Card 01 -->
+                <div class="feature-card bg-white rounded-3xl p-5 flex gap-x-4 items-start modern-shadow border border-emerald-50 
 cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-emerald-200"
-
-data-title="Compare Across 500+ Stores"
-data-description="Compare prices across 500+ stores in seconds and always get the best deal. Our platform scans multiple retailers instantly, so you don’t have to jump between sites. You’ll see the lowest available price, discover better offers, and shop with confidence knowing you’re saving both time and money.">
-    
-
-    <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center">
-        <i class="fas fa-store text-xl"></i>
-    </div>
-
-    <div>
-        <div class="font-semibold">Compare Across 500+ Stores</div>
-        <div class="text-xs text-emerald-600 mt-1">Find the lowest price instantly</div>
-    </div>
-</div>
+                    data-title="Compare Across 500+ Stores" data-title-ur="500+ اسٹورز میں قیمتوں کا موازنہ کریں"
+                    data-description="Compare prices across 500+ stores in seconds and always get the best deal. Our platform scans multiple retailers instantly, so you don’t have to jump between sites. You’ll see the lowest available price, discover better offers, and shop with confidence knowing you’re saving both time and money."
+                    data-desc-ur="صرف چند سیکنڈز میں 500 سے زائد اسٹورز کی قیمتوں کا موازنہ کریں اور ہمیشہ بہترین ڈیل حاصل کریں۔ ہمارا پلیٹ فارم مختلف ریٹیلرز کی قیمتیں فوری طور پر اسکین کرتا ہے، تاکہ آپ کو بار بار مختلف ویب سائٹس دیکھنے کی ضرورت نہ پڑے۔ آپ کو سب سے کم دستیاب قیمت نظر آئے گی، بہتر آفرز دریافت ہوں گی، اور آپ پورے اعتماد کے ساتھ خریداری کر سکیں گے کہ آپ اپنا وقت اور پیسہ دونوں بچا رہے ہیں۔">
 
 
+                    <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-store text-xl"></i>
+                    </div>
+
+                    <div>
+                        <div class="font-semibold" data-lang-en="Compare Across 500+ Stores"
+                            data-lang-ur="500+ اسٹورز میں قیمتوں کا موازنہ کریں">Compare Across 500+ Stores</div>
+                        <div class="text-xs text-emerald-600 mt-1" data-lang-en="Find the lowest price instantly"
+                            data-lang-ur="فوری طور پر سب سے کم قیمت تلاش کریں">Find the lowest price instantly</div>
+                    </div>
+                </div>
+
+
+                <!-- Card 02 -->
                 <div class="feature-card bg-white rounded-3xl p-5 flex gap-x-4 items-start modern-shadow border border-emerald-50 
     cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-emerald-200"
-    
-    data-title="Price History & Trends"
-    data-description="Track price history and trends to make smarter buying decisions. See how prices change over time, identify the best moments to purchase, and avoid overpaying. With clear insights and data, you can confidently buy at the right time and get the best value.">
+                    data-title="Price History & Trends"
+                    data-title-ur="قیمتوں کی تاریخ اور رجحانات"
+                    data-description="Track price history and trends to make smarter buying decisions. See how prices change over time, identify the best moments to purchase, and avoid overpaying. With clear insights and data, you can confidently buy at the right time and get the best value."
+                    data-desc-ur="زیادہ سمجھداری سے خریداری کرنے کے لیے قیمتوں کی تاریخ اور رجحانات کو ٹریک کریں۔ دیکھیں کہ وقت کے ساتھ قیمتیں کیسے تبدیل ہوتی ہیں، خریداری کے بہترین مواقع کی نشاندہی کریں، اور اضافی رقم ادا کرنے سے بچیں۔ واضح معلومات اور ڈیٹا کی مدد سے آپ اعتماد کے ساتھ درست وقت پر خریداری کر سکتے ہیں اور بہترین ویلیو حاصل کر سکتے ہیں۔">
 
-    <div class="w-10 h-10 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center">
-        <i class="fas fa-chart-line text-xl"></i>
-    </div>
+                    <div class="w-10 h-10 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-chart-line text-xl"></i>
+                    </div>
 
-    <div>
-        <div class="font-semibold">Price History &amp; Trends</div>
-        <div class="text-xs text-emerald-600 mt-1">Buy at the right time</div>
-    </div>
-</div>
+                    <div>
+                        <div class="font-semibold" data-lang-en="Price History &amp; Trends"
+                            data-lang-ur="قیمتوں میں اتار چڑھاؤ کی تاریخ اور رجحانات">Price History &amp; Trends</div>
+                        <div class="text-xs text-emerald-600 mt-1" data-lang-en="Buy at the right time"
+                            data-lang-ur="صحیح وقت پر خریداری کریں">Buy at the right time</div>
+                    </div>
+                </div>
 
+
+                <!-- Card 03 -->
                 <div class="feature-card bg-white rounded-3xl p-5 flex gap-x-4 items-start modern-shadow border border-emerald-50 
     cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-emerald-200"
+                    data-title="Nearby-First Comparison"
+                    data-title-ur="قریب ترین اسٹورز کا موازنہ"
+                    data-description="Compare prices with a focus on stores near you to save more than just money. Discover nearby retailers offering the best deals, reduce delivery time, and even explore convenient in-store options. With location-based results, you get faster, smarter, and more practical shopping choices tailored to where you are."
+                    data-desc-ur="اپنے قریب موجود اسٹورز کو ترجیح دیتے ہوئے قیمتوں کا موازنہ کریں تاکہ صرف پیسے ہی نہیں بلکہ وقت کی بھی بچت ہو۔ اپنے آس پاس موجود ایسے ریٹیلرز دریافت کریں جو بہترین ڈیلز فراہم کر رہے ہوں، ڈیلیوری کا وقت کم کریں، اور آسان اِن اسٹور خریداری کے مواقع بھی حاصل کریں۔ مقام پر مبنی نتائج کے ساتھ آپ کو تیز، ذہین، اور زیادہ عملی خریداری کے انتخاب ملتے ہیں جو آپ کی موجودہ لوکیشن کے مطابق ہوتے ہیں۔">
 
-    data-title="Nearby-First Comparison"
-    data-description="Compare prices with a focus on stores near you to save more than just money. Discover nearby retailers offering the best deals, reduce delivery time, and even explore convenient in-store options. With location-based results, you get faster, smarter, and more practical shopping choices tailored to where you are.">
+                    <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-shopping-basket text-xl"></i>
+                    </div>
 
-    <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center">
-        <i class="fas fa-shopping-basket text-xl"></i>
-    </div>
-
-    <div>
-        <div class="font-semibold">Nearby-First Comparison</div>
-        <div class="text-xs text-emerald-600 mt-1">Prioritize stores near you</div>
-    </div>
-</div>
-
-<div id="popupModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
-    <div class="bg-white p-6 rounded-xl max-w-md w-full relative">
-        <button id="closeModal" class="absolute top-2 right-3 text-xl">&times;</button>
-
-        <h2 id="modalTitle" class="font-semibold mb-2"></h2>
-        <p id="modalDesc" class="text-sm text-gray-600"></p>
-    </div>
-</div>
+                    <div>
+                        <div class="font-semibold" data-lang-en="Nearby-First Comparison" data-lang-ur="قریب ترین اسٹورز کا موازنہ">Nearby-First Comparison</div>
+                        <div class="text-xs text-emerald-600 mt-1" data-lang-en="Prioritize stores near you" data-lang-ur="آپ کے قریب موجود اسٹورز کو ترجیح دی جاتی ہے۔">Prioritize stores near you</div>
+                    </div>
+                </div>
 
 
+                <div id="popupModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+                    <div class="bg-white p-6 rounded-xl max-w-md w-full relative">
+                        <button id="closeModal" class="absolute top-2 right-3 text-xl">&times;</button>
+
+                        <h2 id="modalTitle" class="font-semibold mb-2"></h2>
+                        <p id="modalDesc" class="text-sm text-gray-600"></p>
+                    </div>
+                </div>
+
+                <!-- Card 04 -->
                 <div class="feature-card bg-white rounded-3xl p-5 flex gap-x-4 items-start modern-shadow border border-emerald-50 
     cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-emerald-200"
+                    data-title="Real-time Updates Everyday"
+                    data-title-ur="ریئل ٹائم اپڈیٹس"
+                    data-description="Stay ahead with real-time updates that keep prices fresh and accurate every day. Our system continuously monitors changes across stores, so you always see the latest deals, discounts, and availability without any delay. No more relying on outdated information or missing out on better offers—everything is updated as it happens. With reliable, up-to-date data at your fingertips, you can shop smarter, act faster, and always make well-informed decisions."
+                    data-desc-ur="ریئل ٹائم اپڈیٹس کے ساتھ ہمیشہ آگے رہیں جو ہر روز قیمتوں کو تازہ اور درست رکھتی ہیں۔ ہمارا سسٹم مختلف اسٹورز میں ہونے والی تبدیلیوں کو مسلسل مانیٹر کرتا ہے تاکہ آپ کو بغیر کسی تاخیر کے تازہ ترین ڈیلز، ڈسکاؤنٹس، اور دستیابی کی معلومات مل سکیں۔ اب پرانی معلومات پر انحصار کرنے یا بہتر آفرز سے محروم ہونے کی ضرورت نہیں — ہر چیز اسی وقت اپڈیٹ ہوتی ہے جب تبدیلی آتی ہے۔ قابلِ اعتماد اور جدید معلومات آپ کی انگلیوں پر موجود ہونے کی وجہ سے آپ زیادہ سمجھداری سے خریداری کر سکتے ہیں، تیزی سے فیصلے لے سکتے ہیں، اور ہمیشہ بہتر انتخاب کر سکتے ہیں۔">
 
-    data-title="Real-time Updates Everyday"
-    data-description="Stay ahead with real-time updates that keep prices fresh and accurate every day. Our system continuously monitors changes across stores, so you always see the latest deals, discounts, and availability without any delay. No more relying on outdated information or missing out on better offers—everything is updated as it happens. With reliable, up-to-date data at your fingertips, you can shop smarter, act faster, and always make well-informed decisions.">
+                    <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-sync text-xl"></i>
+                    </div>
 
-    <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center">
-        <i class="fas fa-sync text-xl"></i>
-    </div>
-
-    <div>
-        <div class="font-semibold">Real-time Updates Everyday</div>
-        <div class="text-xs text-emerald-600 mt-1">Always up to date</div>
-    </div>
-</div>
+                    <div>
+                        <div class="font-semibold" data-lang-en="Real-time Updates Everyday" data-lang-ur="ریئل ٹائم اپڈیٹس">Real-time Updates Everyday</div>
+                        <div class="text-xs text-emerald-600 mt-1" data-lang-en="Always up to date" data-lang-ur="ہر روز تازہ معلومات">Always up to date</div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -655,8 +545,8 @@ data-description="Compare prices across 500+ stores in seconds and always get th
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
                     <div>
                         <div class="text-3xl font-bold text-[#0A3D2A] whitespace-nowrap">
-    Price Comparison
-</div>
+                            Price Comparison
+                        </div>
                         <div class="text-gray-500 text-sm">Find the lowest prices near you</div>
                     </div>
 
@@ -679,15 +569,19 @@ data-description="Compare prices across 500+ stores in seconds and always get th
                             Groceries
                         </button>
 
+                        <button onclick="filterCategory('electronics', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm">
+                            Electronics
+                        </button>
+
                         <button onclick="filterCategory('mobiles', this)"
                             class="filter-btn px-4 py-1.5 rounded-full border text-sm">
                             Mobiles
                         </button>
 
-                        <!-- NEW (Moved from dropdown) -->
-                        <button onclick="filterCategory('electronics', this)"
+                        <button onclick="filterCategory('laptops', this)"
                             class="filter-btn px-4 py-1.5 rounded-full border text-sm">
-                            Electronics
+                            Laptops
                         </button>
 
                         <button onclick="filterCategory('fashion', this)"
@@ -695,12 +589,17 @@ data-description="Compare prices across 500+ stores in seconds and always get th
                             Fashion
                         </button>
 
-                        <button onclick="filterCategory('appliances', this)"
+                        <button onclick="filterCategory('personal-care', this)"
                             class="filter-btn px-4 py-1.5 rounded-full border text-sm">
-                            Home Appliances
+                            Personal Care
                         </button>
 
-                        
+                        <button onclick="filterCategory('kids', this)"
+                            class="filter-btn px-4 py-1.5 rounded-full border text-sm">
+                            Kids
+                        </button>
+
+
                     </div>
                 </div>
             </div>
@@ -780,43 +679,7 @@ data-description="Compare prices across 500+ stores in seconds and always get th
                     </div>
                 </div>
 
-                <!-- FOOD -->
-                <div class="product-card bg-white rounded-3xl overflow-hidden shadow border" data-category="food"
-                    data-price="850" data-distance="1">
 
-                    <div class="relative">
-                        <img src="https://picsum.photos/400/250?food=1" class="w-full h-48 object-cover">
-
-                        <div
-                            class="absolute bottom-3 left-3 bg-white text-red-500 text-xs px-3 py-1 rounded-full font-bold">
-                            FROM Rs 850
-                        </div>
-                    </div>
-
-                    <div class="p-4">
-                        <div class="font-semibold text-lg">BBQ Platter Deal</div>
-                        <div class="text-xs text-red-500 mt-1">FOOD • Karachi</div>
-                    </div>
-                </div>
-
-                <!-- GROCERIES -->
-                <div class="product-card bg-white rounded-3xl overflow-hidden shadow border" data-category="groceries"
-                    data-price="320" data-distance="2">
-
-                    <div class="relative">
-                        <img src="https://picsum.photos/400/250?grocery=1" class="w-full h-48 object-cover">
-
-                        <div
-                            class="absolute bottom-3 left-3 bg-white text-red-500 text-xs px-3 py-1 rounded-full font-bold">
-                            FROM Rs 320
-                        </div>
-                    </div>
-
-                    <div class="p-4">
-                        <div class="font-semibold text-lg">Cooking Oil 1L</div>
-                        <div class="text-xs text-red-500 mt-1">GROCERIES • Karachi</div>
-                    </div>
-                </div>
 
             </div>
         </div>
@@ -977,14 +840,23 @@ data-description="Compare prices across 500+ stores in seconds and always get th
         <div class="flex-1">
 
             <!-- Travel & Tours Section -->
-			<section id="travel-section">
-				<!-- Your Travel & Tours Content -->
-			</section>
+
+            <section id="travel-section">
+                <!-- Your Travel & Tours Content -->
+            </section>
             <div class="max-w-screen-2xl mx-auto px-4 pt-9">
                 <div class="flex justify-between items-center mb-4">
-                    <span class="section-header">Travel &amp; Tours</span>
-                    <button onclick="showSimplePage('travel')" class="text-sm text-emerald-700 hover:underline">View all
-                        packages</button>
+
+                    <span class="section-header">
+                        Travel &amp; Tours
+                    </span>
+
+                    <button onclick="window.location.href='pages/travel.html'"
+                        class="text-sm text-emerald-700 hover:text-emerald-900 hover:underline transition">
+                        View all packages
+
+                    </button>
+
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1068,70 +940,174 @@ data-description="Compare prices across 500+ stores in seconds and always get th
                 </div>
             </div>
 
-            <!-- Blog Section -->
-            <div class="max-w-screen-2xl mx-auto px-4 pt-9">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="section-header">Latest Insights &amp; Blogs</span>
-                    <button onclick="showSimplePage('blog')" class="text-sm text-emerald-700 hover:underline">View
-                        all</button>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
-                        <img src="images/blogs/04-05-26/blog_price.png" class="w-full h-44 object-cover rounded-t-3xl">
-                        <div class="p-5">
-                            <div class="font-semibold">Rising Prices in Pakistan 2025</div>
-                            <div class="text-sm text-gray-600 mt-1">What's driving inflation and how to protect your
-                                budget.</div>
-                            <button onclick="showBlogModal(1)" class="mt-4 text-sm text-emerald-700 font-semibold">Read
-                                Full Article →</button>
-                        </div>
+            <!-- Blogs Section -->
+            <section id="blogs-section">
+                <!-- Blog Section -->
+                <div class="max-w-screen-2xl mx-auto px-4 pt-9">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="section-header">Latest Insights &amp; Blogs</span>
+                        <button onclick="window.location.href='pages/blogs.html'"
+                            class="text-sm text-emerald-700 hover:text-emerald-900 hover:underline transition duration-300">
+                            View all
+                        </button>
                     </div>
 
-                    <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
-                        <img src="images/blogs/04-05-26/blog_budget.png" class="w-full h-44 object-cover rounded-t-3xl">
-                        <div class="p-5">
-                            <div class="font-semibold">How to Manage Budget in Challenging Times</div>
-                            <div class="text-sm text-gray-600 mt-1">
-                                Practical tips for Pakistani families to save more.
+                    <!-- Blog Card 1 -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div
+                            class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
+                            <img src="images/blogs/04-05-26/blog_price.png"
+                                class="w-full h-44 object-cover rounded-t-3xl">
+                            <div class="p-5">
+                                <div class="font-semibold">Rising Prices in Pakistan 2025</div>
+                                <div class="text-sm text-gray-600 mt-1">What's driving inflation and how to protect your
+                                    budget.</div>
+                                <button onclick="showBlogModal(1)"
+                                    class="mt-4 text-sm text-emerald-700 font-semibold">Read
+                                    Full Article →</button>
                             </div>
-                            <button onclick="showBlogModal(2)" class="mt-4 text-sm text-emerald-700 font-semibold">
-                                Read Full Article →
-                            </button>
                         </div>
-                    </div>
 
-                    <!-- Blog Card 3 -->
-                    <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
-                        <img src="images/blogs/04-05-26/blog_ai.png" class="w-full h-44 object-cover rounded-t-3xl">
-                        <div class="p-5">
-                            <div class="font-semibold">How AI Can Help You Save Money</div>
-                            <div class="text-sm text-gray-600 mt-1">
-                                Using smart tools for better financial decisions.
+                        <!-- Blog Card 2 -->
+                        <div
+                            class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
+                            <img src="images/blogs/04-05-26/blog_budget.png"
+                                class="w-full h-44 object-cover rounded-t-3xl">
+                            <div class="p-5">
+                                <div class="font-semibold">How to Manage Budget in Challenging Times</div>
+                                <div class="text-sm text-gray-600 mt-1">
+                                    Practical tips for Pakistani families to save more.
+                                </div>
+                                <button onclick="showBlogModal(2)" class="mt-4 text-sm text-emerald-700 font-semibold">
+                                    Read Full Article →
+                                </button>
                             </div>
-                            <button onclick="showBlogModal(3)" class="mt-4 text-sm text-emerald-700 font-semibold">
-                                Read Full Article →
-                            </button>
+                        </div>
+
+                        <!-- Blog Card 3 -->
+                        <div
+                            class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
+                            <img src="images/blogs/04-05-26/blog_ai.png" class="w-full h-44 object-cover rounded-t-3xl">
+                            <div class="p-5">
+                                <div class="font-semibold">How AI Can Help You Save Money</div>
+                                <div class="text-sm text-gray-600 mt-1">
+                                    Using smart tools for better financial decisions.
+                                </div>
+                                <button onclick="showBlogModal(3)" class="mt-4 text-sm text-emerald-700 font-semibold">
+                                    Read Full Article →
+                                </button>
+                            </div>
                         </div>
                     </div>
+
                 </div>
 
-            </div>
+                <!-- ================= CUSTOMER SUPPORT SECTION ================= -->
+                <section class="max-w-screen-2xl mx-auto px-4 pt-10 pb-4">
 
+                    <!-- Section Header -->
+                    <div class="flex justify-center items-center mb-10">
+                        <h2 class="text-2xl md:text-4xl font-extrabold text-slate-800 flex items-center gap-3">
+                            <span class="text-cyan-500 text-4xl">🎧</span>
+                            How Can We Help You?
+                        </h2>
+                    </div>
 
+                    <!-- Support Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-            <!-- Trust Bar -->
-            <div class="max-w-screen-2xl mx-auto px-4 pb-8 pt-6">
-                <div
-                    class="flex flex-wrap justify-center gap-x-8 text-sm py-4 border-t border-emerald-100 text-emerald-700">
-                    <div><i class="fas fa-check-circle mr-1"></i> Verified Stores</div>
-                    <div><i class="fas fa-check-circle mr-1"></i> 100% Free</div>
-                    <div><i class="fas fa-check-circle mr-1"></i> Real-time Updates</div>
+                        <!-- CARD 1 -->
+                        <div
+                            class="group bg-white rounded-[32px] p-8 text-center border border-emerald-200/80 hover:border-emerald-400 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition duration-500">
+
+                            <div
+                                class="w-20 h-20 mx-auto rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 text-3xl shadow-inner group-hover:scale-110 transition duration-500">
+                                💬
+                            </div>
+
+                            <h3 class="mt-8 text-2xl font-bold text-slate-800">
+                                Live Chat Support
+                            </h3>
+
+                            <p class="mt-5 text-slate-500 leading-9 text-[17px]">
+                                Chat with our support team in real-time for instant assistance with any queries.
+                            </p>
+
+                        </div>
+
+                        <!-- CARD 2 -->
+                        <div
+                            class="group bg-white rounded-[32px] p-8 text-center border border-emerald-200/80 hover:border-emerald-400 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition duration-500">
+
+                            <div
+                                class="w-20 h-20 mx-auto rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 text-3xl shadow-inner group-hover:scale-110 transition duration-500">
+                                📞
+                            </div>
+
+                            <h3 class="mt-8 text-2xl font-bold text-slate-800">
+                                Call Us Anytime
+                            </h3>
+
+                            <p class="mt-5 text-slate-500 leading-9 text-[17px]">
+                                Reach us at +92 300 1234567 from 9 AM to 9 PM, 7 days a week.
+                            </p>
+
+                        </div>
+
+                        <!-- CARD 3 -->
+                        <div
+                            class="group bg-white rounded-[32px] p-8 text-center border border-emerald-200/80 hover:border-emerald-400 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition duration-500">
+
+                            <div
+                                class="w-20 h-20 mx-auto rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 text-3xl shadow-inner group-hover:scale-110 transition duration-500">
+                                ✉️
+                            </div>
+
+                            <h3 class="mt-8 text-2xl font-bold text-slate-800">
+                                Email Support
+                            </h3>
+
+                            <p class="mt-5 text-slate-500 leading-9 text-[17px]">
+                                Send us an email at support@stopbuypk.com and we'll respond within 24 hours.
+                            </p>
+
+                        </div>
+
+                        <!-- CARD 4 -->
+                        <div
+                            class="group bg-white rounded-[32px] p-8 text-center border border-emerald-200/80 hover:border-emerald-400 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition duration-500">
+
+                            <div
+                                class="w-20 h-20 mx-auto rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 text-3xl shadow-inner group-hover:scale-110 transition duration-500">
+                                ❓
+                            </div>
+
+                            <h3 class="mt-8 text-2xl font-bold text-slate-800">
+                                Help Center
+                            </h3>
+
+                            <p class="mt-5 text-slate-500 leading-9 text-[17px]">
+                                Browse our comprehensive FAQ and guides for quick answers to common questions.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+                <!-- ================= END SUPPORT SECTION ================= -->
+
+                <!-- Trust Bar -->
+                <div class="max-w-screen-2xl mx-auto px-4 pb-8 pt-6">
+                    <div
+                        class="flex flex-wrap justify-center gap-x-8 text-sm py-4 border-t border-emerald-100 text-emerald-700">
+                        <div><i class="fas fa-check-circle mr-1"></i> Verified Stores</div>
+                        <div><i class="fas fa-check-circle mr-1"></i> 100% Free</div>
+                        <div><i class="fas fa-check-circle mr-1"></i> Real-time Updates</div>
+                    </div>
                 </div>
-            </div>
         </div>
 
-        <!-- FOOTER -->
         <!-- FOOTER -->
         <footer class="bg-[#1e2330] text-gray-300 pt-14 pb-6 mt-12">
             <div class="max-w-screen-2xl mx-auto px-4">
@@ -1279,6 +1255,79 @@ data-description="Compare prices across 500+ stores in seconds and always get th
         </div>
 
         <script>
+            // ================================
+            // LIVE LOCATION DETECTION
+            // ================================
+
+            async function detectUserLocation() {
+
+                const locationText = document.getElementById("current-location");
+
+                // Browser support check
+                if (!navigator.geolocation) {
+                    locationText.innerText = "Karachi";
+                    return;
+                }
+
+                // Ask for permission
+                navigator.geolocation.getCurrentPosition(
+                    async (position) => {
+
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+
+                        try {
+
+                            // Reverse Geocoding API
+                            const response = await fetch(
+                                `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`
+                            );
+
+                            const data = await response.json();
+
+                            const city =
+                                data.address.city ||
+                                data.address.town ||
+                                data.address.village ||
+                                data.address.state ||
+                                "Karachi";
+
+                            locationText.innerText = city;
+
+                        } catch (err) {
+
+                            locationText.innerText = "Karachi";
+
+                        }
+
+                    },
+
+                    // Permission denied
+                    () => {
+
+                        locationText.innerText = "Karachi";
+
+                    }
+
+                );
+
+            }
+
+            // AUTO DETECT ON PAGE LOAD
+            window.addEventListener("load", detectUserLocation);
+
+
+            // ================================
+            // LOCATION MODAL
+            // ================================
+
+            function showLocationModal() {
+
+                alert(
+                    "Location services are active.\n\nYour nearby deals and prices are being shown."
+                );
+
+            }
             function animateVisitorCounter() {
                 const el = document.getElementById('visitor-count');
                 if (!el) return;
@@ -1378,8 +1427,8 @@ data-description="Compare prices across 500+ stores in seconds and always get th
             }
 
             /* =========================
-   🔥 GLOBAL STATE
-========================= */
+                🔥 GLOBAL STATE
+               ========================= */
             let currentCategory = 'all';
             let currentSort = 'low';
             let allCards = [];
@@ -1640,93 +1689,161 @@ data-description="Compare prices across 500+ stores in seconds and always get th
                     goTopBtn.classList.remove('opacity-100', 'visible', 'translate-y-0');
                 }
             });
-			
-			/* =========================
-               🚀 1st Card
+
+            /* =========================
+               🚀 Feature Cards Modal Logic
             ========================= */
-document.addEventListener("DOMContentLoaded", function () {
-    const card = document.getElementById("priceCard");
-    const modal = document.getElementById("popupModal");
-    const closeBtn = document.getElementById("closeModal");
+            document.addEventListener("DOMContentLoaded", function () {
+                const cards = document.querySelectorAll(".feature-card");
+                const modal = document.getElementById("popupModal");
+                const closeBtn = document.getElementById("closeModal");
+                const modalTitle = document.getElementById("modalTitle");
+                const modalDesc = document.getElementById("modalDesc");
 
-    if (!card || !modal || !closeBtn) {
-        console.error("Elements not found");
-        return;
-    }
+                if (!modal || !closeBtn) return;
 
-    card.addEventListener("click", () => {
-        modal.classList.remove("hidden");
-        modal.classList.add("flex");
-    });
+                cards.forEach(card => {
+                    card.addEventListener("click", function () {
+                        const isUrdu = document.documentElement.getAttribute('lang') === 'ur';
+                        modalTitle.innerText = isUrdu && this.dataset.titleUr ? this.dataset.titleUr : this.dataset.title;
+                        modalDesc.innerText = isUrdu && this.dataset.descUr ? this.dataset.descUr : this.dataset.description;
+                        
+                        modal.classList.remove("hidden");
+                        modal.classList.add("flex");
+                    });
+                });
 
-    closeBtn.addEventListener("click", () => {
-        modal.classList.add("hidden");
-        modal.classList.remove("flex");
-    });
+                closeBtn.addEventListener("click", () => {
+                    modal.classList.add("hidden");
+                    modal.classList.remove("flex");
+                });
 
-    modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-            modal.classList.add("hidden");
-            modal.classList.remove("flex");
-        }
-    });
-});
-	
-			/* =========================
-               🚀 2nd Card
-            ========================= */
-document.addEventListener("DOMContentLoaded", function () {
-    const cards = document.querySelectorAll(".feature-card");
-    const modal = document.getElementById("popupModal");
-    const closeBtn = document.getElementById("closeModal");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalDesc = document.getElementById("modalDesc");
+                modal.addEventListener("click", (e) => {
+                    if (e.target === modal) {
+                        modal.classList.add("hidden");
+                        modal.classList.remove("flex");
+                    }
+                });
+            });
 
-    cards.forEach(card => {
-        card.addEventListener("click", () => {
-            modalTitle.textContent = card.dataset.title;
-            modalDesc.textContent = card.dataset.description;
+            function showPage(page) {
+                const routes = {
+                    foodstuffs: "food.html",
+                    groceries: "grocery.html",
+                    electronics: "electronics.html",
+                    mobiles: "mobiles.html",
+                    laptops: "laptops.html",
+                    fashion: "fashion.html",
+                    cosmetics: "personal-care.html",
+                    babycare: "kids.html"
+                };
 
-            modal.classList.remove("hidden");
-            modal.classList.add("flex");
-        });
-    });
+                window.location.href = "/pages/" + routes[page];
+            }
 
-    closeBtn.addEventListener("click", () => {
-        modal.classList.add("hidden");
-        modal.classList.remove("flex");
-    });
+            // Single File Language Toggle
+            function toggleLanguage() {
+                const htmlTag = document.documentElement;
+                const toggleText = document.getElementById('lang-toggle-text');
+                const toggleBtn = document.getElementById('lang-toggle-btn');
+                const isUrdu = htmlTag.getAttribute('lang') === 'ur';
 
-    modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-            modal.classList.add("hidden");
-            modal.classList.remove("flex");
-        }
-    });
-});
+                if (!isUrdu) {
+                    // Switch to Urdu
+                    htmlTag.setAttribute('lang', 'ur');
+                    htmlTag.setAttribute('dir', 'rtl');
+                    toggleText.innerText = 'Eng';
+                    toggleBtn.setAttribute('title', 'Switch to English');
 
-			/* =========================
-               🚀 3rd Card
-            ========================= */
-const cards = document.querySelectorAll(".feature-card");
-const modal = document.getElementById("popupModal");
-const closeBtn = document.getElementById("closeModal");
-const modalTitle = document.getElementById("modalTitle");
-const modalDesc = document.getElementById("modalDesc");
+                    document.querySelectorAll('[data-lang-ur]').forEach(el => {
+                        el.innerText = el.getAttribute('data-lang-ur');
+                    });
+                } else {
+                    // Switch to English
+                    htmlTag.setAttribute('lang', 'en');
+                    htmlTag.setAttribute('dir', 'ltr');
+                    toggleText.innerText = 'اردو';
+                    toggleBtn.setAttribute('title', 'Switch to Urdu');
 
-cards.forEach(card => {
-    card.onclick = function () {
-        modalTitle.innerText = this.dataset.title;
-        modalDesc.innerText = this.dataset.description;
-        modal.style.display = "flex";
-    };
-});
-
-closeBtn.onclick = () => modal.style.display = "none";
-
-modal.onclick = (e) => {
-    if (e.target === modal) modal.style.display = "none";
-};
+                    document.querySelectorAll('[data-lang-en]').forEach(el => {
+                        el.innerText = el.getAttribute('data-lang-en');
+                    });
+                }
+            }
+        </script>
+        
+        <!-- Link DataService and fetch banners dynamically -->
+        <script src="js/data-service.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                try {
+                    const allBanners = await DataService.getBanners();
+                    
+                    const leftVerticalContainer = document.querySelector('#vertical-banner-left');
+                    const rightVerticalContainer = document.querySelector('#vertical-banner-right');
+                    const promoCarousel = document.getElementById('promo-carousel');
+                    const promoDots = document.getElementById('promo-carousel-dots');
+                    
+                    let horizontals = [];
+                    let leftVerticals = [];
+                    let rightVerticals = [];
+                    
+                    allBanners.forEach(b => {
+                        let bType = b.type;
+                        let bLink = b.link;
+                        if (bLink && bLink.includes('|')) {
+                            const parts = bLink.split('|');
+                            bType = parts[0];
+                            bLink = parts.slice(1).join('|');
+                        }
+                        
+                        if (bType === 'horizontal') horizontals.push({ ...b, link: bLink });
+                        else if (bType === 'vertical-left') leftVerticals.push({ ...b, link: bLink });
+                        else if (bType === 'vertical-right' || bType === 'vertical') rightVerticals.push({ ...b, link: bLink }); 
+                    });
+                    
+                    // Render horizontals (promo-carousel)
+                    if (horizontals.length > 0 && promoCarousel) {
+                        promoCarousel.innerHTML = horizontals.map(h => `
+                            <div class="w-full shrink-0">
+                                <a href="${h.link && h.link !== '#' ? h.link : 'javascript:void(0)'}" target="${h.link && h.link !== '#' ? '_blank' : '_self'}">
+                                    <img src="${h.image}" alt="Promo Banner" class="w-full h-[200px] sm:h-[250px] md:h-[320px] object-cover md:object-fill">
+                                </a>
+                            </div>
+                        `).join('');
+                        
+                        if (promoDots) {
+                            promoDots.innerHTML = horizontals.map((h, i) => `
+                                <button onclick="goToSlide(${i})" class="w-2.5 h-2.5 rounded-full ${i===0?'bg-emerald-700':'bg-black/20 hover:bg-black/40'} transition-colors promo-dot"></button>
+                            `).join('');
+                        }
+                        
+                        totalSlides = horizontals.length;
+                        initCarousel(); 
+                    }
+                    
+                    // Render left verticals
+                    if (leftVerticals.length > 0 && leftVerticalContainer) {
+                        leftVerticalContainer.innerHTML = leftVerticals.map(v => `
+                            <a href="${v.link && v.link !== '#' ? v.link : 'javascript:void(0)'}" target="${v.link && v.link !== '#' ? '_blank' : '_self'}">
+                                <img src="${v.image}" class="w-full h-auto rounded-3xl shadow-md border border-emerald-200">
+                            </a>
+                        `).join('');
+                    }
+                    
+                    // Render right verticals
+                    if (rightVerticals.length > 0 && rightVerticalContainer) {
+                        rightVerticalContainer.innerHTML = rightVerticals.map(v => `
+                            <a href="${v.link && v.link !== '#' ? v.link : 'javascript:void(0)'}" target="${v.link && v.link !== '#' ? '_blank' : '_self'}">
+                                <img src="${v.image}" class="w-full h-auto rounded-3xl shadow-md border border-emerald-200">
+                            </a>
+                        `).join('');
+                    }
+                    
+                } catch (e) {
+                    console.error("Error loading dynamic banners:", e);
+                }
+            });
         </script>
 </body>
 

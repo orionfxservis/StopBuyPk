@@ -643,3 +643,89 @@ h3 {
 .blog-row {
     grid-template-columns: 40px 60px 2fr 1fr 1fr 80px 100px 100px !important;
 }
+
+/* =========================================================
+   LIGHT GLASS THEME OVERRIDES (MATCHING MAIN PAGE)
+========================================================= */
+:root {
+    --card-bg: rgba(255, 255, 255, 0.6) !important;
+    --border-color: rgba(16, 185, 129, 0.2) !important;
+}
+
+body {
+    background:
+        radial-gradient(circle at top left, rgba(16, 185, 129, 0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(14, 165, 233, 0.08), transparent 28%),
+        linear-gradient(180deg, #f4f7fb 0%, #edf3f8 100%) !important;
+    color: #0f172a;
+}
+
+.admin-container {
+    color: #0f172a;
+}
+
+/* Distinct Backdrop Colors for Forms vs Tables */
+.form-container {
+    background: rgba(241, 245, 249, 0.85) !important; /* Slightly darker (Slate-100) for forms */
+    border-top: 4px solid #10b981 !important; /* Emerald top border for distinction */
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.08) !important;
+    backdrop-filter: blur(12px) !important;
+}
+
+.list-container {
+    background: rgba(226, 232, 240, 0.75) !important; /* Darker (Slate-200) for tables */
+    border-top: 4px solid #0ea5e9 !important; /* Cyan top border for distinction */
+    box-shadow: 0 10px 25px rgba(14, 165, 233, 0.08) !important;
+    backdrop-filter: blur(12px) !important;
+}
+
+.sidebar {
+    background-color: #0A3D2A !important;
+    border-right: none !important;
+}
+
+.sidebar .logo span {
+    color: #ffffff !important;
+}
+
+.menu li {
+    color: #e2e8f0 !important;
+}
+
+.menu li:hover, .menu li.active {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+h1 { color: #0A3D2A !important; }
+h3 { color: #1e293b !important; }
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.8) !important;
+    color: #0f172a !important;
+}
+.stat-card h3, .stat-label { color: #64748b !important; }
+
+.quick-action { 
+    background: rgba(255, 255, 255, 0.8) !important; 
+    color: #334155 !important;
+}
+
+.form-container input, .form-container select, .admin-input {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #0f172a !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.input-group label { color: #334155 !important; }
+
+.admin-table { color: #334155 !important; }
+.admin-table th, .grid-table-header {
+    background: rgba(241, 245, 249, 0.8) !important;
+    color: #475569 !important;
+}
+.badge { background: rgba(241, 245, 249, 0.8) !important; color: #0ea5e9 !important; }
+
+.banner-item { background: rgba(255, 255, 255, 0.8) !important; }
+.banner-preview { background: rgba(255, 255, 255, 0.9) !important; color: #64748b !important; }
+.broadcast-content { color: #334155 !important; }
