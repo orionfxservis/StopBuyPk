@@ -319,3 +319,105 @@
             pointer-events: none;
             border-radius: inherit;
         }
+
+
+/* BROADCAST BAR */
+.broadcast-bar{
+    background: linear-gradient(to right, #059669, #047857);
+    border-radius: 14px;
+    height: 48px; /* reduced height */
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding: 0 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* ICON */
+.broadcast-icon{
+    min-width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    font-size: 14px;
+}
+
+/* TICKER AREA */
+.ticker-container{
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    position: relative;
+}
+
+/* MOVING TEXT */
+.ticker-text{
+    display: inline-block;
+    white-space: nowrap;
+    color: #ecfdf5;
+    font-size: 13px;
+    padding-left: 100%;
+    animation: scrollTicker 36s linear infinite;
+}
+
+/* ANIMATION */
+@keyframes scrollTicker{
+    0%{
+        transform: translateX(0%);
+    }
+
+    100%{
+        transform: translateX(-100%);
+    }
+}
+
+/* LIVE PRICE SECTION */
+.live-price-section{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+    margin:25px 0;
+    padding:0 15px;
+}
+
+.price-box{
+    background:#fff;
+    border-radius:14px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    transition:0.3s;
+    border:2px solid #f1f1f1;
+}
+
+.price-box:hover{
+    transform:translateY(-4px);
+}
+
+.price-box h3{
+    margin-bottom:10px;
+    font-size:20px;
+    color:#222;
+}
+
+.price-box p{
+    font-size:24px;
+    font-weight:bold;
+    color:#0a7d32;
+}
+
+.petrol{
+    border-top:5px solid #ff9800;
+}
+
+.diesel{
+    border-top:5px solid #607d8b;
+}
+
+.gold{
+    border-top:5px solid #d4af37;
+}
