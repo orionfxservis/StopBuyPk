@@ -43,13 +43,23 @@
                 </div>
             </div>
 
-            <!-- CENTER: Location -->
-            <div class="order-3 sm:order-none w-full sm:w-auto flex justify-center sm:flex-1">
-                <div class="hidden lg:flex items-center gap-1 text-slate-700 text-sm bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 cursor-pointer hover:bg-slate-200 transition whitespace-nowrap"
+            <!-- CENTER: Location & Search -->
+            <div class="order-3 sm:order-none w-full sm:w-auto flex items-center gap-3 justify-center sm:flex-1">
+                <!-- Location -->
+                <div class="hidden lg:flex items-center gap-1 text-slate-700 text-sm bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 cursor-pointer hover:bg-slate-200 transition whitespace-nowrap flex-shrink-0"
                     onclick="showLocationModal()" id="locationBox">
                     <span>📍</span>
                     <span class="font-medium" id="current-location">Detecting...</span>
                     <span class="text-[0.6rem] ml-1">▼</span>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="w-full max-w-md relative hidden sm:block">
+                    <input type="text" placeholder="Search for products or categories..." 
+                        class="w-full bg-white text-gray-800 text-sm px-4 py-2 rounded-full border border-transparent focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent shadow-sm">
+                    <button class="absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center bg-emerald-600 text-white rounded-full hover:bg-emerald-700 transition-colors">
+                        <i class="fas fa-search text-xs"></i>
+                    </button>
                 </div>
             </div>
 
@@ -282,7 +292,7 @@
             <div class="flex gap-4 items-start w-full">
 
                 <div class="hidden lg:block w-[120px] flex-shrink-0">
-                    <div class="sticky top-24 max-h-[720px] overflow-hidden deal-banner">
+                    <div class="sticky top-24 max-h-[720px] overflow-y-auto overflow-x-hidden deal-banner">
 
                         <!-- Vertical Banner Left -->
                         <div id="vertical-banner-left" class="flex flex-col gap-4">
@@ -375,26 +385,44 @@
                     </div>
 
                     <!-- LIVE PRICE UPDATE SECTION -->
-<section class="live-price-section">
-    <div class="price-box petrol">
-        <h3>⛽ Petrol</h3>
-        <p id="petrolPrice">Rs. 414.78/L</p>
-    </div>
+                    <section class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+                        <!-- Petrol Box -->
+                        <div class="bg-white rounded-3xl p-4 flex gap-x-3 items-center modern-shadow border border-orange-50 cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-orange-200">
+                            <div class="w-10 h-10 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-gas-pump text-lg"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-800 text-sm">Petrol</div>
+                                <div id="petrolPrice" class="text-lg font-bold text-orange-600 leading-tight">Rs. 414.78 <span class="text-[10px] font-medium text-orange-500">/L</span></div>
+                            </div>
+                        </div>
 
-    <div class="price-box diesel">
-        <h3>🚛 Diesel</h3>
-        <p id="dieselPrice">Rs. 414.58/L</p>
-    </div>
+                        <!-- Diesel Box -->
+                        <div class="bg-white rounded-3xl p-4 flex gap-x-3 items-center modern-shadow border border-blue-50 cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-blue-200">
+                            <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-truck-monster text-lg"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-800 text-sm">Diesel</div>
+                                <div id="dieselPrice" class="text-lg font-bold text-blue-600 leading-tight">Rs. 414.58 <span class="text-[10px] font-medium text-blue-500">/L</span></div>
+                            </div>
+                        </div>
 
-    <div class="price-box gold">
-        <h3>🪙 Gold</h3>
-        <p id="goldPrice">Rs. 485,000/Tola</p>
-    </div>
-</section>
+                        <!-- Gold Box -->
+                        <div class="bg-white rounded-3xl p-4 flex gap-x-3 items-center modern-shadow border border-yellow-50 cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-yellow-200">
+                            <div class="w-10 h-10 bg-yellow-100 text-yellow-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-coins text-lg"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-800 text-sm">Gold</div>
+                                <div id="goldPrice" class="text-lg font-bold text-yellow-600 leading-tight">Rs. 350,000 <span class="text-[10px] font-medium text-yellow-500">/Tola</span></div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
 
-                <div class="hidden lg:block w-[120px]">
-                    <div class="sticky top-24 max-h-[720px] overflow-hidden deal-banner">
+                <div class="hidden lg:block w-[120px] flex-shrink-0">
+                    <div class="sticky top-24 max-h-[720px] overflow-y-auto overflow-x-hidden deal-banner">
 
                         <!-- Vertical Banner Right -->
                         <div id="vertical-banner-right" class="flex flex-col gap-4">
@@ -513,52 +541,126 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
 
 
         <!-- AI Smart Recommendations -->
-        <div class="max-w-screen-2xl mx-auto px-4 pt-6">
-            <div
-                class="bg-gradient-to-r from-emerald-50 to-emerald-100 border border-emerald-200 rounded-3xl p-5 shadow-sm">
+        <!-- AI Insights Section -->
+<section class="max-w-screen-2xl mx-auto px-4 pt-6">
+    
+    <!-- Main Wrapper -->
+    <div class="rounded-[2rem] bg-gradient-to-r from-[#203c5d] to-[#127b9a] text-white shadow-xl overflow-hidden">
 
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 bg-emerald-600 text-white flex items-center justify-center rounded-xl">
-                            <i class="fas fa-brain text-sm"></i>
-                        </div>
-                        <span class="font-semibold text-lg text-emerald-800">Smart Recommendations</span>
-                    </div>
+        <!-- Header -->
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 px-6 py-5 border-b border-white/10">
 
-                    <div class="text-xs text-emerald-600 font-medium">
-                        Based on trends in Karachi
-                    </div>
+            <div class="flex items-center gap-4">
+                
+                <!-- Icon -->
+                <div class="w-14 h-14 rounded-2xl bg-white/10 text-white flex items-center justify-center shadow-lg backdrop-blur-md">
+                    <i class="fas fa-robot text-2xl"></i>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Title -->
+                <div>
+                    <h3 class="text-2xl font-serif tracking-wide font-bold text-white" style="font-family: Georgia, 'Times New Roman', serif;">
+                        AI-Powered Market Insights
+                    </h3>
 
-                    <!-- BEST DEAL -->
-                    <div class="bg-white rounded-2xl p-4 border border-emerald-100 hover:shadow-md transition">
-                        <div class="text-xs text-gray-500 mb-1">🔥 Best Deal Today</div>
-                        <div class="font-semibold">iPhone 15 (128GB)</div>
-                        <div class="text-emerald-700 font-bold text-lg">Rs. 257,999</div>
-                        <div class="text-xs text-gray-500">Available at Daraz</div>
-                    </div>
-
-                    <!-- BEST VALUE -->
-                    <div class="bg-white rounded-2xl p-4 border border-emerald-100 hover:shadow-md transition">
-                        <div class="text-xs text-gray-500 mb-1">💎 Best Value</div>
-                        <div class="font-semibold">Samsung A54</div>
-                        <div class="text-emerald-700 font-bold text-lg">Rs. 94,999</div>
-                        <div class="text-xs text-gray-500">Best performance/price</div>
-                    </div>
-
-                    <!-- TRENDING -->
-                    <div class="bg-white rounded-2xl p-4 border border-emerald-100 hover:shadow-md transition">
-                        <div class="text-xs text-gray-500 mb-1">📈 Trending Now</div>
-                        <div class="font-semibold">Air Fryer (Kenwood)</div>
-                        <div class="text-emerald-700 font-bold text-lg">Rs. 18,500</div>
-                        <div class="text-xs text-gray-500">High demand today</div>
-                    </div>
-
+                    <p class="text-sm text-gray-200 mt-1">
+                        Real-time analysis of pricing trends across Pakistan
+                    </p>
                 </div>
+
             </div>
+
+            <!-- Status -->
+            <div class="hidden lg:flex items-center gap-2 text-xs font-semibold text-white bg-white/10 border border-white/20 px-4 py-2 rounded-full w-fit backdrop-blur-md">
+                <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                Live Market Tracking
+            </div>
+
         </div>
+
+        <!-- Insights Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 p-6">
+
+            <!-- Card -->
+            <div class="group rounded-2xl border border-white/10 bg-white/10 p-5 backdrop-blur-md hover:bg-white/20 transition duration-300">
+
+                <div class="flex items-center gap-2 text-sm text-gray-200 mb-3">
+                    <i class="fas fa-arrow-trend-down text-white"></i>
+                    Average Price Drop Today
+                </div>
+
+                <div class="text-3xl font-bold text-white">
+                    12.5%
+                </div>
+
+                <div class="mt-3 text-xs font-medium text-green-400 flex items-center gap-1">
+                    <i class="fas fa-caret-down"></i>
+                    Better than yesterday (-8%)
+                </div>
+
+            </div>
+
+            <!-- Card -->
+            <div class="group rounded-2xl border border-white/10 bg-white/10 p-5 backdrop-blur-md hover:bg-white/20 transition duration-300">
+
+                <div class="flex items-center gap-2 text-sm text-gray-200 mb-3">
+                    <i class="fas fa-store text-white"></i>
+                    Active Stores Tracking
+                </div>
+
+                <div class="text-3xl font-bold text-white">
+                    2,847
+                </div>
+
+                <div class="mt-3 text-xs font-medium text-green-400 flex items-center gap-1">
+                    <i class="fas fa-caret-up"></i>
+                    +156 new this week
+                </div>
+
+            </div>
+
+            <!-- Card -->
+            <div class="group rounded-2xl border border-white/10 bg-white/10 p-5 backdrop-blur-md hover:bg-white/20 transition duration-300">
+
+                <div class="flex items-center gap-2 text-sm text-gray-200 mb-3">
+                    <i class="fas fa-tags text-white"></i>
+                    Total Deals Available
+                </div>
+
+                <div class="text-3xl font-bold text-white">
+                    45,892
+                </div>
+
+                <div class="mt-3 text-xs font-medium text-green-400 flex items-center gap-1">
+                    <i class="fas fa-caret-up"></i>
+                    +2,341 new deals today
+                </div>
+
+            </div>
+
+            <!-- Card -->
+            <div class="group rounded-2xl border border-white/10 bg-white/10 p-5 backdrop-blur-md hover:bg-white/20 transition duration-300">
+
+                <div class="flex items-center gap-2 text-sm text-gray-200 mb-3">
+                    <i class="fas fa-piggy-bank text-white"></i>
+                    User Savings This Month
+                </div>
+
+                <div class="text-3xl font-bold text-white">
+                    PKR 12.4M
+                </div>
+
+                <div class="mt-3 text-xs font-medium text-green-400 flex items-center gap-1">
+                    <i class="fas fa-caret-up"></i>
+                    23% more than last month
+                </div>
+
+            </div>
+
+        </div>
+	</div>
+</section>
+
         <!-- Top Price Comparison -->
         <div class="max-w-screen-2xl mx-auto px-4 pt-9">
 
@@ -569,7 +671,7 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
                 </div>
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
                     <div>
-                        <div class="text-3xl font-bold text-[#0A3D2A] whitespace-nowrap">
+                        <div class="text-3xl font-serif tracking-wide font-bold text-[#0A3D2A] whitespace-nowrap" style="font-family: Georgia, 'Times New Roman', serif;">
                             Price Comparison
                         </div>
                         <div class="text-gray-500 text-sm">Find the lowest prices near you</div>
@@ -712,7 +814,7 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
         <!-- Compare by Category -->
         <div class="max-w-screen-2xl mx-auto px-4 pt-9">
             <div class="flex justify-between items-center mb-4">
-                <span class="section-header">Compare Prices by Category</span>
+                <span class="section-header font-serif tracking-wide text-2xl font-bold text-[#0A3D2A]" style="font-family: Georgia, 'Times New Roman', serif;">Compare Prices by Category</span>
                 <button onclick="showPage('groceries')" class="text-sm text-emerald-700 hover:underline">View
                     all</button>
             </div>
@@ -790,7 +892,7 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
                 <div class="lg:col-span-7 bg-white rounded-3xl p-6 modern-shadow border border-emerald-100">
                     <div class="flex justify-between items-center mb-4">
-                        <span class="font-semibold">My Grocery Basket Comparison</span>
+                        <span class="font-serif tracking-wide text-xl font-bold text-[#0A3D2A]" style="font-family: Georgia, 'Times New Roman', serif;">My Grocery Basket Comparison</span>
                         <button onclick="showPage('groceries')"
                             class="text-xs px-3 py-1 bg-emerald-700 text-white rounded-2xl">Manage Basket</button>
                     </div>
@@ -811,7 +913,7 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
                 </div>
 
                 <div class="lg:col-span-5 bg-white rounded-3xl p-6 modern-shadow border border-emerald-100">
-                    <span class="font-semibold">Nearby-First Deals</span>
+                    <span class="font-serif tracking-wide text-xl font-bold text-[#0A3D2A]" style="font-family: Georgia, 'Times New Roman', serif;">Nearby-First Deals</span>
                     <div class="mt-3 space-y-2">
                         <div class="flex justify-between border border-emerald-100 px-3 py-2 rounded-2xl">
                             <div>Chase Up - Clifton</div>
@@ -830,7 +932,7 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
         <div class="max-w-screen-2xl mx-auto px-4 pt-9">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="bg-white rounded-3xl p-6 modern-shadow border border-emerald-100">
-                    <span class="font-semibold">Today's Cheapest Picks</span>
+                    <span class="font-serif tracking-wide text-xl font-bold text-[#0A3D2A]" style="font-family: Georgia, 'Times New Roman', serif;">Today's Cheapest Picks</span>
                     <div class="mt-4 space-y-3 text-sm">
                         <div class="flex justify-between">
                             <div>Sunflower Oil 1L</div>
@@ -844,7 +946,7 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
                 </div>
 
                 <div class="bg-white rounded-3xl p-6 modern-shadow border border-emerald-100">
-                    <span class="font-semibold">Price Drop Alerts</span>
+                    <span class="font-serif tracking-wide text-xl font-bold text-[#0A3D2A]" style="font-family: Georgia, 'Times New Roman', serif;">Price Drop Alerts</span>
                     <div class="mt-4 space-y-3 text-sm">
                         <div class="flex justify-between">
                             <div>Zong 4G Device</div>
@@ -870,98 +972,21 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
                 <!-- Your Travel & Tours Content -->
             </section>
             <div class="max-w-screen-2xl mx-auto px-4 pt-9">
-                <div class="flex justify-between items-center mb-4">
-
-                    <span class="section-header">
-                        Travel &amp; Tours
-                    </span>
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-[#0A3D2A] flex items-center gap-3 tracking-wide" style="font-family: Georgia, 'Times New Roman', serif;">
+                        <span class="text-[#0A3D2A] transform -rotate-45" style="display:inline-block; font-size: 1.2em;">✈️</span>
+                        Travel <span class="italic font-light text-emerald-600">&amp;</span> Tours
+                    </h2>
 
                     <button onclick="window.location.href='pages/travel.html'"
                         class="text-sm text-emerald-700 hover:text-emerald-900 hover:underline transition">
                         View all packages
-
                     </button>
 
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
-                        <img src="images/travel/04-05-26/travel_pakistan.png"
-                            class="w-full h-44 object-cover rounded-t-3xl">
-                        <div class="p-5">
-                            <div class="font-semibold text-xl">Northern Pakistan Tour</div>
-                            <div class="text-sm text-emerald-600">Hunza • Skardu • Gilgit</div>
-                            <div class="flex justify-between mt-4">
-                                <div>
-                                    <div class="text-xs text-gray-500">Duration</div>
-                                    <div class="font-semibold">7 Days</div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-xs text-gray-500">From</div>
-                                    <div class="font-bold text-xl text-emerald-700">Rs. 49,999</div>
-                                </div>
-                            </div>
-                            <div class="flex gap-2 mt-4">
-                                <button onclick="window.location.href='pages/contact.html'"
-                                    class="flex-1 py-2 border border-emerald-300 text-emerald-700 font-semibold rounded-3xl text-sm">Contact</button>
-                                <button onclick="showTravelModal(1)"
-                                    class="flex-1 py-2 bg-emerald-700 text-white font-semibold rounded-3xl text-sm">View
-                                    Details</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
-                        <img src="images/travel/04-05-26/travel_umrah.png"
-                            class="w-full h-44 object-cover rounded-t-3xl">
-                        <div class="p-5">
-                            <div class="font-semibold text-xl">Umrah Package 2025</div>
-                            <div class="text-sm text-emerald-600">Makkah • Madinah</div>
-                            <div class="flex justify-between mt-4">
-                                <div>
-                                    <div class="text-xs text-gray-500">Duration</div>
-                                    <div class="font-semibold">10 Days</div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-xs text-gray-500">From</div>
-                                    <div class="font-bold text-xl text-emerald-700">Rs. 245,000</div>
-                                </div>
-                            </div>
-                            <div class="flex gap-2 mt-4">
-                                <button onclick="window.location.href='pages/contact.html'"
-                                    class="flex-1 py-2 border border-emerald-300 text-emerald-700 font-semibold rounded-3xl text-sm">Contact</button>
-                                <button onclick="showTravelModal(2)"
-                                    class="flex-1 py-2 bg-emerald-700 text-white font-semibold rounded-3xl text-sm">View
-                                    Details</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
-                        <img src="images/travel/04-05-26/travel_international.png"
-                            class="w-full h-44 object-cover rounded-t-3xl">
-                        <div class="p-5">
-                            <div class="font-semibold text-xl">Turkey &amp; Dubai Tour</div>
-                            <div class="text-sm text-emerald-600">Istanbul • Dubai</div>
-                            <div class="flex justify-between mt-4">
-                                <div>
-                                    <div class="text-xs text-gray-500">Duration</div>
-                                    <div class="font-semibold">8 Days</div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-xs text-gray-500">From</div>
-                                    <div class="font-bold text-xl text-emerald-700">Rs. 189,999</div>
-                                </div>
-                            </div>
-                            <div class="flex gap-2 mt-4">
-                                <button onclick="window.location.href='pages/contact.html'"
-                                    class="flex-1 py-2 border border-emerald-300 text-emerald-700 font-semibold rounded-3xl text-sm">Contact</button>
-                                <button onclick="showTravelModal(3)"
-                                    class="flex-1 py-2 bg-emerald-700 text-white font-semibold rounded-3xl text-sm">View
-                                    Details</button>
-                            </div>
-                        </div>
-                    </div>
+                <div id="travelPackagesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Travel Packages will be injected here via JS -->
                 </div>
             </div>
 
@@ -970,7 +995,7 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
                 <!-- Blog Section -->
                 <div class="max-w-screen-2xl mx-auto px-4 pt-9">
                     <div class="flex justify-between items-center mb-4">
-                        <span class="section-header">Latest Insights &amp; Blogs</span>
+                        <span class="section-header font-serif tracking-wide text-2xl font-bold text-[#0A3D2A]" style="font-family: Georgia, 'Times New Roman', serif;">Latest Insights &amp; Blogs</span>
                         <button onclick="window.location.href='pages/blogs.html'"
                             class="text-sm text-emerald-700 hover:text-emerald-900 hover:underline transition duration-300">
                             View all
@@ -1032,7 +1057,7 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
 
                     <!-- Section Header -->
                     <div class="flex justify-center items-center mb-10">
-                        <h2 class="text-2xl md:text-4xl font-extrabold text-slate-800 flex items-center gap-3">
+                        <h2 class="text-2xl md:text-4xl font-serif tracking-wide font-extrabold text-[#0A3D2A] flex items-center gap-3" style="font-family: Georgia, 'Times New Roman', serif;">
                             <span class="text-cyan-500 text-4xl">🎧</span>
                             How Can We Help You?
                         </h2>
@@ -1867,6 +1892,66 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
                     
                 } catch (e) {
                     console.error("Error loading dynamic banners:", e);
+                }
+
+                // Load Travel Packages
+                try {
+                    const travelPackages = await DataService.getTravelPackages();
+                    const travelGrid = document.getElementById('travelPackagesGrid');
+                    
+                    if (travelGrid && travelPackages && travelPackages.length > 0) {
+                        // Filter for only published packages and optionally limit to featured/top 3
+                        const publishedPackages = travelPackages.filter(p => p.status !== 'Draft');
+                        // Taking up to 3 to match previous static layout length on main page
+                        const packagesToShow = publishedPackages.slice(0, 3);
+                        
+                        travelGrid.innerHTML = packagesToShow.map((pkg, i) => `
+                            <div class="bg-[#0B1524] rounded-2xl overflow-hidden border border-white/5 hover:border-emerald-500/30 group hover:shadow-2xl hover:shadow-emerald-900/20 hover:-translate-y-1 transition duration-300">
+                                <div class="relative w-full h-[220px]">
+                                    <img src="${pkg.image || 'https://via.placeholder.com/400x250'}"
+                                        class="w-full h-full object-cover">
+                                    ${pkg.listingType === 'Featured' ? '<div class="absolute top-3 right-3 bg-yellow-400/90 backdrop-blur-md text-yellow-900 text-[10px] px-2.5 py-1 rounded-full font-bold shadow-sm">FEATURED</div>' : ''}
+                                    
+                                    <div class="absolute bottom-0 left-0 right-0 p-4 pb-2 bg-gradient-to-t from-[#0B1524] via-[#0B1524]/80 to-transparent">
+                                        <h3 class="font-bold text-white text-lg truncate drop-shadow-md">${pkg.title}</h3>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-4 pt-2">
+                                    <div class="flex items-center text-gray-400 text-sm mb-2">
+                                        <span>${pkg.departure || 'Karachi'}</span>
+                                        <span class="mx-2 text-gray-600">→</span>
+                                        <span>${pkg.destination || pkg.category}</span>
+                                    </div>
+                                    
+                                    <div class="text-gray-400 text-sm mb-4">
+                                        Package Amount: <span class="text-emerald-400 font-bold">PKR ${pkg.price}</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div class="text-emerald-500 font-medium text-sm">
+                                            Duration: ${pkg.duration} Days
+                                        </div>
+                                        
+                                        <div class="flex gap-2">
+                                            <button onclick="window.location.href='pages/contact.html'"
+                                                class="px-3 py-1.5 border border-emerald-900 text-emerald-500 hover:bg-emerald-900 hover:text-emerald-300 font-medium rounded-lg text-xs transition duration-300">
+                                                Contact
+                                            </button>
+                                            <button onclick="showTravelModal(${pkg.id || i})"
+                                                class="px-3 py-1.5 border border-blue-900 text-blue-500 hover:bg-blue-900 hover:text-blue-300 font-medium rounded-lg text-xs transition duration-300">
+                                                View Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+                    } else if (travelGrid) {
+                         travelGrid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-400">No travel packages available.</div>';
+                    }
+                } catch (e) {
+                    console.error("Error loading travel packages:", e);
                 }
             });
         </script>
