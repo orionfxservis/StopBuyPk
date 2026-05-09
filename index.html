@@ -254,6 +254,26 @@
         </div>
     </nav>
 
+<!-- Broadcast Message -->
+<div class="max-w-screen-2xl mx-auto px-4 mt-2">
+
+    <div class="broadcast-bar">
+
+        <div class="broadcast-icon">
+            📢
+        </div>
+
+        <div class="ticker-container">
+            <div class="ticker-text">
+                🔥 Today’s Best Deals • Free Delivery • New Stores Added • Electronics Sale Live • 
+                🔥 Today’s Best Deals • Free Delivery • New Stores Added • Electronics Sale Live •
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
     <!-- HOME PAGE -->
     <div id="home" class="page active">
 
@@ -354,18 +374,23 @@
                         </div>
                     </div>
 
-                    <!-- MOVED DOWN BUTTONS -->
-                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-2">
-                        <button onclick="performGlobalSearch()"
-                            class="px-8 py-3 rounded-3xl bg-emerald-700 text-white font-semibold shadow-lg border-2 border-emerald-400 hover:shadow-emerald-300 hover:scale-105 transition-all">
-                            Start Comparing
-                        </button>
+                    <!-- LIVE PRICE UPDATE SECTION -->
+<section class="live-price-section">
+    <div class="price-box petrol">
+        <h3>⛽ Petrol</h3>
+        <p id="petrolPrice">Rs. 414.78/L</p>
+    </div>
 
-                        <button onclick="showPage('mobiles')"
-                            class="px-8 py-3 rounded-3xl border-2 border-emerald-500 text-emerald-700 font-semibold hover:bg-emerald-50 shadow-md hover:scale-105 transition-all">
-                            Browse Mobiles
-                        </button>
-                    </div>
+    <div class="price-box diesel">
+        <h3>🚛 Diesel</h3>
+        <p id="dieselPrice">Rs. 414.58/L</p>
+    </div>
+
+    <div class="price-box gold">
+        <h3>🪙 Gold</h3>
+        <p id="goldPrice">Rs. 485,000/Tola</p>
+    </div>
+</section>
                 </div>
 
                 <div class="hidden lg:block w-[120px]">
