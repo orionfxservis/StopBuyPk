@@ -588,3 +588,91 @@
         font-size: 1.7rem;
     }
 }
+
+.login-input{
+    width:100%;
+    background:#131A2B;
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:14px;
+    padding:10px 14px;
+    color:white;
+    font-size:12px;
+    transition:all .3s ease;
+    outline:none;
+    height:42px;
+}
+
+.login-input::placeholder{
+    color:#6B7280;
+}
+
+.login-input:focus{
+    border-color:rgba(52,211,153,.6);
+    box-shadow:0 0 0 3px rgba(52,211,153,.10);
+    background:#182133;
+}
+
+.login-btn{
+    width:100%;
+    margin-top:4px;
+    background:linear-gradient(to right,#34D399,#06B6D4);
+    color:#0B1120;
+    font-weight:700;
+    padding:10px;
+    border-radius:14px;
+    transition:all .3s ease;
+    box-shadow:0 6px 18px rgba(52,211,153,.22);
+    font-size:13px;
+    height:42px;
+}
+
+.login-btn:hover{
+    transform:translateY(-1px);
+    opacity:.95;
+    box-shadow:0 10px 24px rgba(52,211,153,.30);
+}
+
+.login-tab{
+    position:relative;
+}
+
+.login-tab:hover{
+    letter-spacing:.3px;
+}
+
+.active-tab{
+    color:#34D399 !important;
+    border-color:#34D399 !important;
+}
+
+.ticker-wrapper{
+    width:100%;
+    overflow:hidden;
+    position:relative;
+    white-space:nowrap;
+}
+
+.ticker-content{
+    display:inline-block;
+    white-space:nowrap;
+    padding-left:100%;
+    animation:tickerScroll 22s linear infinite;
+    font-size:14px;
+    font-weight:500;
+    color:white;
+}
+
+/* Smooth Infinite Scroll */
+@keyframes tickerScroll{
+    0%{
+        transform:translateX(0);
+    }
+    100%{
+        transform:translateX(-100%);
+    }
+}
+
+/* Pause on hover */
+.ticker-wrapper:hover .ticker-content{
+    animation-play-state:paused;
+}

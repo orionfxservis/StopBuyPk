@@ -965,6 +965,7 @@ document.addEventListener('DOMContentLoaded', () => {
         travelFilterCity.innerHTML = cityOptions;
       }
 
+
       renderTravelUI();
 
       if (travelFilterCategory) travelFilterCategory.addEventListener('change', renderTravelUI);
@@ -982,3 +983,25 @@ const track = document.getElementById("adTrack");
 if (track) {
   track.innerHTML += track.innerHTML;
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+
+
+  // --- Broadcast Bar Logic ---
+  const tickerTextElement = document.querySelector('.ticker-text');
+  if (tickerTextElement) {
+    DataService.getBroadcasts().then(broadcasts => {
+      if (broadcasts && broadcasts.length > 0) {
+        // Filter for active broadcasts meant for all users (or dashboard ticker)
+        const activeBroadcasts = broadcasts.filter(b => b.status === 'active' && (!b.target || b.target === 'all'));
+        
+        if (activeBroadcasts.length > 0) {
+          // Combine messages with a separator
+          const combinedMessage = activeBroadcasts.map(b => b.message).join('  |  ');
+          // Duplicate text for seamless scrolling effect
+          tickerTextElement.innerHTML = `${combinedMessage} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ${combinedMessage}`;
+        }
+      }
+    }).catch(err => console.error("Error loading broadcasts:", err));
+  }
+});

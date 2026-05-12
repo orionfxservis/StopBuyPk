@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -9,9 +9,18 @@
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
+    <!-- Fixed Background & Glass Effect Overlay -->
+    <div
+        class="fixed inset-0 z-[-2] bg-[url('../images/bg/bg-home.jpg')] bg-cover bg-center bg-no-repeat pointer-events-none">
+    </div>
+    <div
+        class="fixed inset-0 z-[-1] bg-gradient-to-b from-slate-900/70 to-slate-800/50 backdrop-blur-xl pointer-events-none">
+    </div>
+
     <!-- Click Sound -->
     <audio id="clickSound" src="../click.mp3"></audio>
 
@@ -89,10 +98,7 @@
                 <div id="broadcastContainer" class="broadcast-container section-spacing">
                     <div class="broadcast-icon" style="color: #f59e0b;"><i class="fa-solid fa-bullhorn"></i></div>
                     <div class="broadcast-wrapper">
-                        <div class="broadcast-content" id="broadcastText">
-                            Welcome to Qeemat Point Admin! &nbsp;|&nbsp; System Running Smoothly &nbsp;|&nbsp; New
-                            Products Registered!
-                        </div>
+                        <div class="broadcast-content" id="broadcastText">Loading admin status...</div>
                     </div>
                 </div>
 
@@ -142,11 +148,11 @@
                             <h3 style="color:#38bdf8;"><i class="fa-solid fa-clock"></i> Recent Activity</h3>
                             <div id="recentActivity">
                                 <ul style="list-style:none; padding:0; margin:0; font-size:0.9rem;">
-                                    <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.1);">🧾 Sale
+                                    <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.1);">ðŸ§¾ Sale
                                         recorded - Rs 5,000</li>
-                                    <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.1);">📦
+                                    <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.1);">ðŸ“¦
                                         Purchase added - 20 items</li>
-                                    <li style="padding:6px 0;">💸 Expense added - Rs 1,200</li>
+                                    <li style="padding:6px 0;">ðŸ’¸ Expense added - Rs 1,200</li>
                                 </ul>
                             </div>
                         </div>
@@ -428,9 +434,12 @@
                         <div class="input-group">
                             <label>Banner Image URL</label>
                             <div style="display: flex; gap: 10px;">
-                                <input type="text" id="bannerImage" placeholder="/images/banner/banner.jpg" required style="flex: 1;">
+                                <input type="text" id="bannerImage" placeholder="/images/banner/banner.jpg" required
+                                    style="flex: 1;">
                                 <input type="file" id="bannerImageUpload" accept="image/*" style="display: none;">
-                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('bannerImageUpload').click()" style="padding: 10px 15px;"><i class="fa-solid fa-upload"></i></button>
+                                <button type="button" class="btn btn-secondary"
+                                    onclick="document.getElementById('bannerImageUpload').click()"
+                                    style="padding: 10px 15px;"><i class="fa-solid fa-upload"></i></button>
                             </div>
                         </div>
                         <div class="input-group">
@@ -453,7 +462,8 @@
                         </div>
                         <div class="form-actions" style="margin-top: 15px; display: flex; gap: 10px;">
                             <button type="submit" class="btn btn-primary" id="btnSaveBanner">Add Banner</button>
-                            <button type="button" class="btn btn-secondary" id="btnCancelBanner" style="display:none;" onclick="cancelBannerEdit()">Cancel Edit</button>
+                            <button type="button" class="btn btn-secondary" id="btnCancelBanner" style="display:none;"
+                                onclick="cancelBannerEdit()">Cancel Edit</button>
                         </div>
                     </form>
                 </div>
@@ -487,8 +497,9 @@
                         <div class="form-row">
                             <div class="input-group" style="flex: 1;">
                                 <label>Title (Urdu) <span style="color:var(--accent-color);">*</span></label>
-                                <input type="text" id="blogTitleUr" placeholder="e.g., گروسری پر پیسے کیسے بچائیں"
-                                    required dir="rtl">
+                                <input type="text" id="blogTitleUr"
+                                    placeholder="e.g., Ú¯Ø±ÙˆØ³Ø±ÛŒ Ù¾Ø± Ù¾ÛŒØ³Û’ Ú©ÛŒØ³Û’ Ø¨Ú†Ø§Ø¦ÛŒÚº" required
+                                    dir="rtl">
                             </div>
                             <div class="input-group" style="flex: 1;">
                                 <label>Author Name <span style="color:var(--accent-color);">*</span></label>
@@ -502,8 +513,8 @@
                             </div>
                             <div class="input-group" style="flex: 1;">
                                 <label>Category (Urdu) <span style="color:var(--accent-color);">*</span></label>
-                                <input type="text" id="blogCategoryUr" placeholder="e.g., مہنگائی کا رجحان" required
-                                    dir="rtl">
+                                <input type="text" id="blogCategoryUr"
+                                    placeholder="e.g., Ù…ÛÙ†Ú¯Ø§Ø¦ÛŒ Ú©Ø§ Ø±Ø¬Ø­Ø§Ù†" required dir="rtl">
                             </div>
                         </div>
                         <div class="form-row">
@@ -541,7 +552,8 @@
                             <div class="input-group" style="flex: 1;">
                                 <label>Short Description (Urdu) <span
                                         style="color:var(--accent-color);">*</span></label>
-                                <input type="text" id="blogDescUr" placeholder="مختصر تفصیل..." required dir="rtl">
+                                <input type="text" id="blogDescUr" placeholder="Ù…Ø®ØªØµØ± ØªÙØµÛŒÙ„..." required
+                                    dir="rtl">
                             </div>
                         </div>
                         <div class="form-row">
@@ -553,14 +565,17 @@
                             </div>
                             <div class="input-group" style="flex: 1;">
                                 <label>Content (Urdu) <span style="color:var(--accent-color);">*</span></label>
-                                <textarea id="blogContentUr" rows="6" placeholder="یہاں اپنا بلاگ لکھیں..." required
-                                    dir="rtl"
+                                <textarea id="blogContentUr" rows="6"
+                                    placeholder="ÛŒÛØ§Úº Ø§Ù¾Ù†Ø§ Ø¨Ù„Ø§Ú¯ Ù„Ú©Ú¾ÛŒÚº..." required dir="rtl"
                                     style="width: 100%; border: 1px solid var(--border-color); background: var(--bg-dark); color: var(--text-color); padding: 10px; border-radius: 5px;"></textarea>
                             </div>
                         </div>
-                        <div class="form-actions" style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
+                        <div class="form-actions"
+                            style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
                             <button type="submit" class="btn btn-primary" id="btnSaveBlog">Publish</button>
-                            <button type="button" class="btn btn-info" id="btnPublishFacebook" onclick="shareAdminBlogToFacebook()" style="background: #1877f2; border-color: #1877f2; color: white;">
+                            <button type="button" class="btn btn-info" id="btnPublishFacebook"
+                                onclick="shareAdminBlogToFacebook()"
+                                style="background: #1877f2; border-color: #1877f2; color: white;">
                                 <i class="fab fa-facebook"></i> Publish on Facebook
                             </button>
                             <button type="button" class="btn btn-secondary" id="btnCancelBlog" style="display:none;"
@@ -623,8 +638,11 @@
                             <div class="input-group" style="flex: 1;">
                                 <label>Target Audience <span style="color:var(--accent-color);">*</span></label>
                                 <select id="broadcastAudience" required onchange="toggleSpecificUserField()">
-                                    <option value="all">All Users (Dashboard Ticker)</option>
+
+                                    <option value="all">All Users (Including Admin)</option>
+                                    <option value="main">Main Page Only</option>
                                     <option value="specific">Specific User</option>
+
                                 </select>
                             </div>
                             <div class="input-group" style="flex: 1;">
@@ -841,6 +859,44 @@
     <script src="../js/data-service.js"></script>
     <script src="../js/admin.js"></script>
     <script src="../js/blog-manager.js"></script>
+	
+	<!-- Broadcast Management Section -->
+<section id="broadcasts" class="admin-section">
+    ...
+</section>
+
+<script>
+
+document.getElementById("broadcastForm").addEventListener("submit", function (e) {
+
+    e.preventDefault();
+
+    const message = document.getElementById("broadcastMessage").value;
+    const audience = document.getElementById("broadcastAudience").value;
+    const status = document.getElementById("broadcastStatus").value;
+
+    // Get existing broadcasts
+    let broadcasts = JSON.parse(localStorage.getItem("broadcasts")) || [];
+
+    // Add new broadcast
+    broadcasts.unshift({
+        message,
+        audience,
+        status,
+        date: new Date().toLocaleDateString()
+    });
+
+    // Save broadcasts
+    localStorage.setItem("broadcasts", JSON.stringify(broadcasts));
+
+    alert("Broadcast Saved Successfully");
+
+    // Reset form
+    document.getElementById("broadcastForm").reset();
+
+});
+
+</script>
 </body>
 
 </html>

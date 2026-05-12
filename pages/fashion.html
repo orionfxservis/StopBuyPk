@@ -1,189 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fashion - StopBuy</title>
+  <title>Fashion - StopBuy</title>
 
-<link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/style.css">
 
-<!-- ✅ Tailwind for navbar -->
-<script src="https://cdn.tailwindcss.com"></script>
+  <!-- ✅ Tailwind for navbar -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-<style>
-/* HERO */
-.category-hero {
-  position: relative;
-  width: 100%;
-  height: 240px;
-  margin: 20px;
-  border-radius: 16px;
-  overflow: hidden;
-}
+  <style>
+    /* HERO */
+    
 
-.hero-banner {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+    /* PAGE BAR */
+    .page-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: center;
+      padding: 8px 20px;
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+    }
 
-/* PAGE BAR */
-.page-bar {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  align-items: center;
-  padding: 8px 20px;
-  background: #fff;
-  border-bottom: 1px solid #e5e7eb;
-}
+    .page-bar a {
+      color: #16a34a;
+      text-decoration: none;
+    }
 
-.page-bar a {
-  color: #16a34a;
-  text-decoration: none;
-}
+    .page-bar .center {
+      text-align: center;
+      font-weight: 600;
+    }
 
-.page-bar .center {
-  text-align: center;
-  font-weight: 600;
-}
+    /* SECTION */
+    .section-box {
+      margin: 20px;
+      padding: 16px;
+      border-radius: 14px;
+      background: #fff;
+      border-left: 6px solid #ec4899;
+      /* 🌸 fashion color */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
 
-/* SECTION */
-.section-box {
-  margin: 20px;
-  padding: 16px;
-  border-radius: 14px;
-  background: #fff;
-  border-left: 6px solid #ec4899; /* 🌸 fashion color */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 15px;
+    }
 
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
-  gap: 15px;
-}
+    .card {
+      background: #fff;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      transition: 0.3s;
+    }
 
-.card {
-  background: #fff;
-  padding: 10px;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  transition: 0.3s;
-}
+    .card:hover {
+      transform: translateY(-5px);
+    }
 
-.card:hover {
-  transform: translateY(-5px);
-}
+    .card img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
 
-.card img {
-  width: 100%;
-  height: 130px;
-  object-fit: cover;
-  border-radius: 10px;
-}
+    .card h4 {
+      margin: 6px 0;
+    }
 
-.card h4 {
-  margin: 6px 0;
-}
+    .card p {
+      color: #16a34a;
+      font-weight: bold;
+    }
 
-.card p {
-  color: #16a34a;
-  font-weight: bold;
-}
+    
 
-/* FOOTER */
-.footer {
-  background: linear-gradient(90deg, #065f46, #022c22);
-  color: white;
-  padding: 8px;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 30px;
-}
-
-/* FIX LOGO SIZE */
-.logo-fix {
-  height: 40px !important;
-  width: auto !important;
-}
-</style>
+    /* FIX LOGO SIZE */
+    .logo-fix {
+      height: 40px !important;
+      width: auto !important;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
 
-<!-- ✅ STANDARD NAVBAR -->
-<header class="sticky top-0 z-30 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
-  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-    
-    <div class="flex items-center gap-3">
-      <a href="../index.html" class="flex items-center gap-3">
-        
-        <img src="../images/logo/stopbuy-logo.png" 
-             alt="StopBuy Logo"
-             class="logo-fix object-contain rounded-lg bg-white p-1 shadow-lg shadow-emerald-500/20">
+  <!-- ✅ STANDARD NAVBAR -->
+  <!-- Top Navigation Bar -->
+  <nav class="bg-[#0A3D2A] text-white sticky top-0 z-[99999]">
+    <div
+      class="max-w-screen-2xl mx-auto px-4 py-2 sm:py-0 sm:h-[60px] flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-3 gap-x-2 sm:gap-4">
 
-        <div class="leading-tight">
-          <div class="flex items-end gap-1">
-            <span class="text-lg sm:text-xl font-bold gradient-text">
-              <span class="lang-en">StopBuy</span>
-              <span class="lang-ur">اسٹاپ بائے</span>
+      <!-- LEFT: Logo -->
+      <a href="../index.html" class="flex items-center gap-2 flex-shrink-0 order-1 sm:order-none cursor-pointer">
+        <div class="bg-white p-1 rounded-xl shadow-sm w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center">
+          <img src="../images/logo/stopbuy-logo.png" alt="StopBuy" class="h-6 w-6 sm:h-7 sm:w-7 object-contain">
+        </div>
+
+        <div class="flex flex-col leading-tight">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-lg sm:text-xl tracking-tight">
+              <span class="text-[#8CC63F]">Stop</span><span class="text-[#5B9BD5]">Buy</span>
             </span>
+            <div
+              class="hidden md:block border border-[#24533e] bg-emerald-900/20 text-[#58b284] px-2 py-[2px] rounded text-[10px] font-semibold tracking-wide">
+              Price Smart, Save More
+            </div>
           </div>
-          <p class="text-xs text-slate-400 hidden sm:block">
-            <span class="lang-en">Smart Price Comparison for Pakistan</span>
-            <span class="lang-ur">پاکستان کے لیے اسمارٹ پرائس کمپیرزن</span>
-          </p>
+          <span class="hidden md:block text-[11px] text-gray-300 mt-0.5">
+            Smart Price Comparison for Pakistan
+          </span>
         </div>
       </a>
-    </div>
 
+
+      <!-- CENTER: Location -->
+      <div class="order-3 sm:order-none w-full sm:w-auto flex justify-center sm:flex-1">
+        <div
+          class="hidden lg:flex items-center gap-1 text-slate-700 text-sm bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 cursor-pointer hover:bg-slate-200 transition whitespace-nowrap"
+          onclick="showLocationModal()" id="locationBox">
+          <span>📍</span>
+          <span class="font-medium" id="current-location">Detecting...</span>
+          <span class="text-[0.6rem] ml-1">▼</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: Actions -->
+      <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0 order-2 sm:order-none">
+        <!-- Language Toggle -->
+        <div
+          class="flex items-center justify-center w-[60px] sm:w-[70px] h-[34px] sm:h-[38px] bg-white/10 hover:bg-white/20 rounded-full text-[13px] sm:text-sm font-medium cursor-pointer transition-colors">
+          <span class="text-center">اردو</span>
+        </div>
+
+        <!-- Login Profile Icon -->
+        <div class="relative group z-[100000]">
+          <div
+            class="login-icon-container flex items-center justify-center w-[34px] h-[34px] sm:w-[42px] sm:h-[42px] rounded-full cursor-pointer bg-transparent hover:bg-white/10 transition-colors">
+            <i class="fas fa-user-shield text-emerald-400 text-sm sm:text-lg"></i>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- Category Bar -->
+    <div class="bg-[#052C22] px-4 py-2 relative z-50 min-h-[40px]">
+      <div class="max-w-screen-2xl mx-auto w-full flex items-center relative">
+        <!-- Navigation Links -->
+        <div class="flex items-center gap-5 z-10">
+          <!-- Home Link -->
+          <a href="../index.html"
+            class="text-emerald-400 hover:text-emerald-300 font-semibold text-sm transition-colors flex items-center">
+            <i class="fas fa-arrow-left mr-1.5"></i> Home
+          </a>
+          <!-- Categories Link -->
+          <a href="categories.html"
+            class="text-emerald-400 hover:text-emerald-300 font-semibold text-sm transition-colors flex items-center">
+            <i class="fas fa-arrow-left mr-1.5"></i> Categories
+          </a>
+        </div>
+
+        <!-- Centered Heading -->
+        <h1 class="text-[15px] tracking-wide font-bold text-white absolute left-1/2 -translate-x-1/2 whitespace-nowrap">
+          Fashion</h1>
+      </div>
+    </div>
   </nav>
-</header>
 
-<!-- PAGE BAR -->
-<div class="page-bar">
-  <div><a href="categories.html">← Categories</a></div>
-  <div class="center">Fashion</div>
-  <div></div>
-</div>
-
-<!-- HERO -->
-<div class="category-hero">
-  <img src="../images/grafix/PAGE_BANNER.png" class="hero-banner">
-</div>
-
-<!-- CONTENT -->
-<section class="section-box">
-  <h2>👕 Fashion</h2>
-
-  <div class="card-grid">
-
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
-    <div class="card">
-      <img src="../images/placeholder.jpg">
-      <h4>Product Name</h4>
-      <p>Rs. ---</p>
-    </div>
-
+  <!-- HERO -->
+  <div class="category-hero">
+    <img src="../images/grafix/PAGE_BANNER.png" class="hero-banner">
   </div>
-</section>
 
-<!-- FOOTER -->
-<div class="footer">
-  © 2026 StopBuyPk - Smart Price Comparison
-</div>
+  <!-- CONTENT -->
+  <section class="section-box">
+    <h2>👕 Fashion</h2>
 
+    <div class="card-grid">
+
+      <div class="card">
+        <img src="../images/placeholder.jpg">
+        <h4>Product Name</h4>
+        <p>Rs. ---</p>
+      </div>
+
+      <div class="card">
+        <img src="../images/placeholder.jpg">
+        <h4>Product Name</h4>
+        <p>Rs. ---</p>
+      </div>
+
+      <div class="card">
+        <img src="../images/placeholder.jpg">
+        <h4>Product Name</h4>
+        <p>Rs. ---</p>
+      </div>
+
+    </div>
+  </section>
+
+    <!-- FOOTER -->
+  <div class="footer">
+    © 2026 StopBuyPk - Smart Price Comparison
+  </div>
+
+<script src="../js/location.js"></script>
 </body>
+
 </html>

@@ -1,225 +1,242 @@
-/**
- * DataService - Interacts with the deployed Google Apps Script Web App
- * via standard REST API fetch calls (for GitHub deployment compatibility)
- */
-
 const DataService = {
-    // ⚠️ CRITICAL: Replace this URL with your NEW DEPLOYMENT Web App URL from Google!
-    API_URL: 'https://script.google.com/macros/s/AKfycbyFBxaxAb7I2oNefrtKTO0MEn__YPrce17kpAGKjg9luLntdQA42UKR09jVqeMwh0T0/exec',
 
-    // --- Helpers ---
+    API_URL: "https://script.google.com/macros/s/AKfycbyuf24L5Z5v593h296V9p529istVl1qmK_DZ73KL6xZKK5z0xujwVhoIOBnmfqhMjniLg/exec",
 
-    _fetchGET: async (action) => {
+    login: async (data) => {
+
         try {
-            const url = `${DataService.API_URL}?action=${action}`;
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Network response was not ok');
-            const data = await response.json();
-            if (data && data.error) throw new Error(data.error);
 
-            const localKey = action.replace('get', '').toLowerCase();
-            let localData = null;
-            try {
-                const stored = localStorage.getItem(localKey);
-                if (stored) localData = JSON.parse(stored);
-            } catch (e) {
-                console.warn(`Local storage parse error for ${localKey}`, e);
-            }
-
-            if (data && Array.isArray(data)) {
-                // If API successfully returns an array (even empty), it is the source of truth.
-                try {
-                    localStorage.setItem(localKey, JSON.stringify(data));
-                } catch(e) {}
-                return data;
-            }
-
-            // Fallback to local data only if data is not a valid array
-            if (localData && Array.isArray(localData) && localData.length > 0) {
-                return localData;
-            }
-
-            return [];
-        } catch (error) {
-            console.error(`Error fetching ${action}:`, error);
-            // Fallback for local testing if API isn't set
-            try {
-                const stored = localStorage.getItem(action.replace('get', '').toLowerCase());
-                if (stored) return JSON.parse(stored) || [];
-            } catch (e) {
-                console.warn(`Fallback local parse error for ${action}`, e);
-            }
-            return [];
-        }
-    },
-
-    _fetchPOST: async (action, payload) => {
-        try {
-            if (action.startsWith('save')) {
-                localStorage.setItem(action.replace('save', '').toLowerCase(), JSON.stringify(payload));
-            }
-            const response = await fetch(DataService.API_URL, {
-                method: 'POST',
-                // Using text/plain avoids some CORS preflight issues with Google Apps Script
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify({ action: action, payload: payload })
+            const res = await fetch(DataService.API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    action: "login",
+                    ...data
+                })
             });
-            if (!response.ok) throw new Error('Network response was not ok');
-            const data = await response.json();
-            if (data.error) throw new Error(data.error);
-            return data;
-        } catch (error) {
-            console.error(`Error posting ${action}:`, error);
-            // Fallback for local testing
-            if (action.startsWith('save')) {
-                return { message: 'Success' };
-            }
-            throw error;
-        }
-    },
 
-    // --- Products ---
+            return await res.json();
 
-    getProducts: async () => {
-        return await DataService._fetchGET('getProducts');
-    },
+        } catch (err) {
 
-    saveProducts: async (products) => {
-        const res = await DataService._fetchPOST('saveProducts', products);
-        return res.message;
-    },
+            console.error(err);
 
-    // --- Categories ---
-
-    getCategories: async () => {
-        return await DataService._fetchGET('getCategories');
-    },
-
-    saveCategories: async (categories) => {
-        const res = await DataService._fetchPOST('saveCategories', categories);
-        return res.message;
-    },
-
-    // --- Banners ---
-
-    getBanners: async () => {
-        let items = await DataService._fetchGET('getBanners');
-        if (!items || items.length === 0) {
-            // Provide a default banner if local memory is empty / cross-origin blocked
-            items = [{ image: 'https://picsum.photos/720/120?random=test', link: '#' }];
-        }
-        return items;
-    },
-
-    saveBanners: async (banners) => {
-        const res = await DataService._fetchPOST('saveBanners', banners);
-        return res.message;
-    },
-
-    // --- Deals of the Day ---
-
-    getDeals: async () => {
-        return await DataService._fetchGET('getDeals');
-    },
-
-    saveDeals: async (deals) => {
-        const res = await DataService._fetchPOST('saveDeals', deals);
-        return res.message;
-    },
-
-    // --- Blogs ---
-
-    getBlogs: async () => {
-        return await DataService._fetchGET('getBlogs');
-    },
-
-    saveBlogs: async (blogs) => {
-        const res = await DataService._fetchPOST('saveBlogs', blogs);
-        return res.message;
-    },
-
-    // --- Broadcasts ---
-
-    getBroadcasts: async () => {
-        return await DataService._fetchGET('getBroadcasts');
-    },
-
-    saveBroadcasts: async (broadcasts) => {
-        const res = await DataService._fetchPOST('saveBroadcasts', broadcasts);
-        return res.message;
-    },
-
-    // --- Travel Packages ---
-
-    getTravelPackages: async () => {
-        return await DataService._fetchGET('getTravelPackages');
-    },
-
-    saveTravelPackages: async (travelPackages) => {
-        const res = await DataService._fetchPOST('saveTravelPackages', travelPackages);
-        return res.message;
-    },
-
-    // --- Users / Auth ---
-
-    getUsers: async () => {
-        return await DataService._fetchGET('getUsers');
-    },
-
-    saveUsers: async (users) => {
-        const res = await DataService._fetchPOST('saveUsers', users);
-        return res.message;
-    },
-
-    login: async (username, password, type) => {
-        try {
-            const res = await DataService._fetchPOST('login', { username, password, type });
-            if (res.success) {
-                return res;
-            } else {
-                // Workaround: if remote Code.gs API returns failure, check locally by fetching all users
-                // to circumvent Google Sheets Number vs String type issues in unupdated backends.
-                console.warn("API rejected login, validating dynamically via getUsers...");
-                try {
-                    const allUsers = await DataService.getUsers() || [];
-                    const user = allUsers.find(u => String(u.username) === String(username) && String(u.password) === String(password) && String(u.role) === String(type));
-                    
-                    if (user) {
-                        if (user.status === 'hold') {
-                            return { success: false, message: 'Account is on hold. Please contact support.' };
-                        }
-                        return { success: true, user: user };
-                    }
-                } catch(e) {
-                    console.error("Fallback dynamic user validation failed", e);
-                }
-                
-                return res; // Return original API failure message if dynamic check also fails
-            }
-        } catch (error) {
-            // Local fallback logic if API fails completely
-            console.warn("Using local stub login due to API failure");
-            
-            // Try to find user in local storage first
-            const localUsers = JSON.parse(localStorage.getItem('users')) || [];
-            const user = localUsers.find(u => String(u.username) === String(username) && String(u.password) === String(password) && String(u.role) === String(type));
-            
-            if (user) {
-                if (user.status === 'hold') {
-                    return { success: false, message: 'Account is on hold. Please contact support.' };
-                }
-                return { success: true, user: user };
-            }
-            
-            // Hardcoded defaults
-            if (type === 'admin' && ((username === 'Faisal' && password === '1234') || (username === 'Ashraf Taj' && password === 'admin123'))) {
-                return { success: true, user: { username, role: 'admin' } };
-            } else if (type === 'company' && (username === 'test' && password === 'test')) {
-                return { success: true, user: { username, role: 'company' } };
-            } else if (type === 'user') {
-                return { success: true, user: { username, role: 'user' } };
-            }
-            return { success: false, message: 'Invalid credentials' };
+            return {
+                success: false,
+                message: "Server Error"
+            };
         }
     }
+
 };
+
+// ===============================
+// LOGIN FUNCTION
+// ===============================
+
+async function loginUser() {
+
+    const role = document.getElementById("loginRole").value;
+
+    const username =
+        document.getElementById("loginUsername")?.value.trim() || "";
+
+    const companyName =
+        document.getElementById("loginCompanyName")?.value.trim() || "";
+
+    const userId =
+        document.getElementById("loginUserId")?.value.trim() || "";
+
+    const password =
+        document.getElementById("loginPassword")?.value.trim() || "";
+
+    const msg = document.getElementById("loginMessage");
+
+    msg.classList.add("hidden");
+
+    // ===============================
+    // VALIDATION
+    // ===============================
+
+    // USER
+    if (role === "user") {
+
+        if (!userId || !password) {
+
+            showLoginMessage("Please enter User ID & Password");
+            return;
+        }
+    }
+
+    // COMPANY
+    else if (role === "company") {
+
+        if (!username || !companyName || !userId || !password) {
+
+            showLoginMessage("Please fill all Company login fields");
+            return;
+        }
+    }
+
+    // ADMIN
+    else if (role === "admin") {
+
+        if (!userId || !password) {
+
+            showLoginMessage("Please enter Admin ID & Password");
+            return;
+        }
+    }
+
+    // ===============================
+    // LOGIN API CALL
+    // ===============================
+
+    const result = await DataService.login({
+
+        role,
+
+        username,
+        companyName,
+        userId,
+        password
+
+    });
+
+    console.log("LOGIN:", result);
+
+    // ===============================
+    // SUCCESS
+    // ===============================
+
+    if (result.success) {
+
+        localStorage.setItem(
+            "user",
+            JSON.stringify(result.user)
+        );
+
+        // ADMIN REDIRECT
+        if (result.user.role === "admin") {
+
+            window.location.href = "admin.html";
+        }
+
+        // COMPANY REDIRECT
+        else if (result.user.role === "company") {
+
+            window.location.href = "company.html";
+        }
+
+        // USER REDIRECT
+        else {
+
+            window.location.href = "index.html";
+        }
+
+    }
+
+    // ===============================
+    // FAILED
+    // ===============================
+
+    else {
+
+        showLoginMessage(
+            result.message || "Login Failed"
+        );
+    }
+}
+
+// ===============================
+// SHOW ERROR MESSAGE
+// ===============================
+
+function showLoginMessage(message) {
+
+    const msg = document.getElementById("loginMessage");
+
+    msg.innerText = message;
+
+    msg.classList.remove("hidden");
+}
+
+// ===============================
+// DEFAULT ROLE
+// ===============================
+
+window.selectedRole = "user";
+
+// ===============================
+// ROLE SWITCHING
+// ===============================
+
+function selectLoginRole(role, el) {
+
+    window.selectedRole = role;
+
+    document.getElementById("loginRole").value = role;
+
+    // TABS
+    document.querySelectorAll(".login-role-tab").forEach(t => {
+
+        t.classList.remove(
+            "text-emerald-400",
+            "border-emerald-400",
+            "border-b-2"
+        );
+
+        t.classList.add("text-gray-400");
+    });
+
+    el.classList.add(
+        "text-emerald-400",
+        "border-emerald-400",
+        "border-b-2"
+    );
+
+    el.classList.remove("text-gray-400");
+
+    // INPUTS
+    const usernameField =
+        document.getElementById("loginUsername");
+
+    const companyField =
+        document.getElementById("loginCompanyName");
+
+    const userIdField =
+        document.getElementById("loginUserId");
+
+    // RESET
+    usernameField.classList.add("hidden");
+    companyField.classList.add("hidden");
+
+    usernameField.value = "";
+    companyField.value = "";
+
+    // USER
+    if (role === "user") {
+
+        userIdField.placeholder = "User ID";
+    }
+
+    // COMPANY
+    else if (role === "company") {
+
+        usernameField.classList.remove("hidden");
+
+        companyField.classList.remove("hidden");
+
+        userIdField.placeholder = "User ID";
+    }
+
+    // ADMIN
+    else if (role === "admin") {
+
+        userIdField.placeholder = "Admin ID";
+    }
+
+    console.log("ROLE:", role);
+}

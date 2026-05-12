@@ -5,6 +5,8 @@ let categories = [];
 let products = [];
 let banners = [];
 let deals = [];
+let blogs = [];
+let travelPackages = [];
 let users = [];
 let editIndex = -1; // State to track editing
 let userEditIndex = -1; // State to track user editing
@@ -57,12 +59,12 @@ async function initAdmin() {
         renderBanners();
         renderDeals();
         renderUsers();
-        renderBlogs();
+        if (typeof renderBlogs === "function") renderBlogs(); else window.renderBlogs();
         renderTravelPackages(); // New function for travel
         renderBroadcasts();
         renderAdminProducts(); // New function for products
         populateCategoryDropdown(); // New function for form
-        
+
         if (typeof updateAdminAlerts === 'function') updateAdminAlerts();
 
         // Prevent auto-adding dummy field since we want it completely empty at start
@@ -183,7 +185,7 @@ if (categoryForm) {
     categoryForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const name = document.getElementById('catName').value;
-        
+
 
         // Harvest fields
         const fieldRows = document.querySelectorAll('.field-row');
@@ -224,7 +226,7 @@ function renderBanners() {
     bannerList.innerHTML = banners.map((banner, index) => {
         let displayType = banner.type;
         let displayLink = banner.link;
-        
+
         // Unpack if backend dropped the type field
         if (displayLink && typeof displayLink === 'string' && displayLink.includes('|')) {
             const parts = displayLink.split('|');
@@ -260,7 +262,7 @@ async function deleteBanner(index) {
 window.editBanner = (index) => {
     bannerEditIndex = index;
     const banner = banners[index];
-    
+
     let displayType = banner.type;
     let displayLink = banner.link;
     if (displayLink && typeof displayLink === 'string' && displayLink.includes('|')) {
@@ -274,12 +276,12 @@ window.editBanner = (index) => {
     document.getElementById('bannerImage').value = banner.image || '';
     if (document.getElementById('bannerLink')) document.getElementById('bannerLink').value = displayLink || '';
     if (document.getElementById('bannerType')) document.getElementById('bannerType').value = displayType || 'horizontal';
-    
+
     const btnSaveBanner = document.getElementById('btnSaveBanner');
     if (btnSaveBanner) btnSaveBanner.textContent = "Update Banner";
     const btnCancelBanner = document.getElementById('btnCancelBanner');
     if (btnCancelBanner) btnCancelBanner.style.display = "inline-block";
-    
+
     updateBannerPreview();
     document.querySelector('#banners .form-container').scrollIntoView({ behavior: 'smooth' });
 };
@@ -289,12 +291,12 @@ window.cancelBannerEdit = () => {
     if (bannerForm) bannerForm.reset();
     document.getElementById('bannerImage').value = '';
     if (document.getElementById('bannerImageUpload')) document.getElementById('bannerImageUpload').value = '';
-    
+
     const btnSaveBanner = document.getElementById('btnSaveBanner');
     if (btnSaveBanner) btnSaveBanner.textContent = "Add Banner";
     const btnCancelBanner = document.getElementById('btnCancelBanner');
     if (btnCancelBanner) btnCancelBanner.style.display = "none";
-    
+
     updateBannerPreview();
 };
 
@@ -314,12 +316,12 @@ if (bannerImageInput) {
 
 const bannerImageUpload = document.getElementById('bannerImageUpload');
 if (bannerImageUpload) {
-    bannerImageUpload.addEventListener('change', function() {
+    bannerImageUpload.addEventListener('change', function () {
         const file = this.files[0];
         if (file) {
             document.getElementById('bannerImage').value = '/images/banner/' + file.name;
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 const bannerPreview = document.getElementById('bannerPreview');
                 if (bannerPreview) {
                     bannerPreview.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-width: 100%; border-radius: 10px;">`;
@@ -338,7 +340,7 @@ if (bannerForm) {
         const type = document.getElementById('bannerType') ? document.getElementById('bannerType').value : 'horizontal';
 
         const img = new Image();
-        
+
         const fileInput = document.getElementById('bannerImageUpload');
         if (fileInput && fileInput.files && fileInput.files[0]) {
             img.src = URL.createObjectURL(fileInput.files[0]);
@@ -363,7 +365,7 @@ if (bannerForm) {
                 banners[bannerEditIndex] = { image, link, type };
                 cancelBannerEdit();
             }
-            
+
             await saveBanners();
             if (bannerEditIndex === -1) {
                 bannerForm.reset();
@@ -596,66 +598,6 @@ function renderUsers() {
     `).join('');
 }
 
-async function deleteUser(index) {
-    if (confirm('Delete this user?')) {
-        users.splice(index, 1);
-        await saveUsers();
-    }
-}
-
-window.editUser = (index) => {
-    userEditIndex = index;
-    const user = users[index];
-
-    document.getElementById('userName').value = user.username;
-    document.getElementById('userPassword').value = user.password;
-    document.getElementById('userRole').value = user.role || 'user';
-    document.getElementById('userStatus').value = user.status || 'active';
-
-    userFormTitle.textContent = "Edit User Rights";
-    btnSaveUser.textContent = "Update User";
-    btnCancelUser.style.display = 'inline-block';
-
-    document.getElementById('users').querySelector('.form-container').scrollIntoView({ behavior: 'smooth' });
-};
-
-window.cancelUserEdit = () => {
-    userEditIndex = -1;
-    userForm.reset();
-    userFormTitle.textContent = "Add New User";
-    btnSaveUser.textContent = "Save User";
-    btnCancelUser.style.display = 'none';
-};
-
-if (userForm) {
-    userForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const userData = {
-            username: document.getElementById('userName').value,
-            password: document.getElementById('userPassword').value,
-            role: document.getElementById('userRole').value,
-            status: document.getElementById('userStatus').value
-        };
-
-        if (userEditIndex === -1) {
-            // Check if username already exists
-            if (users.some(u => u.username === userData.username && u.role === userData.role)) {
-                alert('A user with this username and role already exists!');
-                return;
-            }
-            users.push(userData);
-        } else {
-            users[userEditIndex] = userData;
-            cancelUserEdit(); // Reset form state
-        }
-
-        await saveUsers();
-        if (userEditIndex === -1) userForm.reset();
-        alert('User saved successfully!');
-    });
-}
-
 
 // Navigation
 function showSection(sectionId) {
@@ -663,7 +605,7 @@ function showSection(sectionId) {
     document.getElementById(sectionId).classList.add('active');
 
     document.querySelectorAll('.menu li').forEach(li => li.classList.remove('active'));
-    try { if(typeof event !== 'undefined' && event && event.currentTarget) { event.currentTarget.classList.add('active'); } } catch(e) {}
+    try { if (typeof event !== 'undefined' && event && event.currentTarget) { event.currentTarget.classList.add('active'); } } catch (e) { }
 }
 
 function logout() {
@@ -1100,7 +1042,7 @@ if (adminProductForm) {
             } else {
                 alert('Product Updated Successfully!');
             }
-            
+
             adminProductForm.reset();
             renderDynamicAdminFields();
             renderAdminProducts();
@@ -1172,7 +1114,7 @@ window.editProduct = (index) => {
             document.querySelectorAll('.dynamic-admin-field').forEach(field => {
                 let key = field.id.replace('prod', '');
                 key = key.charAt(0).toLowerCase() + key.slice(1);
-                
+
                 if (prod[key] !== undefined) {
                     field.value = prod[key];
                 }
@@ -1197,7 +1139,7 @@ window.editProduct = (index) => {
             // Update UI buttons
             const submitBtn = document.querySelector('#adminProductForm button[type="submit"]');
             if (submitBtn) submitBtn.textContent = 'Update Product';
-            
+
             let cancelBtn = document.getElementById('btnCancelProduct');
             if (!cancelBtn) {
                 cancelBtn = document.createElement('button');
@@ -1220,27 +1162,178 @@ window.cancelProductEdit = () => {
     productEditIndex = -1;
     const form = document.getElementById('adminProductForm');
     if (form) form.reset();
-    
+
     const pCat = document.getElementById('prodCategory');
     if (pCat) {
         pCat.value = "";
         pCat.dispatchEvent(new Event('change'));
     }
-    
+
     const submitBtn = document.querySelector('#adminProductForm button[type="submit"]');
     if (submitBtn) submitBtn.textContent = 'Add Product';
-    
+
     const cancelBtn = document.getElementById('btnCancelProduct');
     if (cancelBtn) cancelBtn.style.display = 'none';
+    // --- Dashboard Logic ---
 };
 
-// --- Dashboard Logic ---
+// --- Travel Packages Functions ---
+let travelEditIndex = -1;
+const travelForm = document.getElementById('travelForm');
+const travelList = document.getElementById('travelList');
+const travelFormTitle = document.getElementById('travelFormTitle');
+const btnCancelTravel = document.getElementById('btnCancelTravel');
+const btnSaveTravel = document.getElementById('btnSaveTravel');
+
+async function saveTravelPackages() {
+    await DataService.saveTravelPackages(travelPackages);
+    renderTravelPackages();
+}
+
+function renderTravelPackages() {
+    if (!travelList) return;
+    travelList.innerHTML = travelPackages.map((pkg, index) => {
+        let displayStatus = pkg.status || 'Publish';
+        let displayType = pkg.listingType || 'Basic';
+        let isFeatured = displayType === 'Featured';
+
+        return `
+        <div class="product-row" style="grid-template-columns: 80px 2fr 1fr 1fr 1fr 1fr 80px; align-items: center;">
+            <img src="${pkg.image || 'https://via.placeholder.com/150'}" alt="${pkg.title}" style="width: 100%; height: 60px; object-fit: cover; border-radius: 8px;">
+            <div>
+                <strong>${pkg.company || 'Unknown'}</strong><br>
+                <small style="color: #aaa;">${pkg.title}</small>
+            </div>
+            <div>
+                <span class="badge" style="background:#0ea5e9; color:white; padding: 2px 6px; font-size: 0.7rem;">${pkg.category}</span>
+            </div>
+            <div>${pkg.duration} Days</div>
+            <div>
+                <span style="color: var(--primary-color); font-weight:bold;">Rs. ${pkg.price}</span><br>
+                <small>${pkg.priceType || 'Per Person'}</small>
+            </div>
+            <div>
+                <span class="badge" style="background:${isFeatured ? '#f59e0b' : '#64748b'}; color:white; padding: 2px 6px; font-size: 0.7rem; margin-bottom: 2px; display:inline-block;">${displayType}</span>
+                <span class="badge" style="background:${displayStatus === 'Publish' ? '#10b981' : '#f43f5e'}; color:white; padding: 2px 6px; font-size: 0.7rem; display:inline-block;">${displayStatus}</span>
+            </div>
+            <div>
+                <button class="edit-btn" onclick="editTravel(${index})" style="padding: 5px; margin-bottom: 2px;"><i class="fa-solid fa-pen"></i></button>
+                <button class="delete-btn" onclick="deleteTravel(${index})" style="padding: 5px;"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>
+        `;
+    }).join('');
+}
+
+window.deleteTravel = async (index) => {
+    if (confirm('Delete this travel package?')) {
+        travelPackages.splice(index, 1);
+        await saveTravelPackages();
+    }
+};
+
+window.editTravel = (index) => {
+    travelEditIndex = index;
+    const pkg = travelPackages[index];
+
+    document.getElementById('travelTitle').value = pkg.title || '';
+    document.getElementById('travelCategory').value = pkg.category || '';
+    document.getElementById('travelDeparture').value = pkg.departure || '';
+    document.getElementById('travelDestination').value = pkg.destination || '';
+    document.getElementById('travelDuration').value = pkg.duration || '';
+    document.getElementById('travelPrice').value = pkg.price || '';
+    document.getElementById('travelPriceType').value = pkg.priceType || 'Per Person';
+
+    // Transport checkboxes
+    document.querySelectorAll('input[name="transportOption"]').forEach(cb => cb.checked = false);
+    if (pkg.transport) {
+        const tArray = pkg.transport.split(',').map(s => s.trim());
+        document.querySelectorAll('input[name="transportOption"]').forEach(cb => {
+            if (tArray.includes(cb.value)) cb.checked = true;
+        });
+    }
+
+    document.getElementById('travelHotel').value = pkg.hotel || 'None';
+    document.getElementById('travelMeals').value = pkg.meals || 'No';
+    document.getElementById('travelGuide').value = pkg.guide || 'No';
+    document.getElementById('travelZiyarat').value = pkg.ziyarat || '';
+    document.getElementById('travelImage').value = pkg.image || '';
+    document.getElementById('travelBrochure').value = pkg.brochure || '';
+    document.getElementById('travelDetails').value = pkg.details || '';
+    document.getElementById('travelCompany').value = pkg.company || '';
+    document.getElementById('travelContact').value = pkg.contact || '';
+    document.getElementById('travelWhatsapp').value = pkg.whatsapp || '';
+    document.getElementById('travelEmail').value = pkg.email || '';
+    document.getElementById('travelListingType').value = pkg.listingType || 'Basic';
+    document.getElementById('travelVerified').value = pkg.verified || 'No';
+    document.getElementById('travelStatus').value = pkg.status || 'Publish';
+
+    if (travelFormTitle) travelFormTitle.textContent = "Edit Travel Package";
+    if (btnSaveTravel) btnSaveTravel.textContent = "Update Package";
+    if (btnCancelTravel) btnCancelTravel.style.display = 'inline-block';
+
+    document.getElementById('travel').querySelector('.travel-form').scrollIntoView({ behavior: 'smooth' });
+};
+
+window.cancelTravelEdit = () => {
+    travelEditIndex = -1;
+    if (travelForm) travelForm.reset();
+    if (travelFormTitle) travelFormTitle.textContent = "Add Travel Package";
+    if (btnSaveTravel) btnSaveTravel.textContent = "Submit Package";
+    if (btnCancelTravel) btnCancelTravel.style.display = 'none';
+};
+
+if (travelForm) {
+    travelForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const transportOptions = Array.from(document.querySelectorAll('input[name="transportOption"]:checked')).map(cb => cb.value);
+
+        const newPkg = {
+            id: travelEditIndex === -1 ? Date.now() : travelPackages[travelEditIndex].id,
+            title: document.getElementById('travelTitle').value,
+            category: document.getElementById('travelCategory').value,
+            departure: document.getElementById('travelDeparture').value,
+            destination: document.getElementById('travelDestination').value,
+            duration: document.getElementById('travelDuration').value,
+            price: document.getElementById('travelPrice').value,
+            priceType: document.getElementById('travelPriceType').value,
+            transport: transportOptions.join(', '),
+            hotel: document.getElementById('travelHotel').value,
+            meals: document.getElementById('travelMeals').value,
+            guide: document.getElementById('travelGuide').value,
+            ziyarat: document.getElementById('travelZiyarat').value,
+            image: document.getElementById('travelImage').value,
+            brochure: document.getElementById('travelBrochure').value,
+            details: document.getElementById('travelDetails').value,
+            company: document.getElementById('travelCompany').value,
+            contact: document.getElementById('travelContact').value,
+            whatsapp: document.getElementById('travelWhatsapp').value,
+            email: document.getElementById('travelEmail').value,
+            listingType: document.getElementById('travelListingType').value,
+            verified: document.getElementById('travelVerified').value,
+            status: document.getElementById('travelStatus').value
+        };
+
+        if (travelEditIndex === -1) {
+            travelPackages.push(newPkg);
+        } else {
+            travelPackages[travelEditIndex] = newPkg;
+            cancelTravelEdit();
+        }
+
+        await saveTravelPackages();
+        if (travelEditIndex === -1) travelForm.reset();
+        alert('Travel Package saved successfully!');
+    });
+}
+
 function initDashboard() {
     // Quick Actions Redirects
     document.querySelectorAll('.quick-action').forEach(btn => {
         btn.addEventListener('click', () => {
             const target = btn.dataset.target;
-            if(target) window.location.href = target;
+            if (target) window.location.href = target;
         });
     });
 
@@ -1261,7 +1354,7 @@ function initDashboard() {
                     tension: 0.4
                 }]
             },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#e2e8f0' } } }, scales: { x: { ticks: { color: '#94a3b8' }, grid: {color: 'rgba(148, 163, 184, 0.1)'} }, y: { ticks: { color: '#94a3b8' }, grid: {color: 'rgba(148, 163, 184, 0.1)'} } } }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#e2e8f0' } } }, scales: { x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } }, y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } } } }
         });
     }
 
@@ -1279,7 +1372,7 @@ function initDashboard() {
                     borderRadius: 4
                 }]
             },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#e2e8f0' } } }, scales: { x: { ticks: { color: '#94a3b8' }, grid: {display: false} }, y: { ticks: { color: '#94a3b8' }, grid: {color: 'rgba(148, 163, 184, 0.1)'} } } }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#e2e8f0' } } }, scales: { x: { ticks: { color: '#94a3b8' }, grid: { display: false } }, y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } } } }
         });
     }
 
@@ -1307,11 +1400,11 @@ window.addEventListener('load', initDashboard);
 // Food category override logic
 document.addEventListener('DOMContentLoaded', () => {
     const catNameInput = document.getElementById('catName');
-    if(catNameInput) {
+    if (catNameInput) {
         catNameInput.addEventListener('input', (e) => {
             const subCatInput = document.getElementById('subCatName');
-            if(subCatInput) {
-                if(e.target.value.trim().toLowerCase() === 'food') {
+            if (subCatInput) {
+                if (e.target.value.trim().toLowerCase() === 'food') {
                     subCatInput.required = false;
                     subCatInput.disabled = true;
                     subCatInput.value = '';
@@ -1340,4 +1433,204 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+});
+
+
+// --- Broadcast Functions ---
+const broadcastForm = document.getElementById('broadcastForm');
+const broadcastList = document.getElementById('broadcastList');
+const broadcastFormTitle = document.getElementById('broadcastFormTitle');
+const btnCancelBroadcast = document.getElementById('btnCancelBroadcast');
+const btnSaveBroadcast = document.getElementById('btnSaveBroadcast');
+const broadcastSpecificUser = document.getElementById('broadcastSpecificUser');
+const broadcastTextTicker = document.getElementById('broadcastText');
+
+async function saveBroadcasts() {
+    await DataService.saveBroadcasts(broadcasts);
+    renderBroadcasts();
+}
+
+function renderBroadcasts() {
+    if (broadcastList) {
+        broadcastList.innerHTML = broadcasts.map((b, index) => `
+            <div class="grid-table-row" style="grid-template-columns: 1fr 2fr 100px 100px 100px; display: grid; gap: 10px; align-items: center; padding: 10px; border-bottom: 1px solid var(--border-color);">
+                <div><span class="badge" style="background:#3498db; color:white;">${b.target === 'all' ? 'All Users' : b.targetUser || 'Specific'}</span></div>
+                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${b.message}</div>
+                <div>${b.date || new Date().toISOString().split('T')[0]}</div>
+                <div><span class="badge" style="background:${b.status === 'active' ? '#2ecc71' : '#e74c3c'}; color:white;">${b.status}</span></div>
+                <div>
+                    <button class="edit-btn" onclick="editBroadcast(${index})"><i class="fa-solid fa-pen"></i></button>
+                    <button class="delete-btn" onclick="deleteBroadcast(${index})"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Update Admin Ticker
+    if (broadcastTextTicker) {
+        const activeBroadcasts = broadcasts.filter(b => b.status === 'active' && (!b.target || b.target === 'all'));
+        if (activeBroadcasts.length > 0) {
+            broadcastTextTicker.innerHTML = activeBroadcasts.map(b => b.message).join('  &nbsp;|&nbsp;  ');
+        } else {
+            broadcastTextTicker.innerHTML = 'Welcome to Qeemat Point Admin! &nbsp;|&nbsp; System Running Smoothly';
+        }
+    }
+}
+
+async function deleteBroadcast(index) {
+    if (confirm('Delete this broadcast?')) {
+        broadcasts.splice(index, 1);
+        await saveBroadcasts();
+    }
+}
+
+window.editBroadcast = (index) => {
+    broadcastEditIndex = index;
+    const b = broadcasts[index];
+
+    document.getElementById('broadcastMessage').value = b.message || '';
+    document.getElementById('broadcastAudience').value = b.target || 'all';
+    document.getElementById('broadcastStatus').value = b.status || 'active';
+
+    toggleSpecificUserField();
+    if (b.target === 'specific' && broadcastSpecificUser) {
+        broadcastSpecificUser.value = b.targetUser || '';
+    }
+
+    if (broadcastFormTitle) broadcastFormTitle.textContent = "Edit Broadcast";
+    if (btnSaveBroadcast) btnSaveBroadcast.textContent = "Update Broadcast";
+    if (btnCancelBroadcast) btnCancelBroadcast.style.display = 'inline-block';
+
+    document.getElementById('broadcasts').scrollIntoView({ behavior: 'smooth' });
+};
+
+window.cancelBroadcastEdit = () => {
+    broadcastEditIndex = -1;
+    if (broadcastForm) broadcastForm.reset();
+    toggleSpecificUserField();
+
+    if (broadcastFormTitle) broadcastFormTitle.textContent = "Create New Broadcast";
+    if (btnSaveBroadcast) btnSaveBroadcast.textContent = "Save Broadcast";
+    if (btnCancelBroadcast) btnCancelBroadcast.style.display = 'none';
+};
+
+window.toggleSpecificUserField = () => {
+    const audience = document.getElementById('broadcastAudience').value;
+    if (broadcastSpecificUser) {
+        if (audience === 'specific') {
+            broadcastSpecificUser.style.display = 'inline-block';
+            // Populate users if empty
+            if (broadcastSpecificUser.options.length <= 1) {
+                broadcastSpecificUser.innerHTML = '<option value="">-- Choose User --</option>' +
+                    users.map(u => `<option value="${u.username}">${u.username} (${u.role})</option>`).join('');
+            }
+        } else {
+            broadcastSpecificUser.style.display = 'none';
+            broadcastSpecificUser.value = '';
+        }
+    }
+};
+
+if (broadcastForm) {
+    broadcastForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const newBroadcast = {
+            id: broadcastEditIndex === -1 ? Date.now() : broadcasts[broadcastEditIndex].id,
+            message: document.getElementById('broadcastMessage').value,
+            target: document.getElementById('broadcastAudience').value,
+            targetUser: document.getElementById('broadcastSpecificUser') ? document.getElementById('broadcastSpecificUser').value : '',
+            status: document.getElementById('broadcastStatus').value,
+            date: new Date().toISOString().split('T')[0]
+        };
+
+        if (broadcastEditIndex === -1) {
+            broadcasts.push(newBroadcast);
+        } else {
+            broadcasts[broadcastEditIndex] = newBroadcast;
+            cancelBroadcastEdit();
+        }
+
+        await saveBroadcasts();
+        if (broadcastEditIndex === -1) {
+            broadcastForm.reset();
+            toggleSpecificUserField();
+        }
+        alert('Broadcast saved successfully!');
+    });
+}
+
+
+// --- Fallback Stub Functions ---
+if (typeof renderBlogs !== 'function') {
+    window.renderBlogs = function () { console.log('renderBlogs not implemented yet'); };
+}
+if (typeof renderAds !== 'function') {
+    window.renderAds = function () { console.log('renderAds not implemented yet'); };
+}
+if (typeof renderDailyPrices !== 'function') {
+    window.renderDailyPrices = function () { console.log('renderDailyPrices not implemented yet'); };
+}
+
+let users = [];
+
+async function loadUsers() {
+
+    users = await fetchUsers();
+
+    renderUsers();
+
+}
+
+function renderUsers() {
+
+    const userList = document.getElementById("userList");
+
+    userList.innerHTML = "";
+
+    users.forEach((user, index) => {
+
+        userList.innerHTML += `
+
+        <tr>
+            <td>${user.username}</td>
+            <td>${user.password}</td>
+            <td>${user.role}</td>
+            <td>${user.status}</td>
+
+            <td>
+                <button onclick="deleteUser(${index})">
+                    Delete
+                </button>
+            </td>
+        </tr>
+
+        `;
+
+    });
+
+}
+
+document.getElementById("userForm")
+.addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+    const newUser = {
+
+        username: document.getElementById("userName").value,
+        password: document.getElementById("userPassword").value,
+        role: document.getElementById("userRole").value,
+        status: document.getElementById("userStatus").value
+
+    };
+
+    users.push(newUser);
+
+    await saveUsers(users);
+
+    renderUsers();
+
+    this.reset();
+
 });
