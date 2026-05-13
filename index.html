@@ -92,143 +92,132 @@
                     <span id="lang-toggle-text" class="text-center">اردو</span>
                 </div>
 
-				<!-- LOGIN PROFILE -->
-<div class="relative group z-[100000]">
+                <!-- LOGIN PROFILE -->
+                <div class="relative group z-[100000]">
 
-    <!-- ICON -->
-    <div
-        class="login-icon-container flex items-center justify-center w-[34px] h-[34px] sm:w-[42px] sm:h-[42px] rounded-full cursor-pointer bg-white/5 border border-white/10 hover:border-emerald-400/40 hover:bg-white/10 transition-all duration-300 shadow-lg hover:shadow-emerald-500/20">
+                    <!-- ICON -->
+                    <div
+                        class="login-icon-container flex items-center justify-center w-[34px] h-[34px] sm:w-[42px] sm:h-[42px] rounded-full cursor-pointer bg-white/5 border border-white/10 hover:border-emerald-400/40 hover:bg-white/10 transition-all duration-300 shadow-lg hover:shadow-emerald-500/20">
 
-        <i
-            class="fas fa-user-shield text-emerald-400 text-sm sm:text-lg transition-transform duration-300 group-hover:scale-110"></i>
+                        <i
+                            class="fas fa-user-shield text-emerald-400 text-sm sm:text-lg transition-transform duration-300 group-hover:scale-110"></i>
 
-    </div>
+                    </div>
 
-    <!-- DROPDOWN -->
-    <div
-        class="absolute right-0 top-full mt-3 w-[320px] bg-[#0B1120]/95 backdrop-blur-2xl rounded-3xl shadow-[0_15px_50px_rgba(0,0,0,0.45)] border border-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible focus-within:opacity-100 focus-within:visible transition-all duration-300 overflow-hidden text-left z-50 translate-y-2 group-hover:translate-y-0">
+                    <!-- DROPDOWN -->
+                    <div
+                        class="absolute right-0 top-full mt-3 w-[320px] bg-[#0B1120]/95 backdrop-blur-2xl rounded-3xl shadow-[0_15px_50px_rgba(0,0,0,0.45)] border border-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible focus-within:opacity-100 focus-within:visible transition-all duration-300 overflow-hidden text-left z-50 translate-y-2 group-hover:translate-y-0">
 
-        <!-- TOP HEADER -->
-        <div
-            class="px-5 py-4 border-b border-white/10 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10">
+                        <!-- TOP HEADER -->
+                        <div
+                            class="px-5 py-4 border-b border-white/10 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10">
 
-            <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-3">
 
-                <div
-                    class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center shadow-lg">
+                                <div
+                                    class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center shadow-lg">
 
-                    <i class="fas fa-shield-halved text-gray-900 text-lg"></i>
+                                    <i class="fas fa-shield-halved text-gray-900 text-lg"></i>
+
+                                </div>
+
+                                <div>
+                                    <h3 class="text-white text-sm font-semibold">
+                                        Secure Login
+                                    </h3>
+
+                                    <p class="text-gray-400 text-xs">
+                                        Access your dashboard securely
+                                    </p>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- TABS -->
+                        <div class="grid grid-cols-3 border-b border-white/10">
+
+                            <!-- USER -->
+                            <button onclick="switchLoginTab('user')" id="tab-user"
+                                class="login-tab active-tab py-3 text-sm font-semibold text-emerald-400 border-b-2 border-emerald-400 transition-all duration-300 hover:bg-white/5">
+                                User
+                            </button>
+
+                            <!-- COMPANY -->
+                            <button onclick="switchLoginTab('company')" id="tab-company"
+                                class="login-tab py-3 text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-300">
+                                Company
+                            </button>
+
+                            <!-- ADMIN -->
+                            <button onclick="switchLoginTab('admin')" id="tab-admin"
+                                class="login-tab py-3 text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-300">
+                                Admin
+                            </button>
+
+                        </div>
+
+                        <!-- FORM AREA -->
+                        <div class="p-4">
+
+                            <!-- USER FORM -->
+                            <div id="form-user" class="space-y-2.5">
+
+                                <input type="text" placeholder="User ID" class="login-input">
+
+                                <input type="password" placeholder="Password" class="login-input">
+
+                                <button type="button" onclick="loginUser()" class="login-btn">
+                                    Login as User
+                                </button>
+
+                            </div>
+
+                            <!-- COMPANY FORM -->
+                            <div id="form-company" class="space-y-2.5 hidden">
+
+                                <input type="text" placeholder="User Name" class="login-input">
+
+                                <input type="text" placeholder="Company Name" class="login-input">
+
+                                <input type="text" placeholder="User ID" class="login-input">
+
+                                <input type="password" placeholder="Password" class="login-input">
+
+                                <button type="button" onclick="loginCompany()" class="login-btn">
+                                    Login as Company
+                                </button>
+
+                            </div>
+
+                            <!-- ADMIN FORM -->
+                            <div id="form-admin" class="space-y-2.5 hidden">
+
+                                <input type="text" placeholder="Admin ID" class="login-input">
+
+                                <input type="password" placeholder="Password" class="login-input">
+
+                                <button type="button" onclick="loginAdmin()" class="login-btn">
+                                    Login as Admin
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
-                <div>
-                    <h3 class="text-white text-sm font-semibold">
-                        Secure Login
-                    </h3>
 
-                    <p class="text-gray-400 text-xs">
-                        Access your dashboard securely
-                    </p>
-                </div>
+
+
 
             </div>
 
         </div>
 
-        <!-- TABS -->
-        <div class="grid grid-cols-3 border-b border-white/10">
-
-            <!-- USER -->
-            <button onclick="switchLoginTab('user')"
-                id="tab-user"
-                class="login-tab active-tab py-3 text-sm font-semibold text-emerald-400 border-b-2 border-emerald-400 transition-all duration-300 hover:bg-white/5">
-                User
-            </button>
-
-            <!-- COMPANY -->
-            <button onclick="switchLoginTab('company')"
-                id="tab-company"
-                class="login-tab py-3 text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-300">
-                Company
-            </button>
-
-            <!-- ADMIN -->
-            <button onclick="switchLoginTab('admin')"
-                id="tab-admin"
-                class="login-tab py-3 text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-300">
-                Admin
-            </button>
-
-        </div>
-
-        <!-- FORM AREA -->
-        <div class="p-4">
-
-            <!-- USER FORM -->
-            <div id="form-user" class="space-y-2.5">
-
-                <input type="text" placeholder="User ID"
-                    class="login-input">
-
-                <input type="password" placeholder="Password"
-                    class="login-input">
-
-                <button type="button" onclick="loginUser()" class="login-btn">
-    Login as User
-</button>
-
-            </div>
-
-            <!-- COMPANY FORM -->
-            <div id="form-company" class="space-y-2.5 hidden">
-
-                <input type="text" placeholder="User Name"
-                    class="login-input">
-
-                <input type="text" placeholder="Company Name"
-                    class="login-input">
-
-                <input type="text" placeholder="User ID"
-                    class="login-input">
-
-                <input type="password" placeholder="Password"
-                    class="login-input">
-
-                <button type="button" onclick="loginCompany()" class="login-btn">
-    Login as Company
-</button>
-
-            </div>
-
-            <!-- ADMIN FORM -->
-            <div id="form-admin" class="space-y-2.5 hidden">
-
-                <input type="text" placeholder="Admin ID"
-                    class="login-input">
-
-                <input type="password" placeholder="Password"
-                    class="login-input">
-
-                <button type="button" onclick="loginAdmin()" class="login-btn">
-    Login as Admin
-</button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-    
-
-       
-
-            </div>
-
-        </div>
-		
         <!-- Category Bar -->
         <div class="bg-[#052C22] px-4 flex items-center relative z-50 h-[36px]">
 
@@ -359,22 +348,23 @@
         </div>
     </nav>
 
-	<!-- BROADCAST BAR -->
+    <!-- BROADCAST BAR -->
     <div class="w-full bg-black text-white overflow-hidden border-y border-gray-800 
             fixed top-[96px] left-0 right-0 z-[998] h-[36px] flex items-center">
 
-		<div class="px-4 bg-green-500 text-white font-bold text-xs h-full flex items-center shrink-0">
-			NEWS
-		</div>
+        <div
+            class="px-4 py-1 mx-2 bg-[#0a7b54] text-white font-bold text-xs rounded-full border-2 border-[#40c988] flex items-center justify-center shrink-0 shadow-sm tracking-wide">
+            News
+        </div>
 
-		<div class="flex-1 overflow-hidden relative h-full flex items-center">
-			<div class="ticker-wrapper w-full">
-				<div id="broadcastText" class="ticker-content text-sm">
-					Loading latest updates...
-				</div>
-			</div>
-		</div>
-	</div>
+        <div class="flex-1 overflow-hidden relative h-full flex items-center">
+            <div class="ticker-wrapper w-full">
+                <div id="broadcastText" class="ticker-content text-sm">
+                    Loading latest updates...
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- HOME PAGE -->
     <div id="home" class="page active relative">
@@ -1130,122 +1120,126 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
 
 
         <!-- Travel & Tours Section -->
-<!-- Travel & Tours Section -->
-<section id="travel-section" class="pt-6">
+        <!-- Travel & Tours Section -->
+        <section id="travel-section" class="pt-6">
 
-<div class="max-w-screen-2xl mx-auto px-4">
+            <div class="max-w-screen-2xl mx-auto px-4">
 
-    <!-- OUTER BOX -->
-    <div class="relative overflow-hidden rounded-[26px] border border-emerald-300/30 
+                <!-- OUTER BOX -->
+                <div class="relative overflow-hidden rounded-[26px] border border-emerald-300/30 
     bg-gradient-to-br from-[#062e22] via-[#0f766e] to-[#10b981] 
     shadow-[0_10px_40px_rgba(16,185,129,0.25)] backdrop-blur-xl p-5">
 
-        <!-- HEADER -->
-        <div class="flex justify-between items-center mb-4">
+                    <!-- HEADER -->
+                    <div class="flex justify-between items-center mb-4">
 
-            <h2 class="text-lg md:text-xl font-semibold text-white flex items-center gap-2">
-                ✈️ <span>Travel & Tours</span>
-            </h2>
-
-            <button class="text-xs px-3 py-1.5 bg-white/90 hover:bg-white text-emerald-700 rounded-full transition hover:scale-105">
-                View All
-            </button>
-
-        </div>
-
-        <!-- GRID (READY FOR ADMIN DATA) -->
-        <div id="travelPackagesGrid"
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-
-            <!-- CARD (SAMPLE - WILL BE REPLACED BY ADMIN DATA) -->
-            <div
-                class="group bg-white/10 border border-white/15 rounded-xl overflow-hidden 
-                shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-
-                <!-- IMAGE -->
-                <div class="h-20 bg-gradient-to-br from-emerald-200/30 to-teal-300/30 
-                flex items-center justify-center text-2xl group-hover:scale-105 transition">
-
-                    🏔️
-
-                </div>
-
-                <!-- CONTENT -->
-                <div class="p-3 space-y-1.5">
-
-                    <!-- TOUR NAME -->
-                    <h3 class="text-sm font-semibold text-white group-hover:text-emerald-200">
-                        Hunza Valley Tour
-                    </h3>
-
-                    <!-- DURATION -->
-                    <p class="text-[11px] text-gray-200">
-                        5 Days / 4 Nights
-                    </p>
-
-                    <!-- PRICE -->
-                    <p class="text-sm font-bold text-emerald-200">
-                        Rs 35,000 / Person
-                    </p>
-
-                    <!-- ACTIONS -->
-                    <div class="flex gap-2 pt-1">
+                        <h2 class="text-lg md:text-xl font-semibold text-white flex items-center gap-2">
+                            ✈️ <span>Travel & Tours</span>
+                        </h2>
 
                         <button
-                            class="flex-1 py-1.5 text-[11px] font-semibold bg-emerald-400 hover:bg-emerald-300 
+                            class="text-xs px-3 py-1.5 bg-white/90 hover:bg-white text-emerald-700 rounded-full transition hover:scale-105">
+                            View All
+                        </button>
+
+                    </div>
+
+                    <!-- GRID (READY FOR ADMIN DATA) -->
+                    <div id="travelPackagesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                        <!-- CARD (SAMPLE - WILL BE REPLACED BY ADMIN DATA) -->
+                        <div class="group bg-white/10 border border-white/15 rounded-xl overflow-hidden 
+                shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+
+                            <!-- IMAGE -->
+                            <div class="h-20 bg-gradient-to-br from-emerald-200/30 to-teal-300/30 
+                flex items-center justify-center text-2xl group-hover:scale-105 transition">
+
+                                🏔️
+
+                            </div>
+
+                            <!-- CONTENT -->
+                            <div class="p-3 space-y-1.5">
+
+                                <!-- TOUR NAME -->
+                                <h3 class="text-sm font-semibold text-white group-hover:text-emerald-200">
+                                    Hunza Valley Tour
+                                </h3>
+
+                                <!-- DURATION -->
+                                <p class="text-[11px] text-gray-200">
+                                    5 Days / 4 Nights
+                                </p>
+
+                                <!-- PRICE -->
+                                <p class="text-sm font-bold text-emerald-200">
+                                    Rs 35,000 / Person
+                                </p>
+
+                                <!-- ACTIONS -->
+                                <div class="flex gap-2 pt-1">
+
+                                    <button class="flex-1 py-1.5 text-[11px] font-semibold bg-emerald-400 hover:bg-emerald-300 
                             text-black rounded-md transition hover:scale-[1.03]">
 
-                            Contact
-                        </button>
+                                        Contact
+                                    </button>
 
-                        <button
-                            class="flex-1 py-1.5 text-[11px] font-semibold bg-white/10 hover:bg-white/20 
+                                    <button class="flex-1 py-1.5 text-[11px] font-semibold bg-white/10 hover:bg-white/20 
                             text-white border border-white/20 rounded-md transition hover:scale-[1.03]">
 
-                            View
-                        </button>
+                                        View
+                                    </button>
 
-                    </div>
+                                </div>
 
-                </div>
+                            </div>
 
-            </div>
+                        </div>
 
-            <!-- CARD 2 -->
-            <div
-                class="group bg-white/10 border border-white/15 rounded-xl overflow-hidden 
+                        <!-- CARD 2 -->
+                        <div class="group bg-white/10 border border-white/15 rounded-xl overflow-hidden 
                 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
 
-                <div class="h-20 bg-gradient-to-br from-emerald-200/30 to-teal-300/30 
+                            <div class="h-20 bg-gradient-to-br from-emerald-200/30 to-teal-300/30 
                 flex items-center justify-center text-2xl group-hover:scale-105 transition">
 
-                    🏜️
+                                🏜️
 
-                </div>
+                            </div>
 
-                <div class="p-3 space-y-1.5">
+                            <div class="p-3 space-y-1.5">
 
-                    <h3 class="text-sm font-semibold text-white group-hover:text-emerald-200">
-                        Skardu Trip
-                    </h3>
+                                <h3 class="text-sm font-semibold text-white group-hover:text-emerald-200">
+                                    Skardu Trip
+                                </h3>
 
-                    <p class="text-[11px] text-gray-200">
-                        7 Days / 6 Nights
-                    </p>
+                                <p class="text-[11px] text-gray-200">
+                                    7 Days / 6 Nights
+                                </p>
 
-                    <p class="text-sm font-bold text-emerald-200">
-                        Rs 45,000 / Person
-                    </p>
+                                <p class="text-sm font-bold text-emerald-200">
+                                    Rs 45,000 / Person
+                                </p>
 
-                    <div class="flex gap-2 pt-1">
+                                <div class="flex gap-2 pt-1">
 
-                        <button class="flex-1 py-1.5 text-[11px] font-semibold bg-emerald-400 hover:bg-emerald-300 text-black rounded-md">
-                            Contact
-                        </button>
+                                    <button
+                                        class="flex-1 py-1.5 text-[11px] font-semibold bg-emerald-400 hover:bg-emerald-300 text-black rounded-md">
+                                        Contact
+                                    </button>
 
-                        <button class="flex-1 py-1.5 text-[11px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-md">
-                            View
-                        </button>
+                                    <button
+                                        class="flex-1 py-1.5 text-[11px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-md">
+                                        View
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
 
                     </div>
 
@@ -1253,13 +1247,7 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
 
             </div>
 
-        </div>
-
-    </div>
-
-</div>
-
-</section>
+        </section>
 
         <!-- Blogs Section -->
         <section id="blogs-section">
@@ -1426,386 +1414,368 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
     </div>
 
     <!-- FOOTER -->
-<footer class="bg-[#1b2230] text-gray-300 pt-16 pb-6 mt-16 border-t border-[#2b3544]">
+    <footer class="bg-[#1b2230] text-gray-300 pt-16 pb-6 mt-16 border-t border-[#2b3544]">
 
-    <div class="max-w-screen-2xl mx-auto px-4">
+        <div class="max-w-screen-2xl mx-auto px-4">
 
-        <!-- TOP -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
+            <!-- TOP -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
 
-            <!-- COLUMN 1 : ABOUT -->
-            <div class="lg:col-span-1">
+                <!-- COLUMN 1 : ABOUT -->
+                <div class="lg:col-span-1">
 
-                <!-- LOGO -->
-                <div class="flex items-center gap-3 mb-5">
+                    <!-- LOGO -->
+                    <div class="flex items-center gap-3 mb-5">
 
-                    <img src="https://orionfxservis.github.io/StopBuyPk/images/logo/stopbuy-logo.png"
-                        alt="StopBuyPk"
-                        class="w-12 h-12 bg-white rounded-xl object-contain p-1">
+                        <img src="https://orionfxservis.github.io/StopBuyPk/images/logo/stopbuy-logo.png"
+                            alt="StopBuyPk" class="w-12 h-12 bg-white rounded-xl object-contain p-1">
 
-                    <div>
+                        <div>
 
-                        <div class="text-2xl font-bold leading-none">
-                            <span class="text-[#8CC63F]">Stop</span><span class="text-[#5B9BD5]">Buy</span>
-                        </div>
+                            <div class="text-2xl font-bold leading-none">
+                                <span class="text-[#8CC63F]">Stop</span><span class="text-[#5B9BD5]">Buy</span>
+                            </div>
 
-                        <div class="text-[11px] text-gray-400 mt-1">
-                            Compare Prices. Save More.
+                            <div class="text-[11px] text-gray-400 mt-1">
+                                Compare Prices. Save More.
+                            </div>
+
                         </div>
 
                     </div>
 
-                </div>
-
-                <!-- DESCRIPTION -->
-                <p class="text-sm text-gray-400 leading-relaxed mb-5">
-                    Pakistan’s trusted AI-powered price comparison platform helping users discover best prices, market trends, offers and smart shopping insights.
-                </p>
-
-                <!-- SOCIAL -->
-                <div class="flex gap-3">
-
-                    <a href="#"
-                        class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition-all">
-
-                        <i class="fab fa-facebook-f text-sm text-white"></i>
-
-                    </a>
-
-                    <a href="#"
-                        class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition-all">
-
-                        <i class="fab fa-twitter text-sm text-white"></i>
-
-                    </a>
-
-                    <a href="#"
-                        class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition-all">
-
-                        <i class="fab fa-instagram text-sm text-white"></i>
-
-                    </a>
-
-                    <a href="#"
-                        class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition-all">
-
-                        <i class="fab fa-youtube text-sm text-white"></i>
-
-                    </a>
-
-                    <a href="#"
-                        class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition-all">
-
-                        <i class="fab fa-tiktok text-sm text-white"></i>
-
-                    </a>
-
-                </div>
-
-            </div>
-
-            <!-- COLUMN 2 : QUICK LINKS -->
-            <div>
-
-                <h3 class="text-white font-semibold text-lg mb-5">
-                    Quick Links
-                </h3>
-
-                <ul class="space-y-3 text-sm">
-
-                    <li>
-                        <a href="#"
-                            class="hover:text-emerald-400 transition-colors">
-
-                            AI Powered Market
-
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#"
-                            class="hover:text-emerald-400 transition-colors">
-
-                            Price Comparison
-
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#"
-                            class="hover:text-emerald-400 transition-colors">
-
-                            Compare Prices by Category
-
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#"
-                            class="hover:text-emerald-400 transition-colors">
-
-                            Travel & Tours
-
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#"
-                            class="hover:text-emerald-400 transition-colors">
-
-                            Blogs
-
-                        </a>
-                    </li>
-
-                </ul>
-
-            </div>
-
-            <!-- COLUMN 3 : CATEGORIES -->
-<div>
-
-    <h3 class="text-white font-semibold text-lg mb-5">
-        Categories
-    </h3>
-
-    <!-- TWO COLUMN CATEGORY LIST -->
-    <div class="grid grid-cols-2 gap-x-8">
-
-        <!-- LEFT -->
-        <ul class="space-y-3 text-sm">
-
-            <li>
-                <a href="#"
-                    class="hover:text-emerald-400 transition-colors">
-
-                    Foods
-
-                </a>
-            </li>
-
-            <li>
-                <a href="#"
-                    class="hover:text-emerald-400 transition-colors">
-
-                    Groceries
-
-                </a>
-            </li>
-
-            <li>
-                <a href="#"
-                    class="hover:text-emerald-400 transition-colors">
-
-                    Electronics
-
-                </a>
-            </li>
-
-            <li>
-                <a href="#"
-                    class="hover:text-emerald-400 transition-colors">
-
-                    Mobiles
-
-                </a>
-            </li>
-
-            <li>
-                <a href="#"
-                    class="hover:text-emerald-400 transition-colors">
-
-                    Laptops
-
-                </a>
-            </li>
-
-        </ul>
-
-        <!-- RIGHT -->
-        <ul class="space-y-3 text-sm">
-
-            <li>
-                <a href="#"
-                    class="hover:text-emerald-400 transition-colors">
-
-                    Property
-
-                </a>
-            </li>
-
-            <li>
-                <a href="#"
-                    class="hover:text-emerald-400 transition-colors">
-
-                    Personal Care
-
-                </a>
-            </li>
-
-            <li>
-                <a href="#"
-                    class="hover:text-emerald-400 transition-colors">
-
-                    Fashion
-
-                </a>
-            </li>
-
-            <li>
-                <a href="#"
-                    class="hover:text-emerald-400 transition-colors">
-
-                    Kids
-
-                </a>
-            </li>
-
-        </ul>
-
-    </div>
-
-</div>
-
-            <!-- COLUMN 4 : COMPANY -->
-            <div>
-
-                <h3 class="text-white font-semibold text-lg mb-5">
-                    Company
-                </h3>
-
-                <ul class="space-y-3 text-sm">
-
-                    <li>
-                        <a href="pages/about.html"
-                            class="hover:text-emerald-400 transition-colors">
-
-                            About Us
-
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#"
-                            class="hover:text-emerald-400 transition-colors">
-
-                            Careers
-
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#"
-                            class="hover:text-emerald-400 transition-colors">
-
-                            Blogs
-
-                        </a>
-                    </li>
-
-                </ul>
-
-            </div>
-
-            <!-- COLUMN 5 : CONTACT -->
-            <div>
-
-                <h3 class="text-white font-semibold text-lg mb-5">
-                    Contact Us
-                </h3>
-
-                <!-- NEWSLETTER -->
-                <div class="mb-6">
-
-                    <p class="text-sm text-gray-400 mb-3">
-                        Get latest deals & price alerts
+                    <!-- DESCRIPTION -->
+                    <p class="text-sm text-gray-400 leading-relaxed mb-5">
+                        Pakistan’s trusted AI-powered price comparison platform helping users discover best prices,
+                        market trends, offers and smart shopping insights.
                     </p>
 
-                    <div class="flex bg-[#2b3544] rounded-xl overflow-hidden">
+                    <!-- SOCIAL -->
+                    <div class="flex gap-3">
 
-                        <input type="email"
-                            placeholder="Enter email"
-                            class="flex-1 px-4 py-3 text-sm bg-transparent text-white outline-none placeholder:text-gray-500">
+                        <a href="#"
+                            class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition-all">
 
-                        <button onclick="subscribeUser()"
-                            class="bg-emerald-600 hover:bg-emerald-700 px-4 text-sm font-semibold transition-colors">
+                            <i class="fab fa-facebook-f text-sm text-white"></i>
 
-                            Subscribe
+                        </a>
 
-                        </button>
+                        <a href="#"
+                            class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition-all">
+
+                            <i class="fab fa-twitter text-sm text-white"></i>
+
+                        </a>
+
+                        <a href="#"
+                            class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition-all">
+
+                            <i class="fab fa-instagram text-sm text-white"></i>
+
+                        </a>
+
+                        <a href="#"
+                            class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition-all">
+
+                            <i class="fab fa-youtube text-sm text-white"></i>
+
+                        </a>
+
+                        <a href="#"
+                            class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition-all">
+
+                            <i class="fab fa-tiktok text-sm text-white"></i>
+
+                        </a>
 
                     </div>
 
                 </div>
 
-                <!-- CONTACT INFO -->
-                <ul class="space-y-4 text-sm text-gray-400">
+                <!-- COLUMN 2 : QUICK LINKS -->
+                <div>
 
-                    <li class="flex items-start gap-3">
+                    <h3 class="text-white font-semibold text-lg mb-5">
+                        Quick Links
+                    </h3>
 
-                        <i class="fas fa-map-marker-alt text-emerald-500 mt-1"></i>
+                    <ul class="space-y-3 text-sm">
 
-                        <span>
-                            Office #42, Block 6, P.E.C.H.S, Karachi, Pakistan
-                        </span>
+                        <li>
+                            <a href="#" class="hover:text-emerald-400 transition-colors">
 
-                    </li>
+                                AI Powered Market
 
-                    <li class="flex items-center gap-3">
+                            </a>
+                        </li>
 
-                        <i class="fas fa-phone-alt text-emerald-500"></i>
+                        <li>
+                            <a href="#" class="hover:text-emerald-400 transition-colors">
 
-                        <span>
-                            +92 300 1234567
-                        </span>
+                                Price Comparison
 
-                    </li>
+                            </a>
+                        </li>
 
-                    <li class="flex items-center gap-3">
+                        <li>
+                            <a href="#" class="hover:text-emerald-400 transition-colors">
 
-                        <i class="fas fa-envelope text-emerald-500"></i>
+                                Compare Prices by Category
 
-                        <span>
-                            support@stopbuypk.com
-                        </span>
+                            </a>
+                        </li>
 
-                    </li>
+                        <li>
+                            <a href="#" class="hover:text-emerald-400 transition-colors">
 
-                </ul>
+                                Travel & Tours
+
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="hover:text-emerald-400 transition-colors">
+
+                                Blogs
+
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <!-- COLUMN 3 : CATEGORIES -->
+                <div>
+
+                    <h3 class="text-white font-semibold text-lg mb-5">
+                        Categories
+                    </h3>
+
+                    <!-- TWO COLUMN CATEGORY LIST -->
+                    <div class="grid grid-cols-2 gap-x-8">
+
+                        <!-- LEFT -->
+                        <ul class="space-y-3 text-sm">
+
+                            <li>
+                                <a href="#" class="hover:text-emerald-400 transition-colors">
+
+                                    Foods
+
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" class="hover:text-emerald-400 transition-colors">
+
+                                    Groceries
+
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" class="hover:text-emerald-400 transition-colors">
+
+                                    Electronics
+
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" class="hover:text-emerald-400 transition-colors">
+
+                                    Mobiles
+
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" class="hover:text-emerald-400 transition-colors">
+
+                                    Laptops
+
+                                </a>
+                            </li>
+
+                        </ul>
+
+                        <!-- RIGHT -->
+                        <ul class="space-y-3 text-sm">
+
+                            <li>
+                                <a href="#" class="hover:text-emerald-400 transition-colors">
+
+                                    Property
+
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" class="hover:text-emerald-400 transition-colors">
+
+                                    Personal Care
+
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" class="hover:text-emerald-400 transition-colors">
+
+                                    Fashion
+
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" class="hover:text-emerald-400 transition-colors">
+
+                                    Kids
+
+                                </a>
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+                <!-- COLUMN 4 : COMPANY -->
+                <div>
+
+                    <h3 class="text-white font-semibold text-lg mb-5">
+                        Company
+                    </h3>
+
+                    <ul class="space-y-3 text-sm">
+
+                        <li>
+                            <a href="pages/about.html" class="hover:text-emerald-400 transition-colors">
+
+                                About Us
+
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="hover:text-emerald-400 transition-colors">
+
+                                Careers
+
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="hover:text-emerald-400 transition-colors">
+
+                                Blogs
+
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <!-- COLUMN 5 : CONTACT -->
+                <div>
+
+                    <h3 class="text-white font-semibold text-lg mb-5">
+                        Contact Us
+                    </h3>
+
+                    <!-- NEWSLETTER -->
+                    <div class="mb-6">
+
+                        <p class="text-sm text-gray-400 mb-3">
+                            Get latest deals & price alerts
+                        </p>
+
+                        <div class="flex bg-[#2b3544] rounded-xl overflow-hidden">
+
+                            <input type="email" placeholder="Enter email"
+                                class="flex-1 px-4 py-3 text-sm bg-transparent text-white outline-none placeholder:text-gray-500">
+
+                            <button onclick="subscribeUser()"
+                                class="bg-emerald-600 hover:bg-emerald-700 px-4 text-sm font-semibold transition-colors">
+
+                                Subscribe
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <!-- CONTACT INFO -->
+                    <ul class="space-y-4 text-sm text-gray-400">
+
+                        <li class="flex items-start gap-3">
+
+                            <i class="fas fa-map-marker-alt text-emerald-500 mt-1"></i>
+
+                            <span>
+                                Office #42, Block 6, P.E.C.H.S, Karachi, Pakistan
+                            </span>
+
+                        </li>
+
+                        <li class="flex items-center gap-3">
+
+                            <i class="fas fa-phone-alt text-emerald-500"></i>
+
+                            <span>
+                                +92 300 1234567
+                            </span>
+
+                        </li>
+
+                        <li class="flex items-center gap-3">
+
+                            <i class="fas fa-envelope text-emerald-500"></i>
+
+                            <span>
+                                support@stopbuypk.com
+                            </span>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <!-- COPYRIGHT -->
+            <div
+                class="border-t border-[#2b3544] pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+
+                <div>
+                    © 2026 StopBuyPk. All rights reserved. Pakistan’s trusted smart price comparison platform.
+                </div>
+
+                <div class="flex gap-5">
+
+                    <a href="#" class="hover:text-white transition-colors">
+                        Terms
+                    </a>
+
+                    <a href="#" class="hover:text-white transition-colors">
+                        Privacy
+                    </a>
+
+                    <a href="#" class="hover:text-white transition-colors">
+                        Cookies
+                    </a>
+
+                </div>
 
             </div>
 
         </div>
 
-        <!-- COPYRIGHT -->
-        <div
-            class="border-t border-[#2b3544] pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
-
-            <div>
-                © 2026 StopBuyPk. All rights reserved. Pakistan’s trusted smart price comparison platform.
-            </div>
-
-            <div class="flex gap-5">
-
-                <a href="#" class="hover:text-white transition-colors">
-                    Terms
-                </a>
-
-                <a href="#" class="hover:text-white transition-colors">
-                    Privacy
-                </a>
-
-                <a href="#" class="hover:text-white transition-colors">
-                    Cookies
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</footer>
+    </footer>
 
     <!-- Floating Action Buttons -->
     <div class="fixed bottom-10 right-6 z-[99999] flex flex-row items-center gap-3">
@@ -1824,192 +1794,154 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
 
     <!-- Load Data Service FIRST -->
     <script src="js/data-service.js"></script>
-	<script src="data-service.js"></script>
+    <script src="data-service.js"></script>
 
     <script>
 
-    function switchLoginTab(tab){
+        function switchLoginTab(tab) {
 
-    // Tabs
-    document.querySelectorAll('.login-tab').forEach(btn=>{
-        btn.classList.remove('active-tab','border-b-2','border-emerald-400','text-emerald-400');
-        btn.classList.add('text-gray-400');
-    });
+            // Tabs
+            document.querySelectorAll('.login-tab').forEach(btn => {
+                btn.classList.remove('active-tab', 'border-b-2', 'border-emerald-400', 'text-emerald-400');
+                btn.classList.add('text-gray-400');
+            });
 
-    document.getElementById('tab-'+tab).classList.add(
-        'active-tab',
-        'border-b-2',
-        'border-emerald-400',
-        'text-emerald-400'
-    );
+            document.getElementById('tab-' + tab).classList.add(
+                'active-tab',
+                'border-b-2',
+                'border-emerald-400',
+                'text-emerald-400'
+            );
 
-    // Forms
-    document.getElementById('form-user').classList.add('hidden');
-    document.getElementById('form-company').classList.add('hidden');
-    document.getElementById('form-admin').classList.add('hidden');
+            // Forms
+            document.getElementById('form-user').classList.add('hidden');
+            document.getElementById('form-company').classList.add('hidden');
+            document.getElementById('form-admin').classList.add('hidden');
 
-    document.getElementById('form-'+tab).classList.remove('hidden');
-}
-
-function loginUser() {
-
-    const inputs = document.querySelectorAll("#form-user .login-input");
-
-    const userId = inputs[0].value;
-    const password = inputs[1].value;
-
-    if (!userId || !password) {
-        alert("Fill all fields");
-        return;
-    }
-
-    console.log("User Login:", userId);
-}
-
-function loginCompany() {
-
-    const inputs = document.querySelectorAll("#form-company .login-input");
-
-    const userName = inputs[0].value;
-    const company = inputs[1].value;
-    const userId = inputs[2].value;
-    const password = inputs[3].value;
-
-    if (!userName || !company || !userId || !password) {
-        alert("Fill all fields");
-        return;
-    }
-
-    console.log("Company Login:", { userName, company, userId });
-}
-
-function loginAdmin() {
-
-    const inputs = document.querySelectorAll("#form-admin .login-input");
-
-    const adminId = inputs[0].value;
-    const password = inputs[1].value;
-
-    if (!adminId || !password) {
-        alert("Fill all fields");
-        return;
-    }
-
-    console.log("Admin Login:", adminId);
-
-    // Example redirect (add your auth later)
-    alert("Admin login success (demo)");
-    window.location.href = "pages/admin.html";
-}
-	
-	window.addEventListener("load", loadBroadcast);
-
-async function loadBroadcast() {
-
-    const bar = document.getElementById("broadcastBar");
-
-    try {
-
-        const res = await fetch(
-            `${DataService.API_URL}?action=getBroadcast&t=${Date.now()}`
-        );
-
-        const data = await res.json();
-
-        const text = data.message || "No updates available";
-
-        bar.innerText = text;
-
-        if (text !== "No updates available") {
-            bar.style.animation = "scrollText 15s linear infinite";
+            document.getElementById('form-' + tab).classList.remove('hidden');
         }
 
-    } catch (err) {
-        bar.innerText = "Failed to load updates";
-    }
-}
+        async function loginUser() {
+            const inputs = document.querySelectorAll("#form-user .login-input");
+            const userId = inputs[0].value;
+            const password = inputs[1].value;
 
-async function loadBroadcast() {
+            if (!userId || !password) {
+                alert("Fill all fields");
+                return;
+            }
 
-    const bar = document.getElementById("broadcastBar");
+            const btn = document.querySelector("#form-user .login-btn");
+            const origText = btn.textContent;
+            btn.textContent = "Logging in...";
 
-    const text = await DataService.getBroadcast("all");
+            const result = await DataService.login({ role: "user", userId, password });
 
-    bar.innerText = text;
-}
-	
+            btn.textContent = origText;
+
+            if (result.success) {
+                localStorage.setItem("user", JSON.stringify(result.user));
+                window.location.href = "index.html";
+            } else {
+                alert(result.message || "Login Failed");
+            }
+        }
+
+        async function loginCompany() {
+            const inputs = document.querySelectorAll("#form-company .login-input");
+            const userName = inputs[0].value;
+            const company = inputs[1].value;
+            const userId = inputs[2].value;
+            const password = inputs[3].value;
+
+            if (!userName || !company || !userId || !password) {
+                alert("Fill all fields");
+                return;
+            }
+
+            const btn = document.querySelector("#form-company .login-btn");
+            const origText = btn.textContent;
+            btn.textContent = "Logging in...";
+
+            const result = await DataService.login({ role: "company", username: userName, companyName: company, userId, password });
+
+            btn.textContent = origText;
+
+            if (result.success) {
+                localStorage.setItem("user", JSON.stringify(result.user));
+                window.location.href = "pages/admin.html";
+            } else {
+                alert(result.message || "Login Failed");
+            }
+        }
+
+        async function loginAdmin() {
+            const inputs = document.querySelectorAll("#form-admin .login-input");
+            const adminId = inputs[0].value;
+            const password = inputs[1].value;
+
+            if (!adminId || !password) {
+                alert("Fill all fields");
+                return;
+            }
+
+            const btn = document.querySelector("#form-admin .login-btn");
+            const origText = btn.textContent;
+            btn.textContent = "Logging in...";
+
+            const result = await DataService.login({ role: "admin", userId: adminId, password });
+
+            btn.textContent = origText;
+
+            if (result.success) {
+                localStorage.setItem("user", JSON.stringify(result.user));
+                window.location.href = "pages/admin.html";
+            } else {
+                alert(result.message || "Login Failed");
+            }
+        }
+
+        window.addEventListener("load", loadBroadcastMessage);
+
         // ================================
         // LOAD BROADCAST MESSAGE
         // ================================
 
         async function loadBroadcastMessage() {
+            try {
+                // Fetch broadcasts directly from DataService instead of hitting the raw endpoint
+                const broadcasts = await DataService.getBroadcasts();
+                const broadcastEl = document.getElementById("broadcastText");
+                
+                if (broadcastEl) {
+                    // Filter for active broadcasts that are meant for "Main Page Only" or "All Users"
+                    const activeBroadcasts = broadcasts.filter(b => 
+                        b.status === "active" && (b.target === "main" || b.target === "all")
+                    );
 
-    try {
-
-        const response = await fetch(API_URL + "?action=getBroadcast");
-
-        const data = await response.json();
-
-        const broadcastEl = document.getElementById("broadcastText");
-
-        if (broadcastEl) {
-
-            // Set broadcast message
-            broadcastEl.innerHTML =
-                "🔥 " + (data.message || "No latest updates available");
-
-            // Restart ticker animation
-            broadcastEl.style.animation = "none";
-            broadcastEl.offsetHeight;
-            broadcastEl.style.animation = null;
-
+                    if (activeBroadcasts.length > 0) {
+                        // Combine messages if there are multiple active broadcasts
+                        const combinedMessage = activeBroadcasts.map(b => "🔥 " + b.message).join(" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ");
+                        broadcastEl.innerHTML = combinedMessage;
+                        
+                        // Restart ticker animation
+                        broadcastEl.style.animation = "none";
+                        broadcastEl.offsetHeight;
+                        broadcastEl.style.animation = "tickerScroll 20s linear infinite";
+                    } else {
+                        broadcastEl.innerHTML = "No updates available";
+                        broadcastEl.style.animation = "none";
+                    }
+                }
+            } catch (error) {
+                console.error("Broadcast Error:", error);
+                const broadcastEl = document.getElementById("broadcastText");
+                if (broadcastEl) {
+                    broadcastEl.innerHTML = "Failed to load updates";
+                    broadcastEl.style.animation = "none";
+                }
+            }
         }
-
-    } catch (error) {
-
-        console.error("Broadcast Error:", error);
-
-    }
-
-}
-
-async function loadBroadcastMessage() {
-
-    try {
-
-        const response = await fetch(API_URL + "?action=getBroadcast");
-
-        const data = await response.json();
-
-        console.log("Broadcast API Response:", data);
-
-        const broadcastEl = document.getElementById("broadcastText");
-
-        if (broadcastEl) {
-
-            broadcastEl.innerHTML =
-                "🔥 " + (data.message || "No latest updates available");
-
-            // Restart animation
-            broadcastEl.style.animation = "none";
-            broadcastEl.offsetHeight;
-            broadcastEl.style.animation = "";
-
-        }
-
-    } catch (error) {
-
-        console.error("Broadcast Error:", error);
-
-    }
-
-}
-
-// Load broadcast
-loadBroadcastMessage();
-
-// Load on page open
-loadBroadcastMessage();
 
         // ================================
         // LIVE LOCATION DETECTION
@@ -2182,41 +2114,41 @@ loadBroadcastMessage();
             autoScrollSideBanners();
         });
 
-const goTopBtn =
-        document.getElementById("goTopBtn");
+        const goTopBtn =
+            document.getElementById("goTopBtn");
 
-    window.addEventListener("scroll", () => {
+        window.addEventListener("scroll", () => {
 
-        if (window.scrollY > 300) {
+            if (window.scrollY > 300) {
 
-            goTopBtn.classList.remove(
-                "opacity-0",
-                "invisible",
-                "translate-y-4"
-            );
+                goTopBtn.classList.remove(
+                    "opacity-0",
+                    "invisible",
+                    "translate-y-4"
+                );
 
-            goTopBtn.classList.add(
-                "opacity-100",
-                "visible",
-                "translate-y-0"
-            );
+                goTopBtn.classList.add(
+                    "opacity-100",
+                    "visible",
+                    "translate-y-0"
+                );
 
-        } else {
+            } else {
 
-            goTopBtn.classList.add(
-                "opacity-0",
-                "invisible",
-                "translate-y-4"
-            );
+                goTopBtn.classList.add(
+                    "opacity-0",
+                    "invisible",
+                    "translate-y-4"
+                );
 
-            goTopBtn.classList.remove(
-                "opacity-100",
-                "visible",
-                "translate-y-0"
-            );
-        }
+                goTopBtn.classList.remove(
+                    "opacity-100",
+                    "visible",
+                    "translate-y-0"
+                );
+            }
 
-    });
+        });
     </script>
 </body>
 

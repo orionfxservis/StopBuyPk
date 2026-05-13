@@ -584,18 +584,113 @@ async function saveUsers() {
 
 function renderUsers() {
     if (!userList) return;
-    userList.innerHTML = users.map((u, index) => `
+    userList.innerHTML = users.map((u, index) => {
+        const fallbackAvatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(u.fullName || 'User') + '&background=e2e8f0&color=475569';
+        return `
         <tr>
-            <td>${u.username}</td>
-            <td>**********</td>
-            <td><span class="badge" style="background:#3498db; color:white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">${u.role}</span></td>
-            <td><span class="badge" style="background:${u.status === 'active' ? '#2ecc71' : '#f1c40f'}; color:white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">${u.status}</span></td>
+            <td>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="${u.pic || fallbackAvatar}" alt="Pic" class="avatar" onerror="this.src='${fallbackAvatar}'">
+                    <div>
+                        <span class="line-1">${u.fullName || 'N/A'}</span>
+                        ${u.role === 'company' && u.companyName ? `<span class="line-2">${u.companyName}</span>` : ''}
+                    </div>
+                </div>
+            </td>
+            <td>
+                <span class="line-1">${u.userId || 'N/A'}</span>
+                <span class="line-2">pwd: **********</span>
+            </td>
+            <td>
+                <span class="line-1 badge" style="background:#f1f5f9; color:#475569; margin-bottom:4px;">${u.role.toUpperCase()}</span><br>
+                <span class="line-2 badge" style="background:${u.status === 'active' ? '#dcfce7' : '#fef08a'}; color:${u.status === 'active' ? '#166534' : '#854d0e'};">${u.status}</span>
+            </td>
             <td>
                 <button class="edit-btn" onclick="editUser(${index})"><i class="fa-solid fa-pen"></i></button>
                 <button class="delete-btn" onclick="deleteUser(${index})"><i class="fa-solid fa-trash"></i></button>
             </td>
         </tr>
-    `).join('');
+    `}).join('');
+}
+
+
+window.toggleCompanyField = function() {
+    const role = document.getElementById('userRole').value;
+    const companyGroup = document.getElementById('companyNameGroup');
+    if (role === 'company') {
+        companyGroup.style.display = 'block';
+    } else {
+        companyGroup.style.display = 'none';
+        document.getElementById('companyName').value = '';
+    }
+}
+
+if (userForm) {
+    userForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const newUser = {
+            id: userEditIndex === -1 ? Date.now() : users[userEditIndex].id,
+            pic: document.getElementById('userPic').value,
+            fullName: document.getElementById('userName').value, // 'userName' input maps to fullName
+            userId: document.getElementById('userId').value,
+            password: document.getElementById('userPassword').value,
+            role: document.getElementById('userRole').value,
+            companyName: document.getElementById('companyName').value,
+            status: document.getElementById('userStatus').value
+        };
+
+        if (userEditIndex === -1) {
+            users.push(newUser);
+        } else {
+            users[userEditIndex] = newUser;
+            cancelUserEdit();
+        }
+
+        await saveUsers();
+        if (userEditIndex === -1) {
+            userForm.reset();
+            toggleCompanyField();
+        }
+        alert('User saved successfully!');
+    });
+}
+
+window.editUser = function(index) {
+    userEditIndex = index;
+    const u = users[index];
+
+    if (userFormTitle) userFormTitle.textContent = "Edit User";
+    
+    document.getElementById('userPic').value = u.pic || '';
+    document.getElementById('userName').value = u.fullName || u.username || '';
+    document.getElementById('userId').value = u.userId || '';
+    document.getElementById('userPassword').value = u.password || '';
+    document.getElementById('userRole').value = u.role || 'user';
+    document.getElementById('companyName').value = u.companyName || '';
+    document.getElementById('userStatus').value = u.status || 'active';
+    
+    toggleCompanyField();
+    
+    if (btnCancelUser) btnCancelUser.style.display = 'inline-block';
+    if (btnSaveUser) btnSaveUser.textContent = 'Update User';
+    window.scrollTo({ top: userForm.offsetTop - 100, behavior: 'smooth' });
+}
+
+window.cancelUserEdit = function() {
+    userEditIndex = -1;
+    if (userForm) userForm.reset();
+    toggleCompanyField();
+    if (userFormTitle) userFormTitle.textContent = "Add New User";
+    if (btnCancelUser) btnCancelUser.style.display = 'none';
+    if (btnSaveUser) btnSaveUser.textContent = 'Save User';
+}
+
+async function deleteUser(index) {
+    if (confirm('Delete this user?')) {
+        users.splice(index, 1);
+        await saveUsers();
+    }
 }
 
 
@@ -1470,9 +1565,9 @@ function renderBroadcasts() {
     if (broadcastTextTicker) {
         const activeBroadcasts = broadcasts.filter(b => b.status === 'active' && (!b.target || b.target === 'all'));
         if (activeBroadcasts.length > 0) {
-            broadcastTextTicker.innerHTML = activeBroadcasts.map(b => b.message).join('  &nbsp;|&nbsp;  ');
+            broadcastTextTicker.innerHTML = activeBroadcasts.map(b => "🔥 " + b.message).join('  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  ');
         } else {
-            broadcastTextTicker.innerHTML = 'Welcome to Qeemat Point Admin! &nbsp;|&nbsp; System Running Smoothly';
+            broadcastTextTicker.innerHTML = '🔥 Welcome to Qeemat Point Admin!  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  🔥 System Running Smoothly';
         }
     }
 }
@@ -1571,66 +1666,4 @@ if (typeof renderAds !== 'function') {
 if (typeof renderDailyPrices !== 'function') {
     window.renderDailyPrices = function () { console.log('renderDailyPrices not implemented yet'); };
 }
-
-let users = [];
-
-async function loadUsers() {
-
-    users = await fetchUsers();
-
-    renderUsers();
-
-}
-
-function renderUsers() {
-
-    const userList = document.getElementById("userList");
-
-    userList.innerHTML = "";
-
-    users.forEach((user, index) => {
-
-        userList.innerHTML += `
-
-        <tr>
-            <td>${user.username}</td>
-            <td>${user.password}</td>
-            <td>${user.role}</td>
-            <td>${user.status}</td>
-
-            <td>
-                <button onclick="deleteUser(${index})">
-                    Delete
-                </button>
-            </td>
-        </tr>
-
-        `;
-
-    });
-
-}
-
-document.getElementById("userForm")
-.addEventListener("submit", async function(e) {
-
-    e.preventDefault();
-
-    const newUser = {
-
-        username: document.getElementById("userName").value,
-        password: document.getElementById("userPassword").value,
-        role: document.getElementById("userRole").value,
-        status: document.getElementById("userStatus").value
-
-    };
-
-    users.push(newUser);
-
-    await saveUsers(users);
-
-    renderUsers();
-
-    this.reset();
-
-});
+
