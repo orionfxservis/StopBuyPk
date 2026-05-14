@@ -10,9 +10,16 @@ const DataService = {
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify({ action: "login", ...data })
             });
-            return await res.json();
+            const result = await res.json();
+            
+            if (result.success) {
+                return result;
+            } else {
+                console.warn("Backend rejected login, checking local fallback");
+                throw new Error("Backend authentication failed");
+            }
         } catch (err) {
-            console.warn("Backend unavailable, falling back to LocalStorage authentication", err);
+            console.warn("Backend unavailable or failed auth, falling back to LocalStorage authentication", err);
             
             // Fallback: Check local storage 'admin_users'
             const users = JSON.parse(localStorage.getItem("admin_users")) || [];

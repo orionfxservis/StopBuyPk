@@ -617,11 +617,17 @@ function renderUsers() {
 window.toggleCompanyField = function() {
     const role = document.getElementById('userRole').value;
     const companyGroup = document.getElementById('companyNameGroup');
+    const companyInput = document.getElementById('companyName');
+    
     if (role === 'company') {
-        companyGroup.style.display = 'block';
+        companyGroup.style.opacity = '1';
+        companyGroup.style.pointerEvents = 'auto';
+        companyInput.disabled = false;
     } else {
-        companyGroup.style.display = 'none';
-        document.getElementById('companyName').value = '';
+        companyGroup.style.opacity = '0.4';
+        companyGroup.style.pointerEvents = 'none';
+        companyInput.disabled = true;
+        companyInput.value = '';
     }
 }
 

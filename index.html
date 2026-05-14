@@ -473,49 +473,147 @@
                         </div>
                     </div>
 
-                    <!-- LIVE PRICE UPDATE SECTION -->
+                    <!-- LIVE PRICE UPDATE SECTION WITH GROCERY BASKET -->
                     <section class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-                        <!-- Petrol Box -->
-                        <div
-                            class="sm:col-start-3 bg-white rounded-3xl p-4 flex gap-x-3 items-center modern-shadow border border-orange-50 cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-orange-200">
-                            <div
-                                class="w-10 h-10 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-gas-pump text-lg"></i>
-                            </div>
-                            <div>
-                                <div class="font-semibold text-gray-800 text-sm">Petrol</div>
-                                <div id="petrolPrice" class="text-lg font-bold text-orange-600 leading-tight">Rs. 414.78
-                                    <span class="text-[10px] font-medium text-orange-500">/L</span>
+                        
+                        <!-- Left Side: Grocery Basket & Nearby (Spans 2 columns) -->
+                        <div class="sm:col-span-2">
+                            <div class="flex flex-col gap-3 scale-[0.75] origin-top-left w-[133%]">
+                                
+                                <!-- ROW 1: Grocery Basket + Nearby -->
+                                <div class="grid grid-cols-1 lg:grid-cols-12 gap-3">
+                                    <!-- Grocery Basket -->
+                                    <div class="lg:col-span-7 bg-white rounded-2xl p-4 modern-shadow border border-emerald-100">
+                                        
+                                        <div class="flex justify-between items-center mb-3">
+                                            <span class="font-serif tracking-wide text-lg font-bold text-[#0A3D2A]"
+                                                style="font-family: Georgia, 'Times New Roman', serif;">
+                                                My Grocery Basket Comparison
+                                            </span>
+                                
+                                            <button onclick="showPage('groceries')"
+                                                class="text-[11px] px-3 py-1 bg-emerald-700 text-white rounded-xl">
+                                                Manage Basket
+                                            </button>
+                                        </div>
+                                
+                                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                            <div class="border border-emerald-100 rounded-xl p-2.5 bg-emerald-50">
+                                                <div class="font-semibold text-xs">Imtiaz</div>
+                                                <div class="font-bold text-lg text-emerald-700">Rs. 5,200</div>
+                                            </div>
+                                            <div class="border border-emerald-100 rounded-xl p-2.5">
+                                                <div class="font-semibold text-xs">Chase Up</div>
+                                                <div class="font-bold text-lg">Rs. 4,750</div>
+                                            </div>
+                                            <div class="border border-emerald-100 rounded-xl p-2.5">
+                                                <div class="font-semibold text-xs">Carrefour</div>
+                                                <div class="font-bold text-lg">Rs. 5,400</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                    <!-- Nearby Deals -->
+                                    <div class="lg:col-span-5 bg-white rounded-2xl p-4 modern-shadow border border-emerald-100">
+                                        <span class="font-serif tracking-wide text-lg font-bold text-[#0A3D2A]"
+                                            style="font-family: Georgia, 'Times New Roman', serif;">
+                                            Nearby-First Deals
+                                        </span>
+                                        <div class="mt-2 space-y-2">
+                                            <div class="flex justify-between border border-emerald-100 px-3 py-2 rounded-xl">
+                                                <div class="text-sm">Chase Up - Clifton</div>
+                                                <div class="font-bold text-emerald-700 text-sm">Rs. 4,750</div>
+                                            </div>
+                                            <div class="flex justify-between border border-emerald-100 px-3 py-2 rounded-xl">
+                                                <div class="text-sm">Imtiaz - Tariq Road</div>
+                                                <div class="font-bold text-sm">Rs. 5,200</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <!-- ROW 2: Today's Cheapest Picks + Price Drop Alerts -->
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                                    <!-- Today's Cheapest Picks -->
+                                    <div class="bg-white rounded-2xl p-4 modern-shadow border border-emerald-100">
+                                        <span class="font-serif tracking-wide text-lg font-bold text-[#0A3D2A]"
+                                            style="font-family: Georgia, 'Times New Roman', serif;">Today's Cheapest Picks</span>
+                                        <div class="mt-4 space-y-3 text-sm">
+                                            <div class="flex justify-between items-center">
+                                                <div class="text-gray-700">Sunflower Oil 1L</div>
+                                                <div class="font-bold text-gray-900">Rs. 389 <span class="text-emerald-600 font-bold text-xs ml-1">↓6%</span></div>
+                                            </div>
+                                            <div class="flex justify-between items-center">
+                                                <div class="text-gray-700">Tide 2kg</div>
+                                                <div class="font-bold text-gray-900">Rs. 499 <span class="text-emerald-600 font-bold text-xs ml-1">↓4%</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <!-- Price Drop Alerts -->
+                                    <div class="bg-white rounded-2xl p-4 modern-shadow border border-emerald-100">
+                                        <span class="font-serif tracking-wide text-lg font-bold text-[#0A3D2A]"
+                                            style="font-family: Georgia, 'Times New Roman', serif;">Price Drop Alerts</span>
+                                        <div class="mt-4 space-y-3 text-sm">
+                                            <div class="flex justify-between items-center">
+                                                <div class="text-gray-700">Zong 4G Device</div>
+                                                <div class="text-emerald-600 font-bold text-xs ml-1">↓9%</div>
+                                            </div>
+                                            <div class="flex justify-between items-center">
+                                                <div class="text-gray-700">Canon Printer</div>
+                                                <div class="text-emerald-600 font-bold text-xs ml-1">↓11%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
-                        <!-- Diesel Box -->
-                        <div
-                            class="sm:col-start-3 bg-white rounded-3xl p-4 flex gap-x-3 items-center modern-shadow border border-blue-50 cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-blue-200">
+                        <!-- Right Side: Live Price Update Boxes -->
+                        <div class="sm:col-start-3 flex flex-col gap-6">
+                            <!-- Petrol Box -->
                             <div
-                                class="w-10 h-10 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-truck-monster text-lg"></i>
-                            </div>
-                            <div>
-                                <div class="font-semibold text-gray-800 text-sm">Diesel</div>
-                                <div id="dieselPrice" class="text-lg font-bold text-blue-600 leading-tight">Rs. 414.58
-                                    <span class="text-[10px] font-medium text-blue-500">/L</span>
+                                class="bg-white rounded-3xl p-4 flex gap-x-3 items-center modern-shadow border border-orange-50 cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-orange-200">
+                                <div
+                                    class="w-10 h-10 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-gas-pump text-lg"></i>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-gray-800 text-sm">Petrol</div>
+                                    <div id="petrolPrice" class="text-lg font-bold text-orange-600 leading-tight">Rs. 414.78
+                                        <span class="text-[10px] font-medium text-orange-500">/L</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Gold Box -->
-                        <div
-                            class="sm:col-start-3 bg-white rounded-3xl p-4 flex gap-x-3 items-center modern-shadow border border-yellow-50 cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-yellow-200">
+    
+                            <!-- Diesel Box -->
                             <div
-                                class="w-10 h-10 bg-yellow-100 text-yellow-600 rounded-2xl flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-coins text-lg"></i>
+                                class="bg-white rounded-3xl p-4 flex gap-x-3 items-center modern-shadow border border-blue-50 cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-blue-200">
+                                <div
+                                    class="w-10 h-10 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-truck-monster text-lg"></i>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-gray-800 text-sm">Diesel</div>
+                                    <div id="dieselPrice" class="text-lg font-bold text-blue-600 leading-tight">Rs. 414.58
+                                        <span class="text-[10px] font-medium text-blue-500">/L</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <div class="font-semibold text-gray-800 text-sm">Gold</div>
-                                <div id="goldPrice" class="text-lg font-bold text-yellow-600 leading-tight">Rs. 350,000
-                                    <span class="text-[10px] font-medium text-yellow-500">/Tola</span>
+    
+                            <!-- Gold Box -->
+                            <div
+                                class="bg-white rounded-3xl p-4 flex gap-x-3 items-center modern-shadow border border-yellow-50 cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl hover:border-yellow-200">
+                                <div
+                                    class="w-10 h-10 bg-yellow-100 text-yellow-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-coins text-lg"></i>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-gray-800 text-sm">Gold</div>
+                                    <div id="goldPrice" class="text-lg font-bold text-yellow-600 leading-tight">Rs. 350,000
+                                        <span class="text-[10px] font-medium text-yellow-500">/Tola</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -545,69 +643,6 @@
                 </div>
             </div>
         </div>
-		
-		<!-- Grocery Basket + Nearby -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-3 scale-[0.75] origin-top-left w-[133%]">
-
-    <!-- Grocery Basket -->
-    <div class="lg:col-span-7 bg-white rounded-2xl p-4 modern-shadow border border-emerald-100">
-        
-        <div class="flex justify-between items-center mb-3">
-            <span class="font-serif tracking-wide text-lg font-bold text-[#0A3D2A]"
-                style="font-family: Georgia, 'Times New Roman', serif;">
-                My Grocery Basket Comparison
-            </span>
-
-            <button onclick="showPage('groceries')"
-                class="text-[11px] px-3 py-1 bg-emerald-700 text-white rounded-xl">
-                Manage Basket
-            </button>
-        </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-
-            <div class="border border-emerald-100 rounded-xl p-2.5 bg-emerald-50">
-                <div class="font-semibold text-xs">Imtiaz</div>
-                <div class="font-bold text-lg text-emerald-700">Rs. 5,200</div>
-            </div>
-
-            <div class="border border-emerald-100 rounded-xl p-2.5">
-                <div class="font-semibold text-xs">Chase Up</div>
-                <div class="font-bold text-lg">Rs. 4,750</div>
-            </div>
-
-            <div class="border border-emerald-100 rounded-xl p-2.5">
-                <div class="font-semibold text-xs">Carrefour</div>
-                <div class="font-bold text-lg">Rs. 5,400</div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Nearby Deals -->
-    <div class="lg:col-span-5 bg-white rounded-2xl p-4 modern-shadow border border-emerald-100">
-
-        <span class="font-serif tracking-wide text-lg font-bold text-[#0A3D2A]"
-            style="font-family: Georgia, 'Times New Roman', serif;">
-            Nearby-First Deals
-        </span>
-
-        <div class="mt-2 space-y-2">
-
-            <div class="flex justify-between border border-emerald-100 px-3 py-2 rounded-xl">
-                <div class="text-sm">Chase Up - Clifton</div>
-                <div class="font-bold text-emerald-700 text-sm">Rs. 4,750</div>
-            </div>
-
-            <div class="flex justify-between border border-emerald-100 px-3 py-2 rounded-xl">
-                <div class="text-sm">Imtiaz - Tariq Road</div>
-                <div class="font-bold text-sm">Rs. 5,200</div>
-            </div>
-
-        </div>
-    </div>
-
-</div>
 
         <!-- Features Row -->
         <div class="max-w-screen-2xl mx-auto px-4 pt-3">
@@ -1035,20 +1070,6 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
             </div>
 
             <div class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-3">
-                <div onclick="showPage('groceries')"
-                    class="category-card bg-white rounded-3xl p-4 cursor-pointer border border-emerald-100 modern-shadow">
-                    <div class="flex justify-between">
-                        <div
-                            class="w-9 h-9 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-700">
-                            <i class="fas fa-shopping-basket text-xl"></i>
-                        </div>
-                    </div>
-                    <div class="mt-4">
-                        <div class="font-semibold">Daily Groceries</div>
-                        <div class="text-xs text-emerald-600">1,280 products • Avg. savings 18%</div>
-                    </div>
-                </div>
-
                 <div onclick="showPage('foodstuffs')"
                     class="category-card bg-white rounded-3xl p-4 cursor-pointer border border-emerald-100 modern-shadow">
                     <div class="flex justify-between">
@@ -1059,6 +1080,20 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
                     <div class="mt-4">
                         <div class="font-semibold">Food Stuffs</div>
                         <div class="text-xs text-emerald-600">3,210 products • Avg. savings 22%</div>
+                    </div>
+                </div>
+								
+				<div onclick="showPage('groceries')"
+                    class="category-card bg-white rounded-3xl p-4 cursor-pointer border border-emerald-100 modern-shadow">
+                    <div class="flex justify-between">
+                        <div
+                            class="w-9 h-9 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-700">
+                            <i class="fas fa-shopping-basket text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="font-semibold">Daily Groceries</div>
+                        <div class="text-xs text-emerald-600">1,280 products • Avg. savings 18%</div>
                     </div>
                 </div>
 
@@ -1099,58 +1134,35 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
                         <div class="text-xs text-emerald-600">4,870 products • Avg. savings 17%</div>
                     </div>
                 </div>
+				
+				<div onclick="showPage('properties')"
+                    class="category-card bg-white rounded-3xl p-4 cursor-pointer border border-emerald-100 modern-shadow">
+                    <div class="flex justify-between">
+                        <div class="w-9 h-9 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-700">
+                            <i class="fas fa-utensils text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="font-semibold">Properties</div>
+                        <div class="text-xs text-emerald-600">3,210 products • Avg. savings 22%</div>
+                    </div>
+                </div>
             </div>
         </div>
 
         
 
-        <!-- Today's Cheapest Picks + Price Drop Alerts -->
-        <div class="max-w-screen-2xl mx-auto px-4 pt-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="bg-white rounded-3xl p-6 modern-shadow border border-emerald-100">
-                    <span class="font-serif tracking-wide text-xl font-bold text-[#0A3D2A]"
-                        style="font-family: Georgia, 'Times New Roman', serif;">Today's Cheapest Picks</span>
-                    <div class="mt-4 space-y-3 text-sm">
-                        <div class="flex justify-between">
-                            <div>Sunflower Oil 1L</div>
-                            <div class="font-bold">Rs. 389 <span class="text-emerald-600 text-xs">↓6%</span></div>
-                        </div>
-                        <div class="flex justify-between">
-                            <div>Tide 2kg</div>
-                            <div class="font-bold">Rs. 499 <span class="text-emerald-600 text-xs">↓4%</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-3xl p-6 modern-shadow border border-emerald-100">
-                    <span class="font-serif tracking-wide text-xl font-bold text-[#0A3D2A]"
-                        style="font-family: Georgia, 'Times New Roman', serif;">Price Drop Alerts</span>
-                    <div class="mt-4 space-y-3 text-sm">
-                        <div class="flex justify-between">
-                            <div>Zong 4G Device</div>
-                            <div class="text-emerald-600 font-bold">↓9%</div>
-                        </div>
-                        <div class="flex justify-between">
-                            <div>Canon Printer</div>
-                            <div class="text-emerald-600 font-bold">↓11%</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
 
-
-        <!-- Travel & Tours Section -->
-        <!-- Travel & Tours Section -->
+		<!-- Travel & Tours Section -->
         <section id="travel-section" class="pt-6">
 
             <div class="max-w-screen-2xl mx-auto px-4">
 
                 <!-- OUTER BOX -->
                 <div class="relative overflow-hidden rounded-[26px] border border-emerald-300/30 
-    bg-gradient-to-br from-[#062e22] via-[#0f766e] to-[#10b981] 
-    shadow-[0_10px_40px_rgba(16,185,129,0.25)] backdrop-blur-xl p-5">
+					bg-gradient-to-br from-[#062e22] via-[#0f766e] to-[#10b981] 
+					shadow-[0_10px_40px_rgba(16,185,129,0.25)] backdrop-blur-xl p-5">
 
                     <!-- HEADER -->
                     <div class="flex justify-between items-center mb-4">
@@ -1171,11 +1183,11 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
 
                         <!-- CARD (SAMPLE - WILL BE REPLACED BY ADMIN DATA) -->
                         <div class="group bg-white/10 border border-white/15 rounded-xl overflow-hidden 
-                shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+							shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
 
                             <!-- IMAGE -->
                             <div class="h-20 bg-gradient-to-br from-emerald-200/30 to-teal-300/30 
-                flex items-center justify-center text-2xl group-hover:scale-105 transition">
+								flex items-center justify-center text-2xl group-hover:scale-105 transition">
 
                                 🏔️
 
@@ -1203,29 +1215,26 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
                                 <div class="flex gap-2 pt-1">
 
                                     <button class="flex-1 py-1.5 text-[11px] font-semibold bg-emerald-400 hover:bg-emerald-300 
-                            text-black rounded-md transition hover:scale-[1.03]">
+											text-black rounded-md transition hover:scale-[1.03]">
 
                                         Contact
                                     </button>
 
                                     <button class="flex-1 py-1.5 text-[11px] font-semibold bg-white/10 hover:bg-white/20 
-                            text-white border border-white/20 rounded-md transition hover:scale-[1.03]">
+											text-white border border-white/20 rounded-md transition hover:scale-[1.03]">
 
                                         View
                                     </button>
-
                                 </div>
-
                             </div>
-
                         </div>
 
                         <!-- CARD 2 -->
                         <div class="group bg-white/10 border border-white/15 rounded-xl overflow-hidden 
-                shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+							shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
 
                             <div class="h-20 bg-gradient-to-br from-emerald-200/30 to-teal-300/30 
-                flex items-center justify-center text-2xl group-hover:scale-105 transition">
+								flex items-center justify-center text-2xl group-hover:scale-105 transition">
 
                                 🏜️
 
@@ -1256,17 +1265,51 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
                                         class="flex-1 py-1.5 text-[11px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-md">
                                         View
                                     </button>
-
                                 </div>
+                            </div>
+                        </div>
+						
+						<!-- CARD 3 -->
+                        <div class="group bg-white/10 border border-white/15 rounded-xl overflow-hidden 
+							shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+
+                            <div class="h-20 bg-gradient-to-br from-emerald-200/30 to-teal-300/30 
+								flex items-center justify-center text-2xl group-hover:scale-105 transition">
+
+                                🏜️
 
                             </div>
 
+                            <div class="p-3 space-y-1.5">
+
+                                <h3 class="text-sm font-semibold text-white group-hover:text-emerald-200">
+                                    Umrah Package
+                                </h3>
+
+                                <p class="text-[11px] text-gray-200">
+                                    20 Days
+                                </p>
+
+                                <p class="text-sm font-bold text-emerald-200">
+                                    Rs. 225,000 / Person
+                                </p>
+
+                                <div class="flex gap-2 pt-1">
+
+                                    <button
+                                        class="flex-1 py-1.5 text-[11px] font-semibold bg-emerald-400 hover:bg-emerald-300 text-black rounded-md">
+                                        Contact
+                                    </button>
+
+                                    <button
+                                        class="flex-1 py-1.5 text-[11px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-md">
+                                        View
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
 
         </section>
@@ -1461,9 +1504,7 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
                             <div class="text-[11px] text-gray-400 mt-1">
                                 Compare Prices. Save More.
                             </div>
-
                         </div>
-
                     </div>
 
                     <!-- DESCRIPTION -->
@@ -1477,94 +1518,68 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
 
                         <a href="#"
                             class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition-all">
-
                             <i class="fab fa-facebook-f text-sm text-white"></i>
-
                         </a>
 
                         <a href="#"
                             class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition-all">
-
                             <i class="fab fa-twitter text-sm text-white"></i>
-
                         </a>
 
                         <a href="#"
                             class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition-all">
-
                             <i class="fab fa-instagram text-sm text-white"></i>
-
                         </a>
 
                         <a href="#"
                             class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition-all">
-
                             <i class="fab fa-youtube text-sm text-white"></i>
-
                         </a>
 
                         <a href="#"
                             class="w-9 h-9 rounded-lg bg-[#2b3544] hover:bg-emerald-600 flex items-center justify-center transition-all">
-
                             <i class="fab fa-tiktok text-sm text-white"></i>
-
                         </a>
-
                     </div>
-
                 </div>
 
                 <!-- COLUMN 2 : QUICK LINKS -->
                 <div>
-
                     <h3 class="text-white font-semibold text-lg mb-5">
                         Quick Links
                     </h3>
 
                     <ul class="space-y-3 text-sm">
-
                         <li>
                             <a href="#" class="hover:text-emerald-400 transition-colors">
-
                                 AI Powered Market
-
                             </a>
                         </li>
 
                         <li>
                             <a href="#" class="hover:text-emerald-400 transition-colors">
-
                                 Price Comparison
-
                             </a>
                         </li>
 
                         <li>
                             <a href="#" class="hover:text-emerald-400 transition-colors">
-
                                 Compare Prices by Category
-
                             </a>
                         </li>
 
                         <li>
                             <a href="#" class="hover:text-emerald-400 transition-colors">
-
                                 Travel & Tours
-
                             </a>
                         </li>
 
                         <li>
                             <a href="#" class="hover:text-emerald-400 transition-colors">
-
                                 Blogs
-
                             </a>
                         </li>
-
                     </ul>
-
                 </div>
 
                 <!-- COLUMN 3 : CATEGORIES -->
@@ -1579,88 +1594,64 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
 
                         <!-- LEFT -->
                         <ul class="space-y-3 text-sm">
-
                             <li>
-                                <a href="#" class="hover:text-emerald-400 transition-colors">
-
+                                <a href="./pages/food.html" class="hover:text-emerald-400 transition-colors">
                                     Foods
-
                                 </a>
                             </li>
 
                             <li>
-                                <a href="#" class="hover:text-emerald-400 transition-colors">
-
+                                <a href="./pages/categories.html" class="hover:text-emerald-400 transition-colors">
                                     Groceries
-
                                 </a>
                             </li>
 
                             <li>
-                                <a href="#" class="hover:text-emerald-400 transition-colors">
-
+                                <a href="./pages/electronics.html" class="hover:text-emerald-400 transition-colors">
                                     Electronics
-
                                 </a>
                             </li>
 
                             <li>
-                                <a href="#" class="hover:text-emerald-400 transition-colors">
-
+                                <a href="./pages/mobiles.html" class="hover:text-emerald-400 transition-colors">
                                     Mobiles
-
                                 </a>
                             </li>
 
                             <li>
-                                <a href="#" class="hover:text-emerald-400 transition-colors">
-
+                                <a href="./pages/laptops.html" class="hover:text-emerald-400 transition-colors">
                                     Laptops
-
                                 </a>
                             </li>
-
                         </ul>
 
                         <!-- RIGHT -->
                         <ul class="space-y-3 text-sm">
-
                             <li>
-                                <a href="#" class="hover:text-emerald-400 transition-colors">
-
+                                <a href="./pages/property.html" class="hover:text-emerald-400 transition-colors">
                                     Property
-
                                 </a>
                             </li>
 
                             <li>
-                                <a href="#" class="hover:text-emerald-400 transition-colors">
-
+                                <a href="./pages/personal-care.html" class="hover:text-emerald-400 transition-colors">
                                     Personal Care
-
                                 </a>
                             </li>
 
                             <li>
-                                <a href="#" class="hover:text-emerald-400 transition-colors">
-
+                                <a href="./pages/fashion.html" class="hover:text-emerald-400 transition-colors">
                                     Fashion
-
                                 </a>
                             </li>
 
                             <li>
-                                <a href="#" class="hover:text-emerald-400 transition-colors">
-
+                                <a href="./pages/kids.html" class="hover:text-emerald-400 transition-colors">
                                     Kids
-
                                 </a>
                             </li>
-
                         </ul>
-
                     </div>
-
                 </div>
 
                 <!-- COLUMN 4 : COMPANY -->
@@ -1702,99 +1693,70 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
 
                 <!-- COLUMN 5 : CONTACT -->
                 <div>
-
                     <h3 class="text-white font-semibold text-lg mb-5">
                         Contact Us
                     </h3>
 
                     <!-- NEWSLETTER -->
                     <div class="mb-6">
-
                         <p class="text-sm text-gray-400 mb-3">
                             Get latest deals & price alerts
                         </p>
-
                         <div class="flex bg-[#2b3544] rounded-xl overflow-hidden">
-
                             <input type="email" placeholder="Enter email"
                                 class="flex-1 px-4 py-3 text-sm bg-transparent text-white outline-none placeholder:text-gray-500">
 
                             <button onclick="subscribeUser()"
                                 class="bg-emerald-600 hover:bg-emerald-700 px-4 text-sm font-semibold transition-colors">
-
                                 Subscribe
-
                             </button>
-
                         </div>
-
                     </div>
 
                     <!-- CONTACT INFO -->
                     <ul class="space-y-4 text-sm text-gray-400">
-
                         <li class="flex items-start gap-3">
-
                             <i class="fas fa-map-marker-alt text-emerald-500 mt-1"></i>
-
                             <span>
                                 Office #42, Block 6, P.E.C.H.S, Karachi, Pakistan
                             </span>
-
                         </li>
 
                         <li class="flex items-center gap-3">
-
                             <i class="fas fa-phone-alt text-emerald-500"></i>
-
                             <span>
                                 +92 300 1234567
                             </span>
-
                         </li>
 
                         <li class="flex items-center gap-3">
-
                             <i class="fas fa-envelope text-emerald-500"></i>
-
                             <span>
                                 support@stopbuypk.com
                             </span>
-
                         </li>
-
                     </ul>
-
                 </div>
-
             </div>
 
             <!-- COPYRIGHT -->
             <div
                 class="border-t border-[#2b3544] pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
-
                 <div>
                     © 2026 StopBuyPk. All rights reserved. Pakistan’s trusted smart price comparison platform.
                 </div>
-
                 <div class="flex gap-5">
-
                     <a href="#" class="hover:text-white transition-colors">
                         Terms
                     </a>
-
                     <a href="#" class="hover:text-white transition-colors">
                         Privacy
                     </a>
-
                     <a href="#" class="hover:text-white transition-colors">
                         Cookies
                     </a>
-
                 </div>
-
             </div>
-
         </div>
 
     </footer>
@@ -1816,7 +1778,6 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
 
     <!-- Load Data Service FIRST -->
     <script src="js/data-service.js"></script>
-    <script src="data-service.js"></script>
 
     <script>
 
