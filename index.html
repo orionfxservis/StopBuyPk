@@ -545,6 +545,69 @@
                 </div>
             </div>
         </div>
+		
+		<!-- Grocery Basket + Nearby -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-3 scale-[0.75] origin-top-left w-[133%]">
+
+    <!-- Grocery Basket -->
+    <div class="lg:col-span-7 bg-white rounded-2xl p-4 modern-shadow border border-emerald-100">
+        
+        <div class="flex justify-between items-center mb-3">
+            <span class="font-serif tracking-wide text-lg font-bold text-[#0A3D2A]"
+                style="font-family: Georgia, 'Times New Roman', serif;">
+                My Grocery Basket Comparison
+            </span>
+
+            <button onclick="showPage('groceries')"
+                class="text-[11px] px-3 py-1 bg-emerald-700 text-white rounded-xl">
+                Manage Basket
+            </button>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+
+            <div class="border border-emerald-100 rounded-xl p-2.5 bg-emerald-50">
+                <div class="font-semibold text-xs">Imtiaz</div>
+                <div class="font-bold text-lg text-emerald-700">Rs. 5,200</div>
+            </div>
+
+            <div class="border border-emerald-100 rounded-xl p-2.5">
+                <div class="font-semibold text-xs">Chase Up</div>
+                <div class="font-bold text-lg">Rs. 4,750</div>
+            </div>
+
+            <div class="border border-emerald-100 rounded-xl p-2.5">
+                <div class="font-semibold text-xs">Carrefour</div>
+                <div class="font-bold text-lg">Rs. 5,400</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Nearby Deals -->
+    <div class="lg:col-span-5 bg-white rounded-2xl p-4 modern-shadow border border-emerald-100">
+
+        <span class="font-serif tracking-wide text-lg font-bold text-[#0A3D2A]"
+            style="font-family: Georgia, 'Times New Roman', serif;">
+            Nearby-First Deals
+        </span>
+
+        <div class="mt-2 space-y-2">
+
+            <div class="flex justify-between border border-emerald-100 px-3 py-2 rounded-xl">
+                <div class="text-sm">Chase Up - Clifton</div>
+                <div class="font-bold text-emerald-700 text-sm">Rs. 4,750</div>
+            </div>
+
+            <div class="flex justify-between border border-emerald-100 px-3 py-2 rounded-xl">
+                <div class="text-sm">Imtiaz - Tariq Road</div>
+                <div class="font-bold text-sm">Rs. 5,200</div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
 
         <!-- Features Row -->
         <div class="max-w-screen-2xl mx-auto px-4 pt-3">
@@ -1039,48 +1102,7 @@ cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl
             </div>
         </div>
 
-        <!-- Grocery Basket + Nearby -->
-        <div class="max-w-screen-2xl mx-auto px-4 pt-9">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                <div class="lg:col-span-7 bg-white rounded-3xl p-6 modern-shadow border border-emerald-100">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="font-serif tracking-wide text-xl font-bold text-[#0A3D2A]"
-                            style="font-family: Georgia, 'Times New Roman', serif;">My Grocery Basket Comparison</span>
-                        <button onclick="showPage('groceries')"
-                            class="text-xs px-3 py-1 bg-emerald-700 text-white rounded-2xl">Manage Basket</button>
-                    </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-                        <div class="border border-emerald-100 rounded-2xl p-3 bg-emerald-50">
-                            <div class="font-semibold text-sm">Imtiaz</div>
-                            <div class="font-bold text-xl text-emerald-700">Rs. 5,200</div>
-                        </div>
-                        <div class="border border-emerald-100 rounded-2xl p-3">
-                            <div class="font-semibold text-sm">Chase Up</div>
-                            <div class="font-bold text-xl">Rs. 4,750</div>
-                        </div>
-                        <div class="border border-emerald-100 rounded-2xl p-3">
-                            <div class="font-semibold text-sm">Carrefour</div>
-                            <div class="font-bold text-xl">Rs. 5,400</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-5 bg-white rounded-3xl p-6 modern-shadow border border-emerald-100">
-                    <span class="font-serif tracking-wide text-xl font-bold text-[#0A3D2A]"
-                        style="font-family: Georgia, 'Times New Roman', serif;">Nearby-First Deals</span>
-                    <div class="mt-3 space-y-2">
-                        <div class="flex justify-between border border-emerald-100 px-3 py-2 rounded-2xl">
-                            <div>Chase Up - Clifton</div>
-                            <div class="font-bold text-emerald-700">Rs. 4,750</div>
-                        </div>
-                        <div class="flex justify-between border border-emerald-100 px-3 py-2 rounded-2xl">
-                            <div>Imtiaz - Tariq Road</div>
-                            <div class="font-bold">Rs. 5,200</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
 
         <!-- Today's Cheapest Picks + Price Drop Alerts -->
         <div class="max-w-screen-2xl mx-auto px-4 pt-6">
