@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -373,8 +373,28 @@
                     <form id="userForm">
                         <div class="form-row">
                             <div class="input-group">
-                                <label>Username</label>
+                                <label>Profile Picture URL</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="text" id="userPic" placeholder="https://..." style="flex: 1;">
+                                    <input type="file" id="userPicUpload" accept="image/*" style="display: none;">
+                                    <button type="button" class="btn btn-secondary"
+                                        onclick="document.getElementById('userPicUpload').click()"
+                                        style="padding: 10px 15px;"><i class="fa-solid fa-upload"></i></button>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Full Name</label>
                                 <input type="text" id="userName" placeholder="e.g., Ali Khan" required>
+                            </div>
+                            <div class="input-group" id="companyNameGroup" style="opacity: 0.4; pointer-events: none;">
+                                <label>Company Name</label>
+                                <input type="text" id="companyName" placeholder="e.g., ABC Corp" disabled>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>User ID</label>
+                                <input type="text" id="userId" placeholder="e.g., ali123" required>
                             </div>
                             <div class="input-group">
                                 <label>Password</label>
@@ -384,7 +404,7 @@
                         <div class="form-row">
                             <div class="input-group">
                                 <label>User Role / Type</label>
-                                <select id="userRole" required>
+                                <select id="userRole" required onchange="toggleCompanyField()">
                                     <option value="user">Normal User</option>
                                     <option value="company">Company</option>
                                     <option value="admin">Admin</option>
@@ -408,12 +428,11 @@
 
                 <div class="list-container">
                     <h3>Registered Users</h3>
-                    <table class="admin-table">
+                    <table class="admin-table compact-table">
                         <thead>
                             <tr>
-                                <th>Username</th>
-                                <th>Password</th>
-                                <th>Role</th>
+                                <th>User</th>
+                                <th>Credentials</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -865,38 +884,6 @@
     ...
 </section>
 
-<script>
-
-document.getElementById("broadcastForm").addEventListener("submit", function (e) {
-
-    e.preventDefault();
-
-    const message = document.getElementById("broadcastMessage").value;
-    const audience = document.getElementById("broadcastAudience").value;
-    const status = document.getElementById("broadcastStatus").value;
-
-    // Get existing broadcasts
-    let broadcasts = JSON.parse(localStorage.getItem("broadcasts")) || [];
-
-    // Add new broadcast
-    broadcasts.unshift({
-        message,
-        audience,
-        status,
-        date: new Date().toLocaleDateString()
-    });
-
-    // Save broadcasts
-    localStorage.setItem("broadcasts", JSON.stringify(broadcasts));
-
-    alert("Broadcast Saved Successfully");
-
-    // Reset form
-    document.getElementById("broadcastForm").reset();
-
-});
-
-</script>
 </body>
 
 </html>
