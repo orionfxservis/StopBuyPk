@@ -69,7 +69,23 @@ const DataService = {
     },
     getBlogs: async () => JSON.parse(localStorage.getItem("admin_blogs")) || [],
     getTravelPackages: async () => JSON.parse(localStorage.getItem("admin_travel_packages")) || [],
-    getBroadcasts: async () => JSON.parse(localStorage.getItem("admin_broadcasts")) || [],
+    getBroadcasts: async () => {
+        try {
+            const res = await fetch(DataService.API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "getBroadcasts" })
+            });
+            const data = await res.json();
+            if (data.success && data.broadcasts) {
+                localStorage.setItem("admin_broadcasts", JSON.stringify(data.broadcasts));
+                return data.broadcasts;
+            }
+        } catch (err) {
+            console.warn("Failed to get broadcasts from API, falling back to local storage");
+        }
+        return JSON.parse(localStorage.getItem("admin_broadcasts")) || [];
+    },
 
     saveCategories: async (data) => localStorage.setItem("admin_categories", JSON.stringify(data)),
     saveProducts: async (data) => localStorage.setItem("admin_products", JSON.stringify(data)),
@@ -92,5 +108,19 @@ const DataService = {
     },
     saveBlogs: async (data) => localStorage.setItem("admin_blogs", JSON.stringify(data)),
     saveTravelPackages: async (data) => localStorage.setItem("admin_travel_packages", JSON.stringify(data)),
-    saveBroadcasts: async (data) => localStorage.setItem("admin_broadcasts", JSON.stringify(data))
+    saveBroadcasts: async (data) => {
+        try {
+            const res = await fetch(DataService.API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "syncBroadcasts", broadcasts: data })
+            });
+            const result = await res.json();
+            if (!result.success) console.warn("API sync failed", result.message);
+        } catch (err) {
+            console.error("Failed to sync broadcasts to API", err);
+        }
+        localStorage.setItem("admin_broadcasts", JSON.stringify(data));
+        return true;
+    }
 };
