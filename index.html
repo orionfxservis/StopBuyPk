@@ -1850,8 +1850,8 @@
 
         <!-- WhatsApp Button -->
         <a href="https://wa.me/" target="_blank"
-            class="w-14 h-14 bg-[#25D366] hover:bg-[#1ebe57] text-white rounded-full shadow-lg flex items-center justify-center transition-transform duration-300 hover:scale-110">
-            <i class="fab fa-whatsapp text-3xl"></i>
+            class="w-12 h-12 bg-[#25D366] hover:bg-[#1ebe57] text-white rounded-full shadow-lg flex items-center justify-center transition-transform duration-300 hover:scale-110">
+            <i class="fab fa-whatsapp text-2xl"></i>
         </a>
     </div>
 
@@ -2343,10 +2343,16 @@
                                 </div>
                                 
                                 <!-- CONTENT SECTION -->
-                                <div class="px-5 py-4 bg-white text-left">
-                                    <h3 class="text-[18px] font-bold text-[#1a2b3c] line-clamp-1 group-hover:text-emerald-600 transition-colors">${pkg.title} ${pkg.verified === 'Yes' ? '✅' : ''}</h3>
-                                    <div class="text-[12px] text-red-400 mt-1 uppercase tracking-wide">
-                                        TRAVEL &bull; ${pkg.departure || 'Karachi'}
+                                <div class="px-5 pt-3 pb-4 bg-white text-left flex flex-col h-full">
+                                    <h3 class="text-[15px] leading-snug font-bold text-[#1a2b3c] group-hover:text-emerald-600 transition-colors">${pkg.title} ${pkg.verified === 'Yes' ? '✅' : ''}</h3>
+                                    <div class="text-[11px] font-semibold text-red-500 mt-1 uppercase tracking-wide">
+                                        Travel: ${(pkg.departure || 'Karachi').toUpperCase()} - ${(pkg.destination || 'Saudi Arab').toUpperCase()}
+                                    </div>
+                                    
+                                    <!-- Action Buttons -->
+                                    <div class="flex items-center gap-2 mt-3 pt-3 border-t border-slate-100">
+                                        <button onclick="event.stopPropagation(); window.open('https://web.whatsapp.com/send?phone=' + (pkg.whatsapp || pkg.contact || '').replace(/[^0-9]/g, ''), '_blank')" class="flex-1 py-1.5 bg-emerald-500/10 text-emerald-600 border border-emerald-500/30 rounded-lg text-[11px] font-bold hover:bg-emerald-500 hover:text-slate-900 transition-all">Contact</button>
+                                        <button onclick="event.stopPropagation(); openTravelDetailModal('${encodeURIComponent(JSON.stringify(pkg))}')" class="flex-1 py-1.5 bg-sky-500/10 text-sky-600 border border-sky-500/30 rounded-lg text-[11px] font-bold hover:bg-sky-500 hover:text-slate-900 transition-all">View Details</button>
                                     </div>
                                 </div>
                                 
