@@ -98,29 +98,56 @@ if (loginTabUser && loginTabAdmin && loginInputUserName && loginInputCompany) {
   });
 }
 
-if (loginSubmitBtn) {
-  loginSubmitBtn.addEventListener('click', () => {
-    if (currentLoginMode === 'admin') {
-      const userId = loginInputUserId.value.trim();
-      const pass = loginInputPassword.value;
+// Global functions expected by index.html onclick handlers
+window.loginAdmin = async () => {
+  const adminForm = document.getElementById('form-admin');
+  const userIdInput = adminForm.querySelector('input[placeholder="Admin ID"]');
+  const passInput = adminForm.querySelector('input[placeholder="Password"]');
+  const btn = adminForm.querySelector('button');
 
-      const isFaisal = userId.toLowerCase() === 'faisal' && pass === '1234';
-      const isAshraf = userId.toLowerCase() === 'ashraf taj' && pass === '1234';
+  const userId = userIdInput.value.trim();
+  const pass = passInput.value;
 
-      if (isFaisal || isAshraf) {
-        // Check if we are currently inside the 'pages' directory
+  if (!userId || !pass) {
+      alert("Please enter both Admin ID and Password.");
+      return;
+  }
+
+  const originalText = btn.textContent;
+  btn.textContent = 'Logging in...';
+  btn.disabled = true;
+
+  try {
+      const response = await DataService.login({
+        userId: userId,
+        password: pass,
+        role: 'admin'
+      });
+
+      if (response.success) {
         const isInPages = window.location.pathname.includes('/pages/');
         const adminPath = isInPages ? 'admin.html' : 'pages/admin.html';
         window.location.href = adminPath;
       } else {
-        alert('Invalid Admin credentials!');
+        alert(response.message || 'Invalid Admin credentials!');
       }
-    } else {
-      alert('User login successful (demo)');
-      loginDropdown.classList.add('hidden');
-    }
-  });
-}
+  } catch (err) {
+      alert('Login failed. Please try again.');
+  } finally {
+      btn.textContent = originalText;
+      btn.disabled = false;
+  }
+};
+
+window.loginUser = () => {
+    alert('User login successful (demo)');
+    document.getElementById('loginDropdown').classList.add('hidden');
+};
+
+window.loginCompany = () => {
+    alert('Company login successful (demo)');
+    document.getElementById('loginDropdown').classList.add('hidden');
+};
 
 // Category dropdown
 const categoryToggle = document.getElementById('categoryToggle');
