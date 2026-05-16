@@ -1182,134 +1182,7 @@
 
                     <!-- GRID (READY FOR ADMIN DATA) -->
                     <div id="travelPackagesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-
-                        <!-- CARD (SAMPLE - WILL BE REPLACED BY ADMIN DATA) -->
-                        <div class="group bg-white/10 border border-white/15 rounded-xl overflow-hidden 
-							shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-
-                            <!-- IMAGE -->
-                            <div class="h-20 bg-gradient-to-br from-emerald-200/30 to-teal-300/30 
-								flex items-center justify-center text-2xl group-hover:scale-105 transition">
-
-                                🏔️
-
-                            </div>
-
-                            <!-- CONTENT -->
-                            <div class="p-3 space-y-1.5">
-
-                                <!-- TOUR NAME -->
-                                <h3 class="text-sm font-semibold text-white group-hover:text-emerald-200">
-                                    Hunza Valley Tour
-                                </h3>
-
-                                <!-- DURATION -->
-                                <p class="text-[11px] text-gray-200">
-                                    5 Days / 4 Nights
-                                </p>
-
-                                <!-- PRICE -->
-                                <p class="text-sm font-bold text-emerald-200">
-                                    Rs 35,000 / Person
-                                </p>
-
-                                <!-- ACTIONS -->
-                                <div class="flex gap-2 pt-1">
-
-                                    <button class="flex-1 py-1.5 text-[11px] font-semibold bg-emerald-400 hover:bg-emerald-300 
-											text-black rounded-md transition hover:scale-[1.03]">
-
-                                        Contact
-                                    </button>
-
-                                    <button class="flex-1 py-1.5 text-[11px] font-semibold bg-white/10 hover:bg-white/20 
-											text-white border border-white/20 rounded-md transition hover:scale-[1.03]">
-
-                                        View
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- CARD 2 -->
-                        <div class="group bg-white/10 border border-white/15 rounded-xl overflow-hidden 
-							shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-
-                            <div class="h-20 bg-gradient-to-br from-emerald-200/30 to-teal-300/30 
-								flex items-center justify-center text-2xl group-hover:scale-105 transition">
-
-                                🏜️
-
-                            </div>
-
-                            <div class="p-3 space-y-1.5">
-
-                                <h3 class="text-sm font-semibold text-white group-hover:text-emerald-200">
-                                    Skardu Trip
-                                </h3>
-
-                                <p class="text-[11px] text-gray-200">
-                                    7 Days / 6 Nights
-                                </p>
-
-                                <p class="text-sm font-bold text-emerald-200">
-                                    Rs 45,000 / Person
-                                </p>
-
-                                <div class="flex gap-2 pt-1">
-
-                                    <button
-                                        class="flex-1 py-1.5 text-[11px] font-semibold bg-emerald-400 hover:bg-emerald-300 text-black rounded-md">
-                                        Contact
-                                    </button>
-
-                                    <button
-                                        class="flex-1 py-1.5 text-[11px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-md">
-                                        View
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-						
-						<!-- CARD 3 -->
-                        <div class="group bg-white/10 border border-white/15 rounded-xl overflow-hidden 
-							shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-
-                            <div class="h-20 bg-gradient-to-br from-emerald-200/30 to-teal-300/30 
-								flex items-center justify-center text-2xl group-hover:scale-105 transition">
-
-                                🏜️
-
-                            </div>
-
-                            <div class="p-3 space-y-1.5">
-
-                                <h3 class="text-sm font-semibold text-white group-hover:text-emerald-200">
-                                    Umrah Package
-                                </h3>
-
-                                <p class="text-[11px] text-gray-200">
-                                    20 Days
-                                </p>
-
-                                <p class="text-sm font-bold text-emerald-200">
-                                    Rs. 225,000 / Person
-                                </p>
-
-                                <div class="flex gap-2 pt-1">
-
-                                    <button
-                                        class="flex-1 py-1.5 text-[11px] font-semibold bg-emerald-400 hover:bg-emerald-300 text-black rounded-md">
-                                        Contact
-                                    </button>
-
-                                    <button
-                                        class="flex-1 py-1.5 text-[11px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-md">
-                                        View
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Packages injected dynamically -->
                     </div>
                 </div>
             </div>
@@ -2428,6 +2301,57 @@
                     popupModal.classList.remove('flex');
                 }
             });
+        }
+    });
+    // ================================
+    // LOAD TRAVEL PACKAGES DYNAMICALLY
+    // ================================
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const travelPackages = await DataService.getTravelPackages();
+            const grid = document.getElementById('travelPackagesGrid');
+            if (grid && travelPackages.length > 0) {
+                const publishedPackages = travelPackages.filter(pkg => pkg.status === 'Publish');
+                if (publishedPackages.length > 0) {
+                    grid.innerHTML = publishedPackages.map(pkg => {
+                        return `
+                            <div class="group bg-white/10 border border-white/15 rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                                <!-- IMAGE -->
+                                <div class="h-24 bg-gray-800 flex items-center justify-center text-2xl group-hover:scale-105 transition overflow-hidden">
+                                    ${pkg.image ? `<img src="${pkg.image}" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'">` : '🏕️'}
+                                </div>
+                                <!-- CONTENT -->
+                                <div class="p-3 space-y-1.5">
+                                    <h3 class="text-sm font-semibold text-white group-hover:text-emerald-200" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        ${pkg.title}
+                                    </h3>
+                                    <p class="text-[11px] text-gray-200">
+                                        ${pkg.duration} Days
+                                    </p>
+                                    <p class="text-sm font-bold text-emerald-200">
+                                        Rs ${pkg.price} <small style="font-weight:normal; font-size:9px;">/ ${pkg.priceType || 'Person'}</small>
+                                    </p>
+                                    <!-- ACTIONS -->
+                                    <div class="flex gap-2 pt-1">
+                                        <button onclick="window.open('https://wa.me/${pkg.whatsapp}', '_blank')" class="flex-1 py-1.5 text-[11px] font-semibold bg-emerald-400 hover:bg-emerald-300 text-black rounded-md transition hover:scale-[1.03]">
+                                            Contact
+                                        </button>
+                                        <button onclick="alert('Viewing package details for ${pkg.title} is coming soon!')" class="flex-1 py-1.5 text-[11px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-md transition hover:scale-[1.03]">
+                                            View
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    grid.innerHTML = '<p class="text-gray-400 text-sm">No active travel packages available at the moment.</p>';
+                }
+            } else if (grid) {
+                grid.innerHTML = '<p class="text-gray-400 text-sm">No travel packages available at the moment.</p>';
+            }
+        } catch (e) {
+            console.error("Error loading travel packages:", e);
         }
     });
     </script>

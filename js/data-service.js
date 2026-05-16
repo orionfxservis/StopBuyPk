@@ -68,7 +68,23 @@ const DataService = {
         return JSON.parse(localStorage.getItem("admin_users")) || [];
     },
     getBlogs: async () => JSON.parse(localStorage.getItem("admin_blogs")) || [],
-    getTravelPackages: async () => JSON.parse(localStorage.getItem("admin_travel_packages")) || [],
+    getTravelPackages: async () => {
+        try {
+            const res = await fetch(DataService.API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "getTravelPackages" })
+            });
+            const data = await res.json();
+            if (data.success && data.travelPackages) {
+                localStorage.setItem("admin_travel_packages", JSON.stringify(data.travelPackages));
+                return data.travelPackages;
+            }
+        } catch (err) {
+            console.warn("Failed to get travel packages from API, falling back to local storage");
+        }
+        return JSON.parse(localStorage.getItem("admin_travel_packages")) || [];
+    },
     getBroadcasts: async () => {
         try {
             const res = await fetch(DataService.API_URL, {
@@ -107,7 +123,21 @@ const DataService = {
         return true;
     },
     saveBlogs: async (data) => localStorage.setItem("admin_blogs", JSON.stringify(data)),
-    saveTravelPackages: async (data) => localStorage.setItem("admin_travel_packages", JSON.stringify(data)),
+    saveTravelPackages: async (data) => {
+        try {
+            const res = await fetch(DataService.API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "syncTravelPackages", travelPackages: data })
+            });
+            const result = await res.json();
+            if (!result.success) console.warn("API sync failed", result.message);
+        } catch (err) {
+            console.error("Failed to sync travel packages to API", err);
+        }
+        localStorage.setItem("admin_travel_packages", JSON.stringify(data));
+        return true;
+    },
     saveBroadcasts: async (data) => {
         try {
             const res = await fetch(DataService.API_URL, {

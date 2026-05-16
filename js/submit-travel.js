@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 details: document.getElementById('travelDetails').value,
                 listingType: 'Basic', // Default for user submissions
                 verified: 'No', // Default
-                status: 'Pending', // ALWAYS pending for user submissions
+                status: 'Publish', // Auto-publish for user submissions
                 dateAdded: Date.now()
             };
 
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify(newPkg)
                 });
             } catch (error) {
-                console.warn('Backend alert failed or not running, but post will still be saved as Pending.', error);
+                console.warn('Backend alert failed or not running, but post will still be saved.', error);
             }
 
             // 2. Save in DataService (LocalStorage/GAS)
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Save updated
                 await DataService.saveTravelPackages(existingPackages);
                 
-                alert("Your post is submitted for approval!");
+                alert("Your post is published successfully!");
                 form.reset();
             } catch (error) {
                 console.error('Error saving package:', error);
