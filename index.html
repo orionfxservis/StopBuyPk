@@ -1067,8 +1067,9 @@
             <div class="flex justify-between items-center mb-4">
                 <span class="section-header font-serif tracking-wide text-2xl font-bold text-[#0A3D2A]"
                     style="font-family: Georgia, 'Times New Roman', serif;">Compare Prices by Category</span>
-                <button onclick="showPage('groceries')" class="text-sm text-emerald-700 hover:underline">View
-                    all</button>
+                <button onclick="showPage('groceries')" class="flex items-center gap-1.5 text-[13px] md:text-sm font-bold px-4 md:px-5 py-2 bg-white text-emerald-800 rounded-full shadow-sm hover:shadow-md border border-emerald-100/50 transition-all hover:-translate-y-0.5 hover:bg-emerald-50">
+                    View All <i class="fas fa-arrow-right text-[10px] md:text-xs"></i>
+                </button>
             </div>
 
             <div class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-3">
@@ -1162,48 +1163,51 @@
             <div class="max-w-screen-2xl mx-auto px-4">
 
                 <!-- OUTER BOX -->
-                <div class="relative overflow-hidden rounded-[26px] border border-emerald-300/30 
-					bg-gradient-to-br from-[#062e22] via-[#0f766e] to-[#10b981] 
-					shadow-[0_10px_40px_rgba(16,185,129,0.25)] backdrop-blur-xl p-5">
+                <div class="relative overflow-hidden rounded-[26px] border-2 border-emerald-200/50 bg-gradient-to-br from-[#062e22] via-[#0f766e] to-[#10b981] shadow-[0_10px_40px_rgba(16,185,129,0.25)] backdrop-blur-xl p-5 md:p-7">
+
+                    <!-- DECORATIVE GLOW -->
+                    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+                        <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl mix-blend-overlay"></div>
+                        <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-900/40 rounded-full blur-3xl"></div>
+                    </div>
 
                     <!-- HEADER -->
-                    <div class="flex justify-between items-center mb-4">
-
-                        <h2 class="text-lg md:text-xl font-semibold text-white flex items-center gap-2">
-                            ✈️ <span>Travel & Tours</span>
+                    <div class="relative z-10 flex justify-between items-center mb-6">
+                        <h2 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-3 drop-shadow-md">
+                            <span class="bg-white/20 p-1.5 rounded-lg backdrop-blur-md border border-white/30 text-lg">✈️</span> 
+                            <span style="font-family: Georgia, 'Times New Roman', serif; letter-spacing: 0.5px;">Travel & Tours</span>
                         </h2>
 
-                        <button
-                            class="text-xs px-3 py-1.5 bg-white/90 hover:bg-white text-emerald-700 rounded-full transition hover:scale-105">
-                            View All
+                        <button onclick="window.location.href='pages/travel.html'" class="flex items-center gap-1.5 text-[13px] md:text-sm font-bold px-4 md:px-5 py-2 bg-white text-emerald-800 rounded-full shadow-sm hover:shadow-md border border-emerald-100/50 transition-all hover:-translate-y-0.5 hover:bg-emerald-50">
+                            View All <i class="fas fa-arrow-right text-[10px] md:text-xs"></i>
                         </button>
-
                     </div>
 
-                    <!-- GRID (READY FOR ADMIN DATA) -->
-                    <div id="travelPackagesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <!-- Packages injected dynamically -->
+                    <!-- GRID -->
+                    <div class="relative z-10">
+                        <div id="travelPackagesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                            <!-- Packages injected dynamically -->
+                        </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </section>
 
         <!-- Blogs Section -->
-        <section id="blogs-section">
-            <!-- Blog Section -->
-            <div class="max-w-screen-2xl mx-auto px-4 pt-4">
+        <section id="blogs-section" class="pt-6">
+            <div class="max-w-screen-2xl mx-auto px-4">
                 <div class="flex justify-between items-center mb-4">
                     <span class="section-header font-serif tracking-wide text-2xl font-bold text-[#0A3D2A]"
                         style="font-family: Georgia, 'Times New Roman', serif;">Latest Insights &amp; Blogs</span>
-                    <button onclick="window.location.href='pages/blogs.html'"
-                        class="text-sm text-emerald-700 hover:text-emerald-900 hover:underline transition duration-300">
-                        View all
+                    <button onclick="window.location.href='pages/blogs.html'" class="flex items-center gap-1.5 text-[13px] md:text-sm font-bold px-4 md:px-5 py-2 bg-white text-emerald-800 rounded-full shadow-sm hover:shadow-md border border-emerald-100/50 transition-all hover:-translate-y-0.5 hover:bg-emerald-50">
+                        View All <i class="fas fa-arrow-right text-[10px] md:text-xs"></i>
                     </button>
                 </div>
 
-                <!-- Blog Card 1 -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- OUTER BOX -->
+                <div class="relative overflow-hidden rounded-[38px] border border-emerald-100 bg-white/70 backdrop-blur-xl shadow-[0_20px_60px_rgba(16,24,40,0.08)] p-5 md:p-7">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
                     <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
                         <img src="images/blogs/04-05-26/blog_price.png" class="w-full h-44 object-cover rounded-t-3xl">
                         <div class="p-5">
@@ -1242,9 +1246,11 @@
                             </button>
                         </div>
                     </div>
+                    </div>
                 </div>
 
             </div>
+        </section>
 			
 			<!-- CUSTOMER REVIEWS SECTION -->
 <section id="reviews-section" class="pt-6">
@@ -1441,19 +1447,22 @@
 </div>
 
             <!-- ================= CUSTOMER SUPPORT SECTION ================= -->
-            <section class="max-w-screen-2xl mx-auto px-4 pt-10 pb-3">
+            <section class="pt-6 pb-6">
+                <div class="max-w-screen-2xl mx-auto px-4">
 
-                <!-- Section Header -->
-                <div class="flex justify-center items-center mb-10">
-                    <h2 class="text-2xl md:text-4xl font-serif tracking-wide font-extrabold text-[#0A3D2A] flex items-center gap-3"
-                        style="font-family: Georgia, 'Times New Roman', serif;">
-                        <span class="text-cyan-500 text-4xl">🎧</span>
-                        How Can We Help You?
-                    </h2>
-                </div>
+                    <!-- Section Header -->
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl md:text-3xl font-serif tracking-wide font-extrabold text-[#0A3D2A] flex items-center gap-3"
+                            style="font-family: Georgia, 'Times New Roman', serif;">
+                            <span class="text-cyan-500 text-3xl">🎧</span>
+                            How Can We Help You?
+                        </h2>
+                    </div>
 
-                <!-- Support Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- OUTER BOX -->
+                    <div class="relative overflow-hidden rounded-[38px] border border-emerald-100 bg-white/70 backdrop-blur-xl shadow-[0_20px_60px_rgba(16,24,40,0.08)] p-5 md:p-7">
+                        <!-- Support Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
 
                     <!-- CARD 1 -->
                     <div
@@ -1531,8 +1540,9 @@
 
                     </div>
 
+                    </div>
                 </div>
-
+            </div>
             </section>
             <!-- ================= END SUPPORT SECTION ================= -->
 
@@ -2315,32 +2325,31 @@
                 if (publishedPackages.length > 0) {
                     grid.innerHTML = publishedPackages.map(pkg => {
                         return `
-                            <div class="group bg-white/10 border border-white/15 rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                                <!-- IMAGE -->
-                                <div class="h-24 bg-gray-800 flex items-center justify-center text-2xl group-hover:scale-105 transition overflow-hidden">
-                                    ${pkg.image ? `<img src="${pkg.image}" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'">` : '🏕️'}
-                                </div>
-                                <!-- CONTENT -->
-                                <div class="p-3 space-y-1.5">
-                                    <h3 class="text-sm font-semibold text-white group-hover:text-emerald-200" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                        ${pkg.title}
-                                    </h3>
-                                    <p class="text-[11px] text-gray-200">
-                                        ${pkg.duration} Days
-                                    </p>
-                                    <p class="text-sm font-bold text-emerald-200">
-                                        Rs ${pkg.price} <small style="font-weight:normal; font-size:9px;">/ ${pkg.priceType || 'Person'}</small>
-                                    </p>
-                                    <!-- ACTIONS -->
-                                    <div class="flex gap-2 pt-1">
-                                        <button onclick="window.open('https://wa.me/${pkg.whatsapp}', '_blank')" class="flex-1 py-1.5 text-[11px] font-semibold bg-emerald-400 hover:bg-emerald-300 text-black rounded-md transition hover:scale-[1.03]">
-                                            Contact
-                                        </button>
-                                        <button onclick="alert('Viewing package details for ${pkg.title} is coming soon!')" class="flex-1 py-1.5 text-[11px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-md transition hover:scale-[1.03]">
-                                            View
-                                        </button>
+                            <div class="w-full cursor-pointer group bg-white rounded-[28px] overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300" onclick="openTravelDetailModal('${encodeURIComponent(JSON.stringify(pkg))}')">
+                                
+                                <!-- IMAGE SECTION -->
+                                <div class="relative w-full h-[200px] bg-slate-100 overflow-hidden">
+                                    <img src="${pkg.image || 'https://via.placeholder.com/400x200'}" alt="${pkg.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    
+                                    <!-- Heart Icon -->
+                                    <div class="absolute top-4 right-4 w-9 h-9 bg-white rounded-full flex items-center justify-center text-slate-500 hover:text-red-500 shadow-md transition-colors z-10" onclick="event.stopPropagation();">
+                                        <i class="far fa-heart"></i>
+                                    </div>
+                                    
+                                    <!-- Price Badge -->
+                                    <div class="absolute bottom-4 left-4 bg-white px-4 py-1.5 rounded-full shadow-md z-10">
+                                        <span class="text-[12px] font-bold text-red-500">FROM Rs ${(pkg.price || 0).toLocaleString()}</span>
                                     </div>
                                 </div>
+                                
+                                <!-- CONTENT SECTION -->
+                                <div class="px-5 py-4 bg-white text-left">
+                                    <h3 class="text-[18px] font-bold text-[#1a2b3c] line-clamp-1 group-hover:text-emerald-600 transition-colors">${pkg.title} ${pkg.verified === 'Yes' ? '✅' : ''}</h3>
+                                    <div class="text-[12px] text-red-400 mt-1 uppercase tracking-wide">
+                                        TRAVEL &bull; ${pkg.departure || 'Karachi'}
+                                    </div>
+                                </div>
+                                
                             </div>
                         `;
                     }).join('');
@@ -2354,7 +2363,106 @@
             console.error("Error loading travel packages:", e);
         }
     });
+
+    // ================================
+    // COMPACT TRAVEL MODAL LOGIC
+    // ================================
+    function openTravelDetailModal(pkgStr) {
+        try {
+            const pkg = JSON.parse(decodeURIComponent(pkgStr));
+            document.getElementById('tdm-image').src = pkg.image || 'https://via.placeholder.com/400x200?text=Travel';
+            document.getElementById('tdm-title').textContent = pkg.title;
+            document.getElementById('tdm-route').innerHTML = `${pkg.departure || 'Karachi'} &rarr; ${pkg.destination || 'Saudi Arab'}`;
+            document.getElementById('tdm-duration').textContent = `${pkg.duration || 'N/A'} Days`;
+            document.getElementById('tdm-category').textContent = pkg.category || 'Travel Package';
+            document.getElementById('tdm-price').textContent = `Rs ${(pkg.price || 0).toLocaleString()} ${pkg.priceType ? '/ ' + pkg.priceType : ''}`;
+            document.getElementById('tdm-details').textContent = pkg.details || 'No additional details available for this package.';
+            
+            const contactBtn = document.getElementById('tdm-contact');
+            contactBtn.onclick = () => window.open(`https://web.whatsapp.com/send?phone=${(pkg.whatsapp || pkg.contact || '').replace(/[^0-9]/g, '')}`, '_blank');
+            
+            const modal = document.getElementById('travelDetailModal');
+            const content = document.getElementById('travelModalContent');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // trigger reflow
+            void modal.offsetWidth;
+            
+            modal.classList.remove('opacity-0');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+            
+        } catch(e) {
+            console.error("Error opening modal", e);
+        }
+    }
+    
+    function closeTravelDetailModal() {
+        const modal = document.getElementById('travelDetailModal');
+        const content = document.getElementById('travelModalContent');
+        
+        modal.classList.add('opacity-0');
+        content.classList.remove('scale-100');
+        content.classList.add('scale-95');
+        
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }, 300);
+    }
     </script>
+
+    <!-- ================================
+    // COMPACT TRAVEL MODAL HTML
+    // ================================ -->
+    <div id="travelDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-[99999] opacity-0 transition-opacity duration-300" onclick="closeTravelDetailModal()">
+        <div class="bg-white rounded-2xl max-w-[320px] w-full mx-4 shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="travelModalContent" onclick="event.stopPropagation()">
+            <!-- Image Header -->
+            <div class="relative h-32 w-full bg-slate-200">
+                <img id="tdm-image" src="" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80"></div>
+                <button onclick="closeTravelDetailModal()" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all">&times;</button>
+                <div class="absolute bottom-2 left-3 right-3">
+                    <h3 id="tdm-title" class="text-white font-bold text-lg leading-tight line-clamp-2">Package Title</h3>
+                </div>
+            </div>
+            
+            <!-- Details -->
+            <div class="p-4 space-y-3">
+                <div class="flex items-center gap-2 text-sm text-slate-600">
+                    <i class="fas fa-map-marker-alt text-emerald-500 w-4 text-center"></i>
+                    <span id="tdm-route">Karachi &rarr; Saudi Arab</span>
+                </div>
+                
+                <div class="flex items-center gap-2 text-sm text-slate-600">
+                    <i class="fas fa-clock text-sky-500 w-4 text-center"></i>
+                    <span id="tdm-duration">20 Days</span>
+                </div>
+
+                <div class="flex items-center gap-2 text-sm text-slate-600">
+                    <i class="fas fa-tags text-amber-500 w-4 text-center"></i>
+                    <span id="tdm-category">Category</span>
+                </div>
+                
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex justify-between items-center">
+                    <div class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Package Price</div>
+                    <div class="text-lg font-extrabold text-emerald-600" id="tdm-price">Rs 0</div>
+                </div>
+
+                <!-- Description/Details -->
+                <div class="text-xs text-slate-500 max-h-24 overflow-y-auto custom-scrollbar" id="tdm-details">
+                    Package details here.
+                </div>
+                
+                <!-- Action -->
+                <button id="tdm-contact" class="w-full py-2.5 mt-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+                    <i class="fab fa-whatsapp text-lg"></i> Contact on WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
