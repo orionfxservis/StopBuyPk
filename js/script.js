@@ -15,29 +15,32 @@ function updateLanguageUI(lang) {
   document.querySelectorAll('.lang-ur').forEach(el => {
     el.style.display = (lang === 'ur') ? '' : 'none';
   });
+
+  // Update toggle button text if it exists
+  const toggleText = document.getElementById('lang-toggle-text');
+  if (toggleText) {
+    toggleText.textContent = lang === 'ur' ? 'English' : 'اردو';
+  }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const toggleBtn = document.getElementById('langToggleBtn');
+// Make toggleLanguage available globally for the onclick handler
+window.toggleLanguage = function() {
+  const newLang = document.documentElement.lang === 'ur' ? 'en' : 'ur';
 
+  // Update HTML attributes
+  document.documentElement.lang = newLang;
+  document.documentElement.dir = newLang === 'ur' ? 'rtl' : 'ltr';
+
+  // Save preference
+  localStorage.setItem('qeematLang', newLang);
+
+  // Update UI text
+  updateLanguageUI(newLang);
+};
+
+document.addEventListener('DOMContentLoaded', () => {
   // Apply language on page load
   updateLanguageUI(currentLang);
-
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', () => {
-      const newLang = document.documentElement.lang === 'ur' ? 'en' : 'ur';
-
-      // Update HTML attributes
-      document.documentElement.lang = newLang;
-      document.documentElement.dir = newLang === 'ur' ? 'rtl' : 'ltr';
-
-      // Save preference
-      localStorage.setItem('qeematLang', newLang);
-
-      // Update UI text
-      updateLanguageUI(newLang);
-    });
-  }
 });
 
 // Mobile menu toggle
