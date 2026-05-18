@@ -602,8 +602,8 @@ function renderUsers() {
                 <span class="line-2">pwd: **********</span>
             </td>
             <td>
-                <span class="line-1 badge" style="background:#f1f5f9; color:#475569; margin-bottom:4px;">${u.role.toUpperCase()}</span><br>
-                <span class="line-2 badge" style="background:${u.status === 'active' ? '#dcfce7' : '#fef08a'}; color:${u.status === 'active' ? '#166534' : '#854d0e'};">${u.status}</span>
+                <span class="line-1 badge" style="background:#f1f5f9; color:#475569; margin-bottom:4px;">${(u.role || 'user').toUpperCase()}</span><br>
+                <span class="line-2 badge" style="background:${u.status === 'active' ? '#dcfce7' : '#fef08a'}; color:${u.status === 'active' ? '#166534' : '#854d0e'};">${u.status || 'inactive'}</span>
             </td>
             <td>
                 <button class="edit-btn" onclick="editUser(${index})"><i class="fa-solid fa-pen"></i></button>

@@ -757,8 +757,6 @@
             </div>
         </div>
 
-
-        <!-- AI Smart Recommendations -->
         <!-- AI Insights Section -->
         <section class="max-w-screen-2xl mx-auto px-4 pt-6">
 
@@ -1169,42 +1167,187 @@
 
 
 
-		<!-- Travel & Tours Section -->
-        <section id="travel-section" class="pt-6">
+		<!-- TRAVEL & TOURS SECTION -->
+<section id="travel-section" class="pt-8 pb-5">
 
-            <div class="max-w-screen-2xl mx-auto px-4">
+    <div class="max-w-screen-2xl mx-auto px-4">
 
-                <!-- OUTER BOX -->
-                <div class="relative overflow-hidden rounded-[26px] border-2 border-emerald-200/50 bg-gradient-to-br from-[#062e22] via-[#0f766e] to-[#10b981] shadow-[0_10px_40px_rgba(16,185,129,0.25)] backdrop-blur-xl p-5 md:p-7">
+        <!-- PREMIUM OUTER WRAPPER -->
+        <div class="relative overflow-hidden rounded-[34px] border border-white/10 bg-gradient-to-br from-[#021710] via-[#064e3b] to-[#059669] shadow-[0_20px_70px_rgba(16,185,129,0.28)] p-5 md:p-7">
 
-                    <!-- DECORATIVE GLOW -->
-                    <div class="absolute inset-0 pointer-events-none overflow-hidden">
-                        <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl mix-blend-overlay"></div>
-                        <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-900/40 rounded-full blur-3xl"></div>
-                    </div>
+            <!-- BACKGROUND EFFECTS -->
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
 
-                    <!-- HEADER -->
-                    <div class="relative z-10 flex justify-between items-center mb-6">
-                        <h2 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-3 drop-shadow-md">
-                            <span class="bg-white/20 p-1.5 rounded-lg backdrop-blur-md border border-white/30 text-lg">✈️</span> 
-                            <span style="font-family: Georgia, 'Times New Roman', serif; letter-spacing: 0.5px;"><span class="lang-en">Travel & Tours</span><span class="lang-ur">سفر اور سیاحت</span></span>
-                        </h2>
+                <!-- Glow -->
+                <div class="absolute -top-32 -right-32 w-[420px] h-[420px] bg-emerald-300/10 rounded-full blur-3xl"></div>
 
-                        <button onclick="window.location.href='pages/travel.html'" class="flex items-center gap-1.5 text-[13px] md:text-sm font-bold px-4 md:px-5 py-2 bg-white text-emerald-800 rounded-full shadow-sm hover:shadow-md border border-emerald-100/50 transition-all hover:-translate-y-0.5 hover:bg-emerald-50">
-                            View All <i class="fas fa-arrow-right text-[10px] md:text-xs"></i>
-                        </button>
-                    </div>
+                <div class="absolute -bottom-32 -left-32 w-[420px] h-[420px] bg-cyan-400/10 rounded-full blur-3xl"></div>
 
-                    <!-- GRID -->
-                    <div class="relative z-10">
-                        <div id="travelPackagesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                            <!-- Packages injected dynamically -->
-                        </div>
-                    </div>
+                <!-- Grid -->
+                <div class="absolute inset-0 opacity-[0.05]"
+                    style="background-image:
+                    linear-gradient(to right, rgba(255,255,255,.18) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255,255,255,.18) 1px, transparent 1px);
+                    background-size: 55px 55px;">
                 </div>
 
             </div>
-        </section>
+
+            <!-- HEADER -->
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 mb-7">
+
+                <!-- LEFT -->
+                <div class="flex items-center gap-4">
+
+                    <!-- ICON -->
+                    <div class="w-16 h-16 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/15 flex items-center justify-center shadow-[0_8px_30px_rgba(255,255,255,.12)] text-3xl">
+                        ✈️
+                    </div>
+
+                    <!-- TEXT -->
+                    <div>
+
+                        <h2 class="text-3xl md:text-4xl font-black text-white tracking-wide leading-tight"
+                            style="font-family: Georgia, 'Times New Roman', serif;">
+
+                            <span class="lang-en">
+                                Travel & Tours
+                            </span>
+
+                            <span class="lang-ur">
+                                سفر اور سیاحت
+                            </span>
+
+                        </h2>
+
+                        <p class="text-sm md:text-[15px] text-emerald-100/80 mt-1 max-w-xl leading-relaxed">
+
+                            <span class="lang-en">
+                                Explore Pakistan & International Tour Deals with Smart Price Comparison
+                            </span>
+
+                            <span class="lang-ur">
+                                پاکستان اور بین الاقوامی ٹور پیکجز بہترین قیمتوں کے موازنہ کے ساتھ دریافت کریں
+                            </span>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- RIGHT BUTTON -->
+                <button onclick="window.location.href='pages/travel.html'"
+                    class="group h-[52px] px-7 rounded-2xl bg-white text-emerald-900 text-sm font-extrabold shadow-[0_8px_25px_rgba(255,255,255,.18)] hover:bg-emerald-50 transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2 whitespace-nowrap">
+
+                    <span>
+                        View All Packages
+                    </span>
+
+                    <i class="fas fa-arrow-right text-xs transition-transform duration-300 group-hover:translate-x-1"></i>
+
+                </button>
+
+            </div>
+
+            <!-- FEATURE STRIP -->
+            <div class="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-3 mb-7">
+
+                <!-- ITEM -->
+                <div class="h-[56px] rounded-2xl bg-white/10 border border-white/10 backdrop-blur-xl px-4 flex items-center gap-3">
+
+                    <div class="text-xl">
+                        🌍
+                    </div>
+
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-lg font-black text-white">
+                            120+
+                        </span>
+
+                        <span class="text-[13px] font-semibold text-emerald-100/80">
+                            Tours
+                        </span>
+                    </div>
+
+                </div>
+
+                <!-- ITEM -->
+                <div class="h-[56px] rounded-2xl bg-white/10 border border-white/10 backdrop-blur-xl px-4 flex items-center gap-3">
+
+                    <div class="text-xl">
+                        🏨
+                    </div>
+
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-lg font-black text-white">
+                            85+
+                        </span>
+
+                        <span class="text-[13px] font-semibold text-emerald-100/80">
+                            Hotels
+                        </span>
+                    </div>
+
+                </div>
+
+                <!-- ITEM -->
+                <div class="h-[56px] rounded-2xl bg-white/10 border border-white/10 backdrop-blur-xl px-4 flex items-center gap-3">
+
+                    <div class="text-xl">
+                        ✈️
+                    </div>
+
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-lg font-black text-white">
+                            40+
+                        </span>
+
+                        <span class="text-[13px] font-semibold text-emerald-100/80">
+                            Airlines
+                        </span>
+                    </div>
+
+                </div>
+
+                <!-- ITEM -->
+                <div class="h-[56px] rounded-2xl bg-white/10 border border-white/10 backdrop-blur-xl px-4 flex items-center gap-3">
+
+                    <div class="text-xl">
+                        ⭐
+                    </div>
+
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-lg font-black text-white">
+                            4.9
+                        </span>
+
+                        <span class="text-[13px] font-semibold text-emerald-100/80">
+                            Rating
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- PACKAGES GRID -->
+            <div class="relative z-10">
+
+                <div id="travelPackagesGrid"
+                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+                    <!-- DYNAMIC CARDS FROM JS -->
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
         <!-- Blogs Section -->
         <section id="blogs-section" class="pt-6">
@@ -2460,6 +2603,122 @@
             modal.classList.remove('flex');
         }, 300);
     }
+	
+	function renderTravelCard(pkg) {
+
+let comparisonHTML = "";
+
+if (pkg.comparisons && pkg.comparisons.length > 0) {
+
+    comparisonHTML = `
+        <div class="mt-4 space-y-2">
+
+            ${pkg.comparisons.slice(0,2).map((c, index) => `
+
+                <div class="flex items-center justify-between bg-white/10 border border-white/10 rounded-xl px-3 py-2 backdrop-blur-md">
+
+                    <div>
+
+                        <p class="text-[11px] text-emerald-100/70">
+                            Comparison ${index + 1}
+                        </p>
+
+                        <h5 class="text-sm font-semibold text-white leading-tight">
+                            ${c.name}
+                        </h5>
+                    </div>
+
+                    <div class="text-sm font-bold text-yellow-300 whitespace-nowrap">
+                        Rs. ${c.price}
+                    </div>
+                </div>
+            `).join("")}
+
+        </div>
+    `;
+
+} else {
+
+    comparisonHTML = `
+        <div class="mt-4">
+
+            <div class="bg-white/5 border border-dashed border-white/15 rounded-xl px-3 py-3 text-center">
+                <p class="text-sm text-emerald-100/70">
+                    No Comparison Available Now
+                </p>
+            </div>
+        </div>
+    `;
+
+}
+
+return `
+
+<div class="travel-card relative overflow-hidden rounded-[28px] border border-white/10 bg-white/10 backdrop-blur-xl shadow-[0_10px_35px_rgba(0,0,0,.28)] hover:-translate-y-2 hover:shadow-[0_15px_50px_rgba(0,0,0,.4)] transition-all duration-500">
+
+    <!-- IMAGE -->
+    <div class="travel-card-image relative h-[240px] overflow-hidden">
+
+        <img src="${pkg.image}"
+            class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+
+        <!-- OVERLAY -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
+
+        <!-- BADGE -->
+        <div class="absolute top-4 left-4 px-3 py-1 rounded-full bg-emerald-500 text-white text-[11px] font-bold shadow-lg">
+            Featured
+        </div>
+
+        <!-- LOCATION -->
+        <div class="absolute bottom-4 left-4 right-4">
+            <div class="text-xs text-emerald-200 mb-1">
+                📍 ${pkg.location}
+            </div>
+
+            <h3 class="text-2xl font-black text-white leading-tight">
+                ${pkg.name}
+            </h3>
+        </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="travel-card-content p-5">
+
+        <!-- PRICE -->
+        <div class="flex items-center justify-between mb-3">
+            <div>
+                <p class="text-[11px] uppercase tracking-widest text-emerald-100/60 mb-1">
+                    Starting From
+                </p>
+                
+				<div class="text-2xl font-black text-yellow-300">
+                    Rs. ${pkg.price}
+                </div>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-xl border border-white/10">
+                ✈️
+            </div>
+        </div>
+
+        <!-- SHORT DESC -->
+        <p class="text-sm text-emerald-50/80 leading-relaxed">
+            ${pkg.description || "Best travel experience with premium services and unforgettable destinations."}
+        </p>
+
+        <!-- COMPARISON SECTION -->
+        ${comparisonHTML}
+
+        <!-- BUTTON -->
+        <button class="travel-card-btn mt-5 w-full h-[48px] rounded-2xl bg-white text-emerald-900 font-black text-sm hover:bg-emerald-50 transition-all duration-300 shadow-lg">
+
+            View Details
+        </button>
+    </div>
+</div>
+
+`;
+}
     </script>
 
     <!-- ================================
