@@ -30,11 +30,11 @@ const DataService = {
                     const uId = String(u.userId || u.id || '').trim().toLowerCase();
                     const targetId = String(data.userId || '').trim().toLowerCase();
                     const uRole = String(u.role || '').trim().toLowerCase();
-                    return (uId === targetId) && (String(u.password) === String(data.password)) && (uRole === 'admin');
+                    return (uId === targetId) && (String(u.password) === String(data.password)) && (uRole === 'admin' || uRole === 'sub-admin');
                 });
                 // Hardcoded fallback admin for demo purposes
                 if (!foundUser && data.userId === 'admin' && data.password === 'admin123') {
-                    foundUser = { role: 'admin', username: 'Admin Demo' };
+                    foundUser = { role: 'admin', userId: 'admin', username: 'Admin Demo' };
                 }
             } else if (data.role === 'company') {
                 foundUser = users.find(u => u.username === data.username && u.password === data.password && u.role === 'company');

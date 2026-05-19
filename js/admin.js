@@ -587,6 +587,21 @@ async function saveUsers() {
     users.forEach(u => {
         if (!u.permissions) u.permissions = {};
     });
+    
+    // Safety check to prevent wiping the main admin account if it was missing from local storage
+    const hasAdmin = users.some(u => String(u.userId).toLowerCase() === 'admin' && u.role === 'admin');
+    if (!hasAdmin) {
+        users.unshift({
+            id: 'admin_1',
+            userId: 'admin',
+            password: '123',
+            fullName: 'Super Admin',
+            role: 'admin',
+            status: 'active',
+            permissions: {}
+        });
+    }
+
     await DataService.saveUsers(users);
     renderUsers();
 }
@@ -611,12 +626,14 @@ function renderUsers() {
                 <span class="line-2">pwd: **********</span>
             </td>
             <td>
-                <span class="line-1 badge" style="background:#f1f5f9; color:#475569; margin-bottom:4px;">${(u.role || 'user').toUpperCase()}</span><br>
+                <span class="line-1 badge" style="background:#f1f5f9; color:#475569; margin-bottom:4px;">${String(u.userId).toLowerCase() === 'admin' ? 'SUPER ADMIN' : (u.role || 'user').toUpperCase()}</span><br>
                 <span class="line-2 badge" style="background:${u.status === 'active' ? '#dcfce7' : '#fef08a'}; color:${u.status === 'active' ? '#166534' : '#854d0e'};">${u.status || 'inactive'}</span>
             </td>
             <td>
+                ${String(u.userId).toLowerCase() !== 'admin' ? `
                 <button class="edit-btn" onclick="editUser(${index})"><i class="fa-solid fa-pen"></i></button>
                 <button class="delete-btn" onclick="deleteUser(${index})"><i class="fa-solid fa-trash"></i></button>
+                ` : '<span style="color:#aaa; font-size:12px;">Protected</span>'}
             </td>
         </tr>
     `}).join('');
@@ -1712,24 +1729,33 @@ window.populatePermissionDropdown = function() {
 
 window.loadUserPermissions = function() {
     const userSelect = document.getElementById('rightsUserSelect');
-    const sectionSelect = document.getElementById('rightsSectionSelect');
-    const checkboxes = document.querySelectorAll('.perm-checkbox');
+    const sectionCheckboxes = document.querySelectorAll('.section-checkbox');
+    const permCheckboxes = document.querySelectorAll('.perm-checkbox');
     
-    checkboxes.forEach(cb => cb.checked = false);
+    permCheckboxes.forEach(cb => cb.checked = false);
     
-    if (!userSelect || !userSelect.value || !sectionSelect || !sectionSelect.value) return;
+    if (!userSelect || !userSelect.value) return;
+    
+    // Check which sections are selected
+    const selectedSections = Array.from(sectionCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
     
     const user = users.find(u => u.userId === userSelect.value);
     if (!user) return;
     
     if (user.permissions && typeof user.permissions === 'object' && !Array.isArray(user.permissions)) {
-        const sectionPerms = user.permissions[sectionSelect.value] || [];
-        sectionPerms.forEach(action => {
-            const cb = document.querySelector(`.perm-checkbox[value="${action}"]`);
-            if (cb) cb.checked = true;
-        });
+        // If multiple sections are selected, we only show checkmarks if ALL selected sections have that right.
+        // Or to keep it simple, just load rights of the first selected section, or union. Let's do intersection:
+        if (selectedSections.length > 0) {
+            const firstSectionPerms = user.permissions[selectedSections[0]] || [];
+            
+            // To be accurate, we'll just show the rights of the first checked section to populate the UI.
+            firstSectionPerms.forEach(action => {
+                const cb = document.querySelector(`.perm-checkbox[value="${action}"]`);
+                if (cb) cb.checked = true;
+            });
+        }
     } else if (user.role === 'admin' && user.userId === 'admin') {
-        checkboxes.forEach(cb => cb.checked = true);
+        permCheckboxes.forEach(cb => cb.checked = true);
     }
 };
 
@@ -1738,23 +1764,25 @@ if (rightsForm) {
     rightsForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const userSelect = document.getElementById('rightsUserSelect');
-        const sectionSelect = document.getElementById('rightsSectionSelect');
+        const sectionCheckboxes = document.querySelectorAll('.section-checkbox');
+        
+        const selectedSections = Array.from(sectionCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
         
         if (!userSelect || !userSelect.value) {
             alert('Please select a user first.');
             return;
         }
-        if (!sectionSelect || !sectionSelect.value) {
-            alert('Please select a section.');
+        if (selectedSections.length === 0) {
+            alert('Please select at least one section.');
             return;
         }
         
         const userIndex = users.findIndex(u => u.userId === userSelect.value);
         if (userIndex === -1) return;
         
-        const checkboxes = document.querySelectorAll('.perm-checkbox');
+        const permCheckboxes = document.querySelectorAll('.perm-checkbox');
         const selectedActions = [];
-        checkboxes.forEach(cb => {
+        permCheckboxes.forEach(cb => {
             if (cb.checked) selectedActions.push(cb.value);
         });
         
@@ -1764,7 +1792,11 @@ if (rightsForm) {
             currentPerms = {};
         }
         
-        currentPerms[sectionSelect.value] = selectedActions;
+        // Apply rights to all selected sections
+        selectedSections.forEach(sec => {
+            currentPerms[sec] = selectedActions;
+        });
+        
         users[userIndex].permissions = currentPerms;
         
         await saveUsers();
@@ -1778,7 +1810,7 @@ window.enforceUserPermissions = function() {
         if (!currentUserStr) return;
         
         const currentUser = JSON.parse(currentUserStr);
-        if (String(currentUser.userId || '').toLowerCase() === 'admin') return; // Super admin exception
+        if (String(currentUser.userId || currentUser.username || '').toLowerCase() === 'admin') return; // Super admin exception
         
         if (currentUser.role === 'admin') {
             let perms = currentUser.permissions;
@@ -1794,14 +1826,19 @@ window.enforceUserPermissions = function() {
                     const sectionId = sectionMatch[1];
                     // Always show dashboard
                     if (sectionId !== 'dashboard') {
-                        const sectionRights = perms[sectionId] || [];
-                        if (sectionRights.length === 0) {
+                        // Force hide 'Manage Users' for anyone except Super Admin
+                        if (sectionId === 'users' && String(currentUser.userId || '').toLowerCase() !== 'admin') {
                             li.style.display = 'none';
-                        }
-                        
-                        // Enforce Publish/Draft rights
-                        if (!sectionRights.includes('Publish')) {
-                           restrictPublishForSection(sectionId);
+                        } else {
+                            const sectionRights = perms[sectionId] || [];
+                            if (sectionRights.length === 0) {
+                                li.style.display = 'none';
+                            }
+                            
+                            // Enforce Publish/Draft rights
+                            if (!sectionRights.includes('Publish')) {
+                               restrictPublishForSection(sectionId);
+                            }
                         }
                     }
                 }
