@@ -36,13 +36,13 @@
             <ul class="menu">
                 <li onclick="showSection('dashboard')"><i class="fa-solid fa-chart-line"></i> Dashboard</li>
                 <li onclick="showSection('categories')"><i class="fa-solid fa-layer-group"></i> Manage Categories</li>
-                <li onclick="showSection('products')"><i class="fa-solid fa-box"></i> Manage Products</li>
-                <li onclick="showSection('deals')"><i class="fa-solid fa-fire"></i> Manage Deals</li>
+                <li onclick="showSection('products')"><i class="fa-solid fa-box"></i> Manage Products <span id="productsPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
+                <li onclick="showSection('deals')"><i class="fa-solid fa-fire"></i> Manage Deals <span id="dealsPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
                 <li onclick="showSection('users')"><i class="fa-solid fa-users"></i> Manage Users</li>
                 <li onclick="showSection('ads')"><i class="fa-solid fa-bullhorn"></i> Place Ads</li>
-                <li onclick="showSection('banners')"><i class="fa-solid fa-image"></i> Manage Banners</li>
-                <li onclick="showSection('blogs')"><i class="fa-solid fa-blog"></i> Manage Blogs</li>
-                <li onclick="showSection('broadcasts')"><i class="fa-solid fa-bullhorn"></i> Manage Broadcasts</li>
+                <li onclick="showSection('banners')"><i class="fa-solid fa-image"></i> Manage Banners <span id="bannersPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
+                <li onclick="showSection('blogs')"><i class="fa-solid fa-blog"></i> Manage Blogs <span id="blogsPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
+                <li onclick="showSection('broadcasts')"><i class="fa-solid fa-bullhorn"></i> Manage Broadcasts <span id="broadcastsPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
                 <li onclick="showSection('travel')"><i class="fa-solid fa-plane"></i> Manage Travel <span
                         id="travelPendingBadge"
                         style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span>
@@ -261,6 +261,14 @@
                         <!-- Dynamic Fields Injected Here -->
                         <div id="dynamicProductFields"></div>
 
+                        <div class="input-group" style="margin-top:10px;">
+                            <label>Status <span style="color:var(--accent-color);">*</span></label>
+                            <select id="prodStatus" class="admin-input" required>
+                                <option value="Publish">Publish</option>
+                                <option value="Draft">Draft</option>
+                            </select>
+                        </div>
+
                         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Add
                             Product</button>
                     </form>
@@ -340,6 +348,15 @@
                             <div class="input-group">
                                 <label>Video Link (TikTok/FB)</label>
                                 <input type="url" id="dealVideo" placeholder="https://tiktok.com/...">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Status <span style="color:var(--accent-color);">*</span></label>
+                                <select id="dealStatus" class="admin-input" required>
+                                    <option value="Publish">Publish</option>
+                                    <option value="Draft">Draft</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-actions" style="margin-top: 15px;">
@@ -442,6 +459,51 @@
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Assign Rights UI -->
+                <div class="form-container" style="margin-top: 20px;">
+                    <h3>Assign Section Rights</h3>
+                    <form id="rightsForm">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Select User</label>
+                                <select id="rightsUserSelect" required onchange="loadUserPermissions()">
+                                    <option value="">Select a user...</option>
+                                    <!-- Populated via JS -->
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Select Section</label>
+                                <select id="rightsSectionSelect" required onchange="loadUserPermissions()">
+                                    <option value="">Select a section...</option>
+                                    <option value="dashboard">Dashboard</option>
+                                    <option value="categories">Manage Categories</option>
+                                    <option value="products">Manage Products</option>
+                                    <option value="deals">Manage Deals</option>
+                                    <option value="users">Manage Users</option>
+                                    <option value="ads">Place Ads</option>
+                                    <option value="banners">Manage Banners</option>
+                                    <option value="blogs">Manage Blogs</option>
+                                    <option value="broadcasts">Manage Broadcasts</option>
+                                    <option value="travel">Manage Travel</option>
+                                    <option value="daily-prices">Manage Daily Prices</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-top: 15px;">
+                            <label>Action Rights (For the selected user & section)</label>
+                            <div id="permissionsGrid" style="display: flex; flex-wrap: wrap; gap: 20px; padding: 15px; background: rgba(0,0,0,0.1); border-radius: 8px; border: 1px solid var(--border-color);">
+                                <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" value="Draft" class="perm-checkbox"> Draft</label>
+                                <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" value="Publish" class="perm-checkbox"> Publish</label>
+                                <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" value="Edit" class="perm-checkbox"> Edit</label>
+                                <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" value="Delete" class="perm-checkbox"> Delete</label>
+                            </div>
+                        </div>
+                        <div class="form-actions" style="margin-top: 15px;">
+                            <button type="submit" class="btn btn-primary" id="btnSaveRights">Save Rights</button>
+                        </div>
+                    </form>
+                </div>
             </section>
 
             <!-- Banner Management Section -->
@@ -472,6 +534,13 @@
                         <div class="input-group">
                             <label>Weblink (Optional)</label>
                             <input type="url" id="bannerLink" placeholder="https://example.com/promo">
+                        </div>
+                        <div class="input-group">
+                            <label>Status <span style="color:var(--accent-color);">*</span></label>
+                            <select id="bannerStatus" class="admin-input" required>
+                                <option value="Publish">Publish</option>
+                                <option value="Draft">Draft</option>
+                            </select>
                         </div>
                         <div class="input-group">
                             <label>Preview</label>
@@ -667,8 +736,8 @@
                             <div class="input-group" style="flex: 1;">
                                 <label>Status <span style="color:var(--accent-color);">*</span></label>
                                 <select id="broadcastStatus" required>
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
+                                    <option value="Publish">Publish</option>
+                                    <option value="Draft">Draft</option>
                                     <option value="delete">Delete (Remove)</option>
                                 </select>
                             </div>
