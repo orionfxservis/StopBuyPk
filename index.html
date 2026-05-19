@@ -2087,7 +2087,7 @@
             btn.textContent = origText;
 
             if (result.success) {
-                localStorage.setItem("user", JSON.stringify(result.user));
+                localStorage.setItem("currentUser", JSON.stringify(result.user));
                 window.location.href = "index.html";
             } else {
                 alert(result.message || "Login Failed");
@@ -2115,7 +2115,7 @@
             btn.textContent = origText;
 
             if (result.success) {
-                localStorage.setItem("user", JSON.stringify(result.user));
+                localStorage.setItem("currentUser", JSON.stringify(result.user));
                 window.location.href = "pages/admin.html";
             } else {
                 alert(result.message || "Login Failed");
@@ -2141,7 +2141,7 @@
             btn.textContent = origText;
 
             if (result.success) {
-                localStorage.setItem("user", JSON.stringify(result.user));
+                localStorage.setItem("currentUser", JSON.stringify(result.user));
                 window.location.href = "pages/admin.html";
             } else {
                 alert(result.message || "Login Failed");

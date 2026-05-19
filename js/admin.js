@@ -64,6 +64,9 @@ async function initAdmin() {
         renderBroadcasts();
         renderAdminProducts(); // New function for products
         populateCategoryDropdown(); // New function for form
+        
+        enforceUserPermissions(); // Apply user rights to sidebar
+        updatePendingApprovalsBadge(); // Update badges
 
         if (typeof updateAdminAlerts === 'function') updateAdminAlerts();
 
@@ -219,6 +222,7 @@ if (categoryForm) {
 async function saveBanners() {
     await DataService.saveBanners(banners);
     renderBanners();
+    if (typeof updatePendingApprovalsBadge === 'function') updatePendingApprovalsBadge();
 }
 
 function renderBanners() {
@@ -391,6 +395,7 @@ const btnSaveDeal = document.getElementById('btnSaveDeal');
 async function saveDeals() {
     await DataService.saveDeals(deals);
     renderDeals();
+    if (typeof updatePendingApprovalsBadge === 'function') updatePendingApprovalsBadge();
 }
 
 function renderDeals() {
@@ -578,6 +583,10 @@ const btnCancelUser = document.getElementById('btnCancelUser');
 const btnSaveUser = document.getElementById('btnSaveUser');
 
 async function saveUsers() {
+    // Ensure all users have a permissions property so the backend GAS script detects it in Object.keys(items[0])
+    users.forEach(u => {
+        if (!u.permissions) u.permissions = {};
+    });
     await DataService.saveUsers(users);
     renderUsers();
 }
@@ -611,6 +620,8 @@ function renderUsers() {
             </td>
         </tr>
     `}).join('');
+    
+    if (typeof populatePermissionDropdown === 'function') populatePermissionDropdown();
 }
 
 
@@ -1148,6 +1159,7 @@ if (adminProductForm) {
             renderDynamicAdminFields();
             renderAdminProducts();
             updateUI(); // Update stats
+            if (typeof updatePendingApprovalsBadge === 'function') updatePendingApprovalsBadge();
         } catch (error) {
             alert('Failed to save product. Check internet connection or Google Script logs.');
             console.error('Save product error:', error);
@@ -1189,6 +1201,7 @@ window.deleteProduct = async (index) => {
         await DataService.saveProducts(products);
         renderAdminProducts();
         updateUI();
+        if (typeof updatePendingApprovalsBadge === 'function') updatePendingApprovalsBadge();
     }
 };
 
@@ -1289,6 +1302,7 @@ const btnSaveTravel = document.getElementById('btnSaveTravel');
 async function saveTravelPackages() {
     await DataService.saveTravelPackages(travelPackages);
     renderTravelPackages();
+    if (typeof updatePendingApprovalsBadge === 'function') updatePendingApprovalsBadge();
 }
 
 function renderTravelPackages() {
@@ -1549,6 +1563,7 @@ const broadcastTextTicker = document.getElementById('broadcastText');
 async function saveBroadcasts() {
     await DataService.saveBroadcasts(broadcasts);
     renderBroadcasts();
+    if (typeof updatePendingApprovalsBadge === 'function') updatePendingApprovalsBadge();
 }
 
 function renderBroadcasts() {
@@ -1672,4 +1687,194 @@ if (typeof renderAds !== 'function') {
 if (typeof renderDailyPrices !== 'function') {
     window.renderDailyPrices = function () { console.log('renderDailyPrices not implemented yet'); };
 }
+
+// ==========================================
+// USER RIGHTS MANAGEMENT
+// ==========================================
+window.populatePermissionDropdown = function() {
+    const select = document.getElementById('rightsUserSelect');
+    if (!select) return;
+    
+    const currentSelection = select.value;
+    select.innerHTML = '<option value="">Select a user...</option>';
+    
+    users.forEach(u => {
+        const option = document.createElement('option');
+        option.value = u.userId;
+        option.textContent = `${u.fullName || u.userId} (${u.role})`;
+        select.appendChild(option);
+    });
+    
+    if (currentSelection && users.some(u => u.userId === currentSelection)) {
+        select.value = currentSelection;
+    }
+};
+
+window.loadUserPermissions = function() {
+    const userSelect = document.getElementById('rightsUserSelect');
+    const sectionSelect = document.getElementById('rightsSectionSelect');
+    const checkboxes = document.querySelectorAll('.perm-checkbox');
+    
+    checkboxes.forEach(cb => cb.checked = false);
+    
+    if (!userSelect || !userSelect.value || !sectionSelect || !sectionSelect.value) return;
+    
+    const user = users.find(u => u.userId === userSelect.value);
+    if (!user) return;
+    
+    if (user.permissions && typeof user.permissions === 'object' && !Array.isArray(user.permissions)) {
+        const sectionPerms = user.permissions[sectionSelect.value] || [];
+        sectionPerms.forEach(action => {
+            const cb = document.querySelector(`.perm-checkbox[value="${action}"]`);
+            if (cb) cb.checked = true;
+        });
+    } else if (user.role === 'admin' && user.userId === 'admin') {
+        checkboxes.forEach(cb => cb.checked = true);
+    }
+};
+
+const rightsForm = document.getElementById('rightsForm');
+if (rightsForm) {
+    rightsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const userSelect = document.getElementById('rightsUserSelect');
+        const sectionSelect = document.getElementById('rightsSectionSelect');
+        
+        if (!userSelect || !userSelect.value) {
+            alert('Please select a user first.');
+            return;
+        }
+        if (!sectionSelect || !sectionSelect.value) {
+            alert('Please select a section.');
+            return;
+        }
+        
+        const userIndex = users.findIndex(u => u.userId === userSelect.value);
+        if (userIndex === -1) return;
+        
+        const checkboxes = document.querySelectorAll('.perm-checkbox');
+        const selectedActions = [];
+        checkboxes.forEach(cb => {
+            if (cb.checked) selectedActions.push(cb.value);
+        });
+        
+        let currentPerms = users[userIndex].permissions;
+        // Normalize if it was previously an array or undefined
+        if (!currentPerms || Array.isArray(currentPerms) || typeof currentPerms !== 'object') {
+            currentPerms = {};
+        }
+        
+        currentPerms[sectionSelect.value] = selectedActions;
+        users[userIndex].permissions = currentPerms;
+        
+        await saveUsers();
+        alert('User rights updated successfully!');
+    });
+}
+
+window.enforceUserPermissions = function() {
+    try {
+        const currentUserStr = localStorage.getItem('currentUser');
+        if (!currentUserStr) return;
+        
+        const currentUser = JSON.parse(currentUserStr);
+        if (String(currentUser.userId || '').toLowerCase() === 'admin') return; // Super admin exception
+        
+        if (currentUser.role === 'admin') {
+            let perms = currentUser.permissions;
+            if (!perms || Array.isArray(perms) || typeof perms !== 'object') {
+                perms = {}; // Legacy or no perms
+            }
+            
+            const menuItems = document.querySelectorAll('.menu li[onclick^="showSection"]');
+            
+            menuItems.forEach(li => {
+                const sectionMatch = li.getAttribute('onclick').match(/showSection\('([^']+)'\)/);
+                if (sectionMatch && sectionMatch[1]) {
+                    const sectionId = sectionMatch[1];
+                    // Always show dashboard
+                    if (sectionId !== 'dashboard') {
+                        const sectionRights = perms[sectionId] || [];
+                        if (sectionRights.length === 0) {
+                            li.style.display = 'none';
+                        }
+                        
+                        // Enforce Publish/Draft rights
+                        if (!sectionRights.includes('Publish')) {
+                           restrictPublishForSection(sectionId);
+                        }
+                    }
+                }
+            });
+        }
+    } catch(e) {
+        console.error("Error enforcing permissions", e);
+    }
+};
+
+window.restrictPublishForSection = function(sectionId) {
+    const sectionEl = document.getElementById(sectionId);
+    if (!sectionEl) return;
+    
+    const statusSelects = sectionEl.querySelectorAll('select');
+    statusSelects.forEach(select => {
+        let hasPublish = false;
+        Array.from(select.options).forEach(opt => {
+            if (opt.value.toLowerCase() === 'publish') {
+                opt.style.display = 'none';
+                opt.disabled = true;
+                hasPublish = true;
+            }
+        });
+        
+        if (hasPublish) {
+            select.value = 'Draft';
+            select.addEventListener('change', (e) => {
+                if (e.target.value.toLowerCase() === 'publish') {
+                    e.target.value = 'Draft';
+                }
+            });
+        }
+    });
+};
+
+window.updatePendingApprovalsBadge = function() {
+    try {
+        const currentUserStr = localStorage.getItem('currentUser');
+        if (!currentUserStr) return;
+        const currentUser = JSON.parse(currentUserStr);
+        const isSuperAdmin = String(currentUser.userId || '').toLowerCase() === 'admin';
+        
+        if (!isSuperAdmin) {
+            ['products', 'deals', 'banners', 'blogs', 'broadcasts', 'travel'].forEach(sec => {
+                const badge = document.getElementById(sec + 'PendingBadge');
+                if (badge) badge.style.display = 'none';
+            });
+            return;
+        }
+        
+        const counts = {
+            products: products.filter(p => p.status === 'Draft' || p.prodStatus === 'Draft').length,
+            deals: deals.filter(d => d.status === 'Draft' || d.dealStatus === 'Draft').length,
+            banners: banners.filter(b => b.status === 'Draft').length,
+            blogs: blogs.filter(b => b.status === 'Draft').length,
+            broadcasts: broadcasts.filter(b => b.status === 'Draft').length,
+            travel: travelPackages.filter(p => p.status === 'Draft').length
+        };
+        
+        Object.keys(counts).forEach(sec => {
+            const badge = document.getElementById(sec + 'PendingBadge');
+            if (badge) {
+                if (counts[sec] > 0) {
+                    badge.textContent = counts[sec];
+                    badge.style.display = 'inline-block';
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+        });
+    } catch(e) {
+        console.error("Error updating badges", e);
+    }
+};
 

@@ -26,7 +26,12 @@ const DataService = {
             let foundUser = null;
 
             if (data.role === 'admin') {
-                foundUser = users.find(u => (u.username === data.userId || u.id === data.userId) && u.password === data.password && u.role === 'admin');
+                foundUser = users.find(u => {
+                    const uId = String(u.userId || u.id || '').trim().toLowerCase();
+                    const targetId = String(data.userId || '').trim().toLowerCase();
+                    const uRole = String(u.role || '').trim().toLowerCase();
+                    return (uId === targetId) && (String(u.password) === String(data.password)) && (uRole === 'admin');
+                });
                 // Hardcoded fallback admin for demo purposes
                 if (!foundUser && data.userId === 'admin' && data.password === 'admin123') {
                     foundUser = { role: 'admin', username: 'Admin Demo' };
@@ -51,55 +56,34 @@ const DataService = {
     getBanners: async () => JSON.parse(localStorage.getItem("admin_banners")) || [],
     getDeals: async () => JSON.parse(localStorage.getItem("admin_deals")) || [],
     getUsers: async () => {
-        try {
-            const res = await fetch(DataService.API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "getUsers" })
-            });
-            const data = await res.json();
-            if (data.success && data.users) {
-                localStorage.setItem("admin_users", JSON.stringify(data.users));
-                return data.users;
-            }
-        } catch (err) {
-            console.warn("Failed to get users from API, falling back to local storage");
-        }
+        setTimeout(async () => {
+            try {
+                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getUsers" }) });
+                const data = await res.json();
+                if (data.success && data.users) localStorage.setItem("admin_users", JSON.stringify(data.users));
+            } catch (err) {}
+        }, 0);
         return JSON.parse(localStorage.getItem("admin_users")) || [];
     },
     getBlogs: async () => JSON.parse(localStorage.getItem("admin_blogs")) || [],
     getTravelPackages: async () => {
-        try {
-            const res = await fetch(DataService.API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "getTravelPackages" })
-            });
-            const data = await res.json();
-            if (data.success && data.travelPackages) {
-                localStorage.setItem("admin_travel_packages", JSON.stringify(data.travelPackages));
-                return data.travelPackages;
-            }
-        } catch (err) {
-            console.warn("Failed to get travel packages from API, falling back to local storage");
-        }
+        setTimeout(async () => {
+            try {
+                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getTravelPackages" }) });
+                const data = await res.json();
+                if (data.success && data.travelPackages) localStorage.setItem("admin_travel_packages", JSON.stringify(data.travelPackages));
+            } catch (err) {}
+        }, 0);
         return JSON.parse(localStorage.getItem("admin_travel_packages")) || [];
     },
     getBroadcasts: async () => {
-        try {
-            const res = await fetch(DataService.API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "getBroadcasts" })
-            });
-            const data = await res.json();
-            if (data.success && data.broadcasts) {
-                localStorage.setItem("admin_broadcasts", JSON.stringify(data.broadcasts));
-                return data.broadcasts;
-            }
-        } catch (err) {
-            console.warn("Failed to get broadcasts from API, falling back to local storage");
-        }
+        setTimeout(async () => {
+            try {
+                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getBroadcasts" }) });
+                const data = await res.json();
+                if (data.success && data.broadcasts) localStorage.setItem("admin_broadcasts", JSON.stringify(data.broadcasts));
+            } catch (err) {}
+        }, 0);
         return JSON.parse(localStorage.getItem("admin_broadcasts")) || [];
     },
 

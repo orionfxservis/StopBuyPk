@@ -128,6 +128,7 @@ window.loginAdmin = async () => {
       });
 
       if (response.success) {
+        localStorage.setItem('currentUser', JSON.stringify(response.user || { userId: userId, role: 'admin' }));
         const isInPages = window.location.pathname.includes('/pages/');
         const adminPath = isInPages ? 'admin.html' : 'pages/admin.html';
         window.location.href = adminPath;
@@ -258,7 +259,7 @@ function renderProducts() {
 if (typeof DataService !== 'undefined') {
   DataService.getProducts().then(products => {
     if (products && products.length > 0) {
-      allProducts = products;
+      allProducts = products.filter(p => p.status === 'Publish' || p.prodStatus === 'Publish' || (!p.status && !p.prodStatus));
     } else {
       // Fallback dummy products if fetch returns empty
       allProducts = [
@@ -511,8 +512,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof DataService !== 'undefined') {
     DataService.getBanners().then(allBannersRaw => {
       if (allBannersRaw && allBannersRaw.length > 0) {
-        // Unpack type from link if the backend dropped it
-        const allBanners = allBannersRaw.map(b => {
+        // Filter and unpack type from link if the backend dropped it
+        const allBanners = allBannersRaw.filter(b => b.status === 'Publish' || !b.status).map(b => {
           let displayType = b.type;
           let displayLink = b.link;
           if (displayLink && typeof displayLink === 'string' && displayLink.includes('|')) {
@@ -681,12 +682,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Dynamic Blog Injection ---
   if (document.getElementById('dynamicBlogGrid')) {
-    DataService.getBlogs().then(blogs => {
+    DataService.getBlogs().then(blogsRaw => {
       const container = document.getElementById('dynamicBlogGrid');
       const viewAllBtn = document.getElementById('viewAllBlogsBtn');
       let showingAll = false;
       
-      if (blogs && blogs.length > 0) {
+      const blogs = (blogsRaw || []).filter(b => b.status === 'Publish' || !b.status);
+      if (blogs.length > 0) {
         
         // Show blinking button if more than 3
         if (blogs.length > 3 && viewAllBtn) {

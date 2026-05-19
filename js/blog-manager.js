@@ -93,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 cancelBlogEdit(); // Reset form and remove edit state
                 renderBlogs();
+                if (typeof updatePendingApprovalsBadge === 'function') updatePendingApprovalsBadge();
             } catch(err) {
                 console.error("Error saving blog:", err);
                 alert("Failed to save blog. Please try again.");
@@ -237,6 +238,7 @@ window.deleteBlog = async function(id) {
         blogs = blogs.filter(blog => String(blog.id) !== String(id));
         await saveBlogs(blogs);
         renderBlogs();
+        if (typeof updatePendingApprovalsBadge === 'function') updatePendingApprovalsBadge();
     } catch(err) {
         console.error("Error deleting blog:", err);
         alert("Failed to delete blog. Please try again.");
