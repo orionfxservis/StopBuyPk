@@ -464,43 +464,62 @@
                 <div class="form-container" style="margin-top: 20px;">
                     <h3>Assign Section Rights</h3>
                     <form id="rightsForm">
-                        <div class="form-row">
+                        <div class="form-row" style="align-items: flex-start;">
                             <div class="input-group">
                                 <label>Select User</label>
                                 <select id="rightsUserSelect" required onchange="loadUserPermissions()">
                                     <option value="">Select a user...</option>
                                     <!-- Populated via JS -->
                                 </select>
+
+                                <label style="margin-top: 15px;">Action Rights (For the selected user & sections)</label>
+                                <div id="permissionsGrid" style="display: flex; flex-wrap: wrap; gap: 20px; padding: 15px; background: rgba(0,0,0,0.1); border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                                        <div style="background: rgba(255,255,255,0.08); padding: 8px 4px; border-radius: 4px; display:flex; justify-content:center; align-items:center;">
+                                            <input type="checkbox" value="Draft" class="perm-checkbox" style="margin:0; transform: scale(0.8);">
+                                        </div>
+                                        Draft
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                                        <div style="background: rgba(255,255,255,0.08); padding: 8px 4px; border-radius: 4px; display:flex; justify-content:center; align-items:center;">
+                                            <input type="checkbox" value="Publish" class="perm-checkbox" style="margin:0; transform: scale(0.8);">
+                                        </div>
+                                        Publish
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                                        <div style="background: rgba(255,255,255,0.08); padding: 8px 4px; border-radius: 4px; display:flex; justify-content:center; align-items:center;">
+                                            <input type="checkbox" value="Edit" class="perm-checkbox" style="margin:0; transform: scale(0.8);">
+                                        </div>
+                                        Edit
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                                        <div style="background: rgba(255,255,255,0.08); padding: 8px 4px; border-radius: 4px; display:flex; justify-content:center; align-items:center;">
+                                            <input type="checkbox" value="Delete" class="perm-checkbox" style="margin:0; transform: scale(0.8);">
+                                        </div>
+                                        Delete
+                                    </label>
+                                </div>
+                                <div class="form-actions" style="margin-top: 15px;">
+                                    <button type="submit" class="btn btn-primary" id="btnSaveRights">Save Rights</button>
+                                </div>
                             </div>
+                            
                             <div class="input-group">
-                                <label>Select Section</label>
-                                <select id="rightsSectionSelect" required onchange="loadUserPermissions()">
-                                    <option value="">Select a section...</option>
-                                    <option value="dashboard">Dashboard</option>
-                                    <option value="categories">Manage Categories</option>
-                                    <option value="products">Manage Products</option>
-                                    <option value="deals">Manage Deals</option>
-                                    <option value="users">Manage Users</option>
-                                    <option value="ads">Place Ads</option>
-                                    <option value="banners">Manage Banners</option>
-                                    <option value="blogs">Manage Blogs</option>
-                                    <option value="broadcasts">Manage Broadcasts</option>
-                                    <option value="travel">Manage Travel</option>
-                                    <option value="daily-prices">Manage Daily Prices</option>
-                                </select>
+                                <label>Select Sections</label>
+                                <div id="sectionsGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; background: rgba(0,0,0,0.1); border-radius: 8px; border: 1px solid var(--border-color); max-height: 250px; overflow-y: auto;">
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="dashboard" class="section-checkbox" onchange="loadUserPermissions()"> Dashboard</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="ads" class="section-checkbox" onchange="loadUserPermissions()"> Place Ads</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="categories" class="section-checkbox" onchange="loadUserPermissions()"> Manage Categories</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="banners" class="section-checkbox" onchange="loadUserPermissions()"> Manage Banners</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="products" class="section-checkbox" onchange="loadUserPermissions()"> Manage Products</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="blogs" class="section-checkbox" onchange="loadUserPermissions()"> Manage Blogs</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="deals" class="section-checkbox" onchange="loadUserPermissions()"> Manage Deals</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="broadcasts" class="section-checkbox" onchange="loadUserPermissions()"> Manage Broadcasts</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="travel" class="section-checkbox" onchange="loadUserPermissions()"> Manage Travel</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="users" class="section-checkbox" onchange="loadUserPermissions()"> Manage Users</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="daily-prices" class="section-checkbox" onchange="loadUserPermissions()"> Manage Daily Prices</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="input-group" style="margin-top: 15px;">
-                            <label>Action Rights (For the selected user & section)</label>
-                            <div id="permissionsGrid" style="display: flex; flex-wrap: wrap; gap: 20px; padding: 15px; background: rgba(0,0,0,0.1); border-radius: 8px; border: 1px solid var(--border-color);">
-                                <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" value="Draft" class="perm-checkbox"> Draft</label>
-                                <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" value="Publish" class="perm-checkbox"> Publish</label>
-                                <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" value="Edit" class="perm-checkbox"> Edit</label>
-                                <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" value="Delete" class="perm-checkbox"> Delete</label>
-                            </div>
-                        </div>
-                        <div class="form-actions" style="margin-top: 15px;">
-                            <button type="submit" class="btn btn-primary" id="btnSaveRights">Save Rights</button>
                         </div>
                     </form>
                 </div>
