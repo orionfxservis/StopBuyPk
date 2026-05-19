@@ -1871,6 +1871,9 @@ window.enforceUserPermissions = function() {
         
         if (currentUser.role === 'admin') {
             let perms = currentUser.permissions;
+            if (typeof perms === 'string') {
+                try { perms = JSON.parse(perms); } catch(e) { perms = {}; }
+            }
             if (!perms || Array.isArray(perms) || typeof perms !== 'object') {
                 perms = {}; // Legacy or no perms
             }

@@ -916,7 +916,7 @@ window.closeTravelModal = function () {
 
 // --- Dynamic Travel Section Injection ---
 document.addEventListener('DOMContentLoaded', () => {
-  const travelSection = document.getElementById('travelSection');
+  const travelSection = document.getElementById('travelPackagesGrid');
   const travelFilterCategory = document.getElementById('travelFilterCategory');
   const travelFilterCity = document.getElementById('travelFilterCity');
 
@@ -944,12 +944,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const featured = filtered.filter(p => p.listingType === 'Featured');
       const normal = filtered.filter(p => p.listingType !== 'Featured');
 
-      const travelSection = document.getElementById('travelSection');
-      if (travelSection) {
+      const travelPackagesGrid = document.getElementById('travelPackagesGrid');
+      if (travelPackagesGrid) {
         if (filtered.length === 0) {
-          travelSection.innerHTML = `<p class="text-slate-500 text-sm px-2">No travel packages found.</p>`;
+          travelPackagesGrid.innerHTML = `<p class="text-slate-500 text-sm px-2">No travel packages found.</p>`;
         } else {
-          travelSection.innerHTML = filtered.map(p => {
+          travelPackagesGrid.innerHTML = filtered.map(p => {
             const safeObj = encodeURIComponent(JSON.stringify(p));
             const cleanWhatsapp = String(p.whatsapp || '').replace(/\D/g, '');
             return `
