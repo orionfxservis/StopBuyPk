@@ -594,7 +594,7 @@ async function saveUsers() {
         users.unshift({
             id: 'admin_1',
             userId: 'admin',
-            password: '123',
+            password: 'admin123',
             fullName: 'Super Admin',
             role: 'admin',
             status: 'active',
@@ -606,37 +606,94 @@ async function saveUsers() {
     renderUsers();
 }
 
+window.setUserStatus = async function(index, status) {
+    if (users[index]) {
+        users[index].status = status;
+        await saveUsers();
+    }
+};
+
 function renderUsers() {
-    if (!userList) return;
-    userList.innerHTML = users.map((u, index) => {
+    const regularList = document.getElementById('regularUserList');
+    const systemList = document.getElementById('systemUserList');
+    if (!regularList || !systemList) return;
+    
+    let regularHtml = '';
+    let systemHtml = '';
+
+    users.forEach((u, index) => {
         const fallbackAvatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(u.fullName || 'User') + '&background=e2e8f0&color=475569';
-        return `
-        <tr>
-            <td>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <img src="${u.pic || fallbackAvatar}" alt="Pic" class="avatar" onerror="this.src='${fallbackAvatar}'">
-                    <div>
-                        <span class="line-1">${u.fullName || 'N/A'}</span>
-                        ${u.role === 'company' && u.companyName ? `<span class="line-2">${u.companyName}</span>` : ''}
+        const isSuperAdmin = String(u.userId).toLowerCase() === 'admin';
+        
+        if (isSuperAdmin) {
+            systemHtml += `
+            <tr>
+                <td>
+                    <img src="${u.pic || fallbackAvatar}" alt="Pic" class="avatar" onerror="this.src='${fallbackAvatar}'" style="border-color:#ef4444;">
+                </td>
+                <td>
+                    <span style="font-weight:800; color:#ef4444;">SUPER ADMIN</span>
+                </td>
+                <td>
+                    <span style="color: #64748b; font-weight: 600;">${u.fullName || 'admin'}</span>
+                </td>
+                <td>
+                    <div style="display:flex; flex-direction:column; gap:4px; align-items: flex-start;">
+                        <span style="font-size:12px; color:#475569;">${u.userId || 'admin'}</span>
+                        <span style="font-size:10px; color:#94a3b8;">pwd: ${u.password || 'admin123'}</span>
                     </div>
-                </div>
-            </td>
-            <td>
-                <span class="line-1">${u.userId || 'N/A'}</span>
-                <span class="line-2">pwd: **********</span>
-            </td>
-            <td>
-                <span class="line-1 badge" style="background:#f1f5f9; color:#475569; margin-bottom:4px;">${String(u.userId).toLowerCase() === 'admin' ? 'SUPER ADMIN' : (u.role || 'user').toUpperCase()}</span><br>
-                <span class="line-2 badge" style="background:${u.status === 'active' ? '#dcfce7' : '#fef08a'}; color:${u.status === 'active' ? '#166534' : '#854d0e'};">${u.status || 'inactive'}</span>
-            </td>
-            <td>
-                ${String(u.userId).toLowerCase() !== 'admin' ? `
-                <button class="edit-btn" onclick="editUser(${index})"><i class="fa-solid fa-pen"></i></button>
-                <button class="delete-btn" onclick="deleteUser(${index})"><i class="fa-solid fa-trash"></i></button>
-                ` : '<span style="color:#aaa; font-size:12px;">Protected</span>'}
-            </td>
-        </tr>
-    `}).join('');
+                </td>
+                <td>
+                    <span class="status-pill active" style="border:none; background:rgba(16,185,129,0.1);">ACTIVE</span>
+                </td>
+                <td>
+                    <div class="action-buttons-group">
+                        <button class="action-btn purple" onclick="alert('Super Admin cannot be edited here.')" title="Edit User"><i class="fa-solid fa-id-card"></i></button>
+                        <button class="action-btn blue" onclick="alert('Stats feature coming soon!')" title="Stats"><i class="fa-solid fa-chart-simple"></i></button>
+                    </div>
+                </td>
+            </tr>
+            `;
+        } else {
+            regularHtml += `
+            <tr>
+                <td>
+                    <img src="${u.pic || fallbackAvatar}" alt="Pic" class="avatar" onerror="this.src='${fallbackAvatar}'">
+                </td>
+                <td>
+                    <span style="font-weight:600; color:#0f172a;">${u.fullName || 'N/A'}</span>
+                </td>
+                <td>
+                    <span style="color: #64748b; font-size: 13px;">${u.role === 'company' && u.companyName ? u.companyName : (u.role || 'user').toUpperCase()}</span>
+                </td>
+                <td>
+                    <div style="display:flex; flex-direction:column; gap:4px; align-items: flex-start;">
+                        <span style="font-size:12px; color:#475569;">${u.userId || 'N/A'}</span>
+                        <span style="font-size:10px; color:#94a3b8;">${u.password ? 'pwd: ' + u.password : '****'}</span>
+                    </div>
+                </td>
+                <td>
+                    <span class="status-pill ${u.status === 'active' ? 'active' : 'pending'}">
+                        ${u.status === 'active' ? '<i class="fa-solid fa-check-circle"></i> ACTIVE' : '<i class="fa-solid fa-clock"></i> PENDING'}
+                    </span>
+                </td>
+                <td>
+                    <div class="action-buttons-group">
+                        <button class="action-btn green" onclick="setUserStatus(${index}, 'active')" title="Activate"><i class="fa-solid fa-check"></i></button>
+                        <button class="action-btn red" onclick="setUserStatus(${index}, 'hold')" title="Hold"><i class="fa-solid fa-lock"></i></button>
+                        <button class="action-btn purple" onclick="editUser(${index})" title="Edit User"><i class="fa-solid fa-id-card"></i></button>
+                        <button class="action-btn blue" onclick="alert('Stats feature coming soon!')" title="Stats"><i class="fa-solid fa-chart-simple"></i></button>
+                        <button class="action-btn yellow" onclick="alert('Password reset coming soon!')" title="Reset Password"><i class="fa-solid fa-key"></i></button>
+                        <button class="action-btn red" onclick="deleteUser(${index})" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </td>
+            </tr>
+            `;
+        }
+    });
+
+    regularList.innerHTML = regularHtml;
+    systemList.innerHTML = systemHtml;
     
     if (typeof populatePermissionDropdown === 'function') populatePermissionDropdown();
 }
