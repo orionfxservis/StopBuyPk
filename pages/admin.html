@@ -444,18 +444,37 @@
                 </div>
 
                 <div class="list-container">
-                    <h3>Registered Users</h3>
-                    <table class="admin-table compact-table">
+                    <h3 style="color:#0f172a !important; display:inline-block; padding: 6px 15px; border: 1px solid rgba(56,189,248,0.5); border-radius: 8px; background: rgba(56,189,248,0.1); border-left: 4px solid #38bdf8; margin-bottom: 20px;">Regular Users & Admin</h3>
+                    <table class="admin-table compact-table modern-user-table">
                         <thead>
                             <tr>
-                                <th>User</th>
-                                <th>Credentials</th>
+                                <th>Picture</th>
+                                <th>User Name</th>
+                                <th>Company</th>
+                                <th>User Id</th>
+                                <th>Stats</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="regularUserList">
+                            <!-- Regular Users injected here via JS -->
+                        </tbody>
+                    </table>
+
+                    <h3 style="color:#0f172a !important; display:inline-block; padding: 6px 15px; border: 1px solid rgba(245,158,11,0.5); border-radius: 8px; background: rgba(245,158,11,0.1); border-left: 4px solid #f59e0b; margin-top: 30px; margin-bottom: 20px;">System Users (Super Admin / Guest)</h3>
+                    <table class="admin-table compact-table modern-user-table">
+                        <thead>
+                            <tr>
+                                <th>Picture</th>
+                                <th>Role</th>
+                                <th>Name</th>
+                                <th>User Id</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="userList">
-                            <!-- Users injected here via JS -->
+                        <tbody id="systemUserList">
+                            <!-- System Users injected here via JS -->
                         </tbody>
                     </table>
                 </div>
