@@ -13,6 +13,130 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="../css/style.css" />
   <style>
+  
+  html,
+body{
+  min-height:100%;
+  overflow-x:hidden;
+}
+
+body{
+  position:relative;
+}
+
+/* Footer Fix */
+footer,
+.footer{
+  position:relative;
+  z-index:20;
+}
+
+/* Glass Cards */
+.glass-card{
+  border-radius:24px;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+/* Food Tags */
+.foodTag{
+  padding:10px 18px;
+  border-radius:999px;
+  background:rgba(255,255,255,.7);
+  border:1px solid rgba(16,185,129,.2);
+  color:#1F2937;
+  font-size:13px;
+  font-weight:600;
+  backdrop-filter:blur(10px);
+  transition:.3s;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.foodTag:hover{
+  transform:translateY(-2px);
+  background:rgba(16,185,129,.1);
+  border-color:rgba(16,185,129,.4);
+}
+
+/* Stats Cards */
+.miniStatCard{
+  background:rgba(255,255,255,.8);
+  border:1px solid rgba(16,185,129,.2);
+  border-radius:16px;
+  padding:10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  text-align:left;
+  backdrop-filter:blur(16px);
+  transition:.35s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.miniStatCard:hover{
+  transform:translateY(-2px);
+  border-color:rgba(16,185,129,.4);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+}
+
+.miniStatCard span{
+  font-size:24px;
+  display:block;
+}
+
+.miniStatCard .stat-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.miniStatCard h4{
+  font-size:18px;
+  font-weight:700;
+  color:#047857;
+  line-height: 1.1;
+}
+
+.miniStatCard p{
+  font-size:11px;
+  color:#475569;
+  margin-top:2px;
+  font-weight:600;
+  line-height: 1;
+}
+
+/* Quick Buttons */
+.quickFilterBtn{
+  height:42px;
+  border-radius:14px;
+  background:rgba(255,255,255,.8);
+  border:1px solid rgba(16,185,129,.2);
+  color:#475569;
+  font-size:12px;
+  font-weight:600;
+  transition:.3s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.quickFilterBtn:hover{
+  background:rgba(16,185,129,.1);
+  border-color:rgba(16,185,129,.4);
+  color:#047857;
+}
+
+/* Featured Ads */
+.featureAd{
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid rgba(16,185,129,.2);
+}
+
+/* Footer */
+.stopbuyFooter{
+  position:relative;
+  z-index:50;
+  margin-top:60px;
+}
     /* Custom simple scrollbar for the list */
     .food-scroll::-webkit-scrollbar {
       width: 6px;
@@ -28,12 +152,35 @@
     .food-scroll::-webkit-scrollbar-thumb:hover {
       background: rgba(234, 179, 8, 0.6);
     }
+	
+	select,
+input,
+textarea{
+  color:#000000 !important;
+  background:#ffffff !important;
+}
+
+select::placeholder,
+input::placeholder,
+textarea::placeholder{
+  color:#64748b !important;
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(50%); }
+}
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
-<body class="text-slate-100 min-h-screen flex flex-col">
-  <!-- Floating Balloon Layer Removed -->
+<body class="text-[#1F2937] min-h-screen flex flex-col relative overflow-x-hidden bg-transparent">
+
+<!-- Custom Background -->
+<!-- Fixed Background & Glass Effect Overlay -->
+<div class="fixed inset-0 z-[-2] bg-[url('../images/bg/bg-home.jpg')] bg-cover bg-center bg-no-repeat pointer-events-none"></div>
+<div class="fixed inset-0 z-[-1] bg-gradient-to-b from-white/50 to-white/30 backdrop-blur-xl pointer-events-none"></div>
+
 
   <!-- NAVBAR -->
       <!-- Top Navigation Bar -->
@@ -44,7 +191,8 @@
             <!-- LEFT: Logo -->
             <a href="../index.html" class="flex items-center gap-2 flex-shrink-0 order-1 sm:order-none cursor-pointer">
                 <div class="bg-white p-1 rounded-xl shadow-sm w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center">
-                    <img src="../images/logo/stopbuy-logo.png" alt="StopBuy" class="h-6 w-6 sm:h-7 sm:w-7 object-contain">
+                    <img src="../images/logo/stopbuy-logo.png" alt="StopBuy"
+                        class="h-6 w-6 sm:h-7 sm:w-7 object-contain">
                 </div>
 
                 <div class="flex flex-col leading-tight">
@@ -52,7 +200,8 @@
                         <span class="font-bold text-lg sm:text-xl tracking-tight">
                             <span class="text-[#8CC63F]">Stop</span><span class="text-[#5B9BD5]">Buy</span>
                         </span>
-                        <div class="hidden md:block border border-[#24533e] bg-emerald-900/20 text-[#58b284] px-2 py-[2px] rounded text-[10px] font-semibold tracking-wide">
+                        <div
+                            class="hidden md:block border border-[#24533e] bg-emerald-900/20 text-[#58b284] px-2 py-[2px] rounded text-[10px] font-semibold tracking-wide">
                             Price Smart, Save More
                         </div>
                     </div>
@@ -76,13 +225,15 @@
             <!-- RIGHT: Actions -->
             <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0 order-2 sm:order-none">
                 <!-- Language Toggle -->
-                <div class="flex items-center justify-center w-[60px] sm:w-[70px] h-[34px] sm:h-[38px] bg-white/10 hover:bg-white/20 rounded-full text-[13px] sm:text-sm font-medium cursor-pointer transition-colors">
+                <div
+                    class="flex items-center justify-center w-[60px] sm:w-[70px] h-[34px] sm:h-[38px] bg-white/10 hover:bg-white/20 rounded-full text-[13px] sm:text-sm font-medium cursor-pointer transition-colors">
                     <span class="text-center">اردو</span>
                 </div>
 
                 <!-- Login Profile Icon -->
                 <div class="relative group z-[100000]">
-                    <div class="login-icon-container flex items-center justify-center w-[34px] h-[34px] sm:w-[42px] sm:h-[42px] rounded-full cursor-pointer bg-transparent hover:bg-white/10 transition-colors">
+                    <div
+                        class="login-icon-container flex items-center justify-center w-[34px] h-[34px] sm:w-[42px] sm:h-[42px] rounded-full cursor-pointer bg-transparent hover:bg-white/10 transition-colors">
                         <i class="fas fa-user-shield text-emerald-400 text-sm sm:text-lg"></i>
                     </div>
                 </div>
@@ -95,66 +246,128 @@
                 <!-- Navigation Links -->
                 <div class="flex items-center gap-5 z-10">
                     <!-- Home Link -->
-                    <a href="../index.html" class="text-emerald-400 hover:text-emerald-300 font-semibold text-sm transition-colors flex items-center">
+                    <a href="../index.html"
+                        class="text-emerald-400 hover:text-emerald-300 font-semibold text-sm transition-colors flex items-center">
                         <i class="fas fa-arrow-left mr-1.5"></i> Home
                     </a>
-                    <!-- Categories Link -->
-                    <a href="categories.html" class="text-emerald-400 hover:text-emerald-300 font-semibold text-sm transition-colors flex items-center">
-                        <i class="fas fa-arrow-left mr-1.5"></i> Categories
-                    </a>
                 </div>
-                
+
                 <!-- Centered Heading -->
-                <h1 class="text-[15px] tracking-wide font-bold text-white absolute left-1/2 -translate-x-1/2 whitespace-nowrap">Food</h1>
+                <h1
+                    class="text-[15px] tracking-wide font-bold text-white absolute left-1/2 -translate-x-1/2 whitespace-nowrap">Food</h1>
             </div>
         </div>
     </nav>
 
-  <main class="flex-1 relative z-10 pt-6 pb-12">
+  <main class="flex-1 relative z-10 pt-6 pb-32">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Search Panel -->
-      <div class="glass-card p-4 sm:p-5 mb-8 relative">
-        <div class="flex flex-col sm:flex-row gap-4 sm:items-center justify-between mb-4">
+      <div class="glass-card p-5 sm:p-6 mb-8 relative overflow-hidden border border-emerald-100 bg-white/70 backdrop-blur-xl shadow-[0_20px_60px_rgba(16,24,40,0.08)]">
+
+  <!-- Glow -->
+  <div class="absolute -top-20 -right-20 w-60 h-60 bg-yellow-500/20 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-20 -left-20 w-60 h-60 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex flex-col sm:flex-row gap-4 sm:items-center justify-between mb-4 relative z-10">
           <div>
-            <h2 class="section-title text-xl sm:text-2xl text-yellow-400 mb-1">
+            <h2 class="section-title text-xl sm:text-2xl font-bold text-slate-800 mb-1">
               Food Deals & Restaurants
             </h2>
-            <p class="text-[0.75rem] text-slate-400">
+            <p class="text-[0.75rem] text-slate-500 font-medium">
               <span class="lang-en">Nearby places first. We display trusted and verified listings around you.</span><span class="lang-ur">سب سے پہلے آپ کے قریب کی جگہیں۔ ہم آپ کو آپ کے اردگرد قابلِ اعتماد اور تصدیق شدہ مقامات دکھاتے ہیں۔</span>
             </p>
           </div>
-          <button id="headerLocationBtn"
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 shadow-md">
-            📍 Location Active
-          </button>
+          
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-3 sm:items-center">
+        <div class="flex flex-col sm:flex-row gap-3 sm:items-center relative z-10">
           <div class="flex-1 relative">
             <input id="foodSearchInput" type="text"
               placeholder="مثال: پیزا، برگر، دیسی...  |  e.g. Pizza, Burger, Desi"
-              class="w-full bg-slate-900/70 border border-slate-700 rounded-2xl text-sm px-4 py-3 pr-10 outline-none focus:ring-2 focus:ring-yellow-500/70 focus:border-yellow-400 text-slate-100 placeholder:text-slate-500" />
-            <span class="absolute left-4 top-3.5 text-slate-500">🔍</span>
+              class="w-full bg-white border border-slate-200 rounded-2xl text-sm px-4 py-3 pr-10 outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-400 text-slate-800 placeholder:text-slate-400 shadow-sm" />
+            <div class="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 text-slate-500">
+				🔍
+			</div>
           </div>
           <button id="foodSearchBtn"
-            class="px-5 py-3 rounded-2xl bg-gradient-to-r from-yellow-500 to-yellow-600 text-yellow-950 font-semibold text-sm shadow-lg shadow-yellow-500/40 hover:from-yellow-400 hover:to-yellow-500 whitespace-nowrap transition">
+            class="px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold text-sm shadow-[0_8px_20px_rgba(16,185,129,0.3)] hover:from-emerald-400 hover:to-emerald-500 whitespace-nowrap transition">
             <span class="lang-en">Search</span><span class="lang-ur">تلاش</span>
           </button>
         </div>
       </div>
 
+	<!-- Trending Searches -->
+<div class="mt-5 flex flex-wrap items-center justify-center gap-4 px-3 sm:px-4">
+
+  <button class="foodTag">🍔 Burger</button>
+  <button class="foodTag">🍕 Pizza</button>
+  <button class="foodTag">🌯 Shawarma</button>
+  <button class="foodTag">🍗 Chicken Biryani</button>
+  <button class="foodTag">🥩 Beef Biryani</button>
+  <button class="foodTag">🍲 Haleem</button>
+  <button class="foodTag">🍢 Bar BQ</button>
+  <button class="foodTag">🥤 Drink</button>
+  <button class="foodTag">🍦 Ice Cream</button>
+
+</div>
+
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 mb-8">
+
+  <div class="miniStatCard bg-gradient-to-br from-emerald-50 to-white">
+    <span>🍔</span>
+    <div class="stat-text">
+      <h4>120+</h4>
+      <p>Restaurants</p>
+    </div>
+  </div>
+
+  <div class="miniStatCard bg-gradient-to-br from-amber-50 to-white">
+    <span>🔥</span>
+    <div class="stat-text">
+      <h4>450+</h4>
+      <p>Live Deals</p>
+    </div>
+  </div>
+
+  <div class="miniStatCard bg-gradient-to-br from-sky-50 to-white">
+    <span>📍</span>
+    <div class="stat-text">
+      <h4>25+</h4>
+      <p>Areas</p>
+    </div>
+  </div>
+
+  <div class="miniStatCard bg-gradient-to-br from-purple-50 to-white">
+    <span>⭐</span>
+    <div class="stat-text">
+      <h4>4.8</h4>
+      <p>User Rating</p>
+    </div>
+  </div>
+
+</div>
+
       <!-- Two-Column Layout -->
-      <div class="flex flex-col lg:flex-row gap-6">
+      <div class="flex flex-col lg:flex-row gap-6 mb-8">
 
   <!-- FILTER SIDEBAR -->
-  <div class="lg:w-1/4">
-    <div class="glass-card p-4 sticky top-24 h-[650px] overflow-y-auto food-scroll">
+  <div class="lg:w-[30%]">
+    <div class="glass-card p-5 sticky top-24 h-[650px] overflow-y-auto food-scroll bg-white/70 backdrop-blur-xl border border-emerald-100 shadow-[0_20px_60px_rgba(16,24,40,0.08)]">
 
       <!-- Category -->
+	  
+	  <!-- Quick Filters -->
+<div class="grid grid-cols-2 gap-2 mb-5">
+
+  <button class="quickFilterBtn">🔥 Deals</button>
+  <button class="quickFilterBtn">🚚 Free Delivery</button>
+  <button class="quickFilterBtn">⭐ Top Rated</button>
+  <button class="quickFilterBtn">🕒 Open Now</button>
+
+</div>
 <div class="mb-4">
-  <label class="text-xs text-slate-400 mb-1 block">Category</label>
-  <select id="filterCategory" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm">
+  <label class="text-xs text-slate-600 font-semibold mb-1 block">Category</label>
+  <select id="filterCategory" class="w-full bg-white/80 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:border-emerald-500 outline-none">
     <option value="">All</option> <option value="Vegetables">Vegetables</option> 
 	<option value="Food">Food</option> 
 	<option value="Fruits">Fruits</option> 
@@ -166,8 +379,8 @@
 
 <!-- Sub Category -->
 <div class="mb-4">
-  <label class="text-xs text-slate-400 mb-1 block">Sub Category</label>
-  <select id="filterSubCategory" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm">
+  <label class="text-xs text-slate-600 font-semibold mb-1 block">Sub Category</label>
+  <select id="filterSubCategory" class="w-full bg-white/80 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:border-emerald-500 outline-none">
     <option value="">All</option>
 	<option value="">Fast Food</option>
 	<option value="">Desi Cuisine</option>
@@ -176,8 +389,8 @@
 
 <!-- Product -->
 <div class="mb-4">
-  <label class="text-xs text-slate-400 mb-1 block">Product</label>
-  <select id="filterProduct" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm">
+  <label class="text-xs text-slate-600 font-semibold mb-1 block">Product</label>
+  <select id="filterProduct" class="w-full bg-white/80 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:border-emerald-500 outline-none">
     <option value="">All</option>
 	
   </select>
@@ -185,125 +398,185 @@
 
 <!-- Product Variety -->
 <div class="mb-4">
-  <label class="text-xs text-slate-400 mb-1 block">Variety</label>
-  <select id="filterVariety" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm">
+  <label class="text-xs text-slate-600 font-semibold mb-1 block">Variety</label>
+  <select id="filterVariety" class="w-full bg-white/80 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:border-emerald-500 outline-none">
     <option value="">All</option>
   </select>
 </div>
 
       <!-- Price -->
       <div class="mb-4">
-        <label class="text-xs text-slate-400 mb-1 block">Price Range</label>
+        <label class="text-xs text-slate-600 font-semibold mb-1 block">Price Range</label>
         <div class="flex gap-2">
-          <input id="minPrice" type="number" placeholder="Min" class="w-1/2 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-sm">
-          <input id="maxPrice" type="number" placeholder="Max" class="w-1/2 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-sm">
+          <input id="minPrice" type="number" placeholder="Min" class="w-1/2 bg-white/80 border border-slate-200 rounded-lg px-2 py-1 text-sm text-slate-800 focus:border-emerald-500 outline-none">
+          <input id="maxPrice" type="number" placeholder="Max" class="w-1/2 bg-white/80 border border-slate-200 rounded-lg px-2 py-1 text-sm text-slate-800 focus:border-emerald-500 outline-none">
         </div>
       </div>
 
       <!-- Market -->
       <div class="mb-4">
-        <label class="text-xs text-slate-400 mb-1 block">Market</label>
-        <div class="space-y-1 text-sm">
-          <label><input type="checkbox" class="marketFilter" value="Imtiaz"> Imtiaz</label><br>
-          <label><input type="checkbox" class="marketFilter" value="Metro"> Metro</label><br>
-          <label><input type="checkbox" class="marketFilter" value="Sabzi Mandi"> Sabzi Mandi</label>
+        <label class="text-xs text-slate-600 font-semibold mb-1 block">Market</label>
+        <div class="space-y-1 text-sm text-slate-700">
+          <label class="flex items-center gap-2"><input type="checkbox" class="marketFilter w-4 h-4 text-emerald-500 border-slate-300 rounded focus:ring-emerald-500" value="Imtiaz"> Imtiaz</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="marketFilter w-4 h-4 text-emerald-500 border-slate-300 rounded focus:ring-emerald-500" value="Metro"> Metro</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="marketFilter w-4 h-4 text-emerald-500 border-slate-300 rounded focus:ring-emerald-500" value="Sabzi Mandi"> Sabzi Mandi</label>
         </div>
       </div>
 
       <!-- Unit -->
       <div class="mb-4">
-        <label class="text-xs text-slate-400 mb-1 block">Unit</label>
-        <div class="space-y-1 text-sm">
-          <label><input type="checkbox" class="unitFilter" value="kg"> Per Kg</label><br>
-          <label><input type="checkbox" class="unitFilter" value="liter"> Per Liter</label><br>
-          <label><input type="checkbox" class="unitFilter" value="dozen"> Per Dozen</label>
+        <label class="text-xs text-slate-600 font-semibold mb-1 block">Unit</label>
+        <div class="space-y-1 text-sm text-slate-700">
+          <label class="flex items-center gap-2"><input type="checkbox" class="unitFilter w-4 h-4 text-emerald-500 border-slate-300 rounded focus:ring-emerald-500" value="kg"> Per Kg</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="unitFilter w-4 h-4 text-emerald-500 border-slate-300 rounded focus:ring-emerald-500" value="liter"> Per Liter</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="unitFilter w-4 h-4 text-emerald-500 border-slate-300 rounded focus:ring-emerald-500" value="dozen"> Per Dozen</label>
         </div>
       </div>
 
       <!-- Clear Button -->
-      <button id="clearFilters" class="w-full mt-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm hover:bg-slate-700">
+      <button id="clearFilters" class="w-full mt-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition shadow-sm">
         Clear Filters
       </button>
 
     </div>
   </div>
         
-        <!-- Left Column: Items List -->
-        <div class="lg:w-1/4 flex flex-col gap-4">
-          <div class="flex flex-col gap-3 h-[400px] md:h-[500px] lg:h-[650px] overflow-y-auto overflow-x-hidden pr-2 food-scroll" id="foodListings">
+        <!-- Center Column: Items List -->
+        <div class="lg:w-[30%] flex flex-col gap-4">
+          <div class="flex flex-col gap-3 h-[650px] overflow-y-auto overflow-x-hidden pr-2 food-scroll" id="foodListings">
              <!-- Dynamic Content from JS -->
           </div>
         </div>
         
-        <!-- Right Column: Featured Ad & Sponsor Ad -->
-        <div class="lg:w-1/2 flex flex-col gap-5 sticky top-24">
+        <!-- Right Column: Product Details Box -->
+        <div class="lg:w-[40%] flex flex-col gap-5 min-h-[650px]">
           
-          <div class="glass-card p-0 overflow-hidden" id="featuredAdContainer" style="min-height: 500px;">
+          <div class="glass-card p-0 overflow-hidden bg-white/80 backdrop-blur-xl border border-emerald-100 shadow-[0_20px_60px_rgba(16,24,40,0.08)] flex flex-col h-[650px]" id="featuredAdContainer">
              <!-- Initial Empty State -->
-             <div class="h-full flex flex-col items-center justify-center py-20 text-slate-400" id="featuredPlaceholder">
-               <span class="text-6xl mb-4 opacity-50">🍔</span>
-               <p class="text-sm">Select any item from the left to view complete details, location, and contact options.</p>
+             <div id="featuredPlaceholder" class="h-full flex flex-col items-center justify-center py-20 text-slate-500 text-center px-6">
+                <div class="w-24 h-24 rounded-full bg-emerald-500/10 flex items-center justify-center text-5xl mb-5 border border-emerald-500/20">
+                  🍔
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">
+                  Product Details
+                </h3>
+                <p class="max-w-md text-sm leading-relaxed">
+                  Select any product from the center column to view complete details, pricing, contact, and order options here.
+                </p>
              </div>
              
-             <!-- Dynamic Detailed Content from JS (Hidden Initial) -->
-             <div id="featuredContent" class="hidden h-full flex flex-col">
-               <!-- Image Section -->
-               <div class="relative h-64 sm:h-72 w-full bg-slate-900">
-                 <img id="fImg" src="" alt="Product" class="w-full h-full object-cover opacity-90" />
-                 <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
-                 <span id="fDistance" class="absolute top-4 right-4 px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur border border-slate-700 text-xs font-semibold text-yellow-400">
-                   1.2 km away
-                 </span>
-               </div>
-               
-               <!-- Details Section -->
-                <div class="p-5 sm:p-7 flex-1 flex flex-col">
-                  <div class="flex justify-between items-start mb-6 gap-4">
-                     
-                    <!-- Right side (First child in RTL) -->
-                    <div class="flex-1 flex flex-col">
-                      <h2 id="fName" class="text-2xl sm:text-3xl font-bold section-title text-slate-50 mb-2">Burger Name</h2>
-                      <div id="fPrice" class="text-xl font-bold text-emerald-400 mb-3">Rs. 850</div>
-                      <div class="flex items-center gap-2 text-sm text-slate-400">
-                        <span>📍</span>
-                        <span id="fLocation">Branch Area, City</span>
-                      </div>
-                    </div>
-
-                    <!-- Left side (Second child in RTL) - Featured Sponsor Ad -->
-                    <div class="w-48 sm:w-56 shrink-0 glass-card p-3 overflow-hidden relative group border border-slate-700 hover:border-yellow-500/50 transition">
-                      <div class="absolute -left-9 top-3 -rotate-45 bg-yellow-500 text-yellow-950 font-bold text-[0.55rem] py-0.5 w-32 text-center uppercase shadow-md shadow-yellow-500/30 tracking-wider z-10 border-b border-yellow-400">Sponsored</div>
-                      <div class="flex items-center gap-2">
-                        <div class="w-12 h-12 rounded-lg bg-slate-800 shrink-0 overflow-hidden border border-slate-700 hidden sm:block">
-                          <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=200&q=80" alt="Special Deal" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition transform group-hover:scale-105" />
-                        </div>
-                        <div class="flex-1">
-                          <h4 class="text-[0.65rem] sm:text-xs font-semibold text-slate-100 mb-0.5">Midnight Deal</h4>
-                          <p class="text-[0.6rem] text-slate-400 mb-1 leading-tight">50% off premium food.</p>
-                          <a href="#" class="inline-block text-[0.6rem] font-semibold text-emerald-400 hover:text-emerald-300">Grab Deal →</a>
-                        </div>
-                      </div>
-                    </div>
-
+             <!-- Dynamic Detailed Content -->
+             <div id="featuredContent" class="hidden flex flex-col h-full bg-white/90">
+                <!-- Product Image -->
+                <div class="relative h-[250px] w-full overflow-hidden shrink-0">
+                  <img id="fImg" src="" alt="Food Image" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+                  <!-- Distance Badge -->
+                  <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md border border-emerald-200 text-emerald-700 px-4 py-1 rounded-full text-xs font-semibold shadow-sm">
+                    📍 <span id="fDistance">1.2 KM Away</span>
                   </div>
-                 
-                 <div class="mb-8 flex-1">
-                   <h4 class="text-sm font-semibold text-slate-200 mb-2 border-b border-slate-800 pb-1"><span class="lang-en">Product Details</span><span class="lang-ur">پروڈکٹ تفصیلات</span></h4>
-                   <p id="fDesc" class="text-sm text-slate-400 leading-relaxed">
-                     Detailed product description goes here. Fresh ingredients, deals, and anything else the vendor provided.
-                   </p>
-                 </div>
-                 
-                 <div class="grid grid-cols-2 gap-4 mt-auto">
-                   <button id="fCallBtn" class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 text-white font-semibold text-sm shadow-lg shadow-sky-500/30 hover:from-sky-500 hover:to-blue-500 transition">
-                     📞 Call Now
-                   </button>
-                   <button id="fOrderBtn" class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold text-sm shadow-lg shadow-orange-500/30 hover:from-amber-400 hover:to-orange-400 transition">
-                     <span class="lang-en">Order Now</span><span class="lang-ur">آرڈر کریں</span>
-                     <svg class="w-4 h-4 fill-current" viewBox="0 0 576 512"><path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41.1 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>
-                   </button>
-                 </div>
+                </div>
+
+                <!-- CONTENT -->
+                <div class="flex-1 flex flex-col p-5 overflow-y-auto food-scroll">
+                  <!-- Title -->
+                  <div class="mb-4">
+                    <h2 id="fName" class="text-2xl sm:text-3xl font-extrabold text-slate-800 mb-2 leading-tight">Product Name</h2>
+                    <div id="fPrice" class="text-xl font-bold text-emerald-600 mb-2">Rs. 850</div>
+                    <div class="flex items-center gap-2 text-sm text-slate-500 font-medium">
+                      <span>📍</span>
+                      <span id="fLocation">Karachi Pakistan</span>
+                    </div>
+                  </div>
+
+                  <!-- Description -->
+                  <div class="mb-6">
+                    <h3 class="text-sm font-semibold text-slate-700 mb-2">Product Details</h3>
+                    <p id="fDesc" class="text-[14px] leading-6 text-slate-600">Product details here...</p>
+                  </div>
+
+                  <!-- BUTTONS -->
+                  <div class="grid grid-cols-2 gap-3 mt-auto pt-4 border-t border-slate-100">
+                    <button id="fCallBtn" class="h-12 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm transition-all shadow-sm">
+                      📞 Contact
+                    </button>
+                    <button id="fOrderBtn" class="h-12 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold text-sm shadow-[0_4px_12px_rgba(16,185,129,0.3)] transition-all" onclick="document.getElementById('orderModal').classList.remove('hidden')">
+                      🛒 Order Now
+                    </button>
+                  </div>
+                </div>
+             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLLING FEATURED ADS TICKER -->
+      <div class="mt-8">
+        <h3 class="text-lg font-bold text-slate-800 mb-4 px-2">Featured Offers</h3>
+        <div class="overflow-hidden relative w-full rounded-2xl bg-white/40 backdrop-blur-md border border-white/50 p-4 shadow-sm" dir="ltr">
+           <div class="flex gap-4 items-center animate-[scroll_20s_linear_infinite] whitespace-nowrap min-w-max hover:[animation-play-state:paused]" style="animation: scroll 20s linear infinite;">
+             
+             <!-- Ad 1 -->
+             <div class="relative rounded-xl overflow-hidden h-32 w-64 group inline-block shrink-0 shadow-md">
+               <img src="../images/ads/ad1.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+               <div class="absolute bottom-3 left-3 right-3 whitespace-normal">
+                 <h4 class="text-sm font-bold text-white">Burger Deal</h4>
+                 <p class="text-xs text-emerald-300">Buy 1 Get 1 Free</p>
                </div>
+             </div>
+
+             <!-- Ad 2 -->
+             <div class="relative rounded-xl overflow-hidden h-32 w-64 group inline-block shrink-0 shadow-md">
+               <img src="../images/ads/ad2.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+               <div class="absolute bottom-3 left-3 right-3 whitespace-normal">
+                 <h4 class="text-sm font-bold text-white">Pizza Special</h4>
+                 <p class="text-xs text-emerald-300">Extra Cheese Offer</p>
+               </div>
+             </div>
+
+             <!-- Ad 3 -->
+             <div class="relative rounded-xl overflow-hidden h-32 w-64 group inline-block shrink-0 shadow-md">
+               <img src="../images/ads/ad3.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+               <div class="absolute bottom-3 left-3 right-3 whitespace-normal">
+                 <h4 class="text-sm font-bold text-white">Family Combo</h4>
+                 <p class="text-xs text-emerald-300">Save More Today</p>
+               </div>
+             </div>
+             
+             <!-- Duplicate for continuous scroll effect -->
+             <!-- Ad 1 -->
+             <div class="relative rounded-xl overflow-hidden h-32 w-64 group inline-block shrink-0 shadow-md">
+               <img src="../images/ads/ad1.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+               <div class="absolute bottom-3 left-3 right-3 whitespace-normal">
+                 <h4 class="text-sm font-bold text-white">Burger Deal</h4>
+                 <p class="text-xs text-emerald-300">Buy 1 Get 1 Free</p>
+               </div>
+             </div>
+             <!-- Ad 2 -->
+             <div class="relative rounded-xl overflow-hidden h-32 w-64 group inline-block shrink-0 shadow-md">
+               <img src="../images/ads/ad2.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+               <div class="absolute bottom-3 left-3 right-3 whitespace-normal">
+                 <h4 class="text-sm font-bold text-white">Pizza Special</h4>
+                 <p class="text-xs text-emerald-300">Extra Cheese Offer</p>
+               </div>
+             </div>
+             <!-- Ad 3 -->
+             <div class="relative rounded-xl overflow-hidden h-32 w-64 group inline-block shrink-0 shadow-md">
+               <img src="../images/ads/ad3.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+               <div class="absolute bottom-3 left-3 right-3 whitespace-normal">
+                 <h4 class="text-sm font-bold text-white">Family Combo</h4>
+                 <p class="text-xs text-emerald-300">Save More Today</p>
+               </div>
+             </div>
+
+           </div>
+        </div>
               </div>
            </div>
         </div>
@@ -312,53 +585,45 @@
     </div>
   </main>
 
-  <footer class="border-t border-slate-800/80 bg-slate-950/90 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
-        <div class="text-[0.75rem] text-slate-500">
-          © <span id="year"></span> StopBuy. All rights reserved. | Built for Pakistan 🇵🇰
-        </div>
-      </div>
-    </div>
-  </footer>
+  
 
   <!-- Order Modal -->
-  <div id="orderModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
-    <div class="glass-card w-full max-w-md flex flex-col overflow-hidden relative border-slate-700 p-0 shadow-2xl">
-      <button id="closeModalBtn" class="absolute top-4 left-4 text-slate-400 hover:text-white transition z-10 bg-slate-900/50 p-1.5 rounded-full backdrop-blur border border-slate-700/50">
+  <div id="orderModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+    <div class="glass-card w-full max-w-md flex flex-col overflow-hidden relative border-slate-200 bg-white/95 p-0 shadow-2xl">
+      <button id="closeModalBtn" class="absolute top-4 left-4 text-slate-500 hover:text-slate-800 transition z-10 bg-white/80 p-1.5 rounded-full backdrop-blur border border-slate-200">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
       </button>
-      <div class="p-5 pb-4 border-b border-slate-800/80 pt-6">
-        <h3 class="text-xl font-bold text-slate-100 text-start"><span class="lang-en">Place Order</span><span class="lang-ur">آرڈر کریں</span></h3>
+      <div class="p-5 pb-4 border-b border-slate-200 pt-6">
+        <h3 class="text-xl font-bold text-slate-800 text-start"><span class="lang-en">Place Order</span><span class="lang-ur">آرڈر کریں</span></h3>
       </div>
       <div class="p-5 flex flex-col gap-4 sm:gap-5 overflow-y-auto food-scroll max-h-[80vh]">
         
         <!-- Date & Time | Restaurant -->
         <div class="grid grid-cols-2 gap-3 sm:gap-4">
-          <div class="bg-slate-900/40 p-3 rounded-lg border border-slate-800/60 text-start">
+          <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-start">
             <div class="text-xs text-slate-500 mb-1"><span class="lang-en">Date & Time</span><span class="lang-ur">تاریخ و وقت</span></div>
-            <div id="modalDateTime" class="text-xs sm:text-[0.8rem] font-semibold text-emerald-400 tracking-wide mt-1">Apr 9, 2026, 11:41 PM</div>
+            <div id="modalDateTime" class="text-xs sm:text-[0.8rem] font-semibold text-emerald-600 tracking-wide mt-1">Apr 9, 2026, 11:41 PM</div>
           </div>
-          <div class="bg-slate-900/40 p-3 rounded-lg border border-slate-800/60 text-start">
+          <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-start">
             <div class="text-xs text-slate-500 mb-1"><span class="lang-en">Restaurant</span><span class="lang-ur">ریسٹورنٹ</span></div>
-            <div id="modalRestaurant" class="text-sm font-bold text-yellow-400 mt-1">Burger Lab</div>
+            <div id="modalRestaurant" class="text-sm font-bold text-emerald-700 mt-1">Burger Lab</div>
           </div>
         </div>
 
         <!-- Product Details -->
-        <div class="bg-slate-900/30 p-4 rounded-xl border border-slate-800/60 relative">
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 relative">
           <!-- Yellow left bar indicator -->
-          <div class="absolute top-0 bottom-0 left-0 w-1 bg-yellow-500/80 rounded-l-xl"></div>
+          <div class="absolute top-0 bottom-0 left-0 w-1 bg-emerald-500/80 rounded-l-xl"></div>
           <div class="text-[0.7rem] text-slate-500 mb-1 text-start"><span class="lang-en">Product Details</span><span class="lang-ur">تفصیلات</span></div>
-          <div id="modalProductName" class="text-base font-bold text-slate-100 text-start mb-4">Zinger Burger Deal</div>
+          <div id="modalProductName" class="text-base font-bold text-slate-800 text-start mb-4">Zinger Burger Deal</div>
           
-          <div class="flex justify-between items-center text-[0.75rem] border-t border-slate-800/50 pt-3">
-             <div class="flex items-center gap-1.5 text-slate-400">
+          <div class="flex justify-between items-center text-[0.75rem] border-t border-slate-200 pt-3">
+             <div class="flex items-center gap-1.5 text-slate-600">
                 <span class="text-red-400 drop-shadow-md">📍</span>
                 <span id="modalLocation">Gulshan-e-Iqbal, Karachi</span>
              </div>
-             <div class="flex items-center gap-1.5 text-slate-400" dir="ltr">
-                <span class="text-red-400 drop-shadow-md">📞</span>
+             <div class="flex items-center gap-1.5 text-slate-600" dir="ltr">
+                <span class="text-emerald-500 drop-shadow-md">📞</span>
                 <span id="modalPhone">03001234567</span>
              </div>
           </div>
@@ -368,63 +633,63 @@
         <div class="grid grid-cols-3 gap-3">
           <div>
             <div class="text-[0.65rem] text-slate-500 mb-1.5 text-start"><span class="lang-en">Rate</span><span class="lang-ur">قیمت</span></div>
-            <div class="bg-slate-900/80 border border-slate-700/80 rounded-lg h-9 flex items-center justify-end px-3 text-emerald-400 font-bold text-sm" id="modalRate">850</div>
+            <div class="bg-white border border-slate-200 rounded-lg h-9 flex items-center justify-end px-3 text-emerald-600 font-bold text-sm" id="modalRate">850</div>
           </div>
           <div>
             <div class="text-[0.65rem] text-slate-500 mb-1.5 text-start"><span class="lang-en">Quantity</span><span class="lang-ur">مقدار</span></div>
-            <input type="number" id="modalQuantity" value="1" min="1" class="w-full h-9 bg-slate-900/80 border border-slate-700/80 rounded-lg text-sm px-3 py-1 outline-none focus:border-yellow-500 text-slate-100 text-center font-bold transition">
+            <input type="number" id="modalQuantity" value="1" min="1" class="w-full h-9 bg-white border border-slate-200 rounded-lg text-sm px-3 py-1 outline-none focus:border-emerald-500 text-slate-800 text-center font-bold transition">
           </div>
           <div>
             <div class="text-[0.65rem] text-slate-500 mb-1.5 text-start">Promo Code</div>
-            <input type="text" placeholder="OPTIONAL" class="w-full h-9 bg-slate-900/80 border border-slate-700/80 rounded-lg text-xs px-2 py-1 outline-none focus:border-yellow-500 text-slate-100 text-center placeholder:text-slate-600 transition uppercase">
+            <input type="text" placeholder="OPTIONAL" class="w-full h-9 bg-white border border-slate-200 rounded-lg text-xs px-2 py-1 outline-none focus:border-emerald-500 text-slate-800 text-center placeholder:text-slate-400 transition uppercase">
           </div>
         </div>
 
         <!-- Total Amount -->
-        <div class="flex justify-between items-center bg-emerald-950/20 p-3 rounded-lg border border-emerald-900/40">
-          <span class="text-sm text-slate-300 font-medium"><span class="lang-en">Total Amount</span><span class="lang-ur">کل رقم</span></span>
-          <span id="modalTotalAmount" class="font-bold text-xl text-emerald-400 drop-shadow-md">Rs. 850</span>
+        <div class="flex justify-between items-center bg-emerald-50 p-3 rounded-lg border border-emerald-200">
+          <span class="text-sm text-slate-700 font-medium"><span class="lang-en">Total Amount</span><span class="lang-ur">کل رقم</span></span>
+          <span id="modalTotalAmount" class="font-bold text-xl text-emerald-600 drop-shadow-sm">Rs. 850</span>
         </div>
         
         <div>
-          <div class="mb-2 text-xs text-slate-400 text-end"><span class="lang-en">Payment Option</span><span class="lang-ur">ادائیگی کا طریقہ</span></div>
+          <div class="mb-2 text-xs text-slate-500 text-end"><span class="lang-en">Payment Option</span><span class="lang-ur">ادائیگی کا طریقہ</span></div>
           <div class="grid grid-cols-3 gap-3 text-center">
-            <button type="button" class="pymt-btn py-3 rounded-lg border border-slate-700 bg-slate-800/40 hover:bg-slate-800 hover:border-slate-500 transition flex flex-col items-center justify-center gap-1.5 focus:outline-none">
-              <span class="text-yellow-400 text-xl">⚡</span>
-              <span class="text-[0.65rem] text-slate-300 font-medium tracking-wide">JazzCash</span>
+            <button type="button" class="pymt-btn py-3 rounded-lg border border-slate-200 bg-slate-50 hover:bg-white hover:border-slate-300 transition flex flex-col items-center justify-center gap-1.5 focus:outline-none">
+              <span class="text-yellow-500 text-xl">⚡</span>
+              <span class="text-[0.65rem] text-slate-600 font-medium tracking-wide">JazzCash</span>
             </button>
-            <button type="button" class="pymt-btn py-3 rounded-lg border border-slate-700 bg-slate-800/40 hover:bg-slate-800 hover:border-slate-500 transition flex flex-col items-center justify-center gap-1.5 focus:outline-none">
-              <span class="text-sky-400 text-xl">📱</span>
-              <span class="text-[0.65rem] text-slate-300 font-medium tracking-wide">Easypaisa</span>
+            <button type="button" class="pymt-btn py-3 rounded-lg border border-slate-200 bg-slate-50 hover:bg-white hover:border-slate-300 transition flex flex-col items-center justify-center gap-1.5 focus:outline-none">
+              <span class="text-sky-500 text-xl">📱</span>
+              <span class="text-[0.65rem] text-slate-600 font-medium tracking-wide">Easypaisa</span>
             </button>
-            <button type="button" class="pymt-btn border-yellow-500 bg-yellow-500/10 py-3 rounded-lg border transition flex flex-col items-center justify-center gap-1.5 focus:outline-none shadow-inner">
-              <span class="text-emerald-400 text-xl">💵</span>
-              <span class="text-[0.65rem] text-yellow-500 font-bold tracking-wide">COD</span>
+            <button type="button" class="pymt-btn border-emerald-500 bg-emerald-50/50 py-3 rounded-lg border transition flex flex-col items-center justify-center gap-1.5 focus:outline-none shadow-sm">
+              <span class="text-emerald-500 text-xl">💵</span>
+              <span class="text-[0.65rem] text-emerald-700 font-bold tracking-wide">COD</span>
             </button>
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div class="text-start">
-            <label class="block text-xs text-slate-400 mb-1.5"><span class="lang-en">Customer Name</span><span class="lang-ur">نام</span></label>
-            <input type="text" placeholder="e.g. Ali Khan" class="w-full bg-slate-900 border border-slate-700 rounded-lg text-sm px-3 py-2.5 outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/50 text-slate-100 placeholder:text-slate-600 transition">
+            <label class="block text-xs text-slate-500 mb-1.5"><span class="lang-en">Customer Name</span><span class="lang-ur">نام</span></label>
+            <input type="text" placeholder="e.g. Ali Khan" class="w-full bg-white border border-slate-200 rounded-lg text-sm px-3 py-2.5 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50 text-slate-800 placeholder:text-slate-400 transition">
           </div>
           <div class="text-start">
-            <label class="block text-xs text-slate-400 mb-1.5"><span class="lang-en">WhatsApp No</span><span class="lang-ur">واٹس ایپ نمبر</span></label>
-            <input type="text" placeholder="03XXXXXXXXX" dir="ltr" class="w-full text-end bg-slate-900 border border-slate-700 rounded-lg text-sm px-3 py-2.5 outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/50 text-slate-100 placeholder:text-slate-600 transition">
+            <label class="block text-xs text-slate-500 mb-1.5"><span class="lang-en">WhatsApp No</span><span class="lang-ur">واٹس ایپ نمبر</span></label>
+            <input type="text" placeholder="03XXXXXXXXX" dir="ltr" class="w-full text-end bg-white border border-slate-200 rounded-lg text-sm px-3 py-2.5 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50 text-slate-800 placeholder:text-slate-400 transition">
           </div>
         </div>
         
         <div class="text-start">
-          <label class="block text-xs text-slate-400 mb-1.5"><span class="lang-en">Delivery Address</span><span class="lang-ur">مکمل پتہ</span></label>
-          <textarea rows="2" placeholder="...House / Block / Area" class="w-full text-start bg-slate-900 border border-slate-700 rounded-lg text-sm px-3 py-2.5 outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/50 text-slate-100 placeholder:text-slate-600 resize-none transition"></textarea>
+          <label class="block text-xs text-slate-500 mb-1.5"><span class="lang-en">Delivery Address</span><span class="lang-ur">مکمل پتہ</span></label>
+          <textarea rows="2" placeholder="...House / Block / Area" class="w-full text-start bg-white border border-slate-200 rounded-lg text-sm px-3 py-2.5 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50 text-slate-800 placeholder:text-slate-400 resize-none transition"></textarea>
         </div>
         
         <div class="flex gap-3 mt-2">
-          <button id="cancelModalBtn" class="flex-[2] py-2.5 rounded-xl bg-slate-800 text-slate-300 font-semibold text-sm border border-slate-700 hover:bg-slate-700 transition">
+          <button id="cancelModalBtn" class="flex-[2] py-2.5 rounded-xl bg-slate-100 text-slate-600 font-semibold text-sm border border-slate-200 hover:bg-slate-200 transition">
              <span class="lang-en">Cancel</span><span class="lang-ur">منسوخ کریں</span>
           </button>
-          <button id="confirmOrderBtn" class="flex-[3] py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold text-sm shadow-lg shadow-orange-500/30 hover:from-amber-400 hover:to-orange-400 transition">
+          <button id="confirmOrderBtn" class="flex-[3] py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold text-sm shadow-[0_8px_20px_rgba(16,185,129,0.3)] hover:from-emerald-400 hover:to-emerald-500 transition">
              <span class="lang-en">Confirm Order</span><span class="lang-ur">آرڈر کنفرم کریں</span>
           </button>
         </div>
@@ -582,10 +847,14 @@ document.getElementById("clearFilters").addEventListener("click", () => {
 
   <script src="../js/script.js"></script>
   <script src="../js/food.js"></script>
-  <!-- FOOTER -->
-  <div class="footer">
-    © 2026 StopBuyPk - Smart Price Comparison
-  </div>
+  
+
+
+
+<!-- FOOTER -->
+    <div class="w-full bg-[#0A3D2A] text-emerald-50 text-center py-4 text-sm mt-auto border-t border-[#052C22]">
+        &copy; 2026 StopBuyPk - Smart Price Comparison
+    </div>
 
 <script src="../js/location.js"></script>
 </body>
