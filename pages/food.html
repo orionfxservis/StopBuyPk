@@ -193,6 +193,86 @@ textarea::placeholder{
   0% { transform: translateX(0); }
   100% { transform: translateX(50%); }
 }
+
+<!-- MOBILE ONLY STYLE -->
+/* =========================
+   MOBILE FOOD ICONS
+========================= */
+@media (max-width: 640px) {
+
+  /* TRENDING SEARCH WRAPPER */
+  .food-tags-wrapper,
+  .foodTagsWrapper,
+  .trending-foods {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+  }
+
+  /* FOOD PILLS */
+  .foodTag {
+    width: 100%;
+    min-height: 56px;
+    border-radius: 16px;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 12px 10px;
+  }
+
+  /* SAME SIZE */
+  .foodTag i,
+  .foodTag span {
+    pointer-events: none;
+  }
+}
+
+/* =========================
+   GO TO TOP BUTTON
+========================= */
+#goTopBtn {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  z-index: 60;
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 16px;
+
+  background: linear-gradient(135deg,#f97316,#ef4444);
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow:
+    0 10px 30px rgba(239,68,68,.35),
+    inset 0 1px 0 rgba(255,255,255,.25);
+
+  border: 1px solid rgba(255,255,255,.2);
+
+  backdrop-filter: blur(10px);
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+
+  transition: .3s ease;
+}
+
+#goTopBtn.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+#goTopBtn:hover {
+  transform: translateY(-2px);
+}
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -355,6 +435,11 @@ textarea::placeholder{
     <span>Bar BQ</span>
   </div>
 
+  <div class="food-category cat-chinese">
+   <i class="fa-solid fa-bowl-rice"></i>
+   <span>Chinese</span>
+  </div>
+  
   <div class="food-category cat-deals">
     <i class="fa-solid fa-glass-water"></i>
     <span>Drink</span>
@@ -364,12 +449,6 @@ textarea::placeholder{
     <i class="fa-solid fa-ice-cream"></i>
     <span>Ice Cream</span>
   </div>
-
-  <div class="food-category cat-chinese">
-   <i class="fa-solid fa-bowl-rice"></i>
-   <span>Chinese</span>
-</div>
-
 </div>
 
 
