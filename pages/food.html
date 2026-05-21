@@ -22,6 +22,9 @@ body{
 
 body{
   position:relative;
+  background: linear-gradient(180deg, #031b14 0%, #052e24 40%, #0f172a 100%);
+  color: #f1f5f9;
+  min-height: 100vh;
 }
 
 /* Footer Fix */
@@ -42,20 +45,40 @@ footer,
 .foodTag{
   padding:10px 18px;
   border-radius:999px;
-  background:rgba(255,255,255,.7);
-  border:1px solid rgba(16,185,129,.2);
-  color:#1F2937;
   font-size:13px;
   font-weight:600;
   backdrop-filter:blur(10px);
   transition:.3s;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  border: 1px solid transparent;
 }
-
 .foodTag:hover{
   transform:translateY(-2px);
-  background:rgba(16,185,129,.1);
-  border-color:rgba(16,185,129,.4);
+  filter: brightness(1.2);
+}
+.foodTag.cat-fast-food { background: rgba(249,115,22,0.1); border-color: rgba(249,115,22,0.3); color: #fb923c; }
+.foodTag.cat-desi { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); color: #34d399; }
+.foodTag.cat-bbq { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: #f87171; }
+.foodTag.cat-bakery { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: #fbbf24; }
+.foodTag.cat-chinese { background: rgba(168,85,247,0.1); border-color: rgba(168,85,247,0.3); color: #c084fc; }
+.foodTag.cat-deals { background: rgba(236,72,153,0.1); border-color: rgba(236,72,153,0.3); color: #f472b6; }
+
+/* Filter Sidebars */
+.dark-panel {
+  background: rgba(15, 23, 42, 0.75) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  color: #f1f5f9;
+}
+
+/* Image Filter */
+.food-img-filter {
+  filter: saturate(1.1) contrast(1.05);
+}
+
+/* Search Focus Glow */
+#foodSearchInput:focus {
+  box-shadow: 0 0 0 3px rgba(249,115,22,0.25) !important;
+  border-color: #f97316 !important;
 }
 
 /* Stats Cards */
@@ -177,16 +200,14 @@ textarea::placeholder{
 <body class="text-[#1F2937] min-h-screen flex flex-col relative overflow-x-hidden bg-transparent">
 
 <!-- Custom Background -->
-<!-- Fixed Background & Glass Effect Overlay -->
-<div class="fixed inset-0 z-[-2] bg-[url('../images/bg/bg-home.jpg')] bg-cover bg-center bg-no-repeat pointer-events-none"></div>
-<div class="fixed inset-0 z-[-1] bg-gradient-to-b from-white/50 to-white/30 backdrop-blur-xl pointer-events-none"></div>
+<!-- Background gradient is now defined in the CSS body rule -->
 
 
   <!-- NAVBAR -->
       <!-- Top Navigation Bar -->
     <nav class="bg-[#0A3D2A] text-white sticky top-0 z-[99999]">
         <div
-            class="max-w-screen-2xl mx-auto px-4 py-2 sm:py-0 sm:h-[60px] flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-3 gap-x-2 sm:gap-4">
+            class="max-w-screen-2xl mx-auto px-3 py-2 sm:py-0 sm:h-[60px] flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-3 gap-x-2 sm:gap-4">
 
             <!-- LEFT: Logo -->
             <a href="../index.html" class="flex items-center gap-2 flex-shrink-0 order-1 sm:order-none cursor-pointer">
@@ -263,17 +284,17 @@ textarea::placeholder{
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Search Panel -->
-      <div class="glass-card p-5 sm:p-6 mb-8 relative overflow-hidden border border-emerald-100 bg-white/70 backdrop-blur-xl shadow-[0_20px_60px_rgba(16,24,40,0.08)]">
+      <div class="dark-panel p-5 sm:p-6 mb-8 relative overflow-hidden rounded-3xl shadow-lg">
 
   <!-- Glow -->
   <div class="absolute -top-20 -right-20 w-60 h-60 bg-yellow-500/20 rounded-full blur-3xl pointer-events-none"></div>
   <div class="absolute -bottom-20 -left-20 w-60 h-60 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
         <div class="flex flex-col sm:flex-row gap-4 sm:items-center justify-between mb-4 relative z-10">
           <div>
-            <h2 class="section-title text-xl sm:text-2xl font-bold text-slate-800 mb-1">
+            <h2 class="section-title text-xl sm:text-lg font-bold text-slate-100 mb-1">
               Food Deals & Restaurants
             </h2>
-            <p class="text-[0.75rem] text-slate-500 font-medium">
+            <p class="text-[0.75rem] text-slate-400 font-medium">
               <span class="lang-en">Nearby places first. We display trusted and verified listings around you.</span><span class="lang-ur">سب سے پہلے آپ کے قریب کی جگہیں۔ ہم آپ کو آپ کے اردگرد قابلِ اعتماد اور تصدیق شدہ مقامات دکھاتے ہیں۔</span>
             </p>
           </div>
@@ -284,13 +305,13 @@ textarea::placeholder{
           <div class="flex-1 relative">
             <input id="foodSearchInput" type="text"
               placeholder="مثال: پیزا، برگر، دیسی...  |  e.g. Pizza, Burger, Desi"
-              class="w-full bg-white border border-slate-200 rounded-2xl text-sm px-4 py-3 pr-10 outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-400 text-slate-800 placeholder:text-slate-400 shadow-sm" />
-            <div class="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 text-slate-500">
+              class="w-full bg-slate-900/50 border border-slate-700 rounded-2xl text-sm px-4 py-2.5 pr-10 outline-none text-slate-100 placeholder:text-slate-500 shadow-sm transition" />
+            <div class="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700 text-slate-400">
 				🔍
 			</div>
           </div>
           <button id="foodSearchBtn"
-            class="px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold text-sm shadow-[0_8px_20px_rgba(16,185,129,0.3)] hover:from-emerald-400 hover:to-emerald-500 whitespace-nowrap transition">
+            class="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold text-sm shadow-[0_8px_20px_rgba(16,185,129,0.3)] hover:from-emerald-400 hover:to-emerald-500 whitespace-nowrap transition">
             <span class="lang-en">Search</span><span class="lang-ur">تلاش</span>
           </button>
         </div>
@@ -299,17 +320,59 @@ textarea::placeholder{
 	<!-- Trending Searches -->
 <div class="mt-5 flex flex-wrap items-center justify-center gap-4 px-3 sm:px-4">
 
-  <button class="foodTag">🍔 Burger</button>
-  <button class="foodTag">🍕 Pizza</button>
-  <button class="foodTag">🌯 Shawarma</button>
-  <button class="foodTag">🍗 Chicken Biryani</button>
-  <button class="foodTag">🥩 Beef Biryani</button>
-  <button class="foodTag">🍲 Haleem</button>
-  <button class="foodTag">🍢 Bar BQ</button>
-  <button class="foodTag">🥤 Drink</button>
-  <button class="foodTag">🍦 Ice Cream</button>
+  <div class="food-category cat-fast-food">
+    <i class="fa-solid fa-burger"></i>
+    <span>Burger</span>
+  </div>
+
+  <div class="food-category cat-fast-food">
+    <i class="fa-solid fa-pizza-slice"></i>
+    <span>Pizza</span>
+  </div>
+
+  <div class="food-category cat-fast-food">
+    <i class="fa-solid fa-wrap"></i>
+    <span>Shawarma</span>
+  </div>
+
+  <div class="food-category cat-desi">
+    <i class="fa-solid fa-drumstick-bite"></i>
+    <span>Chicken Biryani</span>
+  </div>
+
+  <div class="food-category cat-desi">
+    <i class="fa-solid fa-bowl-food"></i>
+    <span>Beef Biryani</span>
+  </div>
+
+  <div class="food-category cat-desi">
+    <i class="fa-solid fa-utensils"></i>
+    <span>Haleem</span>
+  </div>
+
+  <div class="food-category cat-bbq">
+    <i class="fa-solid fa-fire-burner"></i>
+    <span>Bar BQ</span>
+  </div>
+
+  <div class="food-category cat-deals">
+    <i class="fa-solid fa-glass-water"></i>
+    <span>Drink</span>
+  </div>
+
+  <div class="food-category cat-bakery">
+    <i class="fa-solid fa-ice-cream"></i>
+    <span>Ice Cream</span>
+  </div>
+
+  <div class="food-category cat-chinese">
+   <i class="fa-solid fa-bowl-rice"></i>
+   <span>Chinese</span>
+</div>
 
 </div>
+
+
 
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 mb-8">
 
@@ -352,7 +415,7 @@ textarea::placeholder{
 
   <!-- FILTER SIDEBAR -->
   <div class="lg:w-[30%]">
-    <div class="glass-card p-5 sticky top-24 h-[650px] overflow-y-auto food-scroll bg-white/70 backdrop-blur-xl border border-emerald-100 shadow-[0_20px_60px_rgba(16,24,40,0.08)]">
+    <div class="dark-panel rounded-3xl p-5 sticky top-24 h-[650px] overflow-y-auto food-scroll shadow-lg">
 
       <!-- Category -->
 	  
@@ -366,8 +429,8 @@ textarea::placeholder{
 
 </div>
 <div class="mb-4">
-  <label class="text-xs text-slate-600 font-semibold mb-1 block">Category</label>
-  <select id="filterCategory" class="w-full bg-white/80 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:border-emerald-500 outline-none">
+  <label class="text-xs text-slate-300 font-semibold mb-1 block">Category</label>
+  <select id="filterCategory" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 outline-none">
     <option value="">All</option> <option value="Vegetables">Vegetables</option> 
 	<option value="Food">Food</option> 
 	<option value="Fruits">Fruits</option> 
@@ -379,8 +442,8 @@ textarea::placeholder{
 
 <!-- Sub Category -->
 <div class="mb-4">
-  <label class="text-xs text-slate-600 font-semibold mb-1 block">Sub Category</label>
-  <select id="filterSubCategory" class="w-full bg-white/80 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:border-emerald-500 outline-none">
+  <label class="text-xs text-slate-300 font-semibold mb-1 block">Sub Category</label>
+  <select id="filterSubCategory" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 outline-none">
     <option value="">All</option>
 	<option value="">Fast Food</option>
 	<option value="">Desi Cuisine</option>
@@ -389,8 +452,8 @@ textarea::placeholder{
 
 <!-- Product -->
 <div class="mb-4">
-  <label class="text-xs text-slate-600 font-semibold mb-1 block">Product</label>
-  <select id="filterProduct" class="w-full bg-white/80 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:border-emerald-500 outline-none">
+  <label class="text-xs text-slate-300 font-semibold mb-1 block">Product</label>
+  <select id="filterProduct" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 outline-none">
     <option value="">All</option>
 	
   </select>
@@ -398,43 +461,43 @@ textarea::placeholder{
 
 <!-- Product Variety -->
 <div class="mb-4">
-  <label class="text-xs text-slate-600 font-semibold mb-1 block">Variety</label>
-  <select id="filterVariety" class="w-full bg-white/80 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:border-emerald-500 outline-none">
+  <label class="text-xs text-slate-300 font-semibold mb-1 block">Variety</label>
+  <select id="filterVariety" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 outline-none">
     <option value="">All</option>
   </select>
 </div>
 
       <!-- Price -->
       <div class="mb-4">
-        <label class="text-xs text-slate-600 font-semibold mb-1 block">Price Range</label>
+        <label class="text-xs text-slate-300 font-semibold mb-1 block">Price Range</label>
         <div class="flex gap-2">
-          <input id="minPrice" type="number" placeholder="Min" class="w-1/2 bg-white/80 border border-slate-200 rounded-lg px-2 py-1 text-sm text-slate-800 focus:border-emerald-500 outline-none">
-          <input id="maxPrice" type="number" placeholder="Max" class="w-1/2 bg-white/80 border border-slate-200 rounded-lg px-2 py-1 text-sm text-slate-800 focus:border-emerald-500 outline-none">
+          <input id="minPrice" type="number" placeholder="Min" class="w-1/2 bg-slate-800/50 border border-slate-700 rounded-lg px-2 py-1 text-sm text-slate-100 focus:border-emerald-500 outline-none">
+          <input id="maxPrice" type="number" placeholder="Max" class="w-1/2 bg-slate-800/50 border border-slate-700 rounded-lg px-2 py-1 text-sm text-slate-100 focus:border-emerald-500 outline-none">
         </div>
       </div>
 
       <!-- Market -->
       <div class="mb-4">
-        <label class="text-xs text-slate-600 font-semibold mb-1 block">Market</label>
-        <div class="space-y-1 text-sm text-slate-700">
-          <label class="flex items-center gap-2"><input type="checkbox" class="marketFilter w-4 h-4 text-emerald-500 border-slate-300 rounded focus:ring-emerald-500" value="Imtiaz"> Imtiaz</label>
-          <label class="flex items-center gap-2"><input type="checkbox" class="marketFilter w-4 h-4 text-emerald-500 border-slate-300 rounded focus:ring-emerald-500" value="Metro"> Metro</label>
-          <label class="flex items-center gap-2"><input type="checkbox" class="marketFilter w-4 h-4 text-emerald-500 border-slate-300 rounded focus:ring-emerald-500" value="Sabzi Mandi"> Sabzi Mandi</label>
+        <label class="text-xs text-slate-300 font-semibold mb-1 block">Market</label>
+        <div class="space-y-1 text-sm text-slate-300">
+          <label class="flex items-center gap-2"><input type="checkbox" class="marketFilter w-4 h-4 text-emerald-500 border-slate-700 bg-slate-800/50 rounded focus:ring-emerald-500" value="Imtiaz"> Imtiaz</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="marketFilter w-4 h-4 text-emerald-500 border-slate-700 bg-slate-800/50 rounded focus:ring-emerald-500" value="Metro"> Metro</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="marketFilter w-4 h-4 text-emerald-500 border-slate-700 bg-slate-800/50 rounded focus:ring-emerald-500" value="Sabzi Mandi"> Sabzi Mandi</label>
         </div>
       </div>
 
       <!-- Unit -->
       <div class="mb-4">
-        <label class="text-xs text-slate-600 font-semibold mb-1 block">Unit</label>
-        <div class="space-y-1 text-sm text-slate-700">
-          <label class="flex items-center gap-2"><input type="checkbox" class="unitFilter w-4 h-4 text-emerald-500 border-slate-300 rounded focus:ring-emerald-500" value="kg"> Per Kg</label>
-          <label class="flex items-center gap-2"><input type="checkbox" class="unitFilter w-4 h-4 text-emerald-500 border-slate-300 rounded focus:ring-emerald-500" value="liter"> Per Liter</label>
-          <label class="flex items-center gap-2"><input type="checkbox" class="unitFilter w-4 h-4 text-emerald-500 border-slate-300 rounded focus:ring-emerald-500" value="dozen"> Per Dozen</label>
+        <label class="text-xs text-slate-300 font-semibold mb-1 block">Unit</label>
+        <div class="space-y-1 text-sm text-slate-300">
+          <label class="flex items-center gap-2"><input type="checkbox" class="unitFilter w-4 h-4 text-emerald-500 border-slate-700 bg-slate-800/50 rounded focus:ring-emerald-500" value="kg"> Per Kg</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="unitFilter w-4 h-4 text-emerald-500 border-slate-700 bg-slate-800/50 rounded focus:ring-emerald-500" value="liter"> Per Liter</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="unitFilter w-4 h-4 text-emerald-500 border-slate-700 bg-slate-800/50 rounded focus:ring-emerald-500" value="dozen"> Per Dozen</label>
         </div>
       </div>
 
       <!-- Clear Button -->
-      <button id="clearFilters" class="w-full mt-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition shadow-sm">
+      <button id="clearFilters" class="w-full mt-3 py-2.5 rounded-xl bg-slate-800/50 border border-slate-700 text-sm font-semibold text-slate-300 hover:bg-slate-800 hover:text-emerald-400 transition shadow-sm">
         Clear Filters
       </button>
 
@@ -451,13 +514,13 @@ textarea::placeholder{
         <!-- Right Column: Product Details Box -->
         <div class="lg:w-[40%] flex flex-col gap-5 min-h-[650px]">
           
-          <div class="glass-card p-0 overflow-hidden bg-white/80 backdrop-blur-xl border border-emerald-100 shadow-[0_20px_60px_rgba(16,24,40,0.08)] flex flex-col h-[650px]" id="featuredAdContainer">
+          <div class="dark-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[650px] shadow-lg" id="featuredAdContainer">
              <!-- Initial Empty State -->
-             <div id="featuredPlaceholder" class="h-full flex flex-col items-center justify-center py-20 text-slate-500 text-center px-6">
+             <div id="featuredPlaceholder" class="h-full flex flex-col items-center justify-center py-20 text-slate-400 text-center px-6">
                 <div class="w-24 h-24 rounded-full bg-emerald-500/10 flex items-center justify-center text-5xl mb-5 border border-emerald-500/20">
                   🍔
                 </div>
-                <h3 class="text-xl font-bold text-slate-800 mb-2">
+                <h3 class="text-xl font-bold text-slate-100 mb-2">
                   Product Details
                 </h3>
                 <p class="max-w-md text-sm leading-relaxed">
@@ -466,13 +529,13 @@ textarea::placeholder{
              </div>
              
              <!-- Dynamic Detailed Content -->
-             <div id="featuredContent" class="hidden flex flex-col h-full bg-white/90">
+             <div id="featuredContent" class="hidden flex flex-col h-full bg-[rgba(15,23,42,0.9)]">
                 <!-- Product Image -->
                 <div class="relative h-[250px] w-full overflow-hidden shrink-0">
-                  <img id="fImg" src="" alt="Food Image" class="w-full h-full object-cover">
-                  <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+                  <img id="fImg" src="" alt="Food Image" class="w-full h-full object-cover food-img-filter">
+                  <div class="absolute inset-0 bg-gradient-to-t from-[rgba(15,23,42,1)] via-transparent to-transparent"></div>
                   <!-- Distance Badge -->
-                  <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md border border-emerald-200 text-emerald-700 px-4 py-1 rounded-full text-xs font-semibold shadow-sm">
+                  <div class="absolute top-4 right-4 bg-slate-900/80 backdrop-blur-md border border-slate-700 text-slate-300 px-4 py-1 rounded-full text-xs font-semibold shadow-sm">
                     📍 <span id="fDistance">1.2 KM Away</span>
                   </div>
                 </div>
@@ -481,9 +544,9 @@ textarea::placeholder{
                 <div class="flex-1 flex flex-col p-5 overflow-y-auto food-scroll">
                   <!-- Title -->
                   <div class="mb-4">
-                    <h2 id="fName" class="text-2xl sm:text-3xl font-extrabold text-slate-800 mb-2 leading-tight">Product Name</h2>
-                    <div id="fPrice" class="text-xl font-bold text-emerald-600 mb-2">Rs. 850</div>
-                    <div class="flex items-center gap-2 text-sm text-slate-500 font-medium">
+                    <h2 id="fName" class="text-lg sm:text-xl font-extrabold text-slate-100 mb-2 leading-tight">Product Name</h2>
+                    <div id="fPrice" class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500 inline-block mb-2">Rs. 850</div>
+                    <div class="flex items-center gap-2 text-sm text-slate-400 font-medium">
                       <span>📍</span>
                       <span id="fLocation">Karachi Pakistan</span>
                     </div>
@@ -491,16 +554,16 @@ textarea::placeholder{
 
                   <!-- Description -->
                   <div class="mb-6">
-                    <h3 class="text-sm font-semibold text-slate-700 mb-2">Product Details</h3>
-                    <p id="fDesc" class="text-[14px] leading-6 text-slate-600">Product details here...</p>
+                    <h3 class="text-sm font-semibold text-slate-300 mb-2">Product Details</h3>
+                    <p id="fDesc" class="text-[14px] leading-6 text-slate-400">Product details here...</p>
                   </div>
 
                   <!-- BUTTONS -->
-                  <div class="grid grid-cols-2 gap-3 mt-auto pt-4 border-t border-slate-100">
-                    <button id="fCallBtn" class="h-12 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm transition-all shadow-sm">
+                  <div class="grid grid-cols-2 gap-3 mt-auto pt-4 border-t border-slate-800">
+                    <button id="fCallBtn" class="h-12 rounded-xl border border-slate-700 bg-slate-800/50 hover:bg-slate-700 text-slate-300 font-semibold text-sm transition-all shadow-sm">
                       📞 Contact
                     </button>
-                    <button id="fOrderBtn" class="h-12 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold text-sm shadow-[0_4px_12px_rgba(16,185,129,0.3)] transition-all" onclick="document.getElementById('orderModal').classList.remove('hidden')">
+                    <button id="fOrderBtn" class="h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-600 text-white font-bold text-sm shadow-[0_4px_12px_rgba(249,115,22,0.3)] transition-all" onclick="document.getElementById('orderModal').classList.remove('hidden')">
                       🛒 Order Now
                     </button>
                   </div>
@@ -513,7 +576,7 @@ textarea::placeholder{
       <!-- SCROLLING FEATURED ADS TICKER -->
       <div class="mt-8">
         <h3 class="text-lg font-bold text-slate-800 mb-4 px-2">Featured Offers</h3>
-        <div class="overflow-hidden relative w-full rounded-2xl bg-white/40 backdrop-blur-md border border-white/50 p-4 shadow-sm" dir="ltr">
+        <div class="overflow-hidden relative w-full rounded-2xl bg-white/40 backdrop-blur-md border border-white/50 py-2.5 px-2 shadow-sm" dir="ltr">
            <div class="flex gap-4 items-center animate-[scroll_20s_linear_infinite] whitespace-nowrap min-w-max hover:[animation-play-state:paused]" style="animation: scroll 20s linear infinite;">
              
              <!-- Ad 1 -->
@@ -587,116 +650,319 @@ textarea::placeholder{
 
   
 
-  <!-- Order Modal -->
-  <div id="orderModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-    <div class="glass-card w-full max-w-md flex flex-col overflow-hidden relative border-slate-200 bg-white/95 p-0 shadow-2xl">
-      <button id="closeModalBtn" class="absolute top-4 left-4 text-slate-500 hover:text-slate-800 transition z-10 bg-white/80 p-1.5 rounded-full backdrop-blur border border-slate-200">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-      </button>
-      <div class="p-5 pb-4 border-b border-slate-200 pt-6">
-        <h3 class="text-xl font-bold text-slate-800 text-start"><span class="lang-en">Place Order</span><span class="lang-ur">آرڈر کریں</span></h3>
-      </div>
-      <div class="p-5 flex flex-col gap-4 sm:gap-5 overflow-y-auto food-scroll max-h-[80vh]">
-        
-        <!-- Date & Time | Restaurant -->
-        <div class="grid grid-cols-2 gap-3 sm:gap-4">
-          <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-start">
-            <div class="text-xs text-slate-500 mb-1"><span class="lang-en">Date & Time</span><span class="lang-ur">تاریخ و وقت</span></div>
-            <div id="modalDateTime" class="text-xs sm:text-[0.8rem] font-semibold text-emerald-600 tracking-wide mt-1">Apr 9, 2026, 11:41 PM</div>
-          </div>
-          <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-start">
-            <div class="text-xs text-slate-500 mb-1"><span class="lang-en">Restaurant</span><span class="lang-ur">ریسٹورنٹ</span></div>
-            <div id="modalRestaurant" class="text-sm font-bold text-emerald-700 mt-1">Burger Lab</div>
-          </div>
-        </div>
+  <!-- UPDATED PREMIUM ORDER MODAL -->
+<div id="orderModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md py-2.5 px-2 sm:py-2.5 px-2">
 
-        <!-- Product Details -->
-        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 relative">
-          <!-- Yellow left bar indicator -->
-          <div class="absolute top-0 bottom-0 left-0 w-1 bg-emerald-500/80 rounded-l-xl"></div>
-          <div class="text-[0.7rem] text-slate-500 mb-1 text-start"><span class="lang-en">Product Details</span><span class="lang-ur">تفصیلات</span></div>
-          <div id="modalProductName" class="text-base font-bold text-slate-800 text-start mb-4">Zinger Burger Deal</div>
-          
-          <div class="flex justify-between items-center text-[0.75rem] border-t border-slate-200 pt-3">
-             <div class="flex items-center gap-1.5 text-slate-600">
-                <span class="text-red-400 drop-shadow-md">📍</span>
-                <span id="modalLocation">Gulshan-e-Iqbal, Karachi</span>
-             </div>
-             <div class="flex items-center gap-1.5 text-slate-600" dir="ltr">
-                <span class="text-emerald-500 drop-shadow-md">📞</span>
-                <span id="modalPhone">03001234567</span>
-             </div>
-          </div>
-        </div>
+  <div class="relative w-full max-w-lg overflow-hidden rounded-[18px] border border-white/10 bg-white shadow-[0_25px_80px_rgba(0,0,0,0.35)]">
 
-        <!-- Promo | Quantity | Rate -->
-        <div class="grid grid-cols-3 gap-3">
-          <div>
-            <div class="text-[0.65rem] text-slate-500 mb-1.5 text-start"><span class="lang-en">Rate</span><span class="lang-ur">قیمت</span></div>
-            <div class="bg-white border border-slate-200 rounded-lg h-9 flex items-center justify-end px-3 text-emerald-600 font-bold text-sm" id="modalRate">850</div>
-          </div>
-          <div>
-            <div class="text-[0.65rem] text-slate-500 mb-1.5 text-start"><span class="lang-en">Quantity</span><span class="lang-ur">مقدار</span></div>
-            <input type="number" id="modalQuantity" value="1" min="1" class="w-full h-9 bg-white border border-slate-200 rounded-lg text-sm px-3 py-1 outline-none focus:border-emerald-500 text-slate-800 text-center font-bold transition">
-          </div>
-          <div>
-            <div class="text-[0.65rem] text-slate-500 mb-1.5 text-start">Promo Code</div>
-            <input type="text" placeholder="OPTIONAL" class="w-full h-9 bg-white border border-slate-200 rounded-lg text-xs px-2 py-1 outline-none focus:border-emerald-500 text-slate-800 text-center placeholder:text-slate-400 transition uppercase">
-          </div>
-        </div>
+    <!-- TOP GLOW -->
+    <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-orange-500 via-emerald-500 to-red-500"></div>
 
-        <!-- Total Amount -->
-        <div class="flex justify-between items-center bg-emerald-50 p-3 rounded-lg border border-emerald-200">
-          <span class="text-sm text-slate-700 font-medium"><span class="lang-en">Total Amount</span><span class="lang-ur">کل رقم</span></span>
-          <span id="modalTotalAmount" class="font-bold text-xl text-emerald-600 drop-shadow-sm">Rs. 850</span>
-        </div>
-        
+    <!-- CLOSE BUTTON -->
+    <button id="closeModalBtn"
+      class="absolute left-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-500 transition hover:rotate-90 hover:bg-red-50 hover:text-red-500">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    <!-- HEADER -->
+    <div class="relative overflow-hidden border-b border-slate-200 bg-gradient-to-r from-[#065f46] via-[#047857] to-[#10b981] px-4 pb-3 pt-4 text-white">
+
+      <!-- BG EFFECT -->
+      <div class="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-white/10 blur-2xl"></div>
+      <div class="absolute -bottom-10 -left-10 h-28 w-28 rounded-full bg-yellow-300/20 blur-2xl"></div>
+
+      <div class="relative z-10 flex items-center justify-between">
+
         <div>
-          <div class="mb-2 text-xs text-slate-500 text-end"><span class="lang-en">Payment Option</span><span class="lang-ur">ادائیگی کا طریقہ</span></div>
-          <div class="grid grid-cols-3 gap-3 text-center">
-            <button type="button" class="pymt-btn py-3 rounded-lg border border-slate-200 bg-slate-50 hover:bg-white hover:border-slate-300 transition flex flex-col items-center justify-center gap-1.5 focus:outline-none">
-              <span class="text-yellow-500 text-xl">⚡</span>
-              <span class="text-[0.65rem] text-slate-600 font-medium tracking-wide">JazzCash</span>
-            </button>
-            <button type="button" class="pymt-btn py-3 rounded-lg border border-slate-200 bg-slate-50 hover:bg-white hover:border-slate-300 transition flex flex-col items-center justify-center gap-1.5 focus:outline-none">
-              <span class="text-sky-500 text-xl">📱</span>
-              <span class="text-[0.65rem] text-slate-600 font-medium tracking-wide">Easypaisa</span>
-            </button>
-            <button type="button" class="pymt-btn border-emerald-500 bg-emerald-50/50 py-3 rounded-lg border transition flex flex-col items-center justify-center gap-1.5 focus:outline-none shadow-sm">
-              <span class="text-emerald-500 text-xl">💵</span>
-              <span class="text-[0.65rem] text-emerald-700 font-bold tracking-wide">COD</span>
-            </button>
-          </div>
+          <h3 class="text-lg font-black tracking-tight">
+            <span class="lang-en">Place Your Order</span>
+            <span class="lang-ur">اپنا آرڈر مکمل کریں</span>
+          </h3>
+
+          <p class="mt-0.5 text-[10px] text-emerald-50/90">
+            <span class="lang-en">Fast delivery • Secure ordering • Live support</span>
+            <span class="lang-ur">تیز ڈیلیوری • محفوظ آرڈر • لائیو سپورٹ</span>
+          </p>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
-          <div class="text-start">
-            <label class="block text-xs text-slate-500 mb-1.5"><span class="lang-en">Customer Name</span><span class="lang-ur">نام</span></label>
-            <input type="text" placeholder="e.g. Ali Khan" class="w-full bg-white border border-slate-200 rounded-lg text-sm px-3 py-2.5 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50 text-slate-800 placeholder:text-slate-400 transition">
-          </div>
-          <div class="text-start">
-            <label class="block text-xs text-slate-500 mb-1.5"><span class="lang-en">WhatsApp No</span><span class="lang-ur">واٹس ایپ نمبر</span></label>
-            <input type="text" placeholder="03XXXXXXXXX" dir="ltr" class="w-full text-end bg-white border border-slate-200 rounded-lg text-sm px-3 py-2.5 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50 text-slate-800 placeholder:text-slate-400 transition">
-          </div>
+        <div
+          class="flex h-10 w-11 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-xl shadow-lg backdrop-blur-md">
+          🍔
         </div>
-        
-        <div class="text-start">
-          <label class="block text-xs text-slate-500 mb-1.5"><span class="lang-en">Delivery Address</span><span class="lang-ur">مکمل پتہ</span></label>
-          <textarea rows="2" placeholder="...House / Block / Area" class="w-full text-start bg-white border border-slate-200 rounded-lg text-sm px-3 py-2.5 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50 text-slate-800 placeholder:text-slate-400 resize-none transition"></textarea>
-        </div>
-        
-        <div class="flex gap-3 mt-2">
-          <button id="cancelModalBtn" class="flex-[2] py-2.5 rounded-xl bg-slate-100 text-slate-600 font-semibold text-sm border border-slate-200 hover:bg-slate-200 transition">
-             <span class="lang-en">Cancel</span><span class="lang-ur">منسوخ کریں</span>
-          </button>
-          <button id="confirmOrderBtn" class="flex-[3] py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold text-sm shadow-[0_8px_20px_rgba(16,185,129,0.3)] hover:from-emerald-400 hover:to-emerald-500 transition">
-             <span class="lang-en">Confirm Order</span><span class="lang-ur">آرڈر کنفرم کریں</span>
-          </button>
-        </div>
-
       </div>
     </div>
+
+    <!-- BODY -->
+    <div class="food-scroll max-h-[82vh] overflow-y-auto px-4 py-4">
+
+      <!-- DATE + RESTAURANT -->
+      <div class="grid grid-cols-2 gap-3">
+
+        <div
+          class="rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white py-2.5 px-2 shadow-sm">
+          <div class="mb-1 text-[11px] font-medium uppercase tracking-wide text-slate-500">
+            <span class="lang-en">Date & Time</span>
+            <span class="lang-ur">تاریخ اور وقت</span>
+          </div>
+
+          <div id="modalDateTime"
+            class="text-[0.78rem] font-bold leading-relaxed text-emerald-700">
+            Apr 9, 2026, 11:41 PM
+          </div>
+        </div>
+
+        <div
+          class="rounded-2xl border border-orange-100 bg-gradient-to-br from-orange-50 to-white py-2.5 px-2 shadow-sm">
+          <div class="mb-1 text-[11px] font-medium uppercase tracking-wide text-slate-500">
+            <span class="lang-en">Restaurant</span>
+            <span class="lang-ur">ریسٹورنٹ</span>
+          </div>
+
+          <div id="modalRestaurant"
+            class="text-sm font-extrabold text-orange-600">
+            Burger Lab
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PRODUCT CARD -->
+      <div
+        class="relative mt-5 overflow-hidden rounded-xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 py-2.5 px-2 shadow-sm">
+
+        <!-- SIDE BAR -->
+        <div
+          class="absolute bottom-0 left-0 top-0 w-1.5 bg-gradient-to-b from-orange-500 via-emerald-500 to-red-500">
+        </div>
+
+        <div class="pl-2">
+
+          <div class="mb-1 text-[11px] uppercase tracking-wide text-slate-500">
+            <span class="lang-en">Selected Deal</span>
+            <span class="lang-ur">منتخب ڈیل</span>
+          </div>
+
+          <h4 id="modalProductName"
+            class="text-lg font-black leading-tight text-slate-800">
+            Zinger Burger Deal
+          </h4>
+
+          <!-- INFO -->
+          <div
+            class="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-3 text-[12px]">
+
+            <div class="flex items-center gap-2 text-slate-600">
+              <span class="text-red-500">📍</span>
+              <span id="modalLocation">Gulshan-e-Iqbal, Karachi</span>
+            </div>
+
+            <div class="flex items-center gap-2 text-slate-600" dir="ltr">
+              <span class="text-emerald-500">📞</span>
+              <span id="modalPhone">03001234567</span>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PRICE SECTION -->
+      <div class="mt-5 grid grid-cols-3 gap-3">
+
+        <!-- RATE -->
+        <div>
+          <label class="mb-1.5 block text-[11px] font-medium text-slate-500">
+            <span class="lang-en">Rate</span>
+            <span class="lang-ur">قیمت</span>
+          </label>
+
+          <div
+            class="flex h-10 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-sm font-black text-emerald-600 shadow-sm"
+            id="modalRate">
+            Rs. 850
+          </div>
+        </div>
+
+        <!-- QTY -->
+        <div>
+          <label class="mb-1.5 block text-[11px] font-medium text-slate-500">
+            <span class="lang-en">Quantity</span>
+            <span class="lang-ur">تعداد</span>
+          </label>
+
+          <input type="number" id="modalQuantity" value="1" min="1"
+            class="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-center text-sm font-bold text-slate-800 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20">
+        </div>
+
+        <!-- PROMO -->
+        <div>
+          <label class="mb-1.5 block text-[11px] font-medium text-slate-500">
+            Promo
+          </label>
+
+          <input type="text" placeholder="OPTIONAL"
+            class="h-10 w-full rounded-xl border border-slate-200 bg-white px-2 text-center text-xs font-semibold uppercase tracking-wide text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+        </div>
+
+      </div>
+
+      <!-- TOTAL -->
+      <div
+        class="mt-5 flex items-center justify-between rounded-xl border border-emerald-200 bg-gradient-to-r from-emerald-50 to-white px-4 py-2.5 shadow-sm">
+
+        <div>
+          <div class="text-[11px] uppercase tracking-wide text-slate-500">
+            <span class="lang-en">Grand Total</span>
+            <span class="lang-ur">کل رقم</span>
+          </div>
+
+          <div class="text-xs text-slate-500">
+            <span class="lang-en">Including delivery charges</span>
+            <span class="lang-ur">ڈیلیوری چارجز شامل ہیں</span>
+          </div>
+        </div>
+
+        <div id="modalTotalAmount"
+          class="text-lg font-black tracking-tight text-emerald-600">
+          Rs. 850
+        </div>
+      </div>
+
+      <!-- PAYMENT -->
+      <div class="mt-6">
+
+        <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <span class="lang-en">Payment Method</span>
+          <span class="lang-ur">ادائیگی کا طریقہ</span>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+
+          <!-- JazzCash -->
+          <button type="button"
+            class="group rounded-xl border border-slate-200 bg-white py-2.5 px-2 transition hover:-translate-y-1 hover:border-yellow-400 hover:shadow-lg">
+
+            <div class="text-lg transition group-hover:scale-110">⚡</div>
+
+            <div class="mt-1 text-[11px] font-bold text-slate-700">
+              JazzCash
+            </div>
+
+          </button>
+
+          <!-- Easypaisa -->
+          <button type="button"
+            class="group rounded-2xl border border-slate-200 bg-white py-2.5 px-2 transition hover:-translate-y-1 hover:border-emerald-400 hover:shadow-lg">
+
+            <div class="text-lg transition group-hover:scale-110">📱</div>
+
+            <div class="mt-1 text-[11px] font-bold text-slate-700">
+              Easypaisa
+            </div>
+
+          </button>
+
+          <!-- COD -->
+          <button type="button"
+            class="rounded-2xl border border-emerald-500 bg-gradient-to-br from-emerald-50 to-white py-2.5 px-2 shadow-sm">
+
+            <div class="text-lg">💵</div>
+
+            <div class="mt-1 text-[11px] font-black text-emerald-700">
+              Cash On Delivery
+            </div>
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- CUSTOMER INFO -->
+      <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+
+        <!-- NAME -->
+        <div>
+          <label class="mb-1.5 block text-xs font-medium text-slate-500">
+            <span class="lang-en">Customer Name</span>
+            <span class="lang-ur">صارف کا نام</span>
+          </label>
+
+          <input type="text" placeholder="e.g. Ali Khan"
+            class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20">
+        </div>
+
+        <!-- PHONE -->
+        <div>
+          <label class="mb-1.5 block text-xs font-medium text-slate-500">
+            <span class="lang-en">WhatsApp Number</span>
+            <span class="lang-ur">واٹس ایپ نمبر</span>
+          </label>
+
+          <input type="text" placeholder="03XXXXXXXXX" dir="ltr"
+            class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-end text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20">
+        </div>
+
+      </div>
+
+      <!-- ADDRESS -->
+      <div class="mt-5">
+
+        <label class="mb-1.5 block text-xs font-medium text-slate-500">
+          <span class="lang-en">Delivery Address</span>
+          <span class="lang-ur">مکمل پتہ</span>
+        </label>
+
+        <textarea rows="3" placeholder="House / Block / Area / Landmark"
+          class="w-full resize-none rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"></textarea>
+
+      </div>
+
+      <!-- NOTE -->
+      <div
+        class="mt-5 rounded-2xl border border-orange-200 bg-orange-50 px-4 py-2.5 text-[12px] leading-relaxed text-orange-700">
+
+        <span class="font-bold">⚠ Note:</span>
+
+        <span class="lang-en">
+          Please confirm your contact number before placing order.
+        </span>
+
+        <span class="lang-ur">
+          آرڈر کنفرم کرنے سے پہلے اپنا نمبر لازمی چیک کریں۔
+        </span>
+
+      </div>
+
+      <!-- BUTTONS -->
+<div class="mt-5 flex gap-3">
+
+  <!-- CANCEL -->
+  <button id="cancelModalBtn"
+    class="flex-1 h-10 rounded-xl border border-slate-200 bg-slate-100 text-sm font-bold text-slate-600 transition hover:bg-slate-200">
+
+    <span class="lang-en">Cancel</span>
+    <span class="lang-ur">منسوخ کریں</span>
+
+  </button>
+
+  <!-- CONFIRM -->
+  <button id="confirmOrderBtn"
+    class="flex-[1.4] h-10 rounded-xl bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 text-sm font-black text-white shadow-[0_8px_20px_rgba(249,115,22,0.28)] transition hover:-translate-y-0.5">
+
+    <span class="lang-en">Confirm Order</span>
+    <span class="lang-ur">آرڈر کنفرم کریں</span>
+
+  </button>
+
+</div>
+
+    </div>
   </div>
+</div>
 
   <!-- Scripts -->
   <script>
