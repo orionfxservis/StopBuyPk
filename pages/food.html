@@ -1188,6 +1188,42 @@ document.getElementById("clearFilters").addEventListener("click", () => {
   applyFilters();
 });
 
+/* =========================
+   GO TO TOP BUTTON
+========================= */
+
+const goTopBtn = document.getElementById("goTopBtn");
+
+/* SHOW BUTTON AFTER SCROLL */
+window.addEventListener("scroll", () => {
+
+  if (window.scrollY > 500) {
+    goTopBtn.classList.add("show");
+  } else {
+    goTopBtn.classList.remove("show");
+  }
+
+});
+
+/* GO BACK TO PRODUCT CARDS */
+goTopBtn.addEventListener("click", () => {
+
+  const foodListings = document.getElementById("foodListings");
+
+  if (foodListings) {
+    foodListings.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  } else {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+
+});
+
 </script>
 
   <script src="../js/script.js"></script>
@@ -1200,6 +1236,11 @@ document.getElementById("clearFilters").addEventListener("click", () => {
     <div class="w-full bg-[#0A3D2A] text-emerald-50 text-center py-4 text-sm mt-auto border-t border-[#052C22]">
         &copy; 2026 StopBuyPk - Smart Price Comparison
     </div>
+	
+	<!-- GO TO TOP BUTTON -->
+<button id="goTopBtn">
+  ⬆
+</button>
 
 <script src="../js/location.js"></script>
 </body>
