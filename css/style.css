@@ -875,3 +875,655 @@ html[lang='ur'] .lang-en { display: none !important; }
 
     border:1px solid rgba(255,255,255,.12);
 }
+
+/* ===============================
+   PREMIUM ORDER MODAL
+================================= */
+
+#orderModal .modal-content{
+    background:
+    linear-gradient(
+        145deg,
+        rgba(3,27,20,0.96),
+        rgba(15,23,42,0.96)
+    );
+
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:28px;
+
+    box-shadow:
+    0 20px 60px rgba(0,0,0,0.45),
+    0 10px 30px rgba(249,115,22,0.12);
+
+    backdrop-filter: blur(18px);
+
+    overflow:hidden;
+}
+
+/* Header */
+.order-modal-header{
+    padding:20px 25px;
+    border-bottom:1px solid rgba(255,255,255,0.06);
+
+    background:
+    linear-gradient(
+        to right,
+        rgba(249,115,22,0.12),
+        rgba(16,185,129,0.08)
+    );
+}
+
+.order-modal-title{
+    font-size:1.5rem;
+    font-weight:700;
+
+    background: linear-gradient(to right,#f59e0b,#fb923c);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* Inputs */
+#orderModal input,
+#orderModal textarea,
+#orderModal select{
+
+    background: rgba(15,23,42,0.75);
+    border:1px solid rgba(255,255,255,0.08);
+
+    color:white;
+
+    border-radius:14px;
+
+    padding:12px 14px;
+
+    transition:0.3s ease;
+}
+
+/* Input Focus */
+#orderModal input:focus,
+#orderModal textarea:focus,
+#orderModal select:focus{
+
+    border-color:#f97316;
+
+    box-shadow:
+    0 0 0 3px rgba(249,115,22,0.18);
+
+    outline:none;
+}
+
+/* Labels */
+#orderModal label{
+    color:#d1d5db;
+    font-size:0.92rem;
+    margin-bottom:6px;
+    display:block;
+}
+
+/* Summary Card */
+.order-summary-box{
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(16,185,129,0.10),
+        rgba(249,115,22,0.08)
+    );
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    border-radius:18px;
+
+    padding:18px;
+}
+
+/* Total Price */
+#orderTotal{
+    color:#f59e0b;
+    font-size:1.4rem;
+    font-weight:700;
+}
+
+/* Confirm Button */
+#confirmOrderBtn{
+
+    background:
+    linear-gradient(
+        135deg,
+        #f97316,
+        #ef4444
+    );
+
+    border:none;
+
+    color:white;
+
+    border-radius:16px;
+
+    padding:14px 18px;
+
+    font-weight:700;
+
+    transition:0.3s ease;
+}
+
+#confirmOrderBtn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+    0 10px 25px rgba(249,115,22,0.35);
+}
+
+/* Call Button */
+#callRestaurantBtn{
+
+    background:
+    linear-gradient(
+        135deg,
+        #10b981,
+        #059669
+    );
+
+    border:none;
+
+    color:white;
+
+    border-radius:16px;
+
+    padding:14px 18px;
+
+    font-weight:700;
+}
+
+/* Close Button */
+.order-close-btn{
+
+    width:38px;
+    height:38px;
+
+    border-radius:50%;
+
+    background:rgba(239,68,68,0.12);
+
+    color:#f87171;
+
+    transition:0.3s;
+}
+
+.order-close-btn:hover{
+    background:#ef4444;
+    color:white;
+}
+
+/* Delivery Badge */
+.delivery-badge{
+
+    background:rgba(16,185,129,0.15);
+
+    color:#6ee7b7;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:0.8rem;
+}
+
+/* Time Slots */
+.time-slot{
+
+    background:rgba(15,23,42,0.75);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    border-radius:12px;
+
+    transition:0.3s;
+}
+
+.time-slot:hover,
+.time-slot.active{
+
+    border-color:#f97316;
+
+    background:rgba(249,115,22,0.12);
+
+    color:#fb923c;
+}
+
+/* =========================================
+   PREMIUM BEVEL UI STYLE
+========================================= */
+
+/* Main Glass / Bevel Cards */
+.glass-card,
+.food-card,
+.filter-box,
+.featured-box,
+.modal-box,
+.sidebar-box,
+.category-card,
+.product-card,
+.offer-card {
+    
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.10),
+            rgba(255,255,255,0.03)
+        );
+
+    border: 1px solid rgba(255,255,255,0.12);
+
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.14),
+        inset -1px -1px 0 rgba(0,0,0,0.15),
+        0 10px 25px rgba(0,0,0,0.18);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    transition: all .3s ease;
+}
+
+/* Hover Effect */
+.glass-card:hover,
+.food-card:hover,
+.product-card:hover,
+.offer-card:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.18),
+        inset -1px -1px 0 rgba(0,0,0,0.18),
+        0 15px 35px rgba(0,0,0,0.25);
+}
+
+/* Premium Buttons */
+button,
+.btn-premium {
+
+    border-radius: 14px;
+
+    border: 1px solid rgba(255,255,255,0.15);
+
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.18),
+        inset -1px -1px 0 rgba(0,0,0,0.20),
+        0 6px 18px rgba(0,0,0,0.18);
+
+    transition: all .25s ease;
+}
+
+button:hover,
+.btn-premium:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.20),
+        inset -1px -1px 0 rgba(0,0,0,0.22),
+        0 10px 24px rgba(0,0,0,0.25);
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+
+    border-radius: 12px !important;
+
+    background: rgba(255,255,255,0.06);
+
+    border: 1px solid rgba(255,255,255,0.10);
+
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.08),
+        inset -1px -1px 0 rgba(0,0,0,0.15);
+
+    transition: .25s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+
+    border-color: rgba(16,185,129,0.5);
+
+    box-shadow:
+        0 0 0 3px rgba(16,185,129,0.12),
+        inset 1px 1px 0 rgba(255,255,255,0.08);
+}
+
+/* Category Pills */
+.category-pill,
+.top-category {
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.12),
+            rgba(255,255,255,0.04)
+        );
+
+    border: 1px solid rgba(255,255,255,0.12);
+
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.12),
+        inset -1px -1px 0 rgba(0,0,0,0.15),
+        0 5px 14px rgba(0,0,0,0.15);
+}
+
+/* Order Modal Special Bevel */
+#orderModal .glass-card {
+
+    border-radius: 18px !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.96),
+            rgba(248,250,252,0.92)
+        );
+
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.8),
+        inset -1px -1px 0 rgba(0,0,0,0.05),
+        0 20px 45px rgba(0,0,0,0.25);
+}
+
+/* Featured Right Panel */
+#featuredContent {
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(6,78,59,0.92),
+            rgba(4,120,87,0.82)
+        );
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.08),
+        inset -1px -1px 0 rgba(0,0,0,0.18),
+        0 12px 35px rgba(0,0,0,0.25);
+}
+
+/* Filter Sidebar */
+#filtersPanel {
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.08),
+            rgba(255,255,255,0.02)
+        );
+
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.08),
+        inset -1px -1px 0 rgba(0,0,0,0.15),
+        0 10px 30px rgba(0,0,0,0.18);
+}
+
+/* =========================================================
+   BEVEL STYLE FOR FOOD CATEGORY ICONS
+   ========================================================= */
+
+/* Food Category Cards / Icons */
+.food-category,
+.category-card,
+.food-icon-box,
+.category-pill {
+    position: relative;
+    overflow: hidden;
+    
+    /* Bevel Shape */
+    border-radius: 16px;
+
+    /* Premium Glass Background */
+    background:
+        linear-gradient(145deg,
+            rgba(255,255,255,0.18),
+            rgba(255,255,255,0.05));
+
+    border: 1px solid rgba(255,255,255,0.18);
+
+    /* Bevel Shadow */
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.35),
+        inset -1px -1px 0 rgba(0,0,0,0.18),
+        0 10px 25px rgba(0,0,0,0.18);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    transition: all 0.35s ease;
+}
+
+/* Hover Effect */
+.food-category:hover,
+.category-card:hover,
+.food-icon-box:hover,
+.category-pill:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.45),
+        inset -1px -1px 0 rgba(0,0,0,0.22),
+        0 18px 35px rgba(16,185,129,0.22);
+
+    border-color: rgba(255,255,255,0.28);
+}
+
+/* Top Light Reflection */
+.food-category::before,
+.category-card::before,
+.food-icon-box::before,
+.category-pill::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -40%;
+    width: 60%;
+    height: 100%;
+
+    background: linear-gradient(
+        120deg,
+        rgba(255,255,255,0.22),
+        transparent
+    );
+
+    transform: skewX(-20deg);
+}
+
+/* Icon Style */
+.food-category i,
+.category-card i,
+.food-icon-box i,
+.category-pill i {
+    color: #10b981;
+    filter: drop-shadow(0 2px 8px rgba(16,185,129,0.35));
+    transition: 0.3s ease;
+}
+
+/* Text */
+.food-category span,
+.category-card span,
+.food-icon-box span,
+.category-pill span {
+    color: #ecfdf5;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+/* Active Category */
+.food-category.active,
+.category-card.active,
+.category-pill.active {
+    background:
+        linear-gradient(145deg,
+            rgba(16,185,129,0.28),
+            rgba(5,150,105,0.18));
+
+    border-color: rgba(16,185,129,0.35);
+
+    box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,0.18),
+        inset -1px -1px 0 rgba(0,0,0,0.18),
+        0 12px 30px rgba(16,185,129,0.28);
+}
+
+.food-category{
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 22px;
+    border-radius: 16px;
+
+    background: linear-gradient(
+        145deg,
+        rgba(255,255,255,0.16),
+        rgba(255,255,255,0.05)
+    );
+
+    border: 1px solid rgba(255,255,255,0.18);
+
+    backdrop-filter: blur(14px);
+
+    box-shadow:
+        inset 1px 1px 1px rgba(255,255,255,0.18),
+        inset -1px -1px 1px rgba(0,0,0,0.15),
+        0 10px 25px rgba(0,0,0,0.18);
+
+    color: #ffffff;
+    font-size: 0.92rem;
+    font-weight: 600;
+
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.food-category:hover{
+    transform: translateY(-3px) scale(1.02);
+
+    box-shadow:
+        inset 1px 1px 1px rgba(255,255,255,0.22),
+        inset -1px -1px 1px rgba(0,0,0,0.2),
+        0 15px 30px rgba(16,185,129,0.28);
+}
+
+.food-category i{
+    font-size: 1rem;
+    opacity: 0.95;
+}
+
+/* Different glow accents */
+
+/* FAST FOOD — ORANGE */
+.cat-fast-food{
+    background: linear-gradient(
+        145deg,
+        rgba(251,146,60,0.22),
+        rgba(249,115,22,0.08)
+    );
+
+    border: 1px solid rgba(251,146,60,0.35);
+
+    box-shadow:
+        inset 1px 1px 1px rgba(255,255,255,0.12),
+        inset -1px -1px 1px rgba(0,0,0,0.15),
+        0 10px 25px rgba(249,115,22,0.22);
+}
+
+/* DESI — EMERALD */
+.cat-desi{
+    background: linear-gradient(
+        145deg,
+        rgba(16,185,129,0.22),
+        rgba(5,150,105,0.08)
+    );
+
+    border: 1px solid rgba(16,185,129,0.35);
+
+    box-shadow:
+        inset 1px 1px 1px rgba(255,255,255,0.12),
+        inset -1px -1px 1px rgba(0,0,0,0.15),
+        0 10px 25px rgba(16,185,129,0.22);
+}
+
+/* BBQ — RED */
+.cat-bbq{
+    background: linear-gradient(
+        145deg,
+        rgba(239,68,68,0.22),
+        rgba(220,38,38,0.08)
+    );
+
+    border: 1px solid rgba(239,68,68,0.35);
+
+    box-shadow:
+        inset 1px 1px 1px rgba(255,255,255,0.12),
+        inset -1px -1px 1px rgba(0,0,0,0.15),
+        0 10px 25px rgba(239,68,68,0.22);
+}
+
+/* DEALS — PINK */
+.cat-deals{
+    background: linear-gradient(
+        145deg,
+        rgba(236,72,153,0.22),
+        rgba(190,24,93,0.08)
+    );
+
+    border: 1px solid rgba(236,72,153,0.35);
+
+    box-shadow:
+        inset 1px 1px 1px rgba(255,255,255,0.12),
+        inset -1px -1px 1px rgba(0,0,0,0.15),
+        0 10px 25px rgba(236,72,153,0.22);
+}
+
+/* BAKERY — GOLD */
+.cat-bakery{
+    background: linear-gradient(
+        145deg,
+        rgba(250,204,21,0.22),
+        rgba(202,138,4,0.08)
+    );
+
+    border: 1px solid rgba(250,204,21,0.35);
+
+    box-shadow:
+        inset 1px 1px 1px rgba(255,255,255,0.12),
+        inset -1px -1px 1px rgba(0,0,0,0.15),
+        0 10px 25px rgba(250,204,21,0.22);
+}
+
+/* CHINESE — PURPLE */
+.cat-chinese{
+    background: linear-gradient(
+        145deg,
+        rgba(168,85,247,0.22),
+        rgba(126,34,206,0.08)
+    );
+
+    border: 1px solid rgba(168,85,247,0.35);
+
+    box-shadow:
+        inset 1px 1px 1px rgba(255,255,255,0.12),
+        inset -1px -1px 1px rgba(0,0,0,0.15),
+        0 10px 25px rgba(168,85,247,0.22);
+}
