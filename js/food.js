@@ -254,24 +254,24 @@ function renderFoodList() {
 
   foodListingsEl.innerHTML = filtered.map(f => {
     const isSelected = f.id === selectedFoodId;
-    const activeClass = isSelected ? 'border-emerald-500 shadow-[0_4px_12px_rgba(16,185,129,0.2)] bg-emerald-50/80 ring-1 ring-emerald-500' : 'border-emerald-100 hover:border-emerald-300 hover:bg-white/80 bg-white/60 shadow-sm';
+    const activeClass = isSelected ? 'border-[#f97316] shadow-[0_10px_35px_rgba(249,115,22,0.18)] bg-slate-800/90 ring-1 ring-[#f97316]' : 'border-slate-700 hover:border-slate-500 hover:bg-slate-800/80 bg-slate-900/60 shadow-sm';
     
     return `
       <article data-id="${f.id}" class="food-item rounded-2xl p-3 sm:p-4 cursor-pointer transition-colors duration-300 flex flex-row gap-3 border backdrop-blur-md ${activeClass}">
-        <div class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 rounded-xl overflow-hidden bg-slate-100 shadow-inner">
-          <img src="${f.image}" alt="${f.name}" class="w-full h-full object-cover transition duration-300 hover:scale-105" />
+        <div class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 rounded-xl overflow-hidden bg-slate-800 shadow-inner">
+          <img src="${f.image}" alt="${f.name}" class="w-full h-full object-cover transition duration-300 hover:scale-105 food-img-filter" />
         </div>
         <div class="flex-1 flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-start mb-1">
-              <h3 class="font-bold text-sm sm:text-base text-slate-800 leading-tight">${f.name}</h3>
-              <span class="text-xs font-bold text-emerald-600 whitespace-nowrap ml-2">Rs. ${f.price}</span>
+              <h3 class="font-bold text-sm sm:text-base text-slate-100 leading-tight">${f.name}</h3>
+              <span class="text-xs font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500 whitespace-nowrap ml-2">Rs. ${f.price}</span>
             </div>
-            <p class="text-[0.7rem] sm:text-xs text-slate-500 mb-1 font-medium">${f.restaurant}</p>
+            <p class="text-[0.7rem] sm:text-xs text-slate-400 mb-1 font-medium">${f.restaurant}</p>
           </div>
           <div class="flex justify-between items-end">
-            <p class="text-[0.7rem] text-slate-400 font-medium">📍 ${f.area}</p>
-            <span class="px-2 py-0.5 rounded border border-emerald-200 bg-emerald-50 text-[0.65rem] text-emerald-700 font-semibold shadow-sm">
+            <p class="text-[0.7rem] text-slate-400 font-medium">ðŸ“ ${f.area}</p>
+            <span class="px-2 py-0.5 rounded border border-emerald-500/30 bg-emerald-500/10 text-[0.65rem] text-emerald-400 font-semibold shadow-sm">
               ${f.distanceKm.toFixed(1)} km
             </span>
           </div>
@@ -399,3 +399,28 @@ paymentBtns.forEach(btn => {
     btn.classList.remove('border-slate-200', 'bg-slate-50');
   });
 });
+
+// Mobile Go Back Button Logic
+const goBackBtn = document.getElementById('goBackBtn');
+if (goBackBtn) {
+  // Show/Hide based on scroll
+  window.addEventListener('scroll', () => {
+    if (window.innerWidth < 1024 && window.scrollY > 400) {
+      goBackBtn.classList.remove('hidden');
+    } else {
+      goBackBtn.classList.add('hidden');
+    }
+  });
+
+  // Click to go back to selected card or top
+  goBackBtn.addEventListener('click', () => {
+    if (selectedFoodId) {
+      const card = document.querySelector(`.food-item[data-id="${selectedFoodId}"]`);
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
