@@ -315,7 +315,7 @@ textarea::placeholder{
 
 
             <!-- CENTER: Location -->
-<div class="order-3 sm:order-none w-full sm:w-auto flex justify-center flex-1 pr-20">
+<div class="order-3 sm:order-none w-full sm:w-auto flex justify-center flex-1 lg:pr-32">
     <div class="hidden lg:flex items-center justify-center gap-1 text-slate-700 text-sm bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 cursor-pointer hover:bg-slate-200 transition whitespace-nowrap min-w-[180px]"
         onclick="showLocationModal()" id="locationBox">
         <span>📍</span>
@@ -325,7 +325,7 @@ textarea::placeholder{
 </div>
 
             <!-- RIGHT: Actions -->
-            <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0 order-2 sm:order-none">
+            <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0 order-2 sm:order-none ms-auto">
                 <!-- Language Toggle -->
                 <div onclick="toggleLanguage()" id="lang-toggle-btn"
                     class="flex items-center justify-center w-[60px] sm:w-[70px] h-[34px] sm:h-[38px] bg-white/10 hover:bg-white/20 rounded-full text-[13px] sm:text-sm font-medium cursor-pointer transition-colors"
@@ -357,7 +357,7 @@ textarea::placeholder{
 
                 <!-- Centered Heading -->
                 <h1
-                    class="text-[15px] tracking-wide font-bold text-white absolute left-1/2 -translate-x-1/2 whitespace-nowrap">Food</h1>
+                    class="text-[15px] tracking-wide font-bold text-white absolute left-1/2 -translate-x-1/2 whitespace-nowrap"><span class="lang-en">Food</span><span class="lang-ur">کھانا</span></h1>
             </div>
         </div>
     </nav>
@@ -374,7 +374,7 @@ textarea::placeholder{
         <div class="flex flex-col sm:flex-row gap-4 sm:items-center justify-between mb-4 relative z-10">
           <div>
             <h2 class="section-title text-xl sm:text-lg font-bold text-slate-100 mb-1">
-              Food Deals & Restaurants
+              <span class="lang-en">Food Deals & Restaurants</span><span class="lang-ur">کھانوں کی ڈیلز اور ریسٹورنٹس</span>
             </h2>
             <p class="text-[0.75rem] text-slate-400 font-medium">
               <span class="lang-en">Nearby places first. We display trusted and verified listings around you.</span><span class="lang-ur">سب سے پہلے آپ کے قریب کی جگہیں۔ ہم آپ کو آپ کے اردگرد قابلِ اعتماد اور تصدیق شدہ مقامات دکھاتے ہیں۔</span>
@@ -405,54 +405,54 @@ textarea::placeholder{
 	<!-- Trending Searches -->
 <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-3 sm:gap-4 px-3 sm:px-4">
 
-  <div class="food-category cat-fast-food w-full sm:w-auto">
+  <div class="food-category cat-fast-food w-full sm:w-auto" data-search="Burger">
     <i class="fa-solid fa-burger"></i>
-    <span>Burger</span>
+    <span><span class="lang-en">Burger</span><span class="lang-ur">برگر</span></span>
   </div>
 
-  <div class="food-category cat-fast-food w-full sm:w-auto">
+  <div class="food-category cat-fast-food w-full sm:w-auto" data-search="Pizza">
     <i class="fa-solid fa-pizza-slice"></i>
-    <span>Pizza</span>
+    <span><span class="lang-en">Pizza</span><span class="lang-ur">پیزا</span></span>
   </div>
 
-  <div class="food-category cat-fast-food w-full sm:w-auto">
+  <div class="food-category cat-fast-food w-full sm:w-auto" data-search="Shawarma">
     <i class="fa-solid fa-wrap"></i>
-    <span>Shawarma</span>
+    <span><span class="lang-en">Shawarma</span><span class="lang-ur">شوارما</span></span>
   </div>
 
-  <div class="food-category cat-desi w-full sm:w-auto">
+  <div class="food-category cat-desi w-full sm:w-auto" data-search="Chicken Biryani">
     <i class="fa-solid fa-drumstick-bite"></i>
-    <span>Chicken Biryani</span>
+    <span><span class="lang-en">Chicken Biryani</span><span class="lang-ur">چکن بریانی</span></span>
   </div>
 
-  <div class="food-category cat-desi w-full sm:w-auto">
+  <div class="food-category cat-desi w-full sm:w-auto" data-search="Beef Biryani">
     <i class="fa-solid fa-bowl-food"></i>
-    <span>Beef Biryani</span>
+    <span><span class="lang-en">Beef Biryani</span><span class="lang-ur">بیف بریانی</span></span>
   </div>
 
-  <div class="food-category cat-desi w-full sm:w-auto">
+  <div class="food-category cat-desi w-full sm:w-auto" data-search="Haleem">
     <i class="fa-solid fa-utensils"></i>
-    <span>Haleem</span>
+    <span><span class="lang-en">Haleem</span><span class="lang-ur">حلیم</span></span>
   </div>
 
-  <div class="food-category cat-bbq w-full sm:w-auto">
+  <div class="food-category cat-bbq w-full sm:w-auto" data-search="Bar BQ">
     <i class="fa-solid fa-fire-burner"></i>
-    <span>Bar BQ</span>
+    <span><span class="lang-en">Bar BQ</span><span class="lang-ur">بار بی کیو</span></span>
   </div>
 
-  <div class="food-category cat-chinese w-full sm:w-auto">
+  <div class="food-category cat-chinese w-full sm:w-auto" data-search="Chinese">
    <i class="fa-solid fa-bowl-rice"></i>
-   <span>Chinese</span>
+   <span><span class="lang-en">Chinese</span><span class="lang-ur">چائنیز</span></span>
   </div>
   
-  <div class="food-category cat-deals w-full sm:w-auto">
+  <div class="food-category cat-deals w-full sm:w-auto" data-search="Drink">
     <i class="fa-solid fa-glass-water"></i>
-    <span>Drink</span>
+    <span><span class="lang-en">Drink</span><span class="lang-ur">ڈرنک</span></span>
   </div>
 
-  <div class="food-category cat-bakery w-full sm:w-auto">
+  <div class="food-category cat-bakery w-full sm:w-auto" data-search="Ice Cream">
     <i class="fa-solid fa-ice-cream"></i>
-    <span>Ice Cream</span>
+    <span><span class="lang-en">Ice Cream</span><span class="lang-ur">آئس کریم</span></span>
   </div>
 </div>
 
@@ -463,32 +463,32 @@ textarea::placeholder{
   <div class="miniStatCard bg-gradient-to-br from-emerald-50 to-white">
     <span>🍔</span>
     <div class="stat-text">
-      <h4>120+</h4>
-      <p>Restaurants</p>
+      <h4><span class="lang-en">120+</span><span class="lang-ur">120+</span></h4>
+      <p><span class="lang-en">Restaurants</span><span class="lang-ur">ریسٹورانٹس</span></p>
     </div>
   </div>
 
   <div class="miniStatCard bg-gradient-to-br from-amber-50 to-white">
     <span>🔥</span>
     <div class="stat-text">
-      <h4>450+</h4>
-      <p>Live Deals</p>
+      <h4><span class="lang-en">450+</span><span class="lang-ur">450+</span></h4>
+      <p><span class="lang-en">Live Deals</span><span class="lang-ur">لائیو ڈیلز</span></p>
     </div>
   </div>
 
   <div class="miniStatCard bg-gradient-to-br from-sky-50 to-white">
     <span>📍</span>
     <div class="stat-text">
-      <h4>25+</h4>
-      <p>Areas</p>
+      <h4><span class="lang-en">25+</span><span class="lang-ur">25+</span></h4>
+      <p><span class="lang-en">Areas</span><span class="lang-ur">علاقے</span></p>
     </div>
   </div>
 
   <div class="miniStatCard bg-gradient-to-br from-purple-50 to-white">
     <span>⭐</span>
     <div class="stat-text">
-      <h4>4.8</h4>
-      <p>User Rating</p>
+      <h4><span class="lang-en">4.8</span><span class="lang-ur">4.8</span></h4>
+      <p><span class="lang-en">User Rating</span><span class="lang-ur">صارف کی درجہ بندی</span></p>
     </div>
   </div>
 
@@ -506,10 +506,10 @@ textarea::placeholder{
 	  <!-- Quick Filters -->
 <div class="grid grid-cols-2 gap-2 mb-5">
 
-  <button class="quickFilterBtn">🔥 Deals</button>
-  <button class="quickFilterBtn">🚚 Free Delivery</button>
-  <button class="quickFilterBtn">⭐ Top Rated</button>
-  <button class="quickFilterBtn">🕒 Open Now</button>
+  <button class="quickFilterBtn">🔥 <span class="lang-en">Hot Deals</span><span class="lang-ur">زبردست ڈیلز</span></button>
+  <button class="quickFilterBtn">🚚 <span class="lang-en">Free Delivery</span><span class="lang-ur">مفت ڈیلیوری</span></button>
+  <button class="quickFilterBtn">⭐ <span class="lang-en">Top Rated</span><span class="lang-ur">سب سے زیادہ پسندیدہ</span></button>
+  <button class="quickFilterBtn">🕒 <span class="lang-en">Open Now</span><span class="lang-ur">اب کھولیں</span></button>
 
 </div>
 <div class="mb-4">
