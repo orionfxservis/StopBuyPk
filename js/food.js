@@ -375,9 +375,9 @@ if (foodListingsEl) {
   // Category Tag Listeners
   document.querySelectorAll('.food-category').forEach(catBtn => {
     catBtn.addEventListener('click', () => {
-      const catText = catBtn.querySelector('span').textContent.trim();
+      const searchVal = catBtn.getAttribute('data-search') || catBtn.querySelector('span').textContent.trim();
       if (foodSearchInput) {
-        foodSearchInput.value = catText;
+        foodSearchInput.value = searchVal;
         renderFoodList();
       }
     });
