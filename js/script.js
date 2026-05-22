@@ -21,6 +21,11 @@ function updateLanguageUI(lang) {
   if (toggleText) {
     toggleText.textContent = lang === 'ur' ? 'English' : 'اردو';
   }
+
+  // Update dynamic placeholders
+  document.querySelectorAll('[data-en-placeholder]').forEach(el => {
+    el.placeholder = (lang === 'ur') ? el.getAttribute('data-ur-placeholder') : el.getAttribute('data-en-placeholder');
+  });
 }
 
 // Make toggleLanguage available globally for the onclick handler

@@ -289,7 +289,7 @@ function renderFoodList() {
   });
 }
 
-function selectFoodItem(id) {
+function selectFoodItem(id, preventScroll = false) {
   selectedFoodId = id;
   const item = foodDeals.find(f => f.id === id);
   
@@ -341,9 +341,9 @@ function selectFoodItem(id) {
   
   // Re-render list to show active state
   renderFoodList();
-
+  
   // On mobile, scroll to the detail section automatically
-  if (window.innerWidth < 1024) {
+  if (!preventScroll && window.innerWidth < 1024) {
     setTimeout(() => {
       const adContainer = document.getElementById('featuredAdContainer');
       if (adContainer) {
@@ -359,18 +359,29 @@ if (foodListingsEl) {
   
   // Select first item by default if data exists
   if (foodDeals.length > 0) {
-    selectFoodItem(foodDeals[0].id);
+    selectFoodItem(foodDeals[0].id, true);
   }
 
-  // Search Listeners
+  // Search Listeners (Live Search)
   if (foodSearchBtn) {
     foodSearchBtn.addEventListener('click', renderFoodList);
   }
   if (foodSearchInput) {
-    foodSearchInput.addEventListener('keyup', (e) => {
-      if (e.key === 'Enter') renderFoodList();
+    foodSearchInput.addEventListener('input', () => {
+      renderFoodList();
     });
   }
+
+  // Category Tag Listeners
+  document.querySelectorAll('.food-category').forEach(catBtn => {
+    catBtn.addEventListener('click', () => {
+      const catText = catBtn.querySelector('span').textContent.trim();
+      if (foodSearchInput) {
+        foodSearchInput.value = catText;
+        renderFoodList();
+      }
+    });
+  });
 }
 
 // Modal Listeners
