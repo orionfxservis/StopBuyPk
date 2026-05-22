@@ -86,12 +86,11 @@ footer,
   background:rgba(255,255,255,.8);
   border:1px solid rgba(16,185,129,.2);
   border-radius:16px;
-  padding:10px 14px;
+  padding:8px 12px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
-  text-align:left;
+  justify-content: center;
+  gap: 8px;
   backdrop-filter:blur(16px);
   transition:.35s;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
@@ -104,13 +103,15 @@ footer,
 }
 
 .miniStatCard span{
-  font-size:24px;
+  font-size:22px;
   display:block;
 }
 
 .miniStatCard .stat-text {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
 }
 
 .miniStatCard h4{
@@ -121,9 +122,9 @@ footer,
 }
 
 .miniStatCard p{
-  font-size:11px;
+  font-size:13px;
   color:#475569;
-  margin-top:2px;
+  margin-top:0;
   font-weight:600;
   line-height: 1;
 }
@@ -314,21 +315,22 @@ textarea::placeholder{
 
 
             <!-- CENTER: Location -->
-            <div class="order-3 sm:order-none w-full sm:w-auto flex justify-center sm:flex-1">
-                <div class="hidden lg:flex items-center gap-1 text-slate-700 text-sm bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 cursor-pointer hover:bg-slate-200 transition whitespace-nowrap"
-                    onclick="showLocationModal()" id="locationBox">
-                    <span>📍</span>
-                    <span class="font-medium" id="current-location">Detecting...</span>
-                    <span class="text-[0.6rem] ml-1">▼</span>
-                </div>
-            </div>
+<div class="order-3 sm:order-none w-full sm:w-auto flex justify-center flex-1 pr-20">
+    <div class="hidden lg:flex items-center justify-center gap-1 text-slate-700 text-sm bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 cursor-pointer hover:bg-slate-200 transition whitespace-nowrap min-w-[180px]"
+        onclick="showLocationModal()" id="locationBox">
+        <span>📍</span>
+        <span class="font-medium" id="current-location">Detecting...</span>
+        <span class="text-[0.6rem] ml-1">▼</span>
+    </div>
+</div>
 
             <!-- RIGHT: Actions -->
             <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0 order-2 sm:order-none">
                 <!-- Language Toggle -->
-                <div
-                    class="flex items-center justify-center w-[60px] sm:w-[70px] h-[34px] sm:h-[38px] bg-white/10 hover:bg-white/20 rounded-full text-[13px] sm:text-sm font-medium cursor-pointer transition-colors">
-                    <span class="text-center">اردو</span>
+                <div onclick="toggleLanguage()" id="lang-toggle-btn"
+                    class="flex items-center justify-center w-[60px] sm:w-[70px] h-[34px] sm:h-[38px] bg-white/10 hover:bg-white/20 rounded-full text-[13px] sm:text-sm font-medium cursor-pointer transition-colors"
+                    title="Switch Language">
+                    <span id="lang-toggle-text" class="text-center">اردو</span>
                 </div>
 
                 <!-- Login Profile Icon -->
@@ -384,9 +386,12 @@ textarea::placeholder{
         <div class="flex flex-col sm:flex-row gap-3 sm:items-center relative z-10">
           <div class="flex-1 relative">
             <input id="foodSearchInput" type="text"
-              placeholder="مثال: پیزا، برگر، دیسی...  |  e.g. Pizza, Burger, Desi"
-              class="w-full bg-slate-900/50 border border-slate-700 rounded-2xl text-sm px-4 py-2.5 pr-10 outline-none text-slate-100 placeholder:text-slate-500 shadow-sm transition" />
-            <div class="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700 text-slate-400">
+              data-en-placeholder="e.g. Pizza, Burger, Desi"
+              data-ur-placeholder="مثال: پیزا، برگر، دیسی..."
+              placeholder="مثال: پیزا، برگر، دیسی..."
+              style="padding-inline-start: 3.25rem; padding-inline-end: 1rem;"
+              class="w-full bg-slate-900/50 border border-slate-700 rounded-2xl text-sm py-2.5 outline-none text-slate-100 placeholder:text-slate-500 shadow-sm transition" />
+            <div class="absolute top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700 text-slate-400" style="inset-inline-start: 0.75rem;">
 				🔍
 			</div>
           </div>
