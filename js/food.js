@@ -9,6 +9,7 @@ const featuredContent = document.getElementById('featuredContent');
 const fImg = document.getElementById('fImg');
 const fDistance = document.getElementById('fDistance');
 const fName = document.getElementById('fName');
+const fVariety = document.getElementById('fVariety');
 const fPrice = document.getElementById('fPrice');
 const fLocation = document.getElementById('fLocation');
 const fDesc = document.getElementById('fDesc');
@@ -104,7 +105,8 @@ function selectFoodItem(id, preventScroll = false) {
     if (fImg) fImg.src = item.image;
     if (fDistance) fDistance.textContent = `${item.distanceKm.toFixed(1)} km away`;
     if (fName) fName.textContent = item.name;
-    if (fPrice) fPrice.innerHTML = `Rs. ${item.price} ${item.originalPrice ? \`<span class="text-sm line-through text-slate-500 ml-1">Rs. ${item.originalPrice}</span>\` : ''}`;
+    if (fVariety) fVariety.textContent = item.variety;
+    if (fPrice) fPrice.innerHTML = `Rs. ${item.price} ${item.originalPrice ? `<span class="text-sm line-through text-slate-500 ml-1">Rs. ${item.originalPrice}</span>` : ''}`;
     if (fLocation) fLocation.textContent = `${item.address}`;
     if (fDesc) fDesc.textContent = item.description;
 
@@ -194,7 +196,7 @@ async function initFoodDeals() {
         price: parseFloat(p.price || 0),
         originalPrice: p.originalPrice ? parseFloat(p.originalPrice) : null,
         image: p.image || 'https://via.placeholder.com/600x400?text=No+Image',
-        description: p.description || p.details || p.name || '',
+        description: p.description || p.details || variety,
         phone: phone,
         whatsapp: whatsapp,
         tags: tags
@@ -279,7 +281,7 @@ if (goBackBtn) {
   // Click to go back to selected card or top
   goBackBtn.addEventListener('click', () => {
     if (selectedFoodId) {
-      const card = document.querySelector(\`.food-item[data-id="\${selectedFoodId}"]\`);
+      const card = document.querySelector(`.food-item[data-id="${selectedFoodId}"]`);
       if (card) {
         card.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
