@@ -51,7 +51,16 @@ const DataService = {
     },
 
     // Mock DataService methods using LocalStorage to prevent admin dashboard from getting stuck
-    getCategories: async () => JSON.parse(localStorage.getItem("admin_categories")) || [],
+    getCategories: async () => {
+        setTimeout(async () => {
+            try {
+                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getCategories" }) });
+                const data = await res.json();
+                if (data.success && data.categories) localStorage.setItem("admin_categories", JSON.stringify(data.categories));
+            } catch (err) {}
+        }, 0);
+        return JSON.parse(localStorage.getItem("admin_categories")) || [];
+    },
     getProducts: async () => JSON.parse(localStorage.getItem("admin_products")) || [],
     getBanners: async () => JSON.parse(localStorage.getItem("admin_banners")) || [],
     getDeals: async () => JSON.parse(localStorage.getItem("admin_deals")) || [],
@@ -87,7 +96,20 @@ const DataService = {
         return JSON.parse(localStorage.getItem("admin_broadcasts")) || [];
     },
 
-    saveCategories: async (data) => localStorage.setItem("admin_categories", JSON.stringify(data)),
+    saveCategories: async (data) => {
+        try {
+            const res = await fetch(DataService.API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "syncCategories", categories: data })
+            });
+            const result = await res.json();
+            if (!result.success) console.warn("API sync failed", result.message);
+        } catch (err) {
+            console.error("Failed to sync categories to API", err);
+        }
+        localStorage.setItem("admin_categories", JSON.stringify(data));
+    },
     saveProducts: async (data) => localStorage.setItem("admin_products", JSON.stringify(data)),
     saveBanners: async (data) => localStorage.setItem("admin_banners", JSON.stringify(data)),
     saveDeals: async (data) => localStorage.setItem("admin_deals", JSON.stringify(data)),
