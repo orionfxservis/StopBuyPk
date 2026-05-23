@@ -61,7 +61,16 @@ const DataService = {
         }, 0);
         return JSON.parse(localStorage.getItem("admin_categories")) || [];
     },
-    getProducts: async () => JSON.parse(localStorage.getItem("admin_products")) || [],
+    getProducts: async () => {
+        setTimeout(async () => {
+            try {
+                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getProducts" }) });
+                const data = await res.json();
+                if (data.success && data.products) localStorage.setItem("admin_products", JSON.stringify(data.products));
+            } catch (err) {}
+        }, 0);
+        return JSON.parse(localStorage.getItem("admin_products")) || [];
+    },
     getBanners: async () => JSON.parse(localStorage.getItem("admin_banners")) || [],
     getDeals: async () => JSON.parse(localStorage.getItem("admin_deals")) || [],
     getUsers: async () => {
@@ -114,7 +123,24 @@ const DataService = {
         }
         localStorage.setItem("admin_categories", JSON.stringify(data));
     },
-    saveProducts: async (data) => localStorage.setItem("admin_products", JSON.stringify(data)),
+    saveProducts: async (data) => {
+        try {
+            const res = await fetch(DataService.API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "syncProducts", products: data })
+            });
+            const result = await res.json();
+            if (!result.success) {
+                console.warn("API sync failed", result.message);
+                alert("Google Sheet Sync Error (Products): " + result.message);
+            }
+        } catch (err) {
+            console.error("Failed to sync products to API", err);
+            alert("Failed to connect to Google Apps Script. Did you deploy a New Version?");
+        }
+        localStorage.setItem("admin_products", JSON.stringify(data));
+    },
     saveBanners: async (data) => localStorage.setItem("admin_banners", JSON.stringify(data)),
     saveDeals: async (data) => localStorage.setItem("admin_deals", JSON.stringify(data)),
     saveUsers: async (data) => {
