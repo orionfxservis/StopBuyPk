@@ -104,8 +104,10 @@ function updateUI() {
             const isChecked = cat.showOnMainPage !== false ? 'checked' : '';
             return `
             <tr>
-                <td>${cat.name}</td>
-                
+                <td>
+                    ${cat.name}
+                    ${cat.subCategory ? `<br><small style="color: #64748b;">${cat.subCategory}</small>` : ''}
+                </td>
                 <td><div class="field-badges">${fieldBadges}</div></td>
                 <td>
                     <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
@@ -139,6 +141,8 @@ window.editCategory = (index) => {
 
     // Populate Form
     document.getElementById('catName').value = cat.name;
+    const subCatInput = document.getElementById('catSubCategory');
+    if (subCatInput) subCatInput.value = cat.subCategory || '';
 
     // Populate Fields
     fieldsContainer.innerHTML = '';
@@ -158,6 +162,8 @@ window.editCategory = (index) => {
 window.cancelCategoryEdit = () => {
     editIndex = -1;
     if (categoryForm) categoryForm.reset();
+    const subCatInput = document.getElementById('catSubCategory');
+    if (subCatInput) subCatInput.value = '';
     if (fieldsContainer) fieldsContainer.innerHTML = '';
     if (btnSaveCategory) btnSaveCategory.textContent = "Add Category";
     if (btnCancelCategory) btnCancelCategory.style.display = "none";
@@ -188,6 +194,8 @@ if (categoryForm) {
     categoryForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const name = document.getElementById('catName').value;
+        const subCatInput = document.getElementById('catSubCategory');
+        const subCategory = subCatInput ? subCatInput.value : '';
 
 
         // Harvest fields
@@ -199,10 +207,11 @@ if (categoryForm) {
 
         if (editIndex === -1) {
             // Create
-            categories.push({ name, fields, showOnMainPage: true });
+            categories.push({ name, subCategory, fields, showOnMainPage: true });
         } else {
             // Update
             categories[editIndex].name = name;
+            categories[editIndex].subCategory = subCategory;
             categories[editIndex].fields = fields;
             // Kept showOnMainPage as it was
             cancelCategoryEdit();
