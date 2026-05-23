@@ -1,6 +1,6 @@
 const DataService = {
 
-    API_URL: "https://script.google.com/macros/s/AKfycbzkozZ7alWlQ1V55DO-Fvcb_Q5lGD7Z2YdrOxcLrBAN-nZ07_m2Sl8_XAuxMwoYn0Tl/exec",
+    API_URL: "https://script.google.com/macros/s/AKfycbzyEB5zYLsk68L_bUVpXWZXLTdqcxmmAyaH0oAy0I5p_NXZlD2jT_kM0ueFofmLu66qOQ/exec",
 
     login: async (data) => {
         try {
@@ -104,9 +104,13 @@ const DataService = {
                 body: JSON.stringify({ action: "syncCategories", categories: data })
             });
             const result = await res.json();
-            if (!result.success) console.warn("API sync failed", result.message);
+            if (!result.success) {
+                console.warn("API sync failed", result.message);
+                alert("Google Sheet Sync Error: " + result.message);
+            }
         } catch (err) {
             console.error("Failed to sync categories to API", err);
+            alert("Failed to connect to Google Apps Script. Did you deploy a New Version?");
         }
         localStorage.setItem("admin_categories", JSON.stringify(data));
     },
