@@ -37,8 +37,8 @@ function renderFoodList() {
   if (q) {
     filtered = filtered.filter(f => 
       f.name.toLowerCase().includes(q) || 
-      f.restaurant.toLowerCase().includes(q) || 
-      f.area.toLowerCase().includes(q)
+      f.variety.toLowerCase().includes(q) || 
+      f.address.toLowerCase().includes(q)
     );
   }
 
@@ -69,10 +69,10 @@ function renderFoodList() {
               <h3 class="font-bold text-sm sm:text-base text-slate-100 leading-tight">${f.name}</h3>
               <span class="text-xs font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500 whitespace-nowrap ml-2">Rs. ${f.price}</span>
             </div>
-            <p class="text-[0.7rem] sm:text-xs text-slate-400 mb-1 font-medium">${f.restaurant}</p>
+            <p class="text-[0.7rem] sm:text-xs text-slate-400 mb-1 font-medium">${f.variety}</p>
           </div>
           <div class="flex justify-between items-end">
-            <p class="text-[0.7rem] text-slate-400 font-medium">ðŸ“ ${f.area}</p>
+            <p class="text-[0.7rem] text-slate-400 font-medium">📍 ${f.address}</p>
             <span class="px-2 py-0.5 rounded border border-emerald-500/30 bg-emerald-500/10 text-[0.65rem] text-emerald-400 font-semibold shadow-sm">
               ${f.distanceKm.toFixed(1)} km
             </span>
@@ -97,23 +97,25 @@ function selectFoodItem(id, preventScroll = false) {
   
   if (item) {
     // Hide placeholder, show content
-    featuredPlaceholder.classList.add('hidden');
-    featuredContent.classList.remove('hidden');
+    if (featuredPlaceholder) featuredPlaceholder.classList.add('hidden');
+    if (featuredContent) featuredContent.classList.remove('hidden');
 
     // Populate Details
-    fImg.src = item.image;
-    fDistance.textContent = `${item.distanceKm.toFixed(1)} km away`;
-    fName.textContent = item.name;
-    fPrice.innerHTML = `Rs. ${item.price} ${item.originalPrice ? `<span class="text-sm line-through text-slate-500 ml-1">Rs. ${item.originalPrice}</span>` : ''}`;
-    fLocation.textContent = `${item.restaurant}, ${item.area}, ${item.city}`;
-    fDesc.textContent = item.description;
+    if (fImg) fImg.src = item.image;
+    if (fDistance) fDistance.textContent = `${item.distanceKm.toFixed(1)} km away`;
+    if (fName) fName.textContent = item.name;
+    if (fPrice) fPrice.innerHTML = `Rs. ${item.price} ${item.originalPrice ? \`<span class="text-sm line-through text-slate-500 ml-1">Rs. ${item.originalPrice}</span>\` : ''}`;
+    if (fLocation) fLocation.textContent = `${item.address}`;
+    if (fDesc) fDesc.textContent = item.description;
 
     // Contact Buttons Setup
     if (item.phone) {
-      fCallBtn.classList.remove('hidden');
-      fCallBtn.onclick = () => window.location.href = `tel:${item.phone}`;
+      if (fCallBtn) {
+        fCallBtn.classList.remove('hidden');
+        fCallBtn.onclick = () => window.location.href = `tel:${item.phone}`;
+      }
     } else {
-      fCallBtn.classList.add('hidden');
+      if (fCallBtn) fCallBtn.classList.add('hidden');
     }
 
     if (fOrderBtn) {
@@ -122,9 +124,9 @@ function selectFoodItem(id, preventScroll = false) {
         // Set dynamic static details
         const d = new Date();
         if (modalDateTime) modalDateTime.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ', ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-        if (modalRestaurant) modalRestaurant.textContent = item.restaurant;
+        if (modalRestaurant) modalRestaurant.textContent = item.variety;
         if (modalProductName) modalProductName.textContent = item.name;
-        if (modalLocation) modalLocation.textContent = `${item.area}, ${item.city}`;
+        if (modalLocation) modalLocation.textContent = `${item.address}`;
         if (modalPhone) modalPhone.textContent = item.phone || '';
         if (modalRate) modalRate.textContent = item.price;
         if (modalQuantity) modalQuantity.value = 1;
@@ -165,8 +167,8 @@ async function initFoodDeals() {
     // Map to the format food.js expects
     foodDeals = foodProducts.map(p => {
       // Dynamic fields might have different capitalization, safely extract them
-      const restaurant = p.restaurant || p.brand || p.subCategory || 'Unknown Restaurant';
-      const area = p.area || p.location || 'Unknown Area';
+      const variety = p.variety || p.brand || p.subCategory || 'No Variety Specified';
+      const address = p.address || p.location || p.area || 'Unknown Address';
       const city = p.city || 'Karachi';
       const distanceKm = parseFloat(p.distance || p.distanceKm) || 2.5;
       const phone = p.phone || p.contact || '';
@@ -185,8 +187,8 @@ async function initFoodDeals() {
       return {
         id: p.id,
         name: p.name || 'Unnamed Item',
-        restaurant: restaurant,
-        area: area,
+        variety: variety,
+        address: address,
         city: city,
         distanceKm: distanceKm,
         price: parseFloat(p.price || 0),
@@ -247,18 +249,20 @@ if (orderModal) {
 }
 
 const paymentBtns = document.querySelectorAll('.pymt-btn');
-paymentBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    // reset all
-    paymentBtns.forEach(b => {
-       b.classList.remove('border-emerald-500', 'bg-emerald-50/50');
-       b.classList.add('border-slate-200', 'bg-slate-50');
+if (paymentBtns) {
+  paymentBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // reset all
+      paymentBtns.forEach(b => {
+         b.classList.remove('border-emerald-500', 'bg-emerald-50/50');
+         b.classList.add('border-slate-200', 'bg-slate-50');
+      });
+      // set active
+      btn.classList.add('border-emerald-500', 'bg-emerald-50/50');
+      btn.classList.remove('border-slate-200', 'bg-slate-50');
     });
-    // set active
-    btn.classList.add('border-emerald-500', 'bg-emerald-50/50');
-    btn.classList.remove('border-slate-200', 'bg-slate-50');
   });
-});
+}
 
 // Mobile Go Back Button Logic
 const goBackBtn = document.getElementById('goBackBtn');
@@ -275,7 +279,7 @@ if (goBackBtn) {
   // Click to go back to selected card or top
   goBackBtn.addEventListener('click', () => {
     if (selectedFoodId) {
-      const card = document.querySelector(`.food-item[data-id="${selectedFoodId}"]`);
+      const card = document.querySelector(\`.food-item[data-id="\${selectedFoodId}"]\`);
       if (card) {
         card.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
