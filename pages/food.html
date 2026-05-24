@@ -518,12 +518,7 @@ textarea::placeholder{
 <div class="mb-4">
   <label class="text-xs text-slate-300 font-semibold mb-1 block">Category</label>
   <select id="filterCategory" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 outline-none">
-    <option value="">All</option> <option value="Vegetables">Vegetables</option> 
-	<option value="Food">Food</option> 
-	<option value="Fruits">Fruits</option> 
-	<option value="Meat">Meat</option> 
-	<option value="Grocery">Grocery</option> 
-	<option value="Dairy">Dairy</option>
+    <option value="">All</option>
   </select>
 </div>
 
@@ -532,8 +527,6 @@ textarea::placeholder{
   <label class="text-xs text-slate-300 font-semibold mb-1 block">Sub Category</label>
   <select id="filterSubCategory" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 outline-none">
     <option value="">All</option>
-	<option value="">Fast Food</option>
-	<option value="">Desi Cuisine</option>
   </select>
 </div>
 
@@ -542,7 +535,6 @@ textarea::placeholder{
   <label class="text-xs text-slate-300 font-semibold mb-1 block">Product</label>
   <select id="filterProduct" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 outline-none">
     <option value="">All</option>
-	
   </select>
 </div>
 
@@ -550,6 +542,14 @@ textarea::placeholder{
 <div class="mb-4">
   <label class="text-xs text-slate-300 font-semibold mb-1 block">Variety</label>
   <select id="filterVariety" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 outline-none">
+    <option value="">All</option>
+  </select>
+</div>
+
+<!-- Brand -->
+<div class="mb-4">
+  <label class="text-xs text-slate-300 font-semibold mb-1 block">Brand</label>
+  <select id="filterBrand" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 outline-none">
     <option value="">All</option>
   </select>
 </div>
@@ -636,15 +636,23 @@ textarea::placeholder{
                 <!-- CONTENT -->
                 <div class="flex-1 flex flex-col p-5 overflow-y-auto food-scroll">
                   <!-- Title -->
-                  <div class="mb-4">
+                  <div class="mb-2">
                     <div class="flex justify-between items-start mb-2">
                       <h2 id="fName" class="text-lg sm:text-xl font-extrabold text-slate-100 leading-tight">Product Name</h2>
                       <div id="fPrice" class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500 whitespace-nowrap ml-4">Rs. 850</div>
                     </div>
-                    <div id="fVariety" class="text-sm font-medium text-emerald-400 mb-3">Product Variety</div>
-                    <div class="flex items-center gap-2 text-sm text-slate-400 font-medium">
-                      <span>📍</span>
-                      <span id="fLocation">Karachi Pakistan</span>
+                    <div id="fVariety" class="text-sm font-medium text-emerald-400">Product Variety</div>
+                  </div>
+
+                  <!-- Location & Brand Container (Pushed Down) -->
+                  <div class="mt-8 mb-6 flex flex-col gap-3">
+                    <div class="flex items-center gap-2 text-sm text-slate-300 font-medium">
+                      <i class="fas fa-store text-emerald-500 w-4 text-center"></i>
+                      <span id="fBrand">Brand Name</span>
+                    </div>
+                    <div class="flex items-start gap-2 text-sm text-slate-400 font-medium">
+                      <span class="mt-0.5">📍</span>
+                      <span id="fLocation" class="leading-relaxed">Karachi Pakistan</span>
                     </div>
                   </div>
 
@@ -1062,148 +1070,6 @@ textarea::placeholder{
 
   <!-- Scripts -->
   <script>
-
-// ===== CATEGORY DATA =====
-const categoryData = {
-  Food: {
-    "Fast Food": {
-      "Burger": ["Zinger", "Beef", "Chicken"],
-      "Pizza": ["Cheese", "Fajita", "BBQ"]
-    },
-    "Desi": {
-      "Biryani": ["Chicken", "Beef"],
-      "Karahi": ["Chicken", "Mutton"]
-    },
-    "Drinks": {
-      "Juice": ["Orange", "Mango"],
-      "Soft Drink": ["Coke", "Pepsi"]
-    }
-  }
-};
-
-// ===== HELPERS =====
-function getSelectedValues(className) {
-  return Array.from(document.querySelectorAll(`.${className}:checked`))
-    .map(el => el.value);
-}
-
-// ===== MAIN FILTER FUNCTION =====
-function applyFilters() {
-  let keyword = document.getElementById("foodSearchInput").value.toLowerCase();
-  let category = document.getElementById("filterCategory").value;
-  let subCategory = document.getElementById("filterSubCategory").value;
-  let product = document.getElementById("filterProduct").value;
-  let variety = document.getElementById("filterVariety").value;
-
-  let min = document.getElementById("minPrice").value;
-  let max = document.getElementById("maxPrice").value;
-
-  let markets = getSelectedValues("marketFilter");
-  let units = getSelectedValues("unitFilter");
-
-  let filtered = foodData.filter(item => {
-    return (
-      (!keyword || item.name.toLowerCase().includes(keyword)) &&
-      (!category || item.category === category) &&
-      (!subCategory || item.subCategory === subCategory) &&
-      (!product || item.product === product) &&
-      (!variety || item.variety === variety) &&
-      (!min || item.price >= parseInt(min)) &&
-      (!max || item.price <= parseInt(max)) &&
-      (markets.length === 0 || markets.includes(item.market)) &&
-      (units.length === 0 || units.includes(item.unit))
-    );
-  });
-
-  displayFoodItems(filtered);
-}
-
-// ===== ELEMENTS =====
-const categoryEl = document.getElementById("filterCategory");
-const subCategoryEl = document.getElementById("filterSubCategory");
-const productEl = document.getElementById("filterProduct");
-const varietyEl = document.getElementById("filterVariety");
-
-// ===== DROPDOWN LOGIC =====
-
-// Category → SubCategory
-categoryEl.addEventListener("change", () => {
-  subCategoryEl.innerHTML = '<option value="">All</option>';
-  productEl.innerHTML = '<option value="">All</option>';
-  varietyEl.innerHTML = '<option value="">All</option>';
-
-  let category = categoryEl.value;
-  if (!categoryData[category]) return;
-
-  Object.keys(categoryData[category]).forEach(sub => {
-    subCategoryEl.innerHTML += `<option value="${sub}">${sub}</option>`;
-  });
-
-  applyFilters();
-});
-
-// SubCategory → Product
-subCategoryEl.addEventListener("change", () => {
-  productEl.innerHTML = '<option value="">All</option>';
-  varietyEl.innerHTML = '<option value="">All</option>';
-
-  let category = categoryEl.value;
-  let sub = subCategoryEl.value;
-
-  if (!categoryData[category]?.[sub]) return;
-
-  Object.keys(categoryData[category][sub]).forEach(prod => {
-    productEl.innerHTML += `<option value="${prod}">${prod}</option>`;
-  });
-
-  applyFilters();
-});
-
-// Product → Variety
-productEl.addEventListener("change", () => {
-  varietyEl.innerHTML = '<option value="">All</option>';
-
-  let category = categoryEl.value;
-  let sub = subCategoryEl.value;
-  let product = productEl.value;
-
-  if (!categoryData[category]?.[sub]?.[product]) return;
-
-  categoryData[category][sub][product].forEach(v => {
-    varietyEl.innerHTML += `<option value="${v}">${v}</option>`;
-  });
-
-  applyFilters();
-});
-
-// Final level
-varietyEl.addEventListener("change", applyFilters);
-
-// ===== EVENTS =====
-
-// Search
-document.getElementById("foodSearchInput").addEventListener("input", applyFilters);
-
-// Category
-document.getElementById("filterCategory").addEventListener("change", applyFilters);
-
-// Price
-document.getElementById("minPrice").addEventListener("input", applyFilters);
-document.getElementById("maxPrice").addEventListener("input", applyFilters);
-
-// Checkboxes
-document.querySelectorAll(".marketFilter, .unitFilter").forEach(el => {
-  el.addEventListener("change", applyFilters);
-});
-
-// Clear Filters
-document.getElementById("clearFilters").addEventListener("click", () => {
-  document.querySelectorAll("input, select").forEach(el => {
-    if (el.type === "checkbox") el.checked = false;
-    else el.value = "";
-  });
-  applyFilters();
-});
 
 /* =========================
    GO TO TOP BUTTON
