@@ -10,6 +10,7 @@ const fImg = document.getElementById('fImg');
 const fDistance = document.getElementById('fDistance');
 const fName = document.getElementById('fName');
 const fVariety = document.getElementById('fVariety');
+const fBrand = document.getElementById('fBrand');
 const fPrice = document.getElementById('fPrice');
 const fLocation = document.getElementById('fLocation');
 const fDesc = document.getElementById('fDesc');
@@ -33,15 +34,40 @@ function renderFoodList() {
   if (!foodListingsEl) return;
   
   const q = foodSearchInput ? foodSearchInput.value.trim().toLowerCase() : '';
-  let filtered = foodDeals.slice();
+  const filterCat = document.getElementById('filterCategory')?.value || '';
+  const filterSubCat = document.getElementById('filterSubCategory')?.value || '';
+  const filterProd = document.getElementById('filterProduct')?.value || '';
+  const filterVariety = document.getElementById('filterVariety')?.value || '';
+  const filterBrand = document.getElementById('filterBrand')?.value || '';
+  const minPrice = parseFloat(document.getElementById('minPrice')?.value) || 0;
+  const maxPrice = parseFloat(document.getElementById('maxPrice')?.value) || Infinity;
 
-  if (q) {
-    filtered = filtered.filter(f => 
-      f.name.toLowerCase().includes(q) || 
-      f.variety.toLowerCase().includes(q) || 
-      f.address.toLowerCase().includes(q)
-    );
-  }
+  const activeQuicks = Array.from(document.querySelectorAll('.quickFilterBtn.active-filter'))
+                            .map(btn => btn.querySelector('.lang-en').textContent.trim());
+
+  const markets = Array.from(document.querySelectorAll('.marketFilter:checked')).map(el => el.value);
+  const units = Array.from(document.querySelectorAll('.unitFilter:checked')).map(el => el.value);
+
+  let filtered = foodDeals.filter(f => {
+    if (q && !(f.name.toLowerCase().includes(q) || f.variety.toLowerCase().includes(q) || f.address.toLowerCase().includes(q))) return false;
+    if (filterCat && f.category !== filterCat) return false;
+    if (filterSubCat && f.subCategory !== filterSubCat) return false;
+    if (filterProd && f.name !== filterProd) return false;
+    if (filterVariety && f.variety !== filterVariety) return false;
+    if (filterBrand && f.brand !== filterBrand) return false;
+    
+    if (f.price < minPrice || f.price > maxPrice) return false;
+    
+    if (markets.length > 0 && f.market && !markets.includes(f.market)) return false;
+    if (units.length > 0 && f.unit && !units.includes(f.unit)) return false;
+
+    if (activeQuicks.includes('Hot Deals') && (!f.tags || !f.tags.includes('Hot Deals'))) return false;
+    if (activeQuicks.includes('Free Delivery') && (!f.tags || !f.tags.includes('Free Delivery'))) return false;
+    if (activeQuicks.includes('Top Rated') && (!f.tags || !f.tags.includes('Top Rated'))) return false;
+    if (activeQuicks.includes('Open Now') && (!f.tags || !f.tags.includes('Open Now'))) return false;
+
+    return true;
+  });
 
   // Sort by Distance
   filtered.sort((a, b) => a.distanceKm - b.distanceKm);
@@ -49,7 +75,7 @@ function renderFoodList() {
   if (filtered.length === 0) {
     foodListingsEl.innerHTML = `
       <div class="glass-card p-6 text-center text-slate-400">
-        No food items found for "${q}".
+        No food items match your filters.
       </div>
     `;
     return;
@@ -106,6 +132,7 @@ function selectFoodItem(id, preventScroll = false) {
     if (fDistance) fDistance.textContent = `${item.distanceKm.toFixed(1)} km away`;
     if (fName) fName.textContent = item.name;
     if (fVariety) fVariety.textContent = item.variety;
+    if (fBrand) fBrand.textContent = item.brand || item.subCategory || 'No Brand Specified';
     if (fPrice) fPrice.innerHTML = `Rs. ${item.price} ${item.originalPrice ? `<span class="text-sm line-through text-slate-500 ml-1">Rs. ${item.originalPrice}</span>` : ''}`;
     if (fLocation) fLocation.textContent = `${item.address}`;
     if (fDesc) fDesc.textContent = item.description;
@@ -165,43 +192,81 @@ async function initFoodDeals() {
     const allProducts = await DataService.getProducts();
     // Filter for Food Category
     const foodProducts = allProducts.filter(p => p.category && p.category.toLowerCase() === 'food');
-    
-    // Map to the format food.js expects
-    foodDeals = foodProducts.map(p => {
-      // Dynamic fields might have different capitalization, safely extract them
-      const variety = p.variety || p.brand || p.subCategory || 'No Variety Specified';
-      const address = p.address || p.location || p.area || 'Unknown Address';
-      const city = p.city || 'Karachi';
-      const distanceKm = parseFloat(p.distance || p.distanceKm) || 2.5;
-      const phone = p.phone || p.contact || '';
-      const whatsapp = p.whatsapp || phone;
-      
-      // Handle tags
-      let tags = [];
-      if (Array.isArray(p.tags)) {
-        tags = p.tags;
-      } else if (typeof p.tags === 'string') {
-        tags = p.tags.split(',').map(t => t.trim()).filter(t => t);
-      } else if (p.subCategory) {
-        tags = [p.subCategory];
-      }
+        // Map to the format food.js expects
+      foodDeals = foodProducts.map(p => {
+        // Dynamic fields might have different capitalization, safely extract them
+        const variety = p.variety || p.brand || p.subCategory || 'No Variety Specified';
+        const address = p.address || p.location || p.area || 'Unknown Address';
+        const city = p.city || 'Karachi';
+        const distanceKm = parseFloat(p.distance || p.distanceKm) || 2.5;
+        const phone = p.phone || p.contact || '';
+        const whatsapp = p.whatsapp || phone;
+        
+        // Handle tags
+        let tags = [];
+        if (Array.isArray(p.tags)) {
+          tags = p.tags;
+        } else if (typeof p.tags === 'string') {
+          tags = p.tags.split(',').map(t => t.trim()).filter(t => t);
+        } else if (p.subCategory) {
+          tags = [p.subCategory];
+        }
+  
+        return {
+          id: p.id,
+          name: p.name || 'Unnamed Item',
+          variety: variety,
+          brand: p.brand || p.subCategory || '',
+          category: p.category || '',
+          subCategory: p.subCategory || '',
+          market: p.market || '',
+          unit: p.unit || '',
+          address: address,
+          city: city,
+          distanceKm: distanceKm,
+          price: parseFloat(p.price || 0),
+          originalPrice: p.originalPrice ? parseFloat(p.originalPrice) : null,
+          image: p.image || 'https://via.placeholder.com/600x400?text=No+Image',
+          description: p.description || p.details || variety,
+          phone: phone,
+          whatsapp: whatsapp,
+          tags: tags
+        };
+      });
 
-      return {
-        id: p.id,
-        name: p.name || 'Unnamed Item',
-        variety: variety,
-        address: address,
-        city: city,
-        distanceKm: distanceKm,
-        price: parseFloat(p.price || 0),
-        originalPrice: p.originalPrice ? parseFloat(p.originalPrice) : null,
-        image: p.image || 'https://via.placeholder.com/600x400?text=No+Image',
-        description: p.description || p.details || variety,
-        phone: phone,
-        whatsapp: whatsapp,
-        tags: tags
+      // Populate Filters
+      const populateSelect = (id, property) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const uniqueVals = [...new Set(foodDeals.map(f => f[property]).filter(Boolean))].sort();
+        uniqueVals.forEach(val => {
+          const opt = document.createElement('option');
+          opt.value = val;
+          opt.textContent = val;
+          el.appendChild(opt);
+        });
+        el.addEventListener('change', renderFoodList);
       };
-    });
+      
+      populateSelect('filterCategory', 'category');
+      populateSelect('filterSubCategory', 'subCategory');
+      populateSelect('filterProduct', 'name');
+      populateSelect('filterVariety', 'variety');
+      populateSelect('filterBrand', 'brand');
+      
+      document.getElementById('minPrice')?.addEventListener('input', renderFoodList);
+      document.getElementById('maxPrice')?.addEventListener('input', renderFoodList);
+      
+      document.querySelectorAll('.marketFilter, .unitFilter').forEach(el => el.addEventListener('change', renderFoodList));
+      
+      document.querySelectorAll('.quickFilterBtn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.classList.toggle('active-filter');
+          btn.classList.toggle('border-emerald-500');
+          btn.classList.toggle('text-emerald-400');
+          renderFoodList();
+        });
+      });
   }
 
   if (foodListingsEl) {
