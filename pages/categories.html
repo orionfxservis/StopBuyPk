@@ -150,17 +150,7 @@
                     <span class="lang-en">Kids</span><span class="lang-ur">کڈذ</span></button>
             </div>
 
-            <!-- Bottom Row: Search & Filter (Right Aligned) -->
-            <div class="flex gap-2 w-full lg:w-auto self-end flex-shrink-0">
-                <input type="text" placeholder="Search products..."
-                    class="flex-1 lg:w-64 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 shadow-sm">
-                <select
-                    class="px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 shadow-sm">
-                    <option>Lowest Price</option>
-                    <option>Highest Price</option>
-                    <option>Closest Price</option>
-                </select>
-            </div>
+
         </div>
 
         <!-- SECTIONS -->
@@ -194,6 +184,11 @@
             <div class="flex items-center gap-3">
                 <select id="foodProductFilter" class="bg-white border border-orange-200 text-sm font-semibold rounded-xl px-4 py-2.5 text-orange-800 outline-none focus:ring-2 focus:ring-orange-500 shadow-sm cursor-pointer pr-4 relative">
                     <option value="">All Products</option>
+                </select>
+                <select id="foodPriceSort" class="bg-white border border-orange-200 text-sm font-semibold rounded-xl px-4 py-2.5 text-orange-800 outline-none focus:ring-2 focus:ring-orange-500 shadow-sm cursor-pointer">
+                    <option value="">Sort by Price</option>
+                    <option value="Lowest Price">Lowest Price</option>
+                    <option value="Highest Price">Highest Price</option>
                 </select>
             </div>
         </div>
@@ -1918,12 +1913,18 @@
                             foodFilter.appendChild(opt);
                         });
                         
-                        foodFilter.addEventListener('change', (e) => {
-                            renderFoodSlider(e.target.value);
+                        foodFilter.addEventListener('change', () => {
+                            renderFoodSlider();
+                        });
+                    }
+                    const foodSort = document.getElementById('foodPriceSort');
+                    if (foodSort) {
+                        foodSort.addEventListener('change', () => {
+                            renderFoodSlider();
                         });
                     }
                     
-                    renderFoodSlider('');
+                    renderFoodSlider();
                 }
             } catch (err) {
                 console.error("Error loading category products:", err);
@@ -1931,11 +1932,20 @@
         }
     });
 
-    function renderFoodSlider(filterName) {
+    function renderFoodSlider() {
         const foodSlider = document.getElementById('foodSlider');
         if (!foodSlider) return;
         
-        const filtered = filterName ? window.foodProducts.filter(p => p.name === filterName) : window.foodProducts;
+        const filterName = document.getElementById('foodProductFilter')?.value || '';
+        const sortType = document.getElementById('foodPriceSort')?.value || '';
+        
+        let filtered = filterName ? window.foodProducts.filter(p => p.name === filterName) : [...window.foodProducts];
+        
+        if (sortType === 'Lowest Price') {
+            filtered.sort((a, b) => (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0));
+        } else if (sortType === 'Highest Price') {
+            filtered.sort((a, b) => (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0));
+        }
         
         foodSlider.innerHTML = filtered.map(p => {
             const variety = p.variety || p.brand || p.subCategory || p.name || 'Food Item';
