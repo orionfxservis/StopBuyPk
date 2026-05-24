@@ -294,6 +294,15 @@ async function initFoodDeals() {
         if (foodSearchInput) {
           foodSearchInput.value = searchVal;
           renderFoodList();
+          
+          if (window.innerWidth < 1024) {
+            setTimeout(() => {
+              const listingsContainer = document.getElementById('foodListings');
+              if (listingsContainer) {
+                listingsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }, 100);
+          }
         }
       });
     });
