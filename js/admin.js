@@ -670,21 +670,25 @@ function renderUsers() {
                     <img src="${u.pic || fallbackAvatar}" alt="Pic" class="avatar" onerror="this.src='${fallbackAvatar}'">
                 </td>
                 <td>
-                    <span style="font-weight:600; color:#0f172a;">${u.fullName || 'N/A'}</span>
+                    <span style="font-weight:600; color:#0f172a;">${u.fullName || u.userName || u.name || u.username || 'N/A'}</span>
                 </td>
                 <td>
-                    <span style="color: #64748b; font-size: 13px;">${u.role === 'company' && u.companyName ? u.companyName : (u.role || 'user').toUpperCase()}</span>
+                    <span style="color: #64748b; font-size: 13px;">${u.role === 'company' && u.companyName ? u.companyName : (u.companyName || u.role || 'user').toUpperCase()}</span>
                 </td>
                 <td>
                     <div style="display:flex; flex-direction:column; gap:4px; align-items: flex-start;">
-                        <span style="font-size:12px; color:#475569;">${u.userId || 'N/A'}</span>
+                        <span style="font-size:12px; color:#475569;">${u.userId || u.id || u.username || 'N/A'}</span>
                         <span style="font-size:10px; color:#94a3b8;">${u.password ? 'pwd: ' + u.password : '****'}</span>
                     </div>
                 </td>
                 <td>
-                    <span class="status-pill ${u.status === 'active' ? 'active' : 'pending'}">
-                        ${u.status === 'active' ? '<i class="fa-solid fa-check-circle"></i> ACTIVE' : '<i class="fa-solid fa-clock"></i> PENDING'}
-                    </span>
+                    ${(() => {
+                        const s = String(u.status || u.Status || 'active').toLowerCase();
+                        const isActive = s === 'active' || s === 'approve' || s === 'approved' || s === 'publish';
+                        return `<span class="status-pill ${isActive ? 'active' : 'pending'}">
+                            ${isActive ? '<i class="fa-solid fa-check-circle"></i> ACTIVE' : '<i class="fa-solid fa-clock"></i> PENDING'}
+                        </span>`;
+                    })()}
                 </td>
                 <td>
                     <div class="action-buttons-group">
@@ -732,7 +736,8 @@ if (userForm) {
         const newUser = {
             id: userEditIndex === -1 ? Date.now() : users[userEditIndex].id,
             pic: document.getElementById('userPic').value,
-            fullName: document.getElementById('userName').value, // 'userName' input maps to fullName
+            fullName: document.getElementById('userName').value, // Also save as userName for backward compatibility
+            userName: document.getElementById('userName').value, 
             userId: document.getElementById('userId').value,
             password: document.getElementById('userPassword').value,
             role: document.getElementById('userRole').value,
@@ -763,8 +768,8 @@ window.editUser = function(index) {
     if (userFormTitle) userFormTitle.textContent = "Edit User";
     
     document.getElementById('userPic').value = u.pic || '';
-    document.getElementById('userName').value = u.fullName || u.username || '';
-    document.getElementById('userId').value = u.userId || '';
+    document.getElementById('userName').value = u.fullName || u.userName || u.name || u.username || '';
+    document.getElementById('userId').value = u.userId || u.id || u.username || '';
     document.getElementById('userPassword').value = u.password || '';
     document.getElementById('userRole').value = u.role || 'user';
     document.getElementById('companyName').value = u.companyName || '';
@@ -1191,12 +1196,15 @@ if (adminProductForm) {
         const category = document.getElementById('prodCategory').value;
         const subCategory = document.getElementById('prodSubCategory').value;
 
+        const cUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+
         let newProduct = {
             id: productEditIndex === -1 ? Date.now() : products[productEditIndex].id,
             category: category,
             subCategory: subCategory,
             image: document.getElementById('prodImage').value || (productEditIndex !== -1 ? products[productEditIndex].image : 'https://via.placeholder.com/150'),
-            addedBy: productEditIndex === -1 ? 'Admin' : (products[productEditIndex].addedBy || 'Admin')
+            addedBy: productEditIndex === -1 ? userName : (products[productEditIndex].addedBy || userName)
         };
 
         // Extract native dynamic field values
@@ -1272,6 +1280,7 @@ function renderAdminProducts() {
                    <button class="edit-btn" onclick="editProduct(${index})"><i class="fa-solid fa-pen"></i></button>
                    <button class="delete-btn" onclick="deleteProduct(${index})"><i class="fa-solid fa-trash"></i></button>
                 </div>
+                <div style="font-size: 0.85rem; color: #ffffff; font-weight: 600;">${prod.addedBy || 'Admin'}</div>
             </div>
             `;
         }).join('');
