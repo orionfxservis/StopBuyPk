@@ -1541,3 +1541,18 @@ textarea:focus {
         0 10px 25px rgba(168,85,247,0.22);
 }
 
+/* POST BY */
+.product-grid{
+    display:grid;
+
+    grid-template-columns:
+        60px      /* Image */
+        0.8fr     /* Name reduced */
+        1fr       /* Category */
+        0.7fr     /* Price */
+        1fr       /* Actions */
+        0.9fr;    /* Post By */
+
+    align-items:center;
+    gap:8px;
+}
