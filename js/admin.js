@@ -1983,36 +1983,4 @@ window.updatePendingApprovalsBadge = function() {
         console.error("Error updating badges", e);
     }
 };
-
-// ========================================
-// ADD POST BY
-// ========================================productList.innerHTML += `
-  <div class="grid-table-row product-grid">
-
-      <div>
-        <img src="${product.image}" width="50">
-      </div>
-
-      <div class="truncate">
-        ${product.name}
-      </div>
-
-      <div>
-        ${product.category}
-      </div>
-
-      <div>
-        ${product.price}
-      </div>
-
-      <div class="flex gap-2">
-          <button onclick="editProduct(${index})">Edit</button>
-          <button onclick="deleteProduct(${index})">Delete</button>
-      </div>
-
-      <div>
-        ${product.postBy || 'Admin'}
-      </div>
-
-  </div>
-`;
+
