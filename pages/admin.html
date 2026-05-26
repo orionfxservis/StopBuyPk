@@ -54,6 +54,17 @@
 
         <!-- Main Content -->
         <main class="content">
+            <!-- Top Bar / User Profile -->
+            <div style="display: flex; justify-content: flex-end; align-items: center; padding: 10px 20px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border-color);">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="text-align: right;">
+                        <div id="headerUserName" style="font-weight: bold; font-size: 1rem; color: #fff;">User Name</div>
+                        <div id="headerUserRole" style="font-size: 0.8rem; color: var(--primary-color);">Role</div>
+                    </div>
+                    <img id="headerUserPic" src="https://via.placeholder.com/40" alt="User Pic" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-color);">
+                </div>
+            </div>
+
             <!-- Dashboard Overview -->
             <section id="dashboard" class="admin-section active">
                 <h1>Dashboard Overview</h1>
