@@ -733,11 +733,14 @@ if (userForm) {
     userForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
+        const existingUser = userEditIndex === -1 ? {} : users[userEditIndex];
         const newUser = {
-            id: userEditIndex === -1 ? Date.now() : users[userEditIndex].id,
+            ...existingUser,
+            id: userEditIndex === -1 ? Date.now() : existingUser.id,
             pic: document.getElementById('userPic').value,
             fullName: document.getElementById('userName').value, // Also save as userName for backward compatibility
             userName: document.getElementById('userName').value, 
+            username: document.getElementById('userName').value,
             userId: document.getElementById('userId').value,
             password: document.getElementById('userPassword').value,
             role: document.getElementById('userRole').value,
@@ -1156,6 +1159,13 @@ function renderDynamicAdminFields() {
                    ></textarea>
                 </div>
             </div>
+            
+            <div class="form-row">
+                <div class="input-group" style="width: 100%;">
+                    <label>Video Link (Optional)</label>
+                    <input type="url" id="prodVideoLink" class="dynamic-admin-field" placeholder="https://youtube.com/..." />
+                </div>
+            </div>
 
             <div class="form-row">
                 <div class="input-group">
@@ -1238,6 +1248,9 @@ if (adminProductForm) {
 
         if (document.getElementById('productDetail')) {
             newProduct.details = document.getElementById('productDetail').value;
+        }
+        if (document.getElementById('prodVideoLink')) {
+            newProduct.videoLink = document.getElementById('prodVideoLink').value;
         }
 
         // Handle Checkboxes if Vehicle
@@ -1345,6 +1358,9 @@ window.editProduct = (index) => {
 
             if (document.getElementById('productDetail')) {
                 document.getElementById('productDetail').value = prod.details || prod.description || '';
+            }
+            if (document.getElementById('prodVideoLink')) {
+                document.getElementById('prodVideoLink').value = prod.videoLink || '';
             }
 
             // Handle checkboxes for vehicles if needed
