@@ -1965,6 +1965,39 @@ window.populatePermissionDropdown = function() {
     }
 };
 
+window.onUserSelectChange = function() {
+    const userSelect = document.getElementById('rightsUserSelect');
+    const sectionCheckboxes = document.querySelectorAll('.section-checkbox');
+    
+    // Reset sections
+    sectionCheckboxes.forEach(cb => cb.checked = false);
+
+    if (!userSelect || !userSelect.value) {
+        loadUserPermissions();
+        return;
+    }
+    
+    const user = users.find(u => u.userId === userSelect.value);
+    if (!user) {
+        loadUserPermissions();
+        return;
+    }
+
+    if (user.role === 'admin' && String(user.userId).toLowerCase() === 'admin') {
+        sectionCheckboxes.forEach(cb => cb.checked = true);
+    } else if (user.permissions && typeof user.permissions === 'object' && !Array.isArray(user.permissions)) {
+        // user.permissions is like { "dashboard": ["Draft", "Publish"], "deals": ["Draft"] }
+        Object.keys(user.permissions).forEach(sectionKey => {
+            if (user.permissions[sectionKey] && user.permissions[sectionKey].length > 0) {
+                const cb = document.querySelector(`.section-checkbox[value="${sectionKey}"]`);
+                if (cb) cb.checked = true;
+            }
+        });
+    }
+
+    loadUserPermissions();
+};
+
 window.loadUserPermissions = function() {
     const userSelect = document.getElementById('rightsUserSelect');
     const sectionCheckboxes = document.querySelectorAll('.section-checkbox');
