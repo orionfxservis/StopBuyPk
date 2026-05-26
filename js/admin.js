@@ -67,6 +67,7 @@ async function initAdmin() {
         
         enforceUserPermissions(); // Apply user rights to sidebar
         updatePendingApprovalsBadge(); // Update badges
+        if (typeof populateAdminHeader === 'function') populateAdminHeader();
 
         if (typeof updateAdminAlerts === 'function') updateAdminAlerts();
 
@@ -2152,6 +2153,30 @@ window.updatePendingApprovalsBadge = function() {
         });
     } catch(e) {
         console.error("Error updating badges", e);
+    }
+};
+
+window.populateAdminHeader = function() {
+    const cUserStr = localStorage.getItem('currentUser');
+    if (!cUserStr) return;
+    const cUser = JSON.parse(cUserStr);
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+    let roleDisplay = cUser.role || 'Admin';
+    if (String(cUser.userId || '').toLowerCase() === 'admin') roleDisplay = 'Super Admin';
+
+    const headerName = document.getElementById('headerUserName');
+    const headerRole = document.getElementById('headerUserRole');
+    const headerPic = document.getElementById('headerUserPic');
+
+    if (headerName) headerName.textContent = userName;
+    if (headerRole) headerRole.textContent = roleDisplay.charAt(0).toUpperCase() + roleDisplay.slice(1);
+    if (headerPic) {
+        if (cUser.profilePic) {
+            headerPic.src = cUser.profilePic;
+        } else {
+            // Default image with UI-Avatars
+            headerPic.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userName) + '&background=random';
+        }
     }
 };
 
