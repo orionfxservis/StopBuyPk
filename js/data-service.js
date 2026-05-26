@@ -72,7 +72,16 @@ const DataService = {
         return JSON.parse(localStorage.getItem("admin_products")) || [];
     },
     getBanners: async () => JSON.parse(localStorage.getItem("admin_banners")) || [],
-    getDeals: async () => JSON.parse(localStorage.getItem("admin_deals")) || [],
+    getDeals: async () => {
+        setTimeout(async () => {
+            try {
+                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getDeals" }) });
+                const data = await res.json();
+                if (data.success && data.deals) localStorage.setItem("admin_deals", JSON.stringify(data.deals));
+            } catch (err) {}
+        }, 0);
+        return JSON.parse(localStorage.getItem("admin_deals")) || [];
+    },
     getUsers: async () => {
         setTimeout(async () => {
             try {
@@ -142,7 +151,21 @@ const DataService = {
         localStorage.setItem("admin_products", JSON.stringify(data));
     },
     saveBanners: async (data) => localStorage.setItem("admin_banners", JSON.stringify(data)),
-    saveDeals: async (data) => localStorage.setItem("admin_deals", JSON.stringify(data)),
+    saveDeals: async (data) => {
+        try {
+            const res = await fetch(DataService.API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "syncDeals", deals: data })
+            });
+            const result = await res.json();
+            if (!result.success) console.warn("API sync failed", result.message);
+        } catch (err) {
+            console.error("Failed to sync deals to API", err);
+        }
+        localStorage.setItem("admin_deals", JSON.stringify(data));
+        return true;
+    },
     saveUsers: async (data) => {
         try {
             const res = await fetch(DataService.API_URL, {
