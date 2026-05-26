@@ -426,6 +426,7 @@
 						
 					<!-- Deals Button -->
 						<div
+							onclick="openDealsModal()"
 							class="px-8 py-3 rounded-3xl bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 text-white font-semibold shadow-xl border-2 border-pink-300 inline-block cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/40">
 							🔥 Deals
 						</div>
@@ -2772,6 +2773,83 @@ return `
             </div>
         </div>
     </div>
+    <!-- Deals Modal -->
+    <div id="dealsDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-[99999] opacity-0 transition-opacity duration-300" onclick="closeDealsModal()">
+        <div class="bg-white rounded-2xl max-w-2xl w-full mx-4 shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300 max-h-[90vh] flex flex-col" id="dealsModalContent" onclick="event.stopPropagation()">
+            <!-- Header -->
+            <div class="relative bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 p-4">
+                <h3 class="text-white font-bold text-lg flex items-center gap-2">🔥 Hot Deals</h3>
+                <button onclick="closeDealsModal()" class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all">&times;</button>
+            </div>
+            
+            <!-- Content -->
+            <div class="p-4 overflow-y-auto custom-scrollbar flex-1 bg-slate-50">
+                <div id="dealsListContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Deals injected here via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    async function openDealsModal() {
+        const modal = document.getElementById('dealsDetailModal');
+        const container = document.getElementById('dealsListContainer');
+        
+        // Show Modal
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            document.getElementById('dealsModalContent').classList.remove('scale-95');
+        }, 10);
+        
+        container.innerHTML = '<div class="col-span-full text-center py-8 text-slate-500"><i class="fas fa-spinner fa-spin text-2xl mb-2"></i><br>Loading Deals...</div>';
+        
+        // Load deals
+        let deals = [];
+        try {
+            deals = await DataService.getDeals();
+        } catch(e) {
+            deals = JSON.parse(localStorage.getItem("admin_deals")) || [];
+        }
+        
+        if (deals.length === 0) {
+            container.innerHTML = '<div class="col-span-full text-center py-8 text-slate-500">No active deals right now. Check back later!</div>';
+            return;
+        }
+        
+        container.innerHTML = '';
+        deals.forEach(deal => {
+            const priceHtml = deal.price ? `<div class="text-emerald-600 font-bold text-sm mt-1">Rs ${deal.price}</div>` : '';
+            const locationHtml = deal.location ? `<div class="text-xs text-slate-400 mt-1"><i class="fas fa-map-marker-alt"></i> ${deal.location}</div>` : '';
+            const whatsappLink = deal.whatsapp ? `https://wa.me/${deal.whatsapp}` : '#';
+            
+            container.innerHTML += `
+                <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-200 flex flex-col hover:shadow-md transition-shadow">
+                    <img src="${deal.image || 'https://via.placeholder.com/150'}" class="w-full h-32 object-cover rounded-lg mb-3">
+                    <h4 class="font-bold text-sm text-slate-800 line-clamp-2">${deal.name}</h4>
+                    <div class="text-xs text-slate-500 mt-1 mb-2 line-clamp-2 flex-1">${deal.desc || ''}</div>
+                    ${priceHtml}
+                    ${locationHtml}
+                    <button onclick="window.open('${whatsappLink}', '_blank')" class="mt-3 w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition-colors">
+                        <i class="fab fa-whatsapp"></i> Get Deal
+                    </button>
+                </div>
+            `;
+        });
+    }
+
+    function closeDealsModal() {
+        const modal = document.getElementById('dealsDetailModal');
+        modal.classList.add('opacity-0');
+        document.getElementById('dealsModalContent').classList.add('scale-95');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }, 300);
+    }
+    </script>
 </body>
 
 </html>
