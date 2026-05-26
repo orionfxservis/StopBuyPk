@@ -1143,6 +1143,19 @@ function renderDynamicAdminFields() {
                     <input type="number" id="prodPrice" class="dynamic-admin-field" placeholder="e.g., 1500" required>
                 </div>
             </div>
+            
+            <div class="form-row">
+                <div class="form-group" style="width: 100%; margin-bottom: 8px;">
+                   <label>Product Detail</label>
+                   <textarea
+                      id="productDetail"
+                      class="dynamic-admin-field admin-input"
+                      rows="3"
+                      placeholder="Write product details..."
+                      style="width: 100%; resize: vertical; min-height: 80px;"
+                   ></textarea>
+                </div>
+            </div>
 
             <div class="form-row">
                 <div class="input-group">
@@ -1221,6 +1234,10 @@ if (adminProductForm) {
         }
         if (!newProduct.price && document.getElementById('prodPrice')) {
             newProduct.price = document.getElementById('prodPrice').value;
+        }
+
+        if (document.getElementById('productDetail')) {
+            newProduct.details = document.getElementById('productDetail').value;
         }
 
         // Handle Checkboxes if Vehicle
@@ -1325,6 +1342,10 @@ window.editProduct = (index) => {
                     field.value = prod[key];
                 }
             });
+
+            if (document.getElementById('productDetail')) {
+                document.getElementById('productDetail').value = prod.details || prod.description || '';
+            }
 
             // Handle checkboxes for vehicles if needed
             if (prod.category === 'Vehicles' || prod.category === 'Vehicle') {

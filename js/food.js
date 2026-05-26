@@ -97,6 +97,7 @@ function renderFoodList() {
               <span class="text-xs font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500 whitespace-nowrap ml-2">Rs. ${f.price}</span>
             </div>
             <p class="text-[0.7rem] sm:text-xs text-slate-400 mb-1 font-medium">${f.variety}</p>
+            ${f.description ? `<p class="text-[0.65rem] sm:text-[0.7rem] text-slate-500 mb-2 line-clamp-2">${f.description}</p>` : ''}
           </div>
           <div class="flex justify-between items-end">
             <p class="text-[0.7rem] text-slate-400 font-medium">📍 ${f.address}</p>
