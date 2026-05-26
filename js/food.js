@@ -138,6 +138,36 @@ function selectFoodItem(id, preventScroll = false) {
     if (fLocation) fLocation.textContent = `${item.address}`;
     if (fDesc) fDesc.textContent = item.description;
 
+    // Handle Video Display
+    const fVideoContainer = document.getElementById('fVideoContainer');
+    const fVideoFrame = document.getElementById('fVideoFrame');
+    const fVideoLink = document.getElementById('fVideoLink');
+    if (fVideoContainer) {
+      if (item.videoLink) {
+        fVideoContainer.classList.remove('hidden');
+        let embedUrl = item.videoLink;
+        // Basic YouTube URL parsing
+        let ytMatch = item.videoLink.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+        if (ytMatch) {
+            embedUrl = `https://www.youtube.com/embed/${ytMatch[1]}`;
+            if (fVideoFrame) {
+                fVideoFrame.src = embedUrl;
+                fVideoFrame.classList.remove('hidden');
+            }
+            if (fVideoLink) fVideoLink.classList.add('hidden');
+        } else {
+            if (fVideoFrame) fVideoFrame.classList.add('hidden');
+            if (fVideoLink) {
+                fVideoLink.href = item.videoLink;
+                fVideoLink.classList.remove('hidden');
+            }
+        }
+      } else {
+        fVideoContainer.classList.add('hidden');
+        if (fVideoFrame) fVideoFrame.src = '';
+      }
+    }
+
     // Contact Buttons Setup
     if (item.phone) {
       if (fCallBtn) {
@@ -191,8 +221,8 @@ function selectFoodItem(id, preventScroll = false) {
 async function initFoodDeals() {
   if (typeof DataService !== 'undefined') {
     const allProducts = await DataService.getProducts();
-    // Filter for Food Category
-    const foodProducts = allProducts.filter(p => p.category && p.category.toLowerCase() === 'food');
+    // Filter for Food Category and Published Status
+    const foodProducts = allProducts.filter(p => p.category && p.category.toLowerCase() === 'food' && (p.status === 'Publish' || p.prodStatus === 'Publish' || (!p.status && !p.prodStatus && (!p.addedBy || p.addedBy.toLowerCase() === 'admin'))));
         // Map to the format food.js expects
       foodDeals = foodProducts.map(p => {
         // Dynamic fields might have different capitalization, safely extract them
@@ -231,6 +261,7 @@ async function initFoodDeals() {
           description: p.description || p.details || variety,
           phone: phone,
           whatsapp: whatsapp,
+          videoLink: p.videoLink || null,
           tags: tags
         };
       });

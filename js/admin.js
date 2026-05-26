@@ -236,6 +236,11 @@ async function saveBanners() {
 
 function renderBanners() {
     if (!bannerList) return;
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+
     bannerList.innerHTML = banners.map((banner, index) => {
         let displayType = banner.type;
         let displayLink = banner.link;
@@ -249,6 +254,17 @@ function renderBanners() {
             }
         }
 
+        const canEdit = isSuperAdmin || banner.addedBy === userName;
+        let actionButtons = '';
+        if (canEdit) {
+            actionButtons = `
+                <button class="edit-btn" onclick="editBanner(${index})"><i class="fa-solid fa-pen"></i> Edit</button>
+                <button class="delete-btn" onclick="deleteBanner(${index})"><i class="fa-solid fa-trash"></i> Delete</button>
+            `;
+        } else {
+            actionButtons = `<span style="font-size:12px;color:#888;">View Only</span>`;
+        }
+
         return `
         <div class="banner-item">
             <div style="margin-bottom: 5px;">
@@ -257,8 +273,7 @@ function renderBanners() {
             <img src="${banner.image}" alt="Banner" style="${displayType === 'vertical' ? 'object-fit: contain; max-height: 150px;' : ''}">
             ${displayLink ? `<a href="${displayLink}" target="_blank" class="banner-link"><i class="fa-solid fa-link"></i> ${displayLink}</a>` : ''}
             <div style="margin-top: 10px; display: flex; gap: 5px; justify-content: center;">
-                <button class="edit-btn" onclick="editBanner(${index})"><i class="fa-solid fa-pen"></i> Edit</button>
-                <button class="delete-btn" onclick="deleteBanner(${index})"><i class="fa-solid fa-trash"></i> Delete</button>
+                ${actionButtons}
             </div>
         </div>
         `;
@@ -369,13 +384,21 @@ if (bannerForm) {
                 }
             }
 
+            const cUserStr = localStorage.getItem('currentUser');
+            const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+            const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+
             // Workaround: Backend might drop the 'type' field, so we pack it into the 'link' field
             const link = `${type}|${rawLink}`;
+            let bannerStatus = 'Publish';
+            if (String(cUser.userId || '').toLowerCase() !== 'admin') {
+                bannerStatus = 'Draft';
+            }
 
             if (bannerEditIndex === -1) {
-                banners.push({ image, link, type });
+                banners.push({ image, link, type, addedBy: userName, status: bannerStatus });
             } else {
-                banners[bannerEditIndex] = { image, link, type };
+                banners[bannerEditIndex] = { image, link, type, addedBy: banners[bannerEditIndex].addedBy || userName, status: bannerStatus };
                 cancelBannerEdit();
             }
 
@@ -409,7 +432,24 @@ async function saveDeals() {
 
 function renderDeals() {
     if (!dealList) return;
-    dealList.innerHTML = deals.map((deal, index) => `
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+
+    dealList.innerHTML = deals.map((deal, index) => {
+        const canEdit = isSuperAdmin || deal.addedBy === userName;
+        let actionButtons = '';
+        if (canEdit) {
+            actionButtons = `
+                <button class="edit-btn" onclick="editDeal(${index})"><i class="fa-solid fa-pen"></i></button>
+                <button class="delete-btn" onclick="deleteDeal(${index})"><i class="fa-solid fa-trash"></i></button>
+            `;
+        } else {
+            actionButtons = `<span style="font-size:12px;color:#888;">View Only</span>`;
+        }
+
+        return `
         <div class="product-row" style="grid-template-columns: 80px 2fr 1fr 100px;">
             <img src="${deal.image}" alt="${deal.name}" style="width: 100%; height: 60px; object-fit: cover; border-radius: 8px;">
             <div>
@@ -421,11 +461,11 @@ function renderDeals() {
                 <small><i class="fa-solid fa-location-dot"></i> ${deal.location}</small>
             </div>
             <div>
-                <button class="edit-btn" onclick="editDeal(${index})"><i class="fa-solid fa-pen"></i></button>
-                <button class="delete-btn" onclick="deleteDeal(${index})"><i class="fa-solid fa-trash"></i></button>
+                ${actionButtons}
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 async function deleteDeal(index) {
@@ -560,16 +600,28 @@ if (dealForm) {
     dealForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        const existingDeal = dealEditIndex === -1 ? {} : deals[dealEditIndex];
+        const cUserStr = localStorage.getItem('currentUser');
+        const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+        const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+
         const newDeal = {
-            id: dealEditIndex === -1 ? Date.now() : deals[dealEditIndex].id,
+            ...existingDeal,
+            id: dealEditIndex === -1 ? Date.now() : existingDeal.id,
             name: document.getElementById('dealName').value,
             image: document.getElementById('dealImage').value,
             desc: document.getElementById('dealDesc').value,
             price: document.getElementById('dealPrice').value,
             location: document.getElementById('dealLocation').value,
             whatsapp: document.getElementById('dealWhatsapp').value,
-            video: document.getElementById('dealVideo').value
+            video: document.getElementById('dealVideo').value,
+            status: document.getElementById('dealStatus').value,
+            addedBy: dealEditIndex === -1 ? userName : (existingDeal.addedBy || userName)
         };
+
+        if (String(cUser.userId || '').toLowerCase() !== 'admin') {
+            newDeal.status = 'Draft';
+        }
 
         if (dealEditIndex === -1) {
             deals.push(newDeal);
@@ -1252,6 +1304,14 @@ if (adminProductForm) {
         if (document.getElementById('prodVideoLink')) {
             newProduct.videoLink = document.getElementById('prodVideoLink').value;
         }
+        if (document.getElementById('prodStatus')) {
+            newProduct.status = document.getElementById('prodStatus').value;
+        }
+
+        // Force Draft if not Super Admin
+        if (String(cUser.userId || '').toLowerCase() !== 'admin') {
+            newProduct.status = 'Draft';
+        }
 
         // Handle Checkboxes if Vehicle
         if (category === 'Vehicles' || category === 'Vehicle') {
@@ -1291,6 +1351,11 @@ if (adminProductForm) {
 
 function renderAdminProducts() {
     const adminProductList = document.getElementById('adminProductList');
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+
     if (adminProductList) {
         adminProductList.innerHTML = products.map((prod, index) => {
             let details = prod.variety || '';
@@ -1300,6 +1365,17 @@ function renderAdminProducts() {
                 details = `${prod.specification || ''} | ${prod.batteryBackup ? prod.batteryBackup + 'mAh' : ''}`;
             }
 
+            const canEdit = isSuperAdmin || prod.addedBy === userName;
+            let actionButtons = '';
+            if (canEdit) {
+                actionButtons = `
+                   <button class="edit-btn" onclick="editProduct(${index})"><i class="fa-solid fa-pen"></i></button>
+                   <button class="delete-btn" onclick="deleteProduct(${index})"><i class="fa-solid fa-trash"></i></button>
+                `;
+            } else {
+                actionButtons = `<span style="font-size:12px;color:#888;">View Only</span>`;
+            }
+
             return `
             <div class="product-row">
                 <img src="${prod.image}" alt="${prod.name}">
@@ -1307,8 +1383,7 @@ function renderAdminProducts() {
                 <div>${prod.category} <br> <small>${prod.subCategory}</small></div>
                 <div style="color: var(--primary-color)">Rs. ${prod.price}</div>
                 <div>
-                   <button class="edit-btn" onclick="editProduct(${index})"><i class="fa-solid fa-pen"></i></button>
-                   <button class="delete-btn" onclick="deleteProduct(${index})"><i class="fa-solid fa-trash"></i></button>
+                    ${actionButtons}
                 </div>
                 <div style="font-size: 0.85rem; color: #ffffff; font-weight: 600;">${prod.addedBy || 'Admin'}</div>
             </div>
@@ -1436,10 +1511,26 @@ async function saveTravelPackages() {
 
 function renderTravelPackages() {
     if (!travelList) return;
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+
     travelList.innerHTML = travelPackages.map((pkg, index) => {
         let displayStatus = pkg.status || 'Publish';
         let displayType = pkg.listingType || 'Basic';
         let isFeatured = displayType === 'Featured';
+
+        const canEdit = isSuperAdmin || pkg.addedBy === userName || (!pkg.addedBy && isSuperAdmin);
+        let actionButtons = '';
+        if (canEdit) {
+            actionButtons = `
+                <button class="edit-btn" onclick="editTravel(${index})" style="padding: 5px; margin-bottom: 2px;"><i class="fa-solid fa-pen"></i></button>
+                <button class="delete-btn" onclick="deleteTravel(${index})" style="padding: 5px;"><i class="fa-solid fa-trash"></i></button>
+            `;
+        } else {
+            actionButtons = `<span style="font-size:12px;color:#888;">View Only</span>`;
+        }
 
         return `
         <div class="product-row" style="grid-template-columns: 80px 2fr 1fr 1fr 1fr 1fr 80px; align-items: center;">
@@ -1461,8 +1552,7 @@ function renderTravelPackages() {
                 <span class="badge" style="background:${displayStatus === 'Publish' ? '#10b981' : '#f43f5e'}; color:white; padding: 2px 6px; font-size: 0.7rem; display:inline-block;">${displayStatus}</span>
             </div>
             <div>
-                <button class="edit-btn" onclick="editTravel(${index})" style="padding: 5px; margin-bottom: 2px;"><i class="fa-solid fa-pen"></i></button>
-                <button class="delete-btn" onclick="deleteTravel(${index})" style="padding: 5px;"><i class="fa-solid fa-trash"></i></button>
+                ${actionButtons}
             </div>
         </div>
         `;
@@ -1533,6 +1623,10 @@ if (travelForm) {
 
         const transportOptions = Array.from(document.querySelectorAll('input[name="transportOption"]:checked')).map(cb => cb.value);
 
+        const cUserStr = localStorage.getItem('currentUser');
+        const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+        const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+
         const newPkg = {
             id: travelEditIndex === -1 ? Date.now() : travelPackages[travelEditIndex].id,
             title: document.getElementById('travelTitle').value,
@@ -1556,8 +1650,13 @@ if (travelForm) {
             email: document.getElementById('travelEmail').value,
             listingType: document.getElementById('travelListingType').value,
             verified: document.getElementById('travelVerified').value,
-            status: document.getElementById('travelStatus').value
+            status: document.getElementById('travelStatus').value,
+            addedBy: travelEditIndex === -1 ? userName : (travelPackages[travelEditIndex].addedBy || userName)
         };
+
+        if (String(cUser.userId || '').toLowerCase() !== 'admin') {
+            newPkg.status = 'Draft';
+        }
 
         if (travelEditIndex === -1) {
             travelPackages.push(newPkg);
@@ -1697,18 +1796,35 @@ async function saveBroadcasts() {
 
 function renderBroadcasts() {
     if (broadcastList) {
-        broadcastList.innerHTML = broadcasts.map((b, index) => `
+        const cUserStr = localStorage.getItem('currentUser');
+        const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+        const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+        const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+
+        broadcastList.innerHTML = broadcasts.map((b, index) => {
+            const canEdit = isSuperAdmin || b.addedBy === userName || (!b.addedBy && isSuperAdmin);
+            let actionButtons = '';
+            if (canEdit) {
+                actionButtons = `
+                    <button class="edit-btn" onclick="editBroadcast(${index})"><i class="fa-solid fa-pen"></i></button>
+                    <button class="delete-btn" onclick="deleteBroadcast(${index})"><i class="fa-solid fa-trash"></i></button>
+                `;
+            } else {
+                actionButtons = `<span style="font-size:12px;color:#888;">View Only</span>`;
+            }
+
+            return `
             <div class="grid-table-row" style="grid-template-columns: 1fr 2fr 100px 100px 100px; display: grid; gap: 10px; align-items: center; padding: 10px; border-bottom: 1px solid var(--border-color);">
                 <div><span class="badge" style="background:#3498db; color:white;">${b.target === 'all' ? 'All Users' : b.targetUser || 'Specific'}</span></div>
                 <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${b.message}</div>
                 <div>${b.date || new Date().toISOString().split('T')[0]}</div>
                 <div><span class="badge" style="background:${b.status === 'active' ? '#2ecc71' : '#e74c3c'}; color:white;">${b.status}</span></div>
                 <div>
-                    <button class="edit-btn" onclick="editBroadcast(${index})"><i class="fa-solid fa-pen"></i></button>
-                    <button class="delete-btn" onclick="deleteBroadcast(${index})"><i class="fa-solid fa-trash"></i></button>
+                    ${actionButtons}
                 </div>
             </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
     // Update Admin Ticker
@@ -1780,14 +1896,23 @@ if (broadcastForm) {
     broadcastForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        const cUserStr = localStorage.getItem('currentUser');
+        const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+        const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+
         const newBroadcast = {
             id: broadcastEditIndex === -1 ? Date.now() : broadcasts[broadcastEditIndex].id,
             message: document.getElementById('broadcastMessage').value,
             target: document.getElementById('broadcastAudience').value,
             targetUser: document.getElementById('broadcastSpecificUser') ? document.getElementById('broadcastSpecificUser').value : '',
             status: document.getElementById('broadcastStatus').value,
-            date: new Date().toISOString().split('T')[0]
+            date: new Date().toISOString().split('T')[0],
+            addedBy: broadcastEditIndex === -1 ? userName : (broadcasts[broadcastEditIndex].addedBy || userName)
         };
+
+        if (String(cUser.userId || '').toLowerCase() !== 'admin') {
+            newBroadcast.status = 'Draft';
+        }
 
         if (broadcastEditIndex === -1) {
             broadcasts.push(newBroadcast);

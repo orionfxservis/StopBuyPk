@@ -264,7 +264,7 @@ function renderProducts() {
 if (typeof DataService !== 'undefined') {
   DataService.getProducts().then(products => {
     if (products && products.length > 0) {
-      allProducts = products.filter(p => p.status === 'Publish' || p.prodStatus === 'Publish' || (!p.status && !p.prodStatus));
+      allProducts = products.filter(p => p.status === 'Publish' || p.prodStatus === 'Publish' || (!p.status && !p.prodStatus && (!p.addedBy || p.addedBy.toLowerCase() === 'admin')));
     } else {
       // Fallback dummy products if fetch returns empty
       allProducts = [
