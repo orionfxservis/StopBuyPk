@@ -468,7 +468,7 @@ function renderDeals() {
 
         return `
         <div class="product-row" style="grid-template-columns: 80px 1.2fr 100px 1fr 140px 120px; align-items: center;">
-            <img src="${deal.image}" alt="${deal.name}" style="width: 100%; height: 60px; object-fit: cover; border-radius: 8px;">
+            <img src="${deal.image}" alt="${deal.name}">
             <div>${deal.name}</div>
             <div style="color: var(--primary-color)">Rs. ${deal.price}</div>
             <div><small><i class="fa-solid fa-location-dot"></i> ${deal.location}</small></div>
