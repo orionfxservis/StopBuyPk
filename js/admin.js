@@ -258,7 +258,15 @@ function renderBanners() {
         const canEdit = isSuperAdmin || banner.addedBy === userName;
         let actionButtons = '';
         if (canEdit) {
+            let approvalBtn = '';
+            if (isSuperAdmin) {
+                const isDraft = banner.status === 'Draft';
+                const color = isDraft ? '#e74c3c' : '#2ecc71';
+                const title = isDraft ? 'Approve (Draft)' : 'Approved (Publish)';
+                approvalBtn = `<button onclick="toggleApproval('banners', ${index})" style="background: ${color}; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-right: 5px;" title="${title}"><i class="fa-solid fa-check-circle"></i></button>`;
+            }
             actionButtons = `
+                ${approvalBtn}
                 <button class="edit-btn" onclick="editBanner(${index})"><i class="fa-solid fa-pen"></i> Edit</button>
                 <button class="delete-btn" onclick="deleteBanner(${index})"><i class="fa-solid fa-trash"></i> Delete</button>
             `;
@@ -442,7 +450,15 @@ function renderDeals() {
         const canEdit = isSuperAdmin || deal.addedBy === userName;
         let actionButtons = '';
         if (canEdit) {
+            let approvalBtn = '';
+            if (isSuperAdmin) {
+                const isDraft = deal.status === 'Draft' || deal.dealStatus === 'Draft';
+                const color = isDraft ? '#e74c3c' : '#2ecc71';
+                const title = isDraft ? 'Approve (Draft)' : 'Approved (Publish)';
+                approvalBtn = `<button onclick="toggleApproval('deals', ${index})" style="background: ${color}; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-right: 5px;" title="${title}"><i class="fa-solid fa-check-circle"></i></button>`;
+            }
             actionButtons = `
+                ${approvalBtn}
                 <button class="edit-btn" onclick="editDeal(${index})"><i class="fa-solid fa-pen"></i></button>
                 <button class="delete-btn" onclick="deleteDeal(${index})"><i class="fa-solid fa-trash"></i></button>
             `;
@@ -1369,7 +1385,15 @@ function renderAdminProducts() {
             const canEdit = isSuperAdmin || prod.addedBy === userName;
             let actionButtons = '';
             if (canEdit) {
+                let approvalBtn = '';
+                if (isSuperAdmin) {
+                    const isDraft = prod.status === 'Draft' || prod.prodStatus === 'Draft';
+                    const color = isDraft ? '#e74c3c' : '#2ecc71';
+                    const title = isDraft ? 'Approve (Draft)' : 'Approved (Publish)';
+                    approvalBtn = `<button onclick="toggleApproval('products', ${index})" style="background: ${color}; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-right: 5px;" title="${title}"><i class="fa-solid fa-check-circle"></i></button>`;
+                }
                 actionButtons = `
+                   ${approvalBtn}
                    <button class="edit-btn" onclick="editProduct(${index})"><i class="fa-solid fa-pen"></i></button>
                    <button class="delete-btn" onclick="deleteProduct(${index})"><i class="fa-solid fa-trash"></i></button>
                 `;
@@ -1383,7 +1407,7 @@ function renderAdminProducts() {
                 <div>${prod.name}<br><small>${details}</small></div>
                 <div>${prod.category} <br> <small>${prod.subCategory}</small></div>
                 <div style="color: var(--primary-color)">Rs. ${prod.price}</div>
-                <div>
+                <div style="display: flex; gap: 5px; align-items: center; white-space: nowrap;">
                     ${actionButtons}
                 </div>
                 <div style="font-size: 0.85rem; color: #ffffff; font-weight: 600;">${prod.addedBy || 'Admin'}</div>
@@ -1525,7 +1549,15 @@ function renderTravelPackages() {
         const canEdit = isSuperAdmin || pkg.addedBy === userName || (!pkg.addedBy && isSuperAdmin);
         let actionButtons = '';
         if (canEdit) {
+            let approvalBtn = '';
+            if (isSuperAdmin) {
+                const isDraft = pkg.status === 'Draft';
+                const color = isDraft ? '#e74c3c' : '#2ecc71';
+                const title = isDraft ? 'Approve (Draft)' : 'Approved (Publish)';
+                approvalBtn = `<button onclick="toggleApproval('travel', ${index})" style="background: ${color}; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-right: 5px; margin-bottom: 2px;" title="${title}"><i class="fa-solid fa-check-circle"></i></button>`;
+            }
             actionButtons = `
+                ${approvalBtn}
                 <button class="edit-btn" onclick="editTravel(${index})" style="padding: 5px; margin-bottom: 2px;"><i class="fa-solid fa-pen"></i></button>
                 <button class="delete-btn" onclick="deleteTravel(${index})" style="padding: 5px;"><i class="fa-solid fa-trash"></i></button>
             `;
@@ -1806,7 +1838,15 @@ function renderBroadcasts() {
             const canEdit = isSuperAdmin || b.addedBy === userName || (!b.addedBy && isSuperAdmin);
             let actionButtons = '';
             if (canEdit) {
+                let approvalBtn = '';
+                if (isSuperAdmin) {
+                    const isDraft = b.status === 'Draft';
+                    const color = isDraft ? '#e74c3c' : '#2ecc71';
+                    const title = isDraft ? 'Approve (Draft)' : 'Approved (Publish)';
+                    approvalBtn = `<button onclick="toggleApproval('broadcasts', ${index})" style="background: ${color}; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-right: 5px;" title="${title}"><i class="fa-solid fa-check-circle"></i></button>`;
+                }
                 actionButtons = `
+                    ${approvalBtn}
                     <button class="edit-btn" onclick="editBroadcast(${index})"><i class="fa-solid fa-pen"></i></button>
                     <button class="delete-btn" onclick="deleteBroadcast(${index})"><i class="fa-solid fa-trash"></i></button>
                 `;
@@ -2169,6 +2209,39 @@ window.restrictPublishForSection = function(sectionId) {
             });
         }
     });
+};
+
+window.toggleApproval = async function(type, index) {
+    let arr = [];
+    let saveFunc = null;
+    let renderFunc = null;
+
+    if (type === 'deals') {
+        arr = deals; saveFunc = DataService.saveDeals; renderFunc = renderDeals;
+    } else if (type === 'products') {
+        arr = products; saveFunc = DataService.saveProducts; renderFunc = renderAdminProducts;
+    } else if (type === 'travel') {
+        arr = travelPackages; saveFunc = DataService.saveTravelPackages; renderFunc = renderTravelPackages;
+    } else if (type === 'broadcasts') {
+        arr = broadcasts; saveFunc = DataService.saveBroadcasts; renderFunc = renderBroadcasts;
+    } else if (type === 'blogs') {
+        arr = blogs; saveFunc = DataService.saveBlogs; renderFunc = renderBlogs;
+    } else if (type === 'banners') {
+        arr = banners; saveFunc = DataService.saveBanners; renderFunc = renderBanners;
+    }
+    
+    if (!arr || !arr[index]) return;
+    const item = arr[index];
+    const isDraft = item.status === 'Draft' || item.dealStatus === 'Draft' || item.prodStatus === 'Draft';
+    
+    const newStatus = isDraft ? 'Publish' : 'Draft';
+    if (item.status !== undefined) item.status = newStatus;
+    if (item.dealStatus !== undefined) item.dealStatus = newStatus;
+    if (item.prodStatus !== undefined) item.prodStatus = newStatus;
+    
+    if (saveFunc) await saveFunc(arr);
+    if (renderFunc) renderFunc();
+    if (typeof updatePendingApprovalsBadge === 'function') updatePendingApprovalsBadge();
 };
 
 window.updatePendingApprovalsBadge = function() {
