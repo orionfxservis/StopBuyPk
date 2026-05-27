@@ -2080,44 +2080,66 @@ window.enforceUserPermissions = function() {
         const currentUserStr = localStorage.getItem('currentUser');
         if (!currentUserStr) return;
         
-        const currentUser = JSON.parse(currentUserStr);
+        let currentUser = JSON.parse(currentUserStr);
         if (String(currentUser.userId || currentUser.username || '').toLowerCase() === 'admin') return; // Super admin exception
         
-        if (currentUser.role === 'admin') {
-            let perms = currentUser.permissions;
-            if (typeof perms === 'string') {
-                try { perms = JSON.parse(perms); } catch(e) { perms = {}; }
+        // ALWAYS use the freshest data from the fetched 'users' array if available
+        const liveUser = users.find(u => u.userId === currentUser.userId || u.username === currentUser.username);
+        if (liveUser) {
+            currentUser.role = liveUser.role || currentUser.role;
+            currentUser.permissions = liveUser.permissions !== undefined ? liveUser.permissions : currentUser.permissions;
+            // Update localStorage just to keep it somewhat in sync
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        }
+
+        // Apply permissions to ALL non-super-admin users (admin, company, user)
+        let perms = currentUser.permissions;
+        
+        // Aggressively parse stringified JSON (handles double-stringification)
+        let loopCount = 0;
+        while (typeof perms === 'string' && loopCount < 3) {
+            try { 
+                perms = JSON.parse(perms); 
+            } catch(e) { 
+                break; 
             }
-            if (!perms || Array.isArray(perms) || typeof perms !== 'object') {
-                perms = {}; // Legacy or no perms
-            }
-            
-            const menuItems = document.querySelectorAll('.menu li[onclick^="showSection"]');
-            
-            menuItems.forEach(li => {
-                const sectionMatch = li.getAttribute('onclick').match(/showSection\('([^']+)'\)/);
-                if (sectionMatch && sectionMatch[1]) {
-                    const sectionId = sectionMatch[1];
-                    // Always show dashboard
-                    if (sectionId !== 'dashboard') {
-                        // Force hide 'Manage Users' for anyone except Super Admin
-                        if (sectionId === 'users' && String(currentUser.userId || '').toLowerCase() !== 'admin') {
+            loopCount++;
+        }
+        
+        if (!perms || Array.isArray(perms) || typeof perms !== 'object') {
+            perms = {}; // Legacy or no perms
+        }
+        
+        console.log("Enforcing permissions for user:", currentUser.userId, "Parsed Perms:", perms);
+        
+        const menuItems = document.querySelectorAll('.menu li[onclick^="showSection"]');
+        
+        menuItems.forEach(li => {
+            const sectionMatch = li.getAttribute('onclick').match(/showSection\('([^']+)'\)/);
+            if (sectionMatch && sectionMatch[1]) {
+                const sectionId = sectionMatch[1];
+                // Always show dashboard
+                if (sectionId !== 'dashboard') {
+                    // Force hide 'Manage Users' for anyone except Super Admin
+                    if (sectionId === 'users' && String(currentUser.userId || '').toLowerCase() !== 'admin') {
+                        li.style.display = 'none';
+                    } else {
+                        const sectionRights = perms[sectionId] || [];
+                        if (sectionRights.length === 0) {
                             li.style.display = 'none';
                         } else {
-                            const sectionRights = perms[sectionId] || [];
-                            if (sectionRights.length === 0) {
-                                li.style.display = 'none';
-                            }
-                            
-                            // Enforce Publish/Draft rights
-                            if (!sectionRights.includes('Publish')) {
-                               restrictPublishForSection(sectionId);
-                            }
+                            // Ensure it's visible if it has rights (in case it was hidden)
+                            li.style.display = '';
+                        }
+                        
+                        // Enforce Publish/Draft rights
+                        if (!sectionRights.includes('Publish')) {
+                            restrictPublishForSection(sectionId);
                         }
                     }
                 }
-            });
-        }
+            }
+        });
     } catch(e) {
         console.error("Error enforcing permissions", e);
     }
@@ -2166,7 +2188,7 @@ window.updatePendingApprovalsBadge = function() {
                 const count = arr.filter(item => item.addedBy === userName && (item.status === 'Draft' || item.prodStatus === 'Draft')).length;
                 if (count > 0) {
                     userPendingCount += count;
-                    userNotifsHtml += `<div style="padding: 10px 15px; border-bottom: 1px solid var(--border-color); font-size: 0.85rem;"><i class="fa-solid fa-clock" style="color: #f39c12; margin-right: 8px;"></i> You have ${count} pending ${name} waiting for approval.</div>`;
+                    userNotifsHtml += `<div style="padding: 10px 15px; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; color: white;"><i class="fa-solid fa-clock" style="color: #f39c12; margin-right: 8px;"></i> You have ${count} pending ${name} waiting for approval.</div>`;
                 }
             };
 
@@ -2183,7 +2205,7 @@ window.updatePendingApprovalsBadge = function() {
                 topBadge.textContent = userPendingCount;
             }
             if (notifList) {
-                notifList.innerHTML = userPendingCount > 0 ? userNotifsHtml : `<div style="padding: 15px; text-align: center; color: #888; font-size: 0.9rem;">No new notifications</div>`;
+                notifList.innerHTML = userPendingCount > 0 ? userNotifsHtml : `<div style="padding: 15px; text-align: center; color: #cbd5e1; font-size: 0.9rem;">No new notifications</div>`;
             }
 
             ['products', 'deals', 'banners', 'blogs', 'broadcasts', 'travel'].forEach(sec => {
@@ -2213,7 +2235,7 @@ window.updatePendingApprovalsBadge = function() {
                     badge.textContent = count;
                     badge.style.display = 'inline-block';
                     totalAdminPending += count;
-                    adminNotifsHtml += `<div style="padding: 10px 15px; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; cursor: pointer;" onclick="showSection('${sec}')"><i class="fa-solid fa-exclamation-circle" style="color: #e74c3c; margin-right: 8px;"></i> ${count} pending ${sec} require approval.</div>`;
+                    adminNotifsHtml += `<div style="padding: 10px 15px; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; cursor: pointer; color: white;" onclick="showSection('${sec}')"><i class="fa-solid fa-exclamation-circle" style="color: #e74c3c; margin-right: 8px;"></i> ${count} pending ${sec} require approval.</div>`;
                 } else {
                     badge.style.display = 'none';
                 }
@@ -2227,7 +2249,7 @@ window.updatePendingApprovalsBadge = function() {
             topBadge.textContent = totalAdminPending;
         }
         if (notifList) {
-            notifList.innerHTML = totalAdminPending > 0 ? adminNotifsHtml : `<div style="padding: 15px; text-align: center; color: #888; font-size: 0.9rem;">No new notifications</div>`;
+            notifList.innerHTML = totalAdminPending > 0 ? adminNotifsHtml : `<div style="padding: 15px; text-align: center; color: #cbd5e1; font-size: 0.9rem;">No new notifications</div>`;
         }
     } catch(e) {
         console.error("Error updating badges", e);
