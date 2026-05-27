@@ -467,19 +467,15 @@ function renderDeals() {
         }
 
         return `
-        <div class="product-row" style="grid-template-columns: 80px 2fr 1fr 100px;">
+        <div class="product-row" style="grid-template-columns: 80px 1.2fr 100px 1fr 140px 120px; align-items: center;">
             <img src="${deal.image}" alt="${deal.name}" style="width: 100%; height: 60px; object-fit: cover; border-radius: 8px;">
-            <div>
-                <strong>${deal.name}</strong><br>
-                <small style="color: #aaa;">${deal.desc}</small>
-            </div>
-            <div>
-                <span style="color: var(--primary-color); font-weight:bold;">${deal.price}</span><br>
-                <small><i class="fa-solid fa-location-dot"></i> ${deal.location}</small>
-            </div>
-            <div>
+            <div>${deal.name}</div>
+            <div style="color: var(--primary-color)">Rs. ${deal.price}</div>
+            <div><small><i class="fa-solid fa-location-dot"></i> ${deal.location}</small></div>
+            <div style="display: flex; gap: 5px; align-items: center; white-space: nowrap;">
                 ${actionButtons}
             </div>
+            <div style="font-size: 0.85rem; color: #ffffff; font-weight: 600;">${deal.addedBy || 'Admin'}</div>
         </div>
         `;
     }).join('');
@@ -2124,7 +2120,17 @@ window.enforceUserPermissions = function() {
         if (String(currentUser.userId || currentUser.username || '').toLowerCase() === 'admin') return; // Super admin exception
         
         // ALWAYS use the freshest data from the fetched 'users' array if available
-        const liveUser = users.find(u => u.userId === currentUser.userId || u.username === currentUser.username);
+        const cUid = String(currentUser.userId || '').trim().toLowerCase();
+        const cUname = String(currentUser.username || '').trim().toLowerCase();
+        const liveUser = users.find(u => {
+            const uId = String(u.userId || u.id || '').trim().toLowerCase();
+            const uEmail = String(u.email || '').trim().toLowerCase();
+            const uName = String(u.username || u.userName || '').trim().toLowerCase();
+            return (uId && uId === cUid) || 
+                   (uEmail && uEmail === cUid) || 
+                   (uName && uName === cUname) ||
+                   (uName && uName === cUid);
+        });
         if (liveUser) {
             currentUser.role = liveUser.role || currentUser.role;
             currentUser.permissions = liveUser.permissions !== undefined ? liveUser.permissions : currentUser.permissions;
