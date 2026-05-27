@@ -55,8 +55,25 @@
         <!-- Main Content -->
         <main class="content">
             <!-- Top Bar / User Profile -->
-            <div style="display: flex; justify-content: flex-end; align-items: center; padding: 10px 20px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border-color);">
-                <div style="display: flex; align-items: center; gap: 15px;">
+            <div style="display: flex; justify-content: flex-end; align-items: center; padding: 10px 20px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border-color); gap: 20px;">
+                
+                <!-- Notification Bell -->
+                <div style="position: relative; cursor: pointer;" onclick="document.getElementById('notificationDropdown').classList.toggle('hidden')">
+                    <i class="fa-solid fa-bell" style="font-size: 1.2rem; color: #cbd5e1; transition: color 0.3s;"></i>
+                    <span id="topNotificationBadge" style="display:none; position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white; border-radius: 50%; font-size: 0.6rem; padding: 2px 5px; font-weight: bold;">0</span>
+                    
+                    <!-- Dropdown -->
+                    <div id="notificationDropdown" class="hidden" style="position: absolute; top: 150%; right: -10px; width: 300px; background: #1e293b; border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 1000; overflow: hidden;">
+                        <div style="padding: 10px; background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--border-color); font-weight: bold;">Notifications</div>
+                        <div id="notificationList" style="max-height: 300px; overflow-y: auto;">
+                            <!-- Notifications dynamically injected here -->
+                            <div style="padding: 15px; text-align: center; color: #888; font-size: 0.9rem;">No new notifications</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Profile -->
+                <div style="display: flex; align-items: center; gap: 15px; border-left: 1px solid var(--border-color); padding-left: 20px;">
                     <div style="text-align: right;">
                         <div id="headerUserName" style="font-weight: bold; font-size: 1rem; color: #fff;">User Name</div>
                         <div id="headerUserRole" style="font-size: 0.8rem; color: var(--primary-color);">Role</div>
