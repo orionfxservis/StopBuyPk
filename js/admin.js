@@ -2157,6 +2157,35 @@ window.updatePendingApprovalsBadge = function() {
         const isSuperAdmin = String(currentUser.userId || '').toLowerCase() === 'admin';
         
         if (!isSuperAdmin) {
+            // For regular users, we can just show them how many of THEIR posts are pending
+            const userName = currentUser.fullName || currentUser.username || currentUser.userId || 'Admin';
+            let userPendingCount = 0;
+            let userNotifsHtml = '';
+            
+            const checkUserPending = (arr, name) => {
+                const count = arr.filter(item => item.addedBy === userName && (item.status === 'Draft' || item.prodStatus === 'Draft')).length;
+                if (count > 0) {
+                    userPendingCount += count;
+                    userNotifsHtml += `<div style="padding: 10px 15px; border-bottom: 1px solid var(--border-color); font-size: 0.85rem;"><i class="fa-solid fa-clock" style="color: #f39c12; margin-right: 8px;"></i> You have ${count} pending ${name} waiting for approval.</div>`;
+                }
+            };
+
+            checkUserPending(products, 'Products');
+            checkUserPending(deals, 'Deals');
+            checkUserPending(travelPackages, 'Travel Packages');
+            checkUserPending(banners, 'Banners');
+            checkUserPending(broadcasts, 'Broadcasts');
+
+            const topBadge = document.getElementById('topNotificationBadge');
+            const notifList = document.getElementById('notificationList');
+            if (topBadge) {
+                topBadge.style.display = userPendingCount > 0 ? 'inline-block' : 'none';
+                topBadge.textContent = userPendingCount;
+            }
+            if (notifList) {
+                notifList.innerHTML = userPendingCount > 0 ? userNotifsHtml : `<div style="padding: 15px; text-align: center; color: #888; font-size: 0.9rem;">No new notifications</div>`;
+            }
+
             ['products', 'deals', 'banners', 'blogs', 'broadcasts', 'travel'].forEach(sec => {
                 const badge = document.getElementById(sec + 'PendingBadge');
                 if (badge) badge.style.display = 'none';
@@ -2173,17 +2202,33 @@ window.updatePendingApprovalsBadge = function() {
             travel: travelPackages.filter(p => p.status === 'Draft').length
         };
         
+        let totalAdminPending = 0;
+        let adminNotifsHtml = '';
+
         Object.keys(counts).forEach(sec => {
             const badge = document.getElementById(sec + 'PendingBadge');
+            const count = counts[sec];
             if (badge) {
-                if (counts[sec] > 0) {
-                    badge.textContent = counts[sec];
+                if (count > 0) {
+                    badge.textContent = count;
                     badge.style.display = 'inline-block';
+                    totalAdminPending += count;
+                    adminNotifsHtml += `<div style="padding: 10px 15px; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; cursor: pointer;" onclick="showSection('${sec}')"><i class="fa-solid fa-exclamation-circle" style="color: #e74c3c; margin-right: 8px;"></i> ${count} pending ${sec} require approval.</div>`;
                 } else {
                     badge.style.display = 'none';
                 }
             }
         });
+
+        const topBadge = document.getElementById('topNotificationBadge');
+        const notifList = document.getElementById('notificationList');
+        if (topBadge) {
+            topBadge.style.display = totalAdminPending > 0 ? 'inline-block' : 'none';
+            topBadge.textContent = totalAdminPending;
+        }
+        if (notifList) {
+            notifList.innerHTML = totalAdminPending > 0 ? adminNotifsHtml : `<div style="padding: 15px; text-align: center; color: #888; font-size: 0.9rem;">No new notifications</div>`;
+        }
     } catch(e) {
         console.error("Error updating badges", e);
     }
