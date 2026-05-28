@@ -2358,4 +2358,47 @@ window.populateAdminHeader = function() {
         }
     }
 };
-
+
+// ---------------------------------------------------------
+// LIVE RATES MANAGEMENT
+// ---------------------------------------------------------
+const liveRatesForm = document.getElementById("liveRatesForm");
+if (liveRatesForm) {
+    // Populate form with existing data if available
+    try {
+        const savedRates = localStorage.getItem("stopbuyLiveRates");
+        if (savedRates) {
+            const parsedRates = JSON.parse(savedRates);
+            if (parsedRates.petrol) document.getElementById("adminPetrolPrice").value = parsedRates.petrol;
+            if (parsedRates.diesel) document.getElementById("adminDieselPrice").value = parsedRates.diesel;
+            if (parsedRates.gold) document.getElementById("adminGoldPrice").value = parsedRates.gold;
+            if (parsedRates.updated) document.getElementById("ratesUpdatedTime").value = parsedRates.updated;
+        }
+    } catch(e) {}
+
+    liveRatesForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const currentTime = new Date().toLocaleString();
+        
+        const ratesData = {
+            petrol: document.getElementById("adminPetrolPrice").value,
+            diesel: document.getElementById("adminDieselPrice").value,
+            gold: document.getElementById("adminGoldPrice").value,
+            updated: currentTime
+        };
+
+        localStorage.setItem("stopbuyLiveRates", JSON.stringify(ratesData));
+        
+        const timeField = document.getElementById("ratesUpdatedTime");
+        if (timeField) timeField.value = currentTime;
+
+        alert("Rates Updated Successfully!");
+    });
+}
+
+// Auto show current time on load if not set
+const timeField = document.getElementById("ratesUpdatedTime");
+if (timeField && !timeField.value) {
+   timeField.value = new Date().toLocaleString();
+}
