@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Qeemat Point</title>
+    <title>Admin Dashboard - StopBuy</title>
     <link rel="stylesheet" href="../css/style.css"> <!-- Reusing main styles for variables -->
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -38,7 +38,8 @@
                 <li onclick="showSection('categories')"><i class="fa-solid fa-layer-group"></i> Manage Categories</li>
                 <li onclick="showSection('products')"><i class="fa-solid fa-box"></i> Manage Products <span id="productsPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
                 <li onclick="showSection('deals')"><i class="fa-solid fa-fire"></i> Manage Deals <span id="dealsPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
-                <li onclick="showSection('users')"><i class="fa-solid fa-users"></i> Manage Users</li>
+                <li onclick="showSection('live-rates')"><i class="fa-solid fa-chart-line"></i> Live Rates</li>
+				<li onclick="showSection('users')"><i class="fa-solid fa-users"></i> Manage Users</li>
                 <li onclick="showSection('ads')"><i class="fa-solid fa-bullhorn"></i> Place Ads</li>
                 <li onclick="showSection('banners')"><i class="fa-solid fa-image"></i> Manage Banners <span id="bannersPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
                 <li onclick="showSection('blogs')"><i class="fa-solid fa-blog"></i> Manage Blogs <span id="blogsPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
@@ -1009,9 +1010,45 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Manage Live Rates Section -->
+            <section id="live-rates" class="admin-section">
+               <h1>Manage Live Rates</h1>
+               <div class="form-container">
+                  <h3>Update Market Rates</h3>
+            
+                  <form id="liveRatesForm">
+                     <div class="form-row">
+                        <div class="input-group">
+                           <label>Petrol Price</label>
+                           <input type="number" id="adminPetrolPrice" placeholder="272.15" step="0.01">
+                        </div>
+            
+                        <div class="input-group">
+                           <label>Diesel Price</label>
+                           <input type="number" id="adminDieselPrice" placeholder="284.35" step="0.01">
+                        </div>
+                     </div>
+                     <div class="form-row">
+                        <div class="input-group">
+                           <label>Gold Price (Per Tola)</label>
+                           <input type="number" id="adminGoldPrice" placeholder="350000" step="1">
+                        </div>
+            
+                        <div class="input-group">
+                           <label>Updated Time</label>
+                           <input type="text" id="ratesUpdatedTime" readonly>
+                        </div>
+                     </div>
+                     <button type="submit" class="btn btn-primary">
+                        Save Rates
+                     </button>
+                  </form>
+               </div>
+            </section>
         </main>
     </div>
-	
+
 
     <script src="../js/data-service.js"></script>
     <script src="../js/admin.js"></script>
