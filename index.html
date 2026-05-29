@@ -928,67 +928,44 @@
 						<div class="w-full lg:w-fit bg-white/95 backdrop-blur-md border border-gray-200 rounded-3xl p-5 shadow-sm mb-6">
 
 							<!-- CATEGORY BUTTONS -->
-							<div class="flex flex-wrap items-center justify-end gap-2 mb-4">
-
-								<button onclick="loadSubCategories('food')"
-										class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
-											Food
-								</button>
-								
-								<button
-									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
-										Groceries
-								</button>
-
-								<button
-									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
-										Electronics
-								</button>
-
-								<button
-									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
-										Mobiles
-								</button>
-
-								<button
-									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
-										Laptops		
-								</button>
-								
-								<button
-									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
-										Property
-								</button>
-
-								<button
-									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
-										Fashion
-								</button>
-
-								<button
-									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
-										Personal Care
-								</button>
-
-								<button
-									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
-										Kids
-								</button>
-							</div>
+							<div class="flex flex-wrap items-center justify-end gap-2 mb-4" id="categoryFilterContainer">
+								<button class="cat-filter-btn px-3.5 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Food</button>
+								<button class="cat-filter-btn px-3.5 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Groceries</button>
+								<button class="cat-filter-btn px-3.5 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Electronics</button>
+								<button class="cat-filter-btn px-3.5 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Mobiles</button>
+								<button class="cat-filter-btn px-3.5 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Laptops</button>
+								<button class="cat-filter-btn px-3.5 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Property</button>
+								<button class="cat-filter-btn px-3.5 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Fashion</button>
+								<button class="cat-filter-btn px-3.5 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Personal Care</button>
+								<button class="cat-filter-btn px-3.5 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Kids</button>
+														</div>
+							<script>
+								document.addEventListener("DOMContentLoaded", () => {
+									const catBtns = document.querySelectorAll('.cat-filter-btn');
+									catBtns.forEach(btn => {
+										btn.addEventListener('click', () => {
+											catBtns.forEach(b => b.classList.remove('active'));
+											btn.classList.add('active');
+										});
+									});
+								});
+							</script>
 
 							<!-- SEARCH ROW -->
 <div class="flex flex-wrap items-center justify-end gap-2 mt-2">
 
-    <!-- SEARCH -->
-    <div class="w-[270px]">
-        <input type="text"
-            placeholder="What are you looking for?"
+        <!-- SEARCH -->
+    <div class="w-[270px] relative">
+        <input type="text" id="mainSearchInput"
+            placeholder="What are you looking for?" autocomplete="off"
             class="w-full h-9 px-3 rounded-lg border border-gray-200 bg-white text-[12px] shadow-sm focus:outline-none focus:border-emerald-500">
+        
+        
     </div>
 
     <!-- LOCATION -->
     <div class="w-[160px]">
-        <select
+        <select id="mainLocationSelect"
             class="w-full h-9 px-2 rounded-lg border border-gray-200 bg-white text-[12px] shadow-sm focus:outline-none focus:border-emerald-500">
 
             <option>Select Location</option>
@@ -1014,7 +991,7 @@
 
     <!-- BUTTON -->
     <div class="w-[140px]">
-        <button
+        <button id="mainSearchBtn"
             class="w-full h-9 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium flex items-center justify-center gap-2 hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
 
             <i class="fas fa-search text-[12px]"></i>
@@ -1027,101 +1004,103 @@
                     </div>
 
                     <!-- PRODUCT GRID -->
-                    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
-                        <!-- PRODUCT CARD -->
-                        <div class="product-card bg-white/80 backdrop-blur-lg rounded-[30px] overflow-hidden border border-white/50 shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-2 hover:shadow-[0_18px_40px_rgba(0,0,0,0.10)] transition duration-300"
+                        <!-- PRODUCT CARD 1 -->
+                        <div class="product-card bg-white rounded-3xl border border-gray-200 p-5 shadow-sm hover:shadow-lg transition-all duration-300"
                             data-category="mobiles" data-price="229999" data-distance="3">
-
-                            <div class="relative">
-
-                                <img src="https://picsum.photos/400/250?random=1" class="w-full h-52 object-cover">
-
-                                <div
-                                    class="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md text-red-500 text-xs px-3 py-1.5 rounded-full font-bold shadow">
-                                    FROM Rs 229,999
-                                </div>
-
-                                <div
-                                    class="absolute top-3 right-3 w-10 h-10 bg-white/95 rounded-full flex items-center justify-center shadow cursor-pointer hover:scale-110 transition">
+                            <div class="w-full h-48 rounded-2xl overflow-hidden mb-4 bg-gray-100 relative">
+                                <img src="https://picsum.photos/400/250?random=1" class="w-full h-full object-cover">
+                                <div class="absolute top-3 right-3 w-10 h-10 bg-white/95 rounded-full flex items-center justify-center shadow cursor-pointer hover:scale-110 transition">
                                     <i class="far fa-heart text-gray-700"></i>
                                 </div>
                             </div>
-
-                            <div class="p-5">
-
-                                <div class="font-semibold text-lg text-slate-800">
-                                    Samsung Galaxy S24
+                            <h3 class="text-lg font-bold text-gray-800 mb-1">Samsung Galaxy S24</h3>
+                            <p class="text-sm text-gray-500 mb-4">Compare prices from multiple stores</p>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between bg-red-50 border border-red-100 rounded-xl px-4 py-3">
+                                    <div>
+                                        <p class="text-xs text-gray-500">Highest Price</p>
+                                        <h4 class="text-lg font-bold text-red-600">Rs 250,000</h4>
+                                    </div>
+                                    <span class="bg-red-100 text-red-600 text-xs px-3 py-1 rounded-full font-semibold">MAX</span>
                                 </div>
-
-                                <div class="text-xs text-red-500 mt-1 tracking-wide">
-                                    MOBILES • Karachi
+                                <div class="flex items-center justify-between bg-emerald-50 border border-emerald-100 rounded-xl px-4 py-3">
+                                    <div>
+                                        <p class="text-xs text-gray-500">Lowest Price</p>
+                                        <h4 class="text-lg font-bold text-emerald-600">Rs 229,999</h4>
+                                    </div>
+                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-3 py-1 rounded-full font-semibold">BEST DEAL</span>
                                 </div>
                             </div>
+                            <button class="w-full mt-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 text-white font-semibold hover:shadow-lg hover:-translate-y-[1px] transition-all duration-300">
+                                View Full Comparison
+                            </button>
                         </div>
 
-                        <!-- PRODUCT CARD -->
-                        <div class="product-card bg-white/80 backdrop-blur-lg rounded-[30px] overflow-hidden border border-white/50 shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-2 hover:shadow-[0_18px_40px_rgba(0,0,0,0.10)] transition duration-300"
+                        <!-- PRODUCT CARD 2 -->
+                        <div class="product-card bg-white rounded-3xl border border-gray-200 p-5 shadow-sm hover:shadow-lg transition-all duration-300"
                             data-category="mobiles" data-price="444999" data-distance="5">
-
-                            <div class="relative">
-
-                                <img src="https://picsum.photos/400/250?random=2" class="w-full h-52 object-cover">
-
-                                <div
-                                    class="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md text-red-500 text-xs px-3 py-1.5 rounded-full font-bold shadow">
-                                    FROM Rs 444,999
-                                </div>
-
-                                <div
-                                    class="absolute top-3 right-3 w-10 h-10 bg-white/95 rounded-full flex items-center justify-center shadow cursor-pointer hover:scale-110 transition">
+                            <div class="w-full h-48 rounded-2xl overflow-hidden mb-4 bg-gray-100 relative">
+                                <img src="https://picsum.photos/400/250?random=2" class="w-full h-full object-cover">
+                                <div class="absolute top-3 right-3 w-10 h-10 bg-white/95 rounded-full flex items-center justify-center shadow cursor-pointer hover:scale-110 transition">
                                     <i class="far fa-heart text-gray-700"></i>
                                 </div>
                             </div>
-
-                            <div class="p-5">
-
-                                <div class="font-semibold text-lg text-slate-800">
-                                    iPhone 16 Pro
+                            <h3 class="text-lg font-bold text-gray-800 mb-1">iPhone 16 Pro</h3>
+                            <p class="text-sm text-gray-500 mb-4">Compare prices from multiple stores</p>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between bg-red-50 border border-red-100 rounded-xl px-4 py-3">
+                                    <div>
+                                        <p class="text-xs text-gray-500">Highest Price</p>
+                                        <h4 class="text-lg font-bold text-red-600">Rs 470,000</h4>
+                                    </div>
+                                    <span class="bg-red-100 text-red-600 text-xs px-3 py-1 rounded-full font-semibold">MAX</span>
                                 </div>
-
-                                <div class="text-xs text-red-500 mt-1 tracking-wide">
-                                    MOBILES • Karachi
+                                <div class="flex items-center justify-between bg-emerald-50 border border-emerald-100 rounded-xl px-4 py-3">
+                                    <div>
+                                        <p class="text-xs text-gray-500">Lowest Price</p>
+                                        <h4 class="text-lg font-bold text-emerald-600">Rs 444,999</h4>
+                                    </div>
+                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-3 py-1 rounded-full font-semibold">BEST DEAL</span>
                                 </div>
                             </div>
+                            <button class="w-full mt-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 text-white font-semibold hover:shadow-lg hover:-translate-y-[1px] transition-all duration-300">
+                                View Full Comparison
+                            </button>
                         </div>
 
-                        <!-- PRODUCT CARD -->
-                        <div class="product-card bg-white/80 backdrop-blur-lg rounded-[30px] overflow-hidden border border-white/50 shadow-[0_12px_30px_rgba(0,0,0,0.06)] hover:-translate-y-2 hover:shadow-[0_18px_40px_rgba(0,0,0,0.10)] transition duration-300"
+                        <!-- PRODUCT CARD 3 -->
+                        <div class="product-card bg-white rounded-3xl border border-gray-200 p-5 shadow-sm hover:shadow-lg transition-all duration-300"
                             data-category="mobiles" data-price="119999" data-distance="2">
-
-                            <div class="relative">
-
-                                <img src="https://picsum.photos/400/250?random=3" class="w-full h-52 object-cover">
-
-                                <div
-                                    class="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md text-red-500 text-xs px-3 py-1.5 rounded-full font-bold shadow">
-                                    FROM Rs 119,999
-                                </div>
-
-                                <div
-                                    class="absolute top-3 right-3 w-10 h-10 bg-white/95 rounded-full flex items-center justify-center shadow cursor-pointer hover:scale-110 transition">
+                            <div class="w-full h-48 rounded-2xl overflow-hidden mb-4 bg-gray-100 relative">
+                                <img src="https://picsum.photos/400/250?random=3" class="w-full h-full object-cover">
+                                <div class="absolute top-3 right-3 w-10 h-10 bg-white/95 rounded-full flex items-center justify-center shadow cursor-pointer hover:scale-110 transition">
                                     <i class="far fa-heart text-gray-700"></i>
                                 </div>
                             </div>
-
-                            <div class="p-5">
-
-                                <div class="font-semibold text-lg text-slate-800">
-                                    Vivo V40 Pro
+                            <h3 class="text-lg font-bold text-gray-800 mb-1">Vivo V40 Pro</h3>
+                            <p class="text-sm text-gray-500 mb-4">Compare prices from multiple stores</p>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between bg-red-50 border border-red-100 rounded-xl px-4 py-3">
+                                    <div>
+                                        <p class="text-xs text-gray-500">Highest Price</p>
+                                        <h4 class="text-lg font-bold text-red-600">Rs 135,000</h4>
+                                    </div>
+                                    <span class="bg-red-100 text-red-600 text-xs px-3 py-1 rounded-full font-semibold">MAX</span>
                                 </div>
-
-                                <div class="text-xs text-red-500 mt-1 tracking-wide">
-                                    MOBILES • Karachi
+                                <div class="flex items-center justify-between bg-emerald-50 border border-emerald-100 rounded-xl px-4 py-3">
+                                    <div>
+                                        <p class="text-xs text-gray-500">Lowest Price</p>
+                                        <h4 class="text-lg font-bold text-emerald-600">Rs 119,999</h4>
+                                    </div>
+                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-3 py-1 rounded-full font-semibold">BEST DEAL</span>
                                 </div>
                             </div>
+                            <button class="w-full mt-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 text-white font-semibold hover:shadow-lg hover:-translate-y-[1px] transition-all duration-300">
+                                View Full Comparison
+                            </button>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -2903,6 +2882,124 @@ return `
         }, 300);
     }
     </script>
+            <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const searchInput = document.getElementById('mainSearchInput');
+                const searchBtn = document.getElementById('mainSearchBtn');
+        const locationSelect = document.getElementById('mainLocationSelect');
+        const productGrid = document.getElementById('product-grid');
+        let allProducts = [];
+
+        if (typeof DataService !== 'undefined') {
+            DataService.getProducts().then(products => {
+                allProducts = products;
+            }).catch(e => console.log('Error loading products', e));
+        }
+
+        function getActiveCategory() {
+            const activeBtn = document.querySelector('.cat-filter-btn.active');
+            return activeBtn ? activeBtn.innerText.trim().toLowerCase() : '';
+        }
+
+        if (searchBtn) {
+            searchBtn.addEventListener('click', () => {
+                const query = searchInput.value.trim().toLowerCase();
+                const activeCategory = getActiveCategory();
+                const location = locationSelect ? locationSelect.value : '';
+
+                
+
+                if (!query && !activeCategory) return;
+
+                let filtered = allProducts.filter(p => {
+                    let match = true;
+                    if (activeCategory && p.category && p.category.toLowerCase() !== activeCategory) match = false;
+                    if (query) {
+                        const searchStr = ((p.name || '') + ' ' + (p.variety || '') + ' ' + (p.description || '')).toLowerCase();
+                        if (!searchStr.includes(query)) match = false;
+                    }
+                    if (location && location !== 'Select Location') {
+                        const pCity = (p.city || 'Karachi').toLowerCase();
+                        if (pCity !== location.toLowerCase()) match = false;
+                    }
+                    return match;
+                });
+
+                if (filtered.length === 0) {
+                    productGrid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500 font-medium">No results found for your search.</div>';
+                    productGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    return;
+                }
+
+                                                productGrid.innerHTML = filtered.slice(0, 4).map(p => {
+                    const minPrice = parseFloat(p.price || 0);
+                    const maxPrice = p.originalPrice ? parseFloat(p.originalPrice) : (minPrice * 1.2).toFixed(0);
+                    const img = p.image || 'https://via.placeholder.com/600x400?text=No+Image';
+                    
+                    const safeName = p.name ? p.name.replace(/'/g, "\\'") : '';
+                    const safeVariety = p.variety ? p.variety.replace(/'/g, "\\'") : '';
+
+                    return `
+                        <div class="product-card bg-white rounded-3xl border border-gray-100 p-3 shadow-sm hover:shadow-lg transition-all duration-300 max-w-[280px] mx-auto w-full flex flex-col"
+                            data-category="${p.category}" data-price="${minPrice}">
+                            
+                            <div class="w-full h-44 rounded-[1.25rem] overflow-hidden mb-3 bg-gray-100 relative">
+                                <img src="${img}" class="w-full h-full object-cover">
+                                <div class="absolute top-2 right-2 w-8 h-8 bg-white/95 rounded-full flex items-center justify-center shadow cursor-pointer hover:scale-110 transition">
+                                    <i class="far fa-heart text-gray-700 text-sm"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="flex-1 flex flex-col justify-between px-1">
+                                <div>
+                                    <h3 class="text-[16px] font-extrabold text-[#1f2937] mb-0.5 line-clamp-1">${p.name}</h3>
+                                    <p class="text-[12px] text-gray-500 mb-4 line-clamp-1">${p.variety || 'Compare prices from multiple stores'}</p>
+                                </div>
+                                
+                                <div class="flex items-center gap-2 mb-4">
+                                    <!-- Highest Price -->
+                                    <div class="flex-1 flex flex-col justify-center bg-[#fff1f2] border border-[#ffe4e6] rounded-xl px-2.5 py-2 relative h-[54px]">
+                                        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Highest Price</p>
+                                        <h4 class="text-[15px] font-extrabold text-[#b91c1c]">Rs ${maxPrice}</h4>
+                                        <span class="absolute right-2 top-1/2 -translate-y-1/2 bg-[#ffe4e6] text-[#b91c1c] text-[9px] px-1.5 py-0.5 rounded-full font-bold tracking-wide">MAX</span>
+                                    </div>
+                                    
+                                    <!-- Lowest Price -->
+                                    <div class="flex-1 flex flex-col justify-center bg-[#f0fdf4] border border-[#dcfce7] rounded-xl px-2.5 py-2 relative h-[54px]">
+                                        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Lowest Price</p>
+                                        <h4 class="text-[15px] font-extrabold text-[#059669]">Rs ${minPrice}</h4>
+                                        <span class="absolute right-2 top-1/2 -translate-y-1/2 bg-[#d1fae5] text-[#059669] text-[9px] px-1.5 py-0.5 rounded-full font-bold tracking-wide">BEST</span>
+                                    </div>
+                                </div>
+                                
+                                <button class="w-full py-2.5 rounded-[0.85rem] bg-[#0d9488] text-white text-[12px] font-bold tracking-wide hover:bg-[#0f766e] hover:shadow-md transition-all duration-300" 
+                                    onclick="openProductModal('${safeName}', '${safeVariety}', '${minPrice}', '${maxPrice}', '${img}')">
+                                    View Full Comparison
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                // Automatically scroll the user down so they can clearly see the results!
+                productGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
+    });
+    </script>
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
