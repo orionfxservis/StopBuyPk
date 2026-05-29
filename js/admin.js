@@ -869,8 +869,8 @@ async function deleteUser(index) {
 
 // Navigation
 function showSection(sectionId) {
-    document.querySelectorAll('.admin-section').forEach(sec => sec.classList.remove('active'));
-    document.getElementById(sectionId).classList.add('active');
+    document.querySelectorAll('.admin-section').forEach(sec => { sec.classList.remove('active'); sec.style.display = 'none'; });
+    const activeSec = document.getElementById(sectionId); if (activeSec) { activeSec.classList.add('active'); activeSec.style.display = 'block'; }
 
     document.querySelectorAll('.menu li').forEach(li => li.classList.remove('active'));
     try { if (typeof event !== 'undefined' && event && event.currentTarget) { event.currentTarget.classList.add('active'); } } catch (e) { }
@@ -2376,7 +2376,7 @@ if (liveRatesForm) {
         }
     } catch(e) {}
 
-    liveRatesForm.addEventListener("submit", function(e) {
+    liveRatesForm.addEventListener("submit", async function(e) {
         e.preventDefault();
 
         const currentTime = new Date().toLocaleString();
@@ -2388,12 +2388,17 @@ if (liveRatesForm) {
             updated: currentTime
         };
 
-        localStorage.setItem("stopbuyLiveRates", JSON.stringify(ratesData));
+        const submitBtn = liveRatesForm.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Updating...';
+
+        await DataService.saveLiveRates(ratesData);
+        
+        if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-save"></i> Update Rates';
         
         const timeField = document.getElementById("ratesUpdatedTime");
         if (timeField) timeField.value = currentTime;
 
-        alert("Rates Updated Successfully!");
+        alert("Rates Updated Successfully & Synced to Google Sheets!");
     });
 }
 

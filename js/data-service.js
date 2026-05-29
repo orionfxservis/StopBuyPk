@@ -211,5 +211,20 @@ const DataService = {
         }
         localStorage.setItem("admin_broadcasts", JSON.stringify(data));
         return true;
+    },
+    saveLiveRates: async (data) => {
+        try {
+            const res = await fetch(DataService.API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "syncLiveRates", rates: data })
+            });
+            const result = await res.json();
+            if (!result.success) console.warn("API sync failed", result.message);
+        } catch (err) {
+            console.error("Failed to sync live rates to API", err);
+        }
+        localStorage.setItem("stopbuyLiveRates", JSON.stringify(data));
+        return true;
     }
 };
