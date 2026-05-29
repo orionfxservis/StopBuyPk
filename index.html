@@ -925,10 +925,10 @@
                             </div>
 
 						<!-- SEARCH PANEL -->
-						<div class="w-full bg-white/95 backdrop-blur-md border border-gray-200 rounded-3xl p-5 shadow-sm mb-6">
+						<div class="w-full lg:w-fit bg-white/95 backdrop-blur-md border border-gray-200 rounded-3xl p-5 shadow-sm mb-6">
 
 							<!-- CATEGORY BUTTONS -->
-							<div class="flex flex-wrap items-center gap-2 mb-4">
+							<div class="flex flex-wrap items-center justify-end gap-2 mb-4">
 
 								<button onclick="loadSubCategories('food')"
 										class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
@@ -977,19 +977,19 @@
 							</div>
 
 							<!-- SEARCH ROW -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-3 w-full mt-2">
+<div class="flex flex-wrap items-center justify-end gap-2 mt-2">
 
     <!-- SEARCH -->
-    <div class="lg:col-span-5">
+    <div class="w-[270px]">
         <input type="text"
             placeholder="What are you looking for?"
-            class="w-full h-[54px] px-5 rounded-2xl border border-gray-200 bg-white text-[14px] shadow-sm focus:outline-none focus:border-emerald-500">
+            class="w-full h-9 px-3 rounded-lg border border-gray-200 bg-white text-[12px] shadow-sm focus:outline-none focus:border-emerald-500">
     </div>
 
     <!-- LOCATION -->
-    <div class="lg:col-span-2">
+    <div class="w-[160px]">
         <select
-            class="w-full h-[54px] px-4 rounded-2xl border border-gray-200 bg-white text-[14px] shadow-sm focus:outline-none focus:border-emerald-500">
+            class="w-full h-9 px-2 rounded-lg border border-gray-200 bg-white text-[12px] shadow-sm focus:outline-none focus:border-emerald-500">
 
             <option>Select Location</option>
             <option>Karachi</option>
@@ -1000,9 +1000,9 @@
     </div>
 
     <!-- FILTER -->
-    <div class="lg:col-span-2">
+    <div class="w-[150px]">
         <select
-            class="w-full h-[54px] px-4 rounded-2xl border border-gray-200 bg-white text-[14px] shadow-sm focus:outline-none focus:border-emerald-500">
+            class="w-full h-9 px-2 rounded-lg border border-gray-200 bg-white text-[12px] shadow-sm focus:outline-none focus:border-emerald-500">
 
             <option>Sort By Price</option>
             <option>Highest Price</option>
@@ -1013,12 +1013,11 @@
     </div>
 
     <!-- BUTTON -->
-    <div class="lg:col-span-3">
+    <div class="w-[140px]">
         <button
-            class="w-full h-[54px] rounded-2xl bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[14px] font-semibold flex items-center justify-center gap-2 hover:shadow-lg transition-all">
+            class="w-full h-9 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium flex items-center justify-center gap-2 hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
 
             <i class="fas fa-search text-[12px]"></i>
-
             Search Prices
         </button>
     </div>
