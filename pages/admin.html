@@ -83,45 +83,396 @@
                 </div>
             </div>
 
-            <!-- Dashboard Overview -->
-            <section id="dashboard" class="admin-section active">
-                <h1>Dashboard Overview</h1>
+			<!-- Dashboard Overview -->
+            <!-- TOP ANALYTICS CARDS -->
+			<div class="stats-grid section-spacing" style="margin-bottom:2rem;">
 
-                <!-- Four Stat Boxes -->
-                <div class="stats-grid section-spacing" style="margin-bottom: 2rem;">
-                    <div class="stat-card blue">
-                        <div class="stat-content">
-                            <h3 class="stat-label">Total Registered Companies</h3>
-                            <p class="stat-value"><span id="totalCompanies">5</span> <span class="stat-link"
-                                    style="font-size:0.7rem; color:var(--primary-color); cursor:pointer; margin-left: 10px;">View
-                                    Details</span></p>
-                        </div>
-                    </div>
-                    <div class="stat-card teal">
-                        <div class="stat-content">
-                            <h3 class="stat-label">Total Products</h3>
-                            <p class="stat-value"><span id="totalProducts">0</span> <span class="stat-link"
-                                    style="font-size:0.7rem; color:var(--primary-color); cursor:pointer; margin-left: 10px;">View
-                                    Details</span></p>
-                        </div>
-                    </div>
-                    <div class="stat-card yellow">
-                        <div class="stat-content">
-                            <h3 class="stat-label">Total Users</h3>
-                            <p class="stat-value"><span id="totalUsers">12</span> <span class="stat-link"
-                                    style="font-size:0.7rem; color:var(--primary-color); cursor:pointer; margin-left: 10px;">View
-                                    Records</span></p>
-                        </div>
-                    </div>
-                    <div class="stat-card red">
-                        <div class="stat-content">
-                            <h3 class="stat-label">Total Categories</h3>
-                            <p class="stat-value"><span id="totalCategories">0</span> <span class="stat-link"
-                                    style="font-size:0.7rem; color:var(--primary-color); cursor:pointer; margin-left: 10px;">Review
-                                    Lists</span></p>
-                        </div>
-                    </div>
-                </div>
+		<!-- Total Products CARD STYLE -->
+<div class="stat-card blue" style="padding:18px; overflow:hidden; position:relative; border-radius:20px;">
+
+    <div class="stat-content">
+
+        <!-- TOP -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+
+            <!-- ICON -->
+            <div
+            style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(20,184,166,0.15);">
+
+                <i class="fas fa-box-open" style="font-size:15px; color:#14b8a6;"></i>
+            </div>
+
+            <!-- BADGE -->
+            <span
+            style="font-size:10px; background:rgba(16,185,129,0.15); color:#047857; padding:4px 10px; border-radius:999px; font-weight:700;">
+                +24%
+            </span>
+        </div>
+
+        <!-- TITLE + NUMBER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:flex-start; padding-top:2px; margin-bottom:10px;">
+
+            <h3
+            style="margin:0; font-size:17px; font-weight:700; color:#111827;">
+                Total Products
+            </h3>
+
+            <div
+            style="font-size:17px; font-weight:800; color:#10b981; line-height:1;">
+                <span id="totalProducts">40</span>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.08); padding-top:10px;">
+
+            <span
+            style="font-size:12px; color:#6b7280; font-weight:500;">
+                Live product listings
+            </span>
+
+            <span
+            style="
+                font-size:13px; color:#065f46; font-weight:700; cursor:pointer;">
+                View Products
+            </span>
+        </div>
+    </div>
+</div>
+
+		<!-- Total Cmpanies CARD STYLE -->
+<div class="stat-card teal" style="padding:18px; overflow:hidden; position:relative; border-radius:20px;">
+
+    <div class="stat-content">
+
+        <!-- TOP -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+
+            <!-- ICON -->
+            <div
+            style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(20,184,166,0.15);">
+
+                <i class="fas fa-box-open" style="font-size:15px; color:#14b8a6;"></i>
+            </div>
+
+            <!-- BADGE -->
+            <span
+            style="font-size:10px; background:rgba(16,185,129,0.15); color:#047857; padding:4px 10px; border-radius:999px; font-weight:700;">
+                +12%
+            </span>
+        </div>
+
+        <!-- TITLE + NUMBER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:flex-start; padding-top:2px; margin-bottom:10px;">
+
+            <h3
+            style="margin:0; font-size:17px; font-weight:700; color:#111827;">
+                Total Companies
+            </h3>
+
+            <div
+            style="font-size:17px; font-weight:800; color:#10b981; line-height:1;">
+                <span id="totalProducts">5</span>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.08); padding-top:10px;">
+
+            <span
+            style="font-size:12px; color:#6b7280; font-weight:500;">
+                Registered Businesses
+            </span>
+
+            <span
+            style="
+                font-size:13px; color:#065f46; font-weight:700; cursor:pointer;">
+                View Details
+            </span>
+        </div>
+    </div>
+</div>
+
+		<!-- TOTAL USERS CARD STYLE -->
+<div class="stat-card yellow" style="padding:18px; overflow:hidden; position:relative; border-radius:20px;">
+
+    <div class="stat-content">
+
+        <!-- TOP -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+
+            <!-- ICON -->
+            <div
+            style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(20,184,166,0.15);">
+
+                <i class="fas fa-box-open" style="font-size:15px; color:#14b8a6;"></i>
+            </div>
+
+            <!-- BADGE -->
+            <span
+            style="font-size:10px; background:rgba(16,185,129,0.15); color:#047857; padding:4px 10px; border-radius:999px; font-weight:700;">
+                +8%
+            </span>
+        </div>
+
+        <!-- TITLE + NUMBER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:flex-start; padding-top:2px; margin-bottom:10px;">
+
+            <h3
+            style="margin:0; font-size:17px; font-weight:700; color:#111827;">
+                Total Users
+            </h3>
+
+            <div
+            style="font-size:17px; font-weight:800; color:#10b981; line-height:1;">
+                <span id="totalProducts">10</span>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.08); padding-top:10px;">
+
+            <span
+            style="font-size:12px; color:#6b7280; font-weight:500;">
+                Registered Customers
+            </span>
+
+            <span
+            style="
+                font-size:13px; color:#065f46; font-weight:700; cursor:pointer;">
+                View Records
+            </span>
+        </div>
+    </div>
+</div>
+
+		<!-- TOTAL VISITORS CARD STYLE -->
+<div class="stat-card red" style="padding:18px; overflow:hidden; position:relative; border-radius:20px;">
+
+    <div class="stat-content">
+
+        <!-- TOP -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+
+            <!-- ICON -->
+            <div
+            style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(20,184,166,0.15);">
+
+                <i class="fas fa-box-open" style="font-size:15px; color:#14b8a6;"></i>
+            </div>
+
+            <!-- BADGE -->
+            <span
+            style="font-size:10px; background:rgba(16,185,129,0.15); color:#047857; padding:4px 10px; border-radius:999px; font-weight:700;">
+                +24%
+            </span>
+        </div>
+
+        <!-- TITLE + NUMBER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:flex-start; padding-top:2px; margin-bottom:10px;">
+
+            <h3
+            style="margin:0; font-size:17px; font-weight:700; color:#111827;">
+                Active Visitors
+            </h3>
+
+            <div
+            style="font-size:17px; font-weight:800; color:#10b981; line-height:1;">
+                <span id="totalProducts">248</span>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.08); padding-top:10px;">
+
+            <span
+            style="font-size:12px; color:#6b7280; font-weight:500;">
+                Current Online Users
+            </span>
+
+            <span
+            style="
+                font-size:13px; color:#065f46; font-weight:700; cursor:pointer;">
+                View Activity
+            </span>
+        </div>
+    </div>
+</div>
+
+		<!-- TOTAL SEARCH CARD STYLE -->
+<div class="stat-card blue" style="padding:18px; overflow:hidden; position:relative; border-radius:20px;">
+
+    <div class="stat-content">
+
+        <!-- TOP -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+
+            <!-- ICON -->
+            <div
+            style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(20,184,166,0.15);">
+
+                <i class="fas fa-box-open" style="font-size:15px; color:#14b8a6;"></i>
+            </div>
+
+            <!-- BADGE -->
+            <span
+            style="font-size:10px; background:rgba(16,185,129,0.15); color:#047857; padding:4px 10px; border-radius:999px; font-weight:700;">
+                +31%
+            </span>
+        </div>
+
+        <!-- TITLE + NUMBER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:flex-start; padding-top:2px; margin-bottom:10px;">
+
+            <h3
+            style="margin:0; font-size:17px; font-weight:700; color:#111827;">
+                Today's Searchers
+            </h3>
+
+            <div
+            style="font-size:17px; font-weight:800; color:#10b981; line-height:1;">
+                <span id="totalProducts">3,250</span>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.08); padding-top:10px;">
+
+            <span
+            style="font-size:12px; color:#6b7280; font-weight:500;">
+                Users Search Activity
+            </span>
+
+            <span
+            style="
+                font-size:13px; color:#065f46; font-weight:700; cursor:pointer;">
+                View Insights
+            </span>
+        </div>
+    </div>
+</div>
+
+    <!-- TOTAL PANDING APPROVAL CARD STYLE -->
+<div class="stat-card red" style="padding:18px; overflow:hidden; position:relative; border-radius:20px;">
+
+    <div class="stat-content">
+
+        <!-- TOP -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+
+            <!-- ICON -->
+            <div
+            style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(20,184,166,0.15);">
+
+                <i class="fas fa-box-open" style="font-size:15px; color:#14b8a6;"></i>
+            </div>
+
+            <!-- BADGE -->
+            <span
+            style="font-size:10px; background:rgba(16,185,129,0.15); color:#047857; padding:4px 10px; border-radius:999px; font-weight:700;">
+                Pending
+            </span>
+        </div>
+
+        <!-- TITLE + NUMBER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:flex-start; padding-top:2px; margin-bottom:10px;">
+
+            <h3
+            style="margin:0; font-size:17px; font-weight:700; color:#111827;">
+                Panding Approvals
+            </h3>
+
+            <div
+            style="font-size:17px; font-weight:800; color:#10b981; line-height:1;">
+                <span id="totalProducts">50</span>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.08); padding-top:10px;">
+
+            <span
+            style="font-size:12px; color:#6b7280; font-weight:500;">
+                View Review Request
+            </span>
+
+            <span
+            style="
+                font-size:13px; color:#065f46; font-weight:700; cursor:pointer;">
+                Review Now
+            </span>
+        </div>
+    </div>
+</div>
+
+    <!-- TOTAL MARKET TRENDS STYLE -->
+<div class="stat-card yellow" style="padding:18px; overflow:hidden; position:relative; border-radius:20px;">
+
+    <div class="stat-content">
+
+        <!-- TOP -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+
+            <!-- ICON -->
+            <div
+            style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(20,184,166,0.15);">
+
+                <i class="fas fa-box-open" style="font-size:15px; color:#14b8a6;"></i>
+            </div>
+
+            <!-- BADGE -->
+            <span
+            style="font-size:10px; background:rgba(16,185,129,0.15); color:#047857; padding:4px 10px; border-radius:999px; font-weight:700;">
+                Trending
+            </span>
+        </div>
+
+        <!-- TITLE + NUMBER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:flex-start; padding-top:2px; margin-bottom:10px;">
+
+            <h3
+            style="margin:0; font-size:17px; font-weight:700; color:#111827;">
+                Market Trends
+            </h3>
+
+            <div
+            style="font-size:17px; font-weight:800; color:#10b981; line-height:1;">
+                <span id="totalProducts">18</span>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.08); padding-top:10px;">
+
+            <span
+            style="font-size:12px; color:#6b7280; font-weight:500;">
+                AI Monitored Trends
+            </span>
+
+            <span
+            style="
+                font-size:13px; color:#065f46; font-weight:700; cursor:pointer;">
+                Explore
+            </span>
+        </div>
+    </div>
+</div>
+
+</div>
 
                 <!-- Broadcast Scroll Bar -->
                 <div id="broadcastContainer" class="broadcast-container section-spacing">
