@@ -189,17 +189,31 @@ h3 {
 
 .stat-card {
     background: var(--card-bg);
-    padding: 6px 12px;
-    border-radius: 12px;
-    text-align: center;
+    padding: 10px 14px !important;
+    border-radius: 14px !important;
     border: 1px solid var(--border-color);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
     backdrop-filter: blur(10px);
-    height: 64px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    height: auto;
+    display: block;
+}
+
+.stat-card .stat-content > div:first-child {
+    margin-bottom: 4px !important;
+}
+
+.stat-card h3.stat-label {
+    margin-bottom: 0px !important;
+    font-size: 0.8rem !important;
+}
+
+.stat-card p.stat-value {
+    font-size: 1.4rem !important;
+    margin-bottom: 0 !important;
+}
+
+.stat-card .stat-content > div:last-child {
+    margin-top: 4px !important;
 }
 
 .stat-card h3, .stat-label {
