@@ -891,11 +891,11 @@
             </div>
         </section>
 
-        <!-- OUTER WRAPPER -->
-        <div class="max-w-screen-2xl mx-auto px-4 pt-6">
+    <!-- Price Comparison - OUTER WRAPPER -->
+    <div class="max-w-screen-2xl mx-auto px-4 pt-6">
 
-            <!-- MAIN OUTER BOX -->
-            <div
+        <!-- MAIN OUTER BOX -->
+        <div
                 class="relative overflow-hidden rounded-[38px] border border-emerald-100 bg-white/70 backdrop-blur-xl shadow-[0_20px_60px_rgba(16,24,40,0.08)] p-5 md:p-7">
 
                 <!-- SOFT BACKGROUND GLOW -->
@@ -904,17 +904,13 @@
                     <div class="absolute bottom-0 right-0 w-80 h-80 bg-cyan-100/30 rounded-full blur-3xl"></div>
                 </div>
 
-                <!-- CONTENT -->
-                <div class="relative z-10">
+            <!-- CONTENT -->
+            <div class="relative z-10">
 
-                    <!-- Header -->
-                    <div class="mb-6">
+                <!-- Header -->
+                <div class="mb-6">
 
-                        <div class="text-xs text-red-500 tracking-[0.25em] font-bold mb-2 uppercase">
-                            Powered by Real-Time Data
-                        </div>
-
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
 
                             <!-- LEFT -->
                             <div>
@@ -928,55 +924,106 @@
                                 </div>
                             </div>
 
-                            <!-- FILTERS -->
-                            <div class="flex flex-wrap items-center gap-2">
+						<!-- SEARCH PANEL -->
+						<div class="w-full bg-white/95 backdrop-blur-md border border-gray-200 rounded-3xl p-5 shadow-sm mb-6">
 
-                                <button onclick="window.location.href='./pages/categories.html'"
-                                    class="filter-btn px-4 py-2 rounded-full border border-emerald-600 bg-emerald-700 text-white text-sm font-medium shadow-sm hover:scale-105 transition">
-                                    All
-                                </button>
+							<!-- CATEGORY BUTTONS -->
+							<div class="flex flex-wrap items-center gap-2 mb-4">
 
-                                <button onclick="window.location.href='./pages/food.html'"
-                                    class="filter-btn px-4 py-2 rounded-full border border-gray-200 bg-white/80 text-sm hover:bg-emerald-50 transition">
-                                    Food
-                                </button>
+								<button onclick="loadSubCategories('food')"
+										class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
+											Food
+								</button>
+								
+								<button
+									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
+										Groceries
+								</button>
 
-                                <button onclick="window.location.href='./pages/grocery.html'"
-                                    class="filter-btn px-4 py-2 rounded-full border border-gray-200 bg-white/80 text-sm hover:bg-emerald-50 transition">
-                                    Groceries
-                                </button>
+								<button
+									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
+										Electronics
+								</button>
 
-                                <button onclick="window.location.href='./pages/electronics.html'"
-                                    class="filter-btn px-4 py-2 rounded-full border border-gray-200 bg-white/80 text-sm hover:bg-emerald-50 transition">
-                                    Electronics
-                                </button>
+								<button
+									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
+										Mobiles
+								</button>
 
-                                <button onclick="window.location.href='./pages/mobiles.html'"
-                                    class="filter-btn px-4 py-2 rounded-full border border-gray-200 bg-white/80 text-sm hover:bg-emerald-50 transition">
-                                    Mobiles
-                                </button>
+								<button
+									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
+										Laptops		
+								</button>
+								
+								<button
+									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
+										Property
+								</button>
 
-                                <button onclick="window.location.href='./pages/laptops.html'"
-                                    class="filter-btn px-4 py-2 rounded-full border border-gray-200 bg-white/80 text-sm hover:bg-emerald-50 transition">
-                                    Laptops
-                                </button>
+								<button
+									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
+										Fashion
+								</button>
 
-                                <button onclick="window.location.href='./pages/fashion.html'"
-                                    class="filter-btn px-4 py-2 rounded-full border border-gray-200 bg-white/80 text-sm hover:bg-emerald-50 transition">
-                                    Fashion
-                                </button>
+								<button
+									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
+										Personal Care
+								</button>
 
-                                <button onclick="window.location.href='./pages/personal-care.html'"
-                                    class="filter-btn px-4 py-2 rounded-full border border-gray-200 bg-white/80 text-sm hover:bg-emerald-50 transition">
-                                    Personal Care
-                                </button>
+								<button
+									class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium shadow hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
+										Kids
+								</button>
+							</div>
 
-                                <button onclick="window.location.href='./pages/kids.html'"
-                                    class="filter-btn px-4 py-2 rounded-full border border-gray-200 bg-white/80 text-sm hover:bg-emerald-50 transition">
-                                    Kids
-                                </button>
+							<!-- SEARCH ROW -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-3 w-full mt-2">
 
-                            </div>
+    <!-- SEARCH -->
+    <div class="lg:col-span-5">
+        <input type="text"
+            placeholder="What are you looking for?"
+            class="w-full h-[54px] px-5 rounded-2xl border border-gray-200 bg-white text-[14px] shadow-sm focus:outline-none focus:border-emerald-500">
+    </div>
+
+    <!-- LOCATION -->
+    <div class="lg:col-span-2">
+        <select
+            class="w-full h-[54px] px-4 rounded-2xl border border-gray-200 bg-white text-[14px] shadow-sm focus:outline-none focus:border-emerald-500">
+
+            <option>Select Location</option>
+            <option>Karachi</option>
+            <option>Lahore</option>
+            <option>Islamabad</option>
+
+        </select>
+    </div>
+
+    <!-- FILTER -->
+    <div class="lg:col-span-2">
+        <select
+            class="w-full h-[54px] px-4 rounded-2xl border border-gray-200 bg-white text-[14px] shadow-sm focus:outline-none focus:border-emerald-500">
+
+            <option>Sort By Price</option>
+            <option>Highest Price</option>
+            <option>Lowest Price</option>
+            <option>Best Deal</option>
+
+        </select>
+    </div>
+
+    <!-- BUTTON -->
+    <div class="lg:col-span-3">
+        <button
+            class="w-full h-[54px] rounded-2xl bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[14px] font-semibold flex items-center justify-center gap-2 hover:shadow-lg transition-all">
+
+            <i class="fas fa-search text-[12px]"></i>
+
+            Search Prices
+        </button>
+    </div>
+
+</div>
                         </div>
                     </div>
 
@@ -1080,7 +1127,7 @@
                 </div>
             </div>
         </div>
-
+	</div>
         <!-- Compare by Category -->
         <div class="max-w-screen-2xl mx-auto px-4 pt-4">
             <div class="flex justify-between items-center mb-4">
