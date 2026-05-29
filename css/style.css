@@ -1561,3 +1561,17 @@ textarea:focus {
     overflow:hidden;
     text-overflow:ellipsis;
 }
+/* Category Filter Buttons */
+.cat-filter-btn {
+    background: #ffffff;
+    color: #065f46;
+    border: 1px solid #d1fae5;
+}
+.cat-filter-btn:hover {
+    background: #ecfdf5;
+}
+.cat-filter-btn.active {
+    background: linear-gradient(to right, #059669, #0891b2) !important;
+    color: white !important;
+    border-color: transparent !important;
+}
