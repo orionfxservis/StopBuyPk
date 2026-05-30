@@ -952,155 +952,65 @@
 							</script>
 
 							<!-- SEARCH ROW -->
-<div class="flex flex-wrap items-center justify-end gap-2 mt-2">
+							<div class="grid grid-cols-5 gap-2 mt-2 w-full">
 
-        <!-- SEARCH -->
-    <div class="w-[270px] relative">
-        <input type="text" id="mainSearchInput"
-            placeholder="What are you looking for?" autocomplete="off"
-            class="w-full h-9 px-3 rounded-lg border border-gray-200 bg-white text-[12px] shadow-sm focus:outline-none focus:border-emerald-500">
-        
-        
-    </div>
+								<!-- SEARCH -->
+								<div>
+									<input type="text" id="mainSearchInput"
+										placeholder="What are you looking for?"
+										autocomplete="off"
+										class="w-full h-9 px-3 rounded-lg border border-gray-200 bg-white text-[12px] shadow-sm focus:outline-none focus:border-emerald-500">
+								</div>
 
-    <!-- LOCATION -->
-    <div class="w-[160px]">
-        <select id="mainLocationSelect"
-            class="w-full h-9 px-2 rounded-lg border border-gray-200 bg-white text-[12px] shadow-sm focus:outline-none focus:border-emerald-500">
+								<!-- LOCATION -->
+								<div>
+									<select id="mainLocationSelect"
+										class="w-full h-9 px-2 rounded-lg border border-gray-200 bg-white text-[12px] shadow-sm focus:outline-none focus:border-emerald-500">
+										<option>Select City</option>
+										<option>Karachi</option>
+										<option>Lahore</option>
+										<option>Islamabad</option>
+									</select>
+								</div>
 
-            <option>Select Location</option>
-            <option>Karachi</option>
-            <option>Lahore</option>
-            <option>Islamabad</option>
+								<!-- AREA -->
+								<div>
+									<select id="mainAreaSelect"
+										class="w-full h-9 px-2 rounded-lg border border-gray-200 bg-white text-[12px] shadow-sm focus:outline-none focus:border-emerald-500">
+										<option>Select Area</option>
+										<option>F. B. Area</option>
+										<option>F. B. Area Block 17</option>
+										<option>Gulshan-e-Iqbal</option>
+										<option>North Nazimabad</option>
+										<option>Johar</option>
+										<option>Clifton</option>
+										<option>DHA</option>
+									</select>
+								</div>
 
-        </select>
-    </div>
+								<!-- FILTER -->
+								<div>
+									<select
+										class="w-full h-9 px-2 rounded-lg border border-gray-200 bg-white text-[12px] shadow-sm focus:outline-none focus:border-emerald-500">
+										<option>Sort By Price</option>
+									</select>
+								</div>
 
-    <!-- FILTER -->
-    <div class="w-[150px]">
-        <select
-            class="w-full h-9 px-2 rounded-lg border border-gray-200 bg-white text-[12px] shadow-sm focus:outline-none focus:border-emerald-500">
-
-            <option>Sort By Price</option>
-            <option>Highest Price</option>
-            <option>Lowest Price</option>
-            <option>Best Deal</option>
-
-        </select>
-    </div>
-
-    <!-- BUTTON -->
-    <div class="w-[140px]">
-        <button id="mainSearchBtn"
-            class="w-full h-9 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium flex items-center justify-center gap-2 hover:shadow-md hover:-translate-y-[1px] hover:opacity-95 transition-all duration-300">
-
-            <i class="fas fa-search text-[12px]"></i>
-            Search Prices
-        </button>
-    </div>
-
-</div>
+								<!-- BUTTON -->
+								<div>
+									<button id="mainSearchBtn"
+											class="w-full h-9 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 text-white text-[12px] font-medium">
+												Search Prices
+									</button>
+								</div>
+							</div>
                         </div>
                     </div>
 
                     <!-- PRODUCT GRID -->
                     <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
-                        <!-- PRODUCT CARD 1 -->
-                        <div class="product-card bg-white rounded-3xl border border-gray-200 p-5 shadow-sm hover:shadow-lg transition-all duration-300"
-                            data-category="mobiles" data-price="229999" data-distance="3">
-                            <div class="w-full h-48 rounded-2xl overflow-hidden mb-4 bg-gray-100 relative">
-                                <img src="https://picsum.photos/400/250?random=1" class="w-full h-full object-cover">
-                                <div class="absolute top-3 right-3 w-10 h-10 bg-white/95 rounded-full flex items-center justify-center shadow cursor-pointer hover:scale-110 transition">
-                                    <i class="far fa-heart text-gray-700"></i>
-                                </div>
-                            </div>
-                            <h3 class="text-lg font-bold text-gray-800 mb-1">Samsung Galaxy S24</h3>
-                            <p class="text-sm text-gray-500 mb-4">Compare prices from multiple stores</p>
-                            <div class="space-y-3">
-                                <div class="flex items-center justify-between bg-red-50 border border-red-100 rounded-xl px-4 py-3">
-                                    <div>
-                                        <p class="text-xs text-gray-500">Highest Price</p>
-                                        <h4 class="text-lg font-bold text-red-600">Rs 250,000</h4>
-                                    </div>
-                                    <span class="bg-red-100 text-red-600 text-xs px-3 py-1 rounded-full font-semibold">MAX</span>
-                                </div>
-                                <div class="flex items-center justify-between bg-emerald-50 border border-emerald-100 rounded-xl px-4 py-3">
-                                    <div>
-                                        <p class="text-xs text-gray-500">Lowest Price</p>
-                                        <h4 class="text-lg font-bold text-emerald-600">Rs 229,999</h4>
-                                    </div>
-                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-3 py-1 rounded-full font-semibold">BEST DEAL</span>
-                                </div>
-                            </div>
-                            <button class="w-full mt-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 text-white font-semibold hover:shadow-lg hover:-translate-y-[1px] transition-all duration-300">
-                                View Full Comparison
-                            </button>
-                        </div>
-
-                        <!-- PRODUCT CARD 2 -->
-                        <div class="product-card bg-white rounded-3xl border border-gray-200 p-5 shadow-sm hover:shadow-lg transition-all duration-300"
-                            data-category="mobiles" data-price="444999" data-distance="5">
-                            <div class="w-full h-48 rounded-2xl overflow-hidden mb-4 bg-gray-100 relative">
-                                <img src="https://picsum.photos/400/250?random=2" class="w-full h-full object-cover">
-                                <div class="absolute top-3 right-3 w-10 h-10 bg-white/95 rounded-full flex items-center justify-center shadow cursor-pointer hover:scale-110 transition">
-                                    <i class="far fa-heart text-gray-700"></i>
-                                </div>
-                            </div>
-                            <h3 class="text-lg font-bold text-gray-800 mb-1">iPhone 16 Pro</h3>
-                            <p class="text-sm text-gray-500 mb-4">Compare prices from multiple stores</p>
-                            <div class="space-y-3">
-                                <div class="flex items-center justify-between bg-red-50 border border-red-100 rounded-xl px-4 py-3">
-                                    <div>
-                                        <p class="text-xs text-gray-500">Highest Price</p>
-                                        <h4 class="text-lg font-bold text-red-600">Rs 470,000</h4>
-                                    </div>
-                                    <span class="bg-red-100 text-red-600 text-xs px-3 py-1 rounded-full font-semibold">MAX</span>
-                                </div>
-                                <div class="flex items-center justify-between bg-emerald-50 border border-emerald-100 rounded-xl px-4 py-3">
-                                    <div>
-                                        <p class="text-xs text-gray-500">Lowest Price</p>
-                                        <h4 class="text-lg font-bold text-emerald-600">Rs 444,999</h4>
-                                    </div>
-                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-3 py-1 rounded-full font-semibold">BEST DEAL</span>
-                                </div>
-                            </div>
-                            <button class="w-full mt-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 text-white font-semibold hover:shadow-lg hover:-translate-y-[1px] transition-all duration-300">
-                                View Full Comparison
-                            </button>
-                        </div>
-
-                        <!-- PRODUCT CARD 3 -->
-                        <div class="product-card bg-white rounded-3xl border border-gray-200 p-5 shadow-sm hover:shadow-lg transition-all duration-300"
-                            data-category="mobiles" data-price="119999" data-distance="2">
-                            <div class="w-full h-48 rounded-2xl overflow-hidden mb-4 bg-gray-100 relative">
-                                <img src="https://picsum.photos/400/250?random=3" class="w-full h-full object-cover">
-                                <div class="absolute top-3 right-3 w-10 h-10 bg-white/95 rounded-full flex items-center justify-center shadow cursor-pointer hover:scale-110 transition">
-                                    <i class="far fa-heart text-gray-700"></i>
-                                </div>
-                            </div>
-                            <h3 class="text-lg font-bold text-gray-800 mb-1">Vivo V40 Pro</h3>
-                            <p class="text-sm text-gray-500 mb-4">Compare prices from multiple stores</p>
-                            <div class="space-y-3">
-                                <div class="flex items-center justify-between bg-red-50 border border-red-100 rounded-xl px-4 py-3">
-                                    <div>
-                                        <p class="text-xs text-gray-500">Highest Price</p>
-                                        <h4 class="text-lg font-bold text-red-600">Rs 135,000</h4>
-                                    </div>
-                                    <span class="bg-red-100 text-red-600 text-xs px-3 py-1 rounded-full font-semibold">MAX</span>
-                                </div>
-                                <div class="flex items-center justify-between bg-emerald-50 border border-emerald-100 rounded-xl px-4 py-3">
-                                    <div>
-                                        <p class="text-xs text-gray-500">Lowest Price</p>
-                                        <h4 class="text-lg font-bold text-emerald-600">Rs 119,999</h4>
-                                    </div>
-                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-3 py-1 rounded-full font-semibold">BEST DEAL</span>
-                                </div>
-                            </div>
-                            <button class="w-full mt-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 text-white font-semibold hover:shadow-lg hover:-translate-y-[1px] transition-all duration-300">
-                                View Full Comparison
-                            </button>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -2990,7 +2900,6 @@ return `
 </body>
 
 </html>
-
 
 
 
