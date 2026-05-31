@@ -1,11 +1,11 @@
 // Default prices
 let livePrices = {
-    petrol: "272.15",
-    petrolOld: "280.00",
-    diesel: "284.35",
-    dieselOld: "290.00",
-    gold: "351,000",
-    goldOld: "360,000"
+    petrol: "--",
+    petrolOld: "--",
+    diesel: "--",
+    dieselOld: "--",
+    gold: "--",
+    goldOld: "--"
 };
 
 async function initLivePrices() {
