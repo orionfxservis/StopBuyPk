@@ -1259,9 +1259,9 @@ function renderDynamicAdminFields() {
                 <input type="text" id="prodAddress" class="dynamic-admin-field" placeholder="Full Address">
             </div>
 
-            <div class="form-row">
+                <div class="form-row">
                 <div class="input-group">
-                    <label>Block No.</label>
+                    <label>Area / Block No.</label>
                     <input type="text" id="prodBlockNo" class="dynamic-admin-field" placeholder="e.g. Block A">
                 </div>
                 <div class="input-group">
