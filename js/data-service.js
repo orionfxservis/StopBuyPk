@@ -52,24 +52,50 @@ const DataService = {
 
     // Mock DataService methods using LocalStorage to prevent admin dashboard from getting stuck
     getCategories: async () => {
-        setTimeout(async () => {
+        let cached = JSON.parse(localStorage.getItem("admin_categories"));
+        if (!cached || cached.length === 0) {
             try {
                 const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getCategories" }) });
                 const data = await res.json();
-                if (data.success && data.categories) localStorage.setItem("admin_categories", JSON.stringify(data.categories));
-            } catch (err) {}
-        }, 0);
-        return JSON.parse(localStorage.getItem("admin_categories")) || [];
+                if (data.success && data.categories) {
+                    localStorage.setItem("admin_categories", JSON.stringify(data.categories));
+                    return data.categories;
+                }
+            } catch (err) { console.error(err); }
+            return [];
+        } else {
+            setTimeout(async () => {
+                try {
+                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getCategories" }) });
+                    const data = await res.json();
+                    if (data.success && data.categories) localStorage.setItem("admin_categories", JSON.stringify(data.categories));
+                } catch (err) {}
+            }, 0);
+            return cached;
+        }
     },
     getProducts: async () => {
-        setTimeout(async () => {
+        let cached = JSON.parse(localStorage.getItem("admin_products"));
+        if (!cached || cached.length === 0) {
             try {
                 const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getProducts" }) });
                 const data = await res.json();
-                if (data.success && data.products) localStorage.setItem("admin_products", JSON.stringify(data.products));
-            } catch (err) {}
-        }, 0);
-        return JSON.parse(localStorage.getItem("admin_products")) || [];
+                if (data.success && data.products) {
+                    localStorage.setItem("admin_products", JSON.stringify(data.products));
+                    return data.products;
+                }
+            } catch (err) { console.error(err); }
+            return [];
+        } else {
+            setTimeout(async () => {
+                try {
+                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getProducts" }) });
+                    const data = await res.json();
+                    if (data.success && data.products) localStorage.setItem("admin_products", JSON.stringify(data.products));
+                } catch (err) {}
+            }, 0);
+            return cached;
+        }
     },
     getBanners: async () => JSON.parse(localStorage.getItem("admin_banners")) || [],
     getDeals: async () => {
