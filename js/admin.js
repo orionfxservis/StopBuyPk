@@ -2381,8 +2381,11 @@ if (liveRatesForm) {
         if (savedRates) {
             const parsedRates = JSON.parse(savedRates);
             if (parsedRates.petrol) document.getElementById("adminPetrolPrice").value = parsedRates.petrol;
+            if (parsedRates.petrolOld) document.getElementById("adminPetrolPriceOld").value = parsedRates.petrolOld;
             if (parsedRates.diesel) document.getElementById("adminDieselPrice").value = parsedRates.diesel;
+            if (parsedRates.dieselOld) document.getElementById("adminDieselPriceOld").value = parsedRates.dieselOld;
             if (parsedRates.gold) document.getElementById("adminGoldPrice").value = parsedRates.gold;
+            if (parsedRates.goldOld) document.getElementById("adminGoldPriceOld").value = parsedRates.goldOld;
             if (parsedRates.updated) document.getElementById("ratesUpdatedTime").value = parsedRates.updated;
         }
     } catch(e) {}
@@ -2394,8 +2397,11 @@ if (liveRatesForm) {
         
         const ratesData = {
             petrol: document.getElementById("adminPetrolPrice").value,
+            petrolOld: document.getElementById("adminPetrolPriceOld").value,
             diesel: document.getElementById("adminDieselPrice").value,
+            dieselOld: document.getElementById("adminDieselPriceOld").value,
             gold: document.getElementById("adminGoldPrice").value,
+            goldOld: document.getElementById("adminGoldPriceOld").value,
             updated: currentTime
         };
 

@@ -114,6 +114,17 @@ const DataService = {
         return JSON.parse(localStorage.getItem("admin_broadcasts")) || [];
     },
 
+    getLiveRates: async () => {
+        setTimeout(async () => {
+            try {
+                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getLiveRates" }) });
+                const data = await res.json();
+                if (data.success && data.rates) localStorage.setItem("stopbuyLiveRates", JSON.stringify(data.rates));
+            } catch (err) {}
+        }, 0);
+        return JSON.parse(localStorage.getItem("stopbuyLiveRates")) || null;
+    },
+
     saveCategories: async (data) => {
         try {
             const res = await fetch(DataService.API_URL, {
