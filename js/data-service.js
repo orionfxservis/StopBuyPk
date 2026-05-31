@@ -115,13 +115,16 @@ const DataService = {
     },
 
     getLiveRates: async () => {
-        setTimeout(async () => {
-            try {
-                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getLiveRates" }) });
-                const data = await res.json();
-                if (data.success && data.rates) localStorage.setItem("stopbuyLiveRates", JSON.stringify(data.rates));
-            } catch (err) {}
-        }, 0);
+        try {
+            const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getLiveRates" }) });
+            const data = await res.json();
+            if (data.success && data.rates) {
+                localStorage.setItem("stopbuyLiveRates", JSON.stringify(data.rates));
+                return data.rates;
+            }
+        } catch (err) {
+            console.error("Fetch live rates failed", err);
+        }
         return JSON.parse(localStorage.getItem("stopbuyLiveRates")) || null;
     },
 
