@@ -119,27 +119,15 @@ const DataService = {
         return JSON.parse(localStorage.getItem("admin_users")) || [];
     },
     getBlogs: async () => {
-        let cached = JSON.parse(localStorage.getItem("admin_blogs"));
-        if (!cached || cached.length === 0) {
-            try {
-                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getBlogs" }) });
-                const data = await res.json();
-                if (data.success && data.blogs) {
-                    localStorage.setItem("admin_blogs", JSON.stringify(data.blogs));
-                    return data.blogs;
-                }
-            } catch (err) { console.error(err); }
-            return [];
-        } else {
-            setTimeout(async () => {
-                try {
-                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getBlogs" }) });
-                    const data = await res.json();
-                    if (data.success && data.blogs) localStorage.setItem("admin_blogs", JSON.stringify(data.blogs));
-                } catch (err) {}
-            }, 0);
-            return cached;
-        }
+        try {
+            const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getBlogs" }) });
+            const data = await res.json();
+            if (data.success && data.blogs) {
+                localStorage.setItem("admin_blogs", JSON.stringify(data.blogs));
+                return data.blogs;
+            }
+        } catch (err) { console.error(err); }
+        return JSON.parse(localStorage.getItem("admin_blogs")) || [];
     },
     getTravelPackages: async () => {
         setTimeout(async () => {
