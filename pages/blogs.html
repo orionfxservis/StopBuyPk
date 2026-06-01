@@ -206,9 +206,10 @@ body{
             <!-- RIGHT: Actions -->
             <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0 order-2 sm:order-none">
                 <!-- Language Toggle -->
-                <div
-                    class="flex items-center justify-center w-[60px] sm:w-[70px] h-[34px] sm:h-[38px] bg-white/10 hover:bg-white/20 rounded-full text-[13px] sm:text-sm font-medium cursor-pointer transition-colors">
-                    <span class="text-center">اردو</span>
+                <div onclick="toggleLanguage()" id="lang-toggle-btn"
+                    class="flex items-center justify-center w-[60px] sm:w-[70px] h-[34px] sm:h-[38px] bg-white/10 hover:bg-white/20 rounded-full text-[13px] sm:text-sm font-medium cursor-pointer transition-colors"
+                    title="Switch to Urdu">
+                    <span class="text-center" id="lang-toggle-text">اردو</span>
                 </div>
 
                 <!-- Login Profile Icon -->
@@ -241,28 +242,12 @@ body{
     </nav>
 
 <!-- HERO -->
-<section class="relative overflow-hidden h-[300px] md:h-[400px] bg-gradient-to-br from-[#0A3D2A] via-[#065f46] to-[#059669] mx-4 mt-4 rounded-3xl shadow-2xl flex items-center justify-center text-center">
-    <!-- Optional Background Image (Overlay) -->
-    <div class="absolute inset-0 bg-[url('../images/grafix/blogs.png')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
-    
-    <!-- Hero Content -->
-    <div class="relative z-10 px-4">
-        <div class="inline-block px-5 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-sm mb-6 backdrop-blur-md text-emerald-50 font-medium tracking-wide shadow-sm">
-            Latest News & Insights
-        </div>
-
-        <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-5 text-white drop-shadow-lg">
-            Smart Shopping <br class="hidden md:block">
-            Starts Here
-        </h1>
-
-        <p class="text-base md:text-xl text-emerald-50 max-w-2xl mx-auto leading-relaxed drop-shadow-md opacity-90">
-            Explore latest market trends, inflation updates,
-            shopping guides, saving tips and smart buying decisions
-            for Pakistan.
-        </p>
+<div class="max-w-screen-2xl mx-auto px-4 py-6">
+    <div class="relative w-full rounded-3xl overflow-hidden shadow-lg border border-emerald-200 mb-2 bg-[#F4F9F2]">
+        <img src="../images/grafix/blogs-writing.png" alt="Blogs Banner"
+            class="w-full h-[150px] sm:h-[200px] md:h-[300px] object-cover md:object-fill">
     </div>
-</section>
+</div>
 
 <!-- BLOGS -->
 <section class="max-w-screen-2xl mx-auto px-4 py-16">
@@ -289,6 +274,40 @@ body{
 
 </section>
 
+<!-- BLOG MODAL -->
+<div id="blog-modal" class="fixed inset-0 z-[999999] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+        
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between p-4 md:p-6 border-b border-gray-100 bg-gray-50/50">
+            <div id="modal-category" class="bg-emerald-100 text-emerald-800 px-4 py-1.5 rounded-full text-xs font-bold tracking-wide">
+                Category
+            </div>
+            <button onclick="closeBlogModal()" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-100 hover:text-red-600 transition-colors">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Modal Body (Scrollable) -->
+        <div class="overflow-y-auto flex-1 p-4 md:p-8">
+            <img id="modal-image" src="" class="w-full h-64 md:h-80 object-cover rounded-2xl mb-8 shadow-sm">
+            
+            <h1 id="modal-title" class="text-2xl md:text-4xl font-extrabold text-gray-900 leading-tight mb-4"></h1>
+            
+            <div class="flex items-center gap-4 text-sm text-gray-500 mb-8 pb-8 border-b border-gray-100">
+                <div class="flex items-center gap-2"><i class="far fa-user text-emerald-600"></i> <span id="modal-author">Admin</span></div>
+                <div class="flex items-center gap-2"><i class="far fa-calendar text-emerald-600"></i> <span id="modal-date">Date</span></div>
+            </div>
+
+            <!-- Content Area -->
+            <div id="modal-content" class="prose prose-emerald max-w-none text-gray-700 leading-loose text-base md:text-lg">
+                <!-- Rich text content will be injected here -->
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <!-- FOOTER -->
     <div class="w-full bg-[#0A3D2A] text-emerald-50 text-center py-4 text-sm mt-auto border-t border-[#052C22]">
         &copy; 2026 StopBuyPk - Smart Price Comparison
@@ -297,7 +316,65 @@ body{
 <script src="../js/location.js"></script>
 <script src="../js/data-service.js"></script>
 <script>
+// --- Language Logic ---
+let currentLang = localStorage.getItem('qeematLang') || 'en';
+
+function updateLanguageUI(lang) {
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ur' ? 'rtl' : 'ltr';
+    
+    document.querySelectorAll('.lang-en').forEach(el => {
+        el.style.display = (lang === 'en') ? '' : 'none';
+    });
+    document.querySelectorAll('.lang-ur').forEach(el => {
+        el.style.display = (lang === 'ur') ? '' : 'none';
+    });
+
+    const toggleText = document.getElementById('lang-toggle-text');
+    if (toggleText) toggleText.textContent = lang === 'ur' ? 'English' : 'اردو';
+}
+
+function toggleLanguage() {
+    const newLang = document.documentElement.lang === 'ur' ? 'en' : 'ur';
+    localStorage.setItem('qeematLang', newLang);
+    updateLanguageUI(newLang);
+}
+
+// Store blogs globally for the modal
+window.allBlogs = [];
+
+function openBlogModal(index) {
+    const blog = window.allBlogs[index];
+    if (!blog) return;
+
+    const isUrdu = document.documentElement.lang === 'ur';
+    const title = isUrdu && blog.titleUr ? blog.titleUr : (blog.titleEn || 'Untitled');
+    const content = isUrdu && blog.contentUr ? blog.contentUr : (blog.contentEn || 'No content available.');
+    const category = isUrdu && blog.categoryUr ? blog.categoryUr : (blog.categoryEn || 'Update');
+    
+    document.getElementById('modal-category').innerText = category;
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('modal-author').innerText = blog.author || 'Admin';
+    document.getElementById('modal-date').innerText = blog.date ? new Date(blog.date).toLocaleDateString() : '';
+    document.getElementById('modal-image').src = blog.image || '../images/placeholder.jpg';
+    document.getElementById('modal-content').innerHTML = content;
+
+    const modal = document.getElementById('blog-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+function closeBlogModal() {
+    const modal = document.getElementById('blog-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
+    updateLanguageUI(currentLang);
+
     const blogsContainer = document.getElementById('blogs-container');
     if (!blogsContainer) return;
 
@@ -308,42 +385,67 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        // Only show published blogs
         const publishedBlogs = blogs.filter(b => b.status === 'Publish');
-        
+        window.allBlogs = publishedBlogs; // Save for modal
+
         if (publishedBlogs.length === 0) {
             blogsContainer.innerHTML = '<div style="text-align:center; grid-column: 1/-1; padding:40px; color:#666; font-size:1.1rem;">No published blogs available.</div>';
             return;
         }
 
-        // Render blogs
-        blogsContainer.innerHTML = publishedBlogs.map((blog) => {
-            const isUrdu = document.body.classList.contains('ur-active');
-            const title = isUrdu && blog.titleUr ? blog.titleUr : (blog.titleEn || 'Untitled');
-            const desc = isUrdu && blog.descUr ? blog.descUr : (blog.descEn || '');
-            const category = isUrdu && blog.categoryUr ? blog.categoryUr : (blog.categoryEn || 'Update');
+        // Render blogs with BOTH English and Urdu elements for instant toggling
+        blogsContainer.innerHTML = publishedBlogs.map((blog, index) => {
+            const titleEn = blog.titleEn || 'Untitled';
+            const titleUr = blog.titleUr || titleEn;
+            const descEn = blog.descEn || '';
+            const descUr = blog.descUr || descEn;
+            const catEn = blog.categoryEn || 'Update';
+            const catUr = blog.categoryUr || catEn;
             const image = blog.image || '../images/placeholder.jpg';
 
             return `
-                <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100 cursor-pointer" onclick="window.location.href='blog-detail.html?id=${blog.id}'">
-                    <div class="blog-badge">${category}</div>
+                <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100 cursor-pointer" onclick="openBlogModal(${index})">
+                    <!-- EN Badges -->
+                    <div class="blog-badge lang-en">${catEn}</div>
+                    <!-- UR Badges -->
+                    <div class="blog-badge lang-ur" style="display:none;">${catUr}</div>
+
                     <div class="overflow-hidden">
                         <img src="${image}" class="w-full h-52 object-cover rounded-t-3xl" onerror="this.src='../images/placeholder.jpg'">
                     </div>
                     <div class="p-6">
-                        <div class="font-bold text-2xl text-gray-800" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                            ${title}
+                        <!-- EN Content -->
+                        <div class="lang-en">
+                            <div class="font-bold text-2xl text-gray-800" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                ${titleEn}
+                            </div>
+                            <div class="text-sm text-gray-600 mt-3 leading-relaxed" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                                ${descEn}
+                            </div>
+                            <button class="read-btn mt-5 text-sm text-emerald-700 font-semibold">
+                                Read Full Article →
+                            </button>
                         </div>
-                        <div class="text-sm text-gray-600 mt-3 leading-relaxed" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                            ${desc}
+
+                        <!-- UR Content -->
+                        <div class="lang-ur" style="display:none;">
+                            <div class="font-bold text-2xl text-gray-800" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                ${titleUr}
+                            </div>
+                            <div class="text-sm text-gray-600 mt-3 leading-relaxed" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                                ${descUr}
+                            </div>
+                            <button class="read-btn mt-5 text-sm text-emerald-700 font-semibold">
+                                مکمل مضمون پڑھیں ←
+                            </button>
                         </div>
-                        <button class="read-btn mt-5 text-sm text-emerald-700 font-semibold">
-                            Read Full Article →
-                        </button>
                     </div>
                 </div>
             `;
         }).join('');
+
+        // Apply current lang to new dynamic elements
+        updateLanguageUI(document.documentElement.lang);
 
     } catch (err) {
         console.error('Error loading blogs:', err);
