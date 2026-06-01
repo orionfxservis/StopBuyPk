@@ -118,7 +118,29 @@ const DataService = {
         }, 0);
         return JSON.parse(localStorage.getItem("admin_users")) || [];
     },
-    getBlogs: async () => JSON.parse(localStorage.getItem("admin_blogs")) || [],
+    getBlogs: async () => {
+        let cached = JSON.parse(localStorage.getItem("admin_blogs"));
+        if (!cached || cached.length === 0) {
+            try {
+                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getBlogs" }) });
+                const data = await res.json();
+                if (data.success && data.blogs) {
+                    localStorage.setItem("admin_blogs", JSON.stringify(data.blogs));
+                    return data.blogs;
+                }
+            } catch (err) { console.error(err); }
+            return [];
+        } else {
+            setTimeout(async () => {
+                try {
+                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getBlogs" }) });
+                    const data = await res.json();
+                    if (data.success && data.blogs) localStorage.setItem("admin_blogs", JSON.stringify(data.blogs));
+                } catch (err) {}
+            }, 0);
+            return cached;
+        }
+    },
     getTravelPackages: async () => {
         setTimeout(async () => {
             try {
@@ -221,7 +243,21 @@ const DataService = {
         localStorage.setItem("admin_users", JSON.stringify(data));
         return true;
     },
-    saveBlogs: async (data) => localStorage.setItem("admin_blogs", JSON.stringify(data)),
+    saveBlogs: async (data) => {
+        try {
+            const res = await fetch(DataService.API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "syncBlogs", blogs: data })
+            });
+            const result = await res.json();
+            if (!result.success) console.warn("API sync failed", result.message);
+        } catch (err) {
+            console.error("Failed to sync blogs to API", err);
+        }
+        localStorage.setItem("admin_blogs", JSON.stringify(data));
+        return true;
+    },
     saveTravelPackages: async (data) => {
         try {
             const res = await fetch(DataService.API_URL, {
