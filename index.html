@@ -8,6 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+	<link rel="manifest" href="json/manifest.json">
+	<meta name="theme-color" content="#16a34a">
 </head>
 
 <body class="bg-[#F8FAF9] text-[#1F2937]">
@@ -484,20 +486,20 @@
                         </button>
 
                            <!-- Deal Ends Counter Overlay -->
-                        << <div
-                        <<    class="hidden sm:block absolute right-16 top-1/2 transform -translate-y-1/2 bg-white p-4 rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] z-20 w-[170px] text-center">
-                        <<    <div class="text-[11px] text-emerald-900 font-semibold mb-1 text-left">Deal ends in</div>
-                        <<    <div class="font-bold text-2xl tracking-wider text-black mb-1">02:45:10</div>
-                        <<    <div class="flex justify-between px-3 text-[9px] text-gray-500 font-medium mb-3">
-                        <<        <span>Hours</span>
-                        <<        <span>Min</span>
-                        <<        <span>Sec</span>
-                        <<    </div>
-                        <<    <button onclick="showPage('groceries')"
-                        <<        class="w-full bg-[#71b132] hover:bg-[#629c2a] text-white text-xs font-bold py-2 rounded-xl transition-colors">
-                        <<        Shop Now
-                        <<    </button>
-                        << </div>
+                         <div
+                            class="hidden absolute right-16 top-1/2 transform -translate-y-1/2 bg-white p-4 rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] z-20 w-[170px] text-center">
+                            <div class="text-[11px] text-emerald-900 font-semibold mb-1 text-left">Deal ends in</div>
+                            <div class="font-bold text-2xl tracking-wider text-black mb-1">02:45:10</div>
+                            <div class="flex justify-between px-3 text-[9px] text-gray-500 font-medium mb-3">
+                                <span>Hours</span>
+                                <span>Min</span>
+                                <span>Sec</span>
+                            </div>
+                            <button onclick="showPage('groceries')"
+                                class="w-full bg-[#71b132] hover:bg-[#629c2a] text-white text-xs font-bold py-2 rounded-xl transition-colors">
+                                Shop Now
+                            </button>
+                         </div>
                     </div>
 
                     <!-- LIVE PRICE UPDATE SECTION WITH GROCERY BASKET -->
@@ -2905,6 +2907,10 @@ return `
             });
         }
     });
+	
+	if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+}
     </script>
 </body>
 
