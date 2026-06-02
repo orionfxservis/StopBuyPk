@@ -8,8 +8,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
-	<link rel="manifest" href="json/manifest.json">
-	<meta name="theme-color" content="#16a34a">
+	<link rel="manifest" href="/StopBuyPk/json/manifest.json">
+
+<meta name="theme-color" content="#16a34a">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
 </head>
 
 <body class="bg-[#F8FAF9] text-[#1F2937]">
@@ -441,9 +446,9 @@
                     </div>
 					
 					<button id="installBtn"
-							class="bg-emerald-600 text-white px-4 py-2 rounded-xl hidden">
-								Install StopBuy App
-					</button>
+    class="hidden fixed bottom-20 right-4 z-50 bg-emerald-600 text-white px-4 py-3 rounded-xl shadow-lg">
+    📲 Install StopBuy App
+</button>
 					
                     <!-- Promotional Banners Carousel -->
                     <div dir="ltr"
@@ -2913,9 +2918,39 @@ return `
         }
     });
 	
-	if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
+	if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/StopBuyPk/js/sw.js');
 }
+	
+	let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+
+    deferredPrompt = e;
+
+    installBtn.classList.remove('hidden');
+});
+
+installBtn.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+
+    const { outcome } = await deferredPrompt.userChoice;
+
+    console.log('Install result:', outcome);
+
+    deferredPrompt = null;
+
+    installBtn.classList.add('hidden');
+});
+
+window.addEventListener('appinstalled', () => {
+    installBtn.classList.add('hidden');
+    console.log('StopBuy installed');
+});
     </script>
 </body>
 
