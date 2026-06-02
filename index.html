@@ -1046,7 +1046,8 @@
             </div>
         </div>
 	</div>
-        <!-- Compare by Category -->
+        
+		<!-- Compare by Category -->
         <div class="max-w-screen-2xl mx-auto px-4 pt-4">
             <div class="flex justify-between items-center mb-4">
                 <span class="section-header font-serif tracking-wide text-2xl font-bold text-[#0A3D2A]"
@@ -1138,9 +1139,6 @@
         </div>
 
         
-
-
-
 		<!-- TRAVEL & TOURS SECTION -->
 <section id="travel-section" class="pt-8 pb-5">
 
@@ -1381,8 +1379,9 @@
             </div>
         </section>
 			
+			
 			<!-- CUSTOMER REVIEWS SECTION -->
-<section id="reviews-section" class="pt-6">
+			<section id="reviews-section" class="hidden pt-6">
 
     <div class="max-w-screen-2xl mx-auto px-4">
 
@@ -1579,23 +1578,35 @@
             <section class="pt-6 pb-6">
                 <div class="max-w-screen-2xl mx-auto px-4">
 
-                    <!-- Section Header -->
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl md:text-3xl font-serif tracking-wide font-extrabold text-[#0A3D2A] flex items-center gap-3"
-                            style="font-family: Georgia, 'Times New Roman', serif;">
-                            <span class="text-cyan-500 text-3xl">🎧</span>
-                            <span class="lang-en">How Can We Help You?</span><span class="lang-ur">ہم آپ کی کیا مدد کر سکتے ہیں؟</span>
-                        </h2>
-                    </div>
+                    
 
                     <!-- OUTER BOX -->
                     <div class="relative overflow-hidden rounded-[38px] border border-emerald-100 bg-white/70 backdrop-blur-xl shadow-[0_20px_60px_rgba(16,24,40,0.08)] p-5 md:p-7">
-                        <!-- Support Grid -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+						
+						<!-- Section Header Inside Box -->
+						<div class="flex items-center justify-center mb-8 md:mb-10">
+							<div class="flex items-center gap-4">
+								<div class="w-14 h-14 rounded-2xl bg-cyan-100 flex items-center justify-center shadow-sm">
+									<span class="text-3xl">🎧</span>
+								</div>
+
+								<h2 class="text-2xl md:text-4xl font-extrabold text-[#0A3D2A] leading-tight">
+									<span class="lang-en">
+										How Can We Help You?
+									</span>
+									<span class="lang-ur">
+										ہم آپ کی کیا مدد کر سکتے ہیں؟
+									</span>
+								</h2>
+							</div>
+						</div>	
+						
+					<!-- Support Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
 
                     <!-- CARD 1 -->
                     <div
-                        class="group bg-white rounded-[32px] p-8 text-center border border-emerald-200/80 hover:border-emerald-400 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition duration-500">
+                        class="group bg-white rounded-[32px] p-5 text-center border border-emerald-200/80 hover:border-emerald-400 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition duration-500">
 
                         <div
                             class="w-20 h-20 mx-auto rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 text-3xl shadow-inner group-hover:scale-110 transition duration-500">
@@ -1606,7 +1617,7 @@
                             <span class="lang-en">Live Chat Support</span><span class="lang-ur">لائیو چیٹ سپورٹ</span>
                         </h3>
 
-                        <p class="mt-5 text-slate-500 leading-9 text-[17px]">
+                        <p class="mt-3 text-slate-500 leading-6 text-sm">
                             <span class="lang-en">Chat with our support team in real-time</span><span class="lang-ur">ہماری سپورٹ ٹیم کے ساتھ ریئل ٹائم میں چیٹ کریں</span> for instant assistance with any queries.
                         </p>
 
@@ -1614,7 +1625,7 @@
 
                     <!-- CARD 2 -->
                     <div
-                        class="group bg-white rounded-[32px] p-8 text-center border border-emerald-200/80 hover:border-emerald-400 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition duration-500">
+                        class="group bg-white rounded-[32px] p-5 text-center border border-emerald-200/80 hover:border-emerald-400 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition duration-500">
 
                         <div
                             class="w-20 h-20 mx-auto rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 text-3xl shadow-inner group-hover:scale-110 transition duration-500">
@@ -1625,7 +1636,7 @@
                             <span class="lang-en">Call Us Anytime</span><span class="lang-ur">کسی بھی وقت کال کریں</span>
                         </h3>
 
-                        <p class="mt-5 text-slate-500 leading-9 text-[17px]">
+                        <p class="mt-3 text-slate-500 leading-6 text-sm">
                             Reach us at +92 300 1234567 from 9 AM to 9 PM, 7 days a week.
                         </p>
 
@@ -1633,7 +1644,7 @@
 
                     <!-- CARD 3 -->
                     <div
-                        class="group bg-white rounded-[32px] p-8 text-center border border-emerald-200/80 hover:border-emerald-400 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition duration-500">
+                        class="group bg-white rounded-[32px] p-5 text-center border border-emerald-200/80 hover:border-emerald-400 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition duration-500">
 
                         <div
                             class="w-20 h-20 mx-auto rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 text-3xl shadow-inner group-hover:scale-110 transition duration-500">
@@ -1644,7 +1655,7 @@
                             <span class="lang-en">Email Support</span><span class="lang-ur">ای میل سپورٹ</span>
                         </h3>
 
-                        <p class="mt-5 text-slate-500 leading-9 text-[17px]">
+                        <p class="mt-3 text-slate-500 leading-6 text-sm">
                             Send us an email at support@stopbuypk.com and we'll respond within 24 hours.
                         </p>
 
@@ -1652,7 +1663,7 @@
 
                     <!-- CARD 4 -->
                     <div
-                        class="group bg-white rounded-[32px] p-8 text-center border border-emerald-200/80 hover:border-emerald-400 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition duration-500">
+                        class="group bg-white rounded-[32px] p-5 text-center border border-emerald-200/80 hover:border-emerald-400 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition duration-500">
 
                         <div
                             class="w-20 h-20 mx-auto rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 text-3xl shadow-inner group-hover:scale-110 transition duration-500">
@@ -1663,7 +1674,7 @@
                             <span class="lang-en">Help Center</span><span class="lang-ur">مدد کا مرکز</span>
                         </h3>
 
-                        <p class="mt-5 text-slate-500 leading-9 text-[17px]">
+                        <p class="mt-3 text-slate-500 leading-6 text-sm">
                             Browse our comprehensive FAQ and guides for quick answers to common questions.
                         </p>
 
