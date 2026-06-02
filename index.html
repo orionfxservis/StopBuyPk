@@ -76,7 +76,14 @@
                         class="bg-emerald-600 text-white text-[10px] sm:text-xs font-bold px-1.5 py-0.5 rounded-full">3</span>
                 </div>
 
-
+                <!-- Alerts -->
+                <div onclick="showAlertsModal()"
+                    class="relative flex items-center gap-1.5 px-2 sm:px-3 h-[38px] hover:bg-white/10 rounded-xl cursor-pointer text-sm">
+                    <i class="fas fa-bell text-emerald-400"></i>
+                    <span class="hidden md:inline">Alerts</span>
+                    <span
+                        class="absolute top-0 sm:-top-1 right-0 sm:-right-1 bg-red-500 text-white text-[9px] sm:text-[10px] w-3.5 h-3.5 sm:w-4 sm:h-4 flex items-center justify-center rounded-full">12</span>
+                </div>
 
                 <!-- Language Toggle -->
                 <div onclick="toggleLanguage()" id="lang-toggle-btn"
@@ -414,7 +421,7 @@
                     <div class="w-full text-center pb-2">
                         <div
                             class="px-8 py-3 rounded-3xl bg-emerald-700 text-white font-semibold shadow-lg border-2 border-emerald-400 inline-block cursor-default">
-                            <span class="lang-en">Trends</span><span class="lang-ur">رجحانات</span>
+                            Trends
                         </div>
 						
 					<!-- Deals Button -->
@@ -426,7 +433,7 @@
 							<div
 								onclick="openDealsModal()"
 								class="relative px-8 py-3 rounded-3xl bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 text-white font-bold text-lg shadow-xl border border-white/30 cursor-pointer transform transition-all duration-300 hover:scale-105 flex items-center justify-center">
-								🔥 <span class="lang-en">Deals</span><span class="lang-ur">ڈیلز</span>
+								🔥 Deals
 							</div>
 						</div>
                     </div>
@@ -468,29 +475,29 @@
 
                         <!-- Carousel Navigation -->
                         <button onclick="prevSlide()"
-								class="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-emerald-800 shadow opacity-0 group-hover:opacity-100 transition-opacity z-20">
-									<i class="fas fa-chevron-left text-sm"></i>
+                            class="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-emerald-800 shadow opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                            <i class="fas fa-chevron-left text-sm"></i>
                         </button>
                         <button onclick="nextSlide()"
-								class="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-emerald-800 shadow opacity-0 group-hover:opacity-100 transition-opacity z-20">
-									<i class="fas fa-chevron-right text-sm"></i>
+                            class="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-emerald-800 shadow opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                            <i class="fas fa-chevron-right text-sm"></i>
                         </button>
 
                            <!-- Deal Ends Counter Overlay -->
-                         <div
-							class="hidden absolute right-16 top-1/2 transform -translate-y-1/2 bg-white p-4 rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] z-20 w-[170px] text-center">
-                            <div class="text-[11px] text-emerald-900 font-semibold mb-1 text-left">Deal ends in</div>
-                            <div class="font-bold text-2xl tracking-wider text-black mb-1">02:45:10</div>
-                            <div class="flex justify-between px-3 text-[9px] text-gray-500 font-medium mb-3">
-                                <span>Hours</span>
-                                <span>Min</span>
-                                <span>Sec</span>
-                            </div>
-                            <button onclick="showPage('groceries')"
-									class="w-full bg-[#71b132] hover:bg-[#629c2a] text-white text-xs font-bold py-2 rounded-xl transition-colors">
-										Shop Now
-                            </button>
-                         </div>
+                        << <div
+                        <<    class="hidden sm:block absolute right-16 top-1/2 transform -translate-y-1/2 bg-white p-4 rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] z-20 w-[170px] text-center">
+                        <<    <div class="text-[11px] text-emerald-900 font-semibold mb-1 text-left">Deal ends in</div>
+                        <<    <div class="font-bold text-2xl tracking-wider text-black mb-1">02:45:10</div>
+                        <<    <div class="flex justify-between px-3 text-[9px] text-gray-500 font-medium mb-3">
+                        <<        <span>Hours</span>
+                        <<        <span>Min</span>
+                        <<        <span>Sec</span>
+                        <<    </div>
+                        <<    <button onclick="showPage('groceries')"
+                        <<        class="w-full bg-[#71b132] hover:bg-[#629c2a] text-white text-xs font-bold py-2 rounded-xl transition-colors">
+                        <<        Shop Now
+                        <<    </button>
+                        << </div>
                     </div>
 
                     <!-- LIVE PRICE UPDATE SECTION WITH GROCERY BASKET -->
@@ -1308,8 +1315,45 @@
 
                 <!-- OUTER BOX -->
                 <div class="relative overflow-hidden rounded-[38px] border border-emerald-100 bg-white/70 backdrop-blur-xl shadow-[0_20px_60px_rgba(16,24,40,0.08)] p-5 md:p-7">
-                    <div id="home-blogs-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
-                        <!-- Dynamic blogs will be injected here -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+                    <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
+                        <img src="images/blogs/04-05-26/blog_price.png" class="w-full h-44 object-cover rounded-t-3xl">
+                        <div class="p-5">
+                            <div class="font-semibold">Rising Prices in Pakistan 2025</div>
+                            <div class="text-sm text-gray-600 mt-1">What's driving inflation and how to protect your
+                                budget.</div>
+                            <button onclick="showBlogModal(1)" class="mt-4 text-sm text-emerald-700 font-semibold">Read
+                                Full Article →</button>
+                        </div>
+                    </div>
+
+                    <!-- Blog Card 2 -->
+                    <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
+                        <img src="images/blogs/04-05-26/blog_budget.png" class="w-full h-44 object-cover rounded-t-3xl">
+                        <div class="p-5">
+                            <div class="font-semibold">How to Manage Budget in Challenging Times</div>
+                            <div class="text-sm text-gray-600 mt-1">
+                                Practical tips for Pakistani families to save more.
+                            </div>
+                            <button onclick="showBlogModal(2)" class="mt-4 text-sm text-emerald-700 font-semibold">
+                                Read Full Article →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Blog Card 3 -->
+                    <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
+                        <img src="images/blogs/04-05-26/blog_ai.png" class="w-full h-44 object-cover rounded-t-3xl">
+                        <div class="p-5">
+                            <div class="font-semibold">How AI Can Help You Save Money</div>
+                            <div class="text-sm text-gray-600 mt-1">
+                                Using smart tools for better financial decisions.
+                            </div>
+                            <button onclick="showBlogModal(3)" class="mt-4 text-sm text-emerald-700 font-semibold">
+                                Read Full Article →
+                            </button>
+                        </div>
+                    </div>
                     </div>
                 </div>
 
@@ -2859,53 +2903,6 @@ return `
                 // Automatically scroll the user down so they can clearly see the results!
                 productGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
-        }
-    });
-    </script>
-    <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-        const blogsContainer = document.getElementById('home-blogs-container');
-        if (!blogsContainer) return;
-
-        blogsContainer.innerHTML = '<div style="text-align:center; grid-column: 1/-1; padding:20px; color:#666;">Loading latest blogs...</div>';
-
-        try {
-            const blogs = await DataService.getBlogs();
-            if (!blogs || blogs.length === 0) {
-                blogsContainer.innerHTML = '<div style="text-align:center; grid-column: 1/-1; padding:20px; color:#666;">No blogs available at the moment.</div>';
-                return;
-            }
-
-            // Only show the 3 most recent published blogs
-            const publishedBlogs = blogs.filter(b => b.status === 'Publish').slice(0, 3);
-            
-            if (publishedBlogs.length === 0) {
-                blogsContainer.innerHTML = '<div style="text-align:center; grid-column: 1/-1; padding:20px; color:#666;">No published blogs available.</div>';
-                return;
-            }
-
-            blogsContainer.innerHTML = publishedBlogs.map((blog, index) => {
-                // Determine language based on current display (you can adjust this if needed)
-                const isUrdu = document.body.classList.contains('ur-active');
-                const title = isUrdu && blog.titleUr ? blog.titleUr : (blog.titleEn || 'Untitled');
-                const desc = isUrdu && blog.descUr ? blog.descUr : (blog.descEn || '');
-                const image = blog.image || 'images/placeholder.jpg';
-
-                return `
-                    <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100 cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all" onclick="window.location.href='pages/blogs.html?id=${blog.id}'">
-                        <img src="${image}" class="w-full h-44 object-cover rounded-t-3xl" onerror="this.src='images/placeholder.jpg'">
-                        <div class="p-5">
-                            <div class="font-semibold" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${title}</div>
-                            <div class="text-sm text-gray-600 mt-1" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${desc}</div>
-                            <button class="mt-4 text-sm text-emerald-700 font-semibold">Read Full Article →</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-        } catch (err) {
-            console.error('Error loading blogs for home page:', err);
-            blogsContainer.innerHTML = '<div style="text-align:center; grid-column: 1/-1; padding:20px; color:#ef4444;">Failed to load blogs.</div>';
         }
     });
     </script>
