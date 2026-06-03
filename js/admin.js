@@ -689,10 +689,29 @@ const btnCancelUser = document.getElementById('btnCancelUser');
 const btnSaveUser = document.getElementById('btnSaveUser');
 
 async function saveUsers() {
-    // Ensure all users have a permissions property so the backend GAS script detects it in Object.keys(items[0])
+    // Ensure all users have a permissions property and assignedCategories is synced
     users.forEach(u => {
-        if (!u.permissions) u.permissions = {};
-        if (!u.assignedCategories) u.assignedCategories = [];
+        let perms = u.permissions;
+        let loopCount = 0;
+        while (typeof perms === 'string' && loopCount < 3) {
+            try { perms = JSON.parse(perms); } catch(e) { break; }
+            loopCount++;
+        }
+        if (!perms || typeof perms !== 'object' || Array.isArray(perms)) {
+            perms = {};
+        }
+        
+        // Sync assignedCategories from permissions wrapper if present, otherwise set it
+        if (perms.assignedCategories) {
+            u.assignedCategories = perms.assignedCategories;
+        } else if (u.assignedCategories) {
+            perms.assignedCategories = u.assignedCategories;
+        } else {
+            u.assignedCategories = [];
+            perms.assignedCategories = [];
+        }
+        
+        u.permissions = perms;
     });
     
     // Safety check to prevent wiping the main admin account if it was missing from local storage
@@ -948,10 +967,24 @@ function populateCategoryDropdown() {
                            (uName && uName === cUid);
                 });
                 
-                // If liveUser has assignedCategories, use it. Otherwise fall back to currentUser's assignedCategories
-                let assigned = (liveUser && liveUser.assignedCategories && liveUser.assignedCategories.length > 0)
-                    ? liveUser.assignedCategories
-                    : currentUser.assignedCategories;
+                // Helper to get assigned categories from permissions or assignedCategories
+                const getAssigned = (usr) => {
+                    if (!usr) return [];
+                    let perms = usr.permissions;
+                    let loopCount = 0;
+                    while (typeof perms === 'string' && loopCount < 3) {
+                        try { perms = JSON.parse(perms); } catch(e) { break; }
+                        loopCount++;
+                    }
+                    if (perms && typeof perms === 'object' && !Array.isArray(perms) && perms.assignedCategories) {
+                        return perms.assignedCategories;
+                    }
+                    return usr.assignedCategories || [];
+                };
+
+                let assigned = (liveUser && getAssigned(liveUser).length > 0)
+                    ? getAssigned(liveUser)
+                    : getAssigned(currentUser);
 
                 let loopCount = 0;
                 while (typeof assigned === 'string' && loopCount < 3) {
@@ -2266,7 +2299,10 @@ window.onCategoryAssignUserChange = function() {
     const user = users.find(u => u.userId === userSelect.value);
     if (!user) return;
     
-    let assigned = user.assignedCategories || [];
+    let assigned = (user.permissions && user.permissions.assignedCategories)
+        ? user.permissions.assignedCategories
+        : (user.assignedCategories || []);
+
     let loopCount = 0;
     while (typeof assigned === 'string' && loopCount < 3) {
         try {
@@ -2310,6 +2346,19 @@ if (categoryAssignForm) {
         const checkboxes = document.querySelectorAll('.cat-assign-checkbox');
         const selectedCategories = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
         
+        // Ensure permissions object exists and is parsed
+        let perms = users[userIndex].permissions;
+        let loopCount = 0;
+        while (typeof perms === 'string' && loopCount < 3) {
+            try { perms = JSON.parse(perms); } catch(e) { break; }
+            loopCount++;
+        }
+        if (!perms || typeof perms !== 'object' || Array.isArray(perms)) {
+            perms = {};
+        }
+        
+        perms.assignedCategories = selectedCategories;
+        users[userIndex].permissions = perms;
         users[userIndex].assignedCategories = selectedCategories;
         
         await saveUsers();
