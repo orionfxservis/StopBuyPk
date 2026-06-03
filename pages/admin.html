@@ -922,6 +922,32 @@
                         </div>
                     </form>
                 </div>
+
+                <!-- Assign Categories UI -->
+                <div class="form-container" style="margin-top: 20px;">
+                    <h3>Assign Categories</h3>
+                    <form id="categoryAssignForm">
+                        <div class="form-row" style="align-items: flex-start;">
+                            <div class="input-group">
+                                <label>Select User</label>
+                                <select id="categoryAssignUserSelect" required onchange="onCategoryAssignUserChange()">
+                                    <option value="">Select a user...</option>
+                                    <!-- Populated via JS -->
+                                </select>
+                                <div class="form-actions" style="margin-top: 15px;">
+                                    <button type="submit" class="btn btn-primary" id="btnSaveCategoryAssign">Save Category Assignment</button>
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label>Select Categories</label>
+                                <div id="categoriesAssignGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; background: rgba(0,0,0,0.1); border-radius: 8px; border: 1px solid var(--border-color); max-height: 250px; overflow-y: auto;">
+                                    <!-- Populated dynamically via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </section>
 
             <!-- Banner Management Section -->
