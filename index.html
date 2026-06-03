@@ -108,7 +108,6 @@
 
                         <i
                             class="fas fa-user-shield text-emerald-400 text-sm sm:text-lg transition-transform duration-300 group-hover:scale-110"></i>
-
                     </div>
 
                     <!-- DROPDOWN -->
@@ -137,14 +136,11 @@
                                         Access your dashboard securely
                                     </p>
                                 </div>
-
                             </div>
-
                         </div>
 
                         <!-- TABS -->
                         <div class="grid grid-cols-3 border-b border-white/10">
-
                             <!-- USER -->
                             <button onclick="switchLoginTab('user')" id="tab-user"
                                 class="login-tab active-tab py-3 text-sm font-semibold text-emerald-400 border-b-2 border-emerald-400 transition-all duration-300 hover:bg-white/5">
@@ -162,7 +158,6 @@
                                 class="login-tab py-3 text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-300">
                                 Admin
                             </button>
-
                         </div>
 
                         <!-- FORM AREA -->
@@ -170,32 +165,22 @@
 
                             <!-- USER FORM -->
                             <div id="form-user" class="space-y-2.5">
-
                                 <input type="text" placeholder="User ID" class="login-input">
-
                                 <input type="password" placeholder="Password" class="login-input">
-
                                 <button type="button" onclick="loginUser()" class="login-btn">
                                     Login as User
                                 </button>
-
                             </div>
 
                             <!-- COMPANY FORM -->
                             <div id="form-company" class="space-y-2.5 hidden">
-
                                 <input type="text" placeholder="User Name" class="login-input">
-
                                 <input type="text" placeholder="Company Name" class="login-input">
-
                                 <input type="text" placeholder="User ID" class="login-input">
-
                                 <input type="password" placeholder="Password" class="login-input">
-
                                 <button type="button" onclick="loginCompany()" class="login-btn">
                                     Login as Company
                                 </button>
-
                             </div>
 
                             <!-- ADMIN FORM -->
@@ -208,21 +193,11 @@
                                 <button type="button" onclick="loginAdmin()" class="login-btn">
                                     Login as Admin
                                 </button>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
-
-
-
             </div>
-
         </div>
 
         <!-- Category Bar -->
@@ -311,41 +286,49 @@
                 </a>
 
                 <a href="./pages/food.html" class="hover:text-emerald-300 transition font-medium">
-                    <span class="lang-en">Food Stuffs</span><span class="lang-ur">کھانے پینے کی اشیاء</span>
-                </a>
+					<span class="lang-en">Food Stuffs</span>
+					<span class="lang-ur">کھانے پینے کی اشیاء</span>
+				</a>
 
-                <a href="./pages/grocery.html" class="hover:text-emerald-300 transition font-medium">
-                    <span class="lang-en">Daily Groceries</span><span class="lang-ur">روزمرہ کی اشیائے خوردونوش</span>
-                </a>
+				<a href="./pages/grocery.html" class="hidden hover:text-emerald-300 transition font-medium">
+					<span class="lang-en">Daily Groceries</span>
+					<span class="lang-ur">روزمرہ کی اشیائے خوردونوش</span>
+				</a>
 
-                <a href="./pages/electronics.html" class="hover:text-emerald-300 transition font-medium">
-                    <span class="lang-en">Electronics</span><span class="lang-ur">الیکٹرونکس</span>
-                </a>
+				<a href="./pages/electronics.html" class="hidden hover:text-emerald-300 transition font-medium">
+					<span class="lang-en">Electronics</span>
+					<span class="lang-ur">الیکٹرونکس</span>
+				</a>
 
-                <a href="./pages/mobiles.html" class="hover:text-emerald-300 transition font-medium">
-                    <span class="lang-en">Mobiles</span><span class="lang-ur">موبائیلز</span>
-                </a>
+				<a href="./pages/mobiles.html" class="hidden hover:text-emerald-300 transition font-medium">
+					<span class="lang-en">Mobiles</span>
+					<span class="lang-ur">موبائیلز</span>
+				</a>
 
-                <a href="./pages/laptops.html" class="hover:text-emerald-300 transition font-medium">
-                    <span class="lang-en">Laptops</span><span class="lang-ur">لیپ ٹوپس</span>
-                </a>
+				<a href="./pages/laptops.html" class="hidden hover:text-emerald-300 transition font-medium">
+					<span class="lang-en">Laptops</span>
+					<span class="lang-ur">لیپ ٹوپس</span>
+				</a>
 
-                <a href="./pages/property.html" class="hover:text-emerald-300 transition font-medium">
-                    <span class="lang-en">Property</span><span class="lang-ur">پروپرٹی</span>
-                </a>
+				<a href="./pages/property.html" class="hidden hover:text-emerald-300 transition font-medium">
+					<span class="lang-en">Property</span>
+					<span class="lang-ur">پروپرٹی</span>
+				</a>
 
-                <a href="./pages/fashion.html" class="hover:text-emerald-300 transition font-medium">
-                    <span class="lang-en">Fashion</span><span class="lang-ur">فیشن</span>
-                </a>
+				<a href="./pages/fashion.html" class="hidden hover:text-emerald-300 transition font-medium">
+					<span class="lang-en">Fashion</span>
+					<span class="lang-ur">فیشن</span>
+				</a>
 
-                <a href="./pages/personal-care.html" class="hover:text-emerald-300 transition font-medium">
-                    <span class="lang-en">Personal Care</span><span class="lang-ur">ذاتی نگہداشت</span>
-                </a>
+				<a href="./pages/personal-care.html" class="hidden hover:text-emerald-300 transition font-medium">
+					<span class="lang-en">Personal Care</span>
+					<span class="lang-ur">ذاتی نگہداشت</span>
+				</a>
 
-                <a href="./pages/kids.html" class="hover:text-emerald-300 transition font-medium">
-                    <span class="lang-en">Kids</span><span class="lang-ur">کڈذ</span>
-                </a>
-
+				<a href="./pages/kids.html" class="hidden hover:text-emerald-300 transition font-medium">
+					<span class="lang-en">Kids</span>
+					<span class="lang-ur">کڈز</span>
+				</a>
             </div>
 
             <!-- Visitor Counter -->
@@ -1698,7 +1681,7 @@
     </div>
 
     <!-- FOOTER -->
-    <footer class="bg-[#1b2230] text-gray-300 pt-16 pb-6 mt-16 border-t border-[#2b3544]">
+    <footer class="bg-[#1b2230] text-gray-300 pt-16 pb-6 mt-2 border-t border-[#2b3544]">
 
         <div class="max-w-screen-2xl mx-auto px-4">
 
