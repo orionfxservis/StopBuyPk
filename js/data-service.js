@@ -68,7 +68,12 @@ const DataService = {
                 try {
                     const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getCategories" }) });
                     const data = await res.json();
-                    if (data.success && data.categories) localStorage.setItem("admin_categories", JSON.stringify(data.categories));
+                    if (data.success && data.categories) {
+                        localStorage.setItem("admin_categories", JSON.stringify(data.categories));
+                        if (typeof window.onBackgroundDataLoaded === 'function') {
+                            window.onBackgroundDataLoaded('categories', data.categories);
+                        }
+                    }
                 } catch (err) {}
             }, 0);
             return cached;
@@ -91,7 +96,12 @@ const DataService = {
                 try {
                     const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getProducts" }) });
                     const data = await res.json();
-                    if (data.success && data.products) localStorage.setItem("admin_products", JSON.stringify(data.products));
+                    if (data.success && data.products) {
+                        localStorage.setItem("admin_products", JSON.stringify(data.products));
+                        if (typeof window.onBackgroundDataLoaded === 'function') {
+                            window.onBackgroundDataLoaded('products', data.products);
+                        }
+                    }
                 } catch (err) {}
             }, 0);
             return cached;
@@ -99,24 +109,60 @@ const DataService = {
     },
     getBanners: async () => JSON.parse(localStorage.getItem("admin_banners")) || [],
     getDeals: async () => {
-        setTimeout(async () => {
+        let cached = JSON.parse(localStorage.getItem("admin_deals"));
+        if (!cached || cached.length === 0) {
             try {
                 const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getDeals" }) });
                 const data = await res.json();
-                if (data.success && data.deals) localStorage.setItem("admin_deals", JSON.stringify(data.deals));
-            } catch (err) {}
-        }, 0);
-        return JSON.parse(localStorage.getItem("admin_deals")) || [];
+                if (data.success && data.deals) {
+                    localStorage.setItem("admin_deals", JSON.stringify(data.deals));
+                    return data.deals;
+                }
+            } catch (err) { console.error(err); }
+            return [];
+        } else {
+            setTimeout(async () => {
+                try {
+                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getDeals" }) });
+                    const data = await res.json();
+                    if (data.success && data.deals) {
+                        localStorage.setItem("admin_deals", JSON.stringify(data.deals));
+                        if (typeof window.onBackgroundDataLoaded === 'function') {
+                            window.onBackgroundDataLoaded('deals', data.deals);
+                        }
+                    }
+                } catch (err) {}
+            }, 0);
+            return cached;
+        }
     },
     getUsers: async () => {
-        setTimeout(async () => {
+        let cached = JSON.parse(localStorage.getItem("admin_users"));
+        if (!cached || cached.length === 0) {
             try {
                 const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getUsers" }) });
                 const data = await res.json();
-                if (data.success && data.users) localStorage.setItem("admin_users", JSON.stringify(data.users));
-            } catch (err) {}
-        }, 0);
-        return JSON.parse(localStorage.getItem("admin_users")) || [];
+                if (data.success && data.users) {
+                    localStorage.setItem("admin_users", JSON.stringify(data.users));
+                    return data.users;
+                }
+            } catch (err) { console.error(err); }
+            return [];
+        } else {
+            setTimeout(async () => {
+                try {
+                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getUsers" }) });
+                    const data = await res.json();
+                    if (data.success && data.users) {
+                        localStorage.setItem("admin_users", JSON.stringify(data.users));
+                        if (typeof window.onBackgroundDataLoaded === 'function') {
+                            window.onBackgroundDataLoaded('users', data.users);
+                        }
+                    }
+                } catch (err) {}
+            }, 0);
+            return cached;
+        }
     },
     getBlogs: async () => {
         try {
@@ -130,24 +176,60 @@ const DataService = {
         return JSON.parse(localStorage.getItem("admin_blogs")) || [];
     },
     getTravelPackages: async () => {
-        setTimeout(async () => {
+        let cached = JSON.parse(localStorage.getItem("admin_travel_packages"));
+        if (!cached || cached.length === 0) {
             try {
                 const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getTravelPackages" }) });
                 const data = await res.json();
-                if (data.success && data.travelPackages) localStorage.setItem("admin_travel_packages", JSON.stringify(data.travelPackages));
-            } catch (err) {}
-        }, 0);
-        return JSON.parse(localStorage.getItem("admin_travel_packages")) || [];
+                if (data.success && data.travelPackages) {
+                    localStorage.setItem("admin_travel_packages", JSON.stringify(data.travelPackages));
+                    return data.travelPackages;
+                }
+            } catch (err) { console.error(err); }
+            return [];
+        } else {
+            setTimeout(async () => {
+                try {
+                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getTravelPackages" }) });
+                    const data = await res.json();
+                    if (data.success && data.travelPackages) {
+                        localStorage.setItem("admin_travel_packages", JSON.stringify(data.travelPackages));
+                        if (typeof window.onBackgroundDataLoaded === 'function') {
+                            window.onBackgroundDataLoaded('travelPackages', data.travelPackages);
+                        }
+                    }
+                } catch (err) {}
+            }, 0);
+            return cached;
+        }
     },
     getBroadcasts: async () => {
-        setTimeout(async () => {
+        let cached = JSON.parse(localStorage.getItem("admin_broadcasts"));
+        if (!cached || cached.length === 0) {
             try {
                 const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getBroadcasts" }) });
                 const data = await res.json();
-                if (data.success && data.broadcasts) localStorage.setItem("admin_broadcasts", JSON.stringify(data.broadcasts));
-            } catch (err) {}
-        }, 0);
-        return JSON.parse(localStorage.getItem("admin_broadcasts")) || [];
+                if (data.success && data.broadcasts) {
+                    localStorage.setItem("admin_broadcasts", JSON.stringify(data.broadcasts));
+                    return data.broadcasts;
+                }
+            } catch (err) { console.error(err); }
+            return [];
+        } else {
+            setTimeout(async () => {
+                try {
+                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getBroadcasts" }) });
+                    const data = await res.json();
+                    if (data.success && data.broadcasts) {
+                        localStorage.setItem("admin_broadcasts", JSON.stringify(data.broadcasts));
+                        if (typeof window.onBackgroundDataLoaded === 'function') {
+                            window.onBackgroundDataLoaded('broadcasts', data.broadcasts);
+                        }
+                    }
+                } catch (err) {}
+            }, 0);
+            return cached;
+        }
     },
 
     getLiveRates: async () => {

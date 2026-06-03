@@ -84,6 +84,36 @@ async function initAdmin() {
     }
 }
 
+// Handler for background loaded cache data
+window.onBackgroundDataLoaded = function(type, data) {
+    console.log(`Background data loaded: ${type}`, data);
+    if (type === 'users') {
+        users = data || [];
+        renderUsers();
+        populateCategoryDropdown();
+        populateCategoryAssignDropdown();
+        enforceUserPermissions();
+    } else if (type === 'categories') {
+        categories = data || [];
+        updateUI();
+        populateCategoryDropdown();
+        populateCategoryAssignGrid();
+    } else if (type === 'products') {
+        products = data || [];
+        renderAdminProducts();
+        updateUI();
+    } else if (type === 'deals') {
+        deals = data || [];
+        renderDeals();
+    } else if (type === 'travelPackages') {
+        travelPackages = data || [];
+        renderTravelPackages();
+    } else if (type === 'broadcasts') {
+        broadcasts = data || [];
+        renderBroadcasts();
+    }
+};
+
 // --- Categories Functions ---
 
 async function saveCategories() {
@@ -918,7 +948,11 @@ function populateCategoryDropdown() {
                            (uName && uName === cUid);
                 });
                 
-                let assigned = liveUser ? liveUser.assignedCategories : currentUser.assignedCategories;
+                // If liveUser has assignedCategories, use it. Otherwise fall back to currentUser's assignedCategories
+                let assigned = (liveUser && liveUser.assignedCategories && liveUser.assignedCategories.length > 0)
+                    ? liveUser.assignedCategories
+                    : currentUser.assignedCategories;
+
                 let loopCount = 0;
                 while (typeof assigned === 'string' && loopCount < 3) {
                     try {
@@ -935,8 +969,14 @@ function populateCategoryDropdown() {
                     }
                     loopCount++;
                 }
+
                 if (assigned && Array.isArray(assigned) && assigned.length > 0) {
-                    allowedCategories = uniqueCategories.filter(name => assigned.includes(name));
+                    const assignedLower = assigned.map(a => String(a).trim().toLowerCase());
+                    allowedCategories = uniqueCategories.filter(name => 
+                        assignedLower.includes(String(name).trim().toLowerCase())
+                    );
+                } else {
+                    allowedCategories = []; // Restricted users with no assigned categories see nothing
                 }
             }
         }
@@ -2300,6 +2340,7 @@ window.enforceUserPermissions = function() {
         if (liveUser) {
             currentUser.role = liveUser.role || currentUser.role;
             currentUser.permissions = liveUser.permissions !== undefined ? liveUser.permissions : currentUser.permissions;
+            currentUser.assignedCategories = liveUser.assignedCategories !== undefined ? liveUser.assignedCategories : currentUser.assignedCategories;
             // Update localStorage just to keep it somewhat in sync
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
         }
