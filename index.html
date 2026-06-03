@@ -2943,33 +2943,31 @@ return `
 }
 	
 	let deferredPrompt;
-const installBtn = document.getElementById('installBtn');
 
-window.addEventListener('beforeinstallprompt', (e) => {
+const installContainer = document.getElementById("installContainer");
+const installBtn = document.getElementById("installBtn");
+
+// Hide initially
+installContainer.style.display = "none";
+
+// Show only when app is installable
+window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
-
     deferredPrompt = e;
-
-    installBtn.classList.remove('hidden');
+    installContainer.style.display = "block";
 });
 
-installBtn.addEventListener('click', async () => {
+// Install button click
+installBtn.addEventListener("click", async () => {
     if (!deferredPrompt) return;
 
     deferredPrompt.prompt();
-
-    const { outcome } = await deferredPrompt.userChoice;
-
-    console.log('Install result:', outcome);
-
-    deferredPrompt = null;
-
-    installBtn.classList.add('hidden');
+    await deferredPrompt.userChoice;
 });
 
-window.addEventListener('appinstalled', () => {
-    installBtn.classList.add('hidden');
-    console.log('StopBuy installed');
+// Automatically hide after installation
+window.addEventListener("appinstalled", () => {
+    installContainer.style.display = "none";
 });
     </script>
 </body>
