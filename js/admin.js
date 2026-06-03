@@ -64,6 +64,7 @@ async function initAdmin() {
         renderBroadcasts();
         renderAdminProducts(); // New function for products
         populateCategoryDropdown(); // New function for form
+        populateCategoryAssignGrid(); // Populate categories assign grid
         
         enforceUserPermissions(); // Apply user rights to sidebar
         updatePendingApprovalsBadge(); // Update badges
@@ -96,6 +97,7 @@ function updateUI() {
     if (totalProductsEl) totalProductsEl.textContent = products.length;
 
     populateCategoryDropdown(); // Keep product dropdowns in sync
+    populateCategoryAssignGrid(); // Keep assignment grid in sync
 
     // Render Categories
     if (categoryList) {
@@ -660,6 +662,7 @@ async function saveUsers() {
     // Ensure all users have a permissions property so the backend GAS script detects it in Object.keys(items[0])
     users.forEach(u => {
         if (!u.permissions) u.permissions = {};
+        if (!u.assignedCategories) u.assignedCategories = [];
     });
     
     // Safety check to prevent wiping the main admin account if it was missing from local storage
@@ -672,7 +675,8 @@ async function saveUsers() {
             fullName: 'Super Admin',
             role: 'admin',
             status: 'active',
-            permissions: {}
+            permissions: {},
+            assignedCategories: []
         });
     }
 
@@ -774,6 +778,7 @@ function renderUsers() {
     systemList.innerHTML = systemHtml;
     
     if (typeof populatePermissionDropdown === 'function') populatePermissionDropdown();
+    if (typeof populateCategoryAssignDropdown === 'function') populateCategoryAssignDropdown();
 }
 
 
@@ -894,11 +899,59 @@ function populateCategoryDropdown() {
         const uniqueCategories = [...new Set(categories.map(c => c.name))];
         const currentSelection = prodCategorySelect.value;
 
-        prodCategorySelect.innerHTML = '<option value="">Select Category</option>' +
-            uniqueCategories.map(name => `<option value="${name}">${name}</option>`).join('');
+        const cUserStr = localStorage.getItem('currentUser');
+        let allowedCategories = uniqueCategories;
+        if (cUserStr) {
+            const currentUser = JSON.parse(cUserStr);
+            const isSuperAdmin = String(currentUser.userId || '').toLowerCase() === 'admin';
+            if (!isSuperAdmin) {
+                // Find fresh live user in the users list
+                const cUid = String(currentUser.userId || '').trim().toLowerCase();
+                const cUname = String(currentUser.username || '').trim().toLowerCase();
+                const liveUser = users.find(u => {
+                    const uId = String(u.userId || u.id || '').trim().toLowerCase();
+                    const uEmail = String(u.email || '').trim().toLowerCase();
+                    const uName = String(u.username || u.userName || '').trim().toLowerCase();
+                    return (uId && uId === cUid) || 
+                           (uEmail && uEmail === cUid) || 
+                           (uName && uName === cUname) ||
+                           (uName && uName === cUid);
+                });
+                
+                let assigned = liveUser ? liveUser.assignedCategories : currentUser.assignedCategories;
+                let loopCount = 0;
+                while (typeof assigned === 'string' && loopCount < 3) {
+                    try {
+                        assigned = JSON.parse(assigned);
+                    } catch(e) {
+                        if (assigned.includes(',')) {
+                            assigned = assigned.split(',').map(s => s.trim());
+                        } else if (assigned) {
+                            assigned = [assigned];
+                        } else {
+                            assigned = [];
+                        }
+                        break;
+                    }
+                    loopCount++;
+                }
+                if (assigned && Array.isArray(assigned) && assigned.length > 0) {
+                    allowedCategories = uniqueCategories.filter(name => assigned.includes(name));
+                }
+            }
+        }
 
-        if (uniqueCategories.includes(currentSelection)) {
+        prodCategorySelect.innerHTML = '<option value="">Select Category</option>' +
+            allowedCategories.map(name => `<option value="${name}">${name}</option>`).join('');
+
+        if (allowedCategories.includes(currentSelection)) {
             prodCategorySelect.value = currentSelection;
+        } else if (currentSelection) {
+            // Keep the selected category even if not in the allowed list, to prevent breaking edit mode
+            prodCategorySelect.innerHTML += `<option value="${currentSelection}">${currentSelection}</option>`;
+            prodCategorySelect.value = currentSelection;
+        } else {
+            prodCategorySelect.value = '';
         }
 
         // Add listener
@@ -2119,6 +2172,108 @@ if (rightsForm) {
         
         await saveUsers();
         alert('User rights updated successfully!');
+    });
+}
+
+// ==========================================
+// USER CATEGORIES ASSIGNMENT
+// ==========================================
+window.populateCategoryAssignDropdown = function() {
+    const select = document.getElementById('categoryAssignUserSelect');
+    if (!select) return;
+    
+    const currentSelection = select.value;
+    select.innerHTML = '<option value="">Select a user...</option>';
+    
+    users.forEach(u => {
+        const isSuperAdmin = String(u.userId).toLowerCase() === 'admin';
+        if (!isSuperAdmin) {
+            const option = document.createElement('option');
+            option.value = u.userId;
+            option.textContent = `${u.fullName || u.userId} (${u.role})`;
+            select.appendChild(option);
+        }
+    });
+    
+    if (currentSelection && users.some(u => u.userId === currentSelection)) {
+        select.value = currentSelection;
+    }
+};
+
+window.populateCategoryAssignGrid = function() {
+    const grid = document.getElementById('categoriesAssignGrid');
+    if (!grid) return;
+    
+    const uniqueCategories = [...new Set(categories.map(c => c.name))];
+    
+    grid.innerHTML = uniqueCategories.map(catName => {
+        return `
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                <input type="checkbox" value="${catName}" class="cat-assign-checkbox"> ${catName}
+            </label>
+        `;
+    }).join('');
+};
+
+window.onCategoryAssignUserChange = function() {
+    const userSelect = document.getElementById('categoryAssignUserSelect');
+    const checkboxes = document.querySelectorAll('.cat-assign-checkbox');
+    
+    checkboxes.forEach(cb => cb.checked = false);
+    
+    if (!userSelect || !userSelect.value) return;
+    
+    const user = users.find(u => u.userId === userSelect.value);
+    if (!user) return;
+    
+    let assigned = user.assignedCategories || [];
+    let loopCount = 0;
+    while (typeof assigned === 'string' && loopCount < 3) {
+        try {
+            assigned = JSON.parse(assigned);
+        } catch(e) {
+            if (assigned.includes(',')) {
+                assigned = assigned.split(',').map(s => s.trim());
+            } else if (assigned) {
+                assigned = [assigned];
+            } else {
+                assigned = [];
+            }
+            break;
+        }
+        loopCount++;
+    }
+    if (!Array.isArray(assigned)) {
+        assigned = [];
+    }
+    
+    checkboxes.forEach(cb => {
+        if (assigned.includes(cb.value)) {
+            cb.checked = true;
+        }
+    });
+};
+
+const categoryAssignForm = document.getElementById('categoryAssignForm');
+if (categoryAssignForm) {
+    categoryAssignForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const userSelect = document.getElementById('categoryAssignUserSelect');
+        if (!userSelect || !userSelect.value) {
+            alert('Please select a user first.');
+            return;
+        }
+        
+        const userIndex = users.findIndex(u => u.userId === userSelect.value);
+        if (userIndex === -1) return;
+        
+        const checkboxes = document.querySelectorAll('.cat-assign-checkbox');
+        const selectedCategories = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+        
+        users[userIndex].assignedCategories = selectedCategories;
+        
+        await saveUsers();
+        alert('Category assignment updated successfully!');
     });
 }
 
