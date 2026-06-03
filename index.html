@@ -418,22 +418,23 @@
                 <div class="flex-1">
 
                     <!-- Trends Box (Centered above banner) -->
-                    <div class="w-full text-center pb-2">
+                    <div class="w-full text-center pb-2 flex items-center justify-center gap-3">
                         <div
-                            class="px-10 py-3 rounded-3xl bg-emerald-700 text-white font-semibold shadow-lg border-2 border-emerald-400 inline-block cursor-default">
-                            Trends
+                            onclick="openTrendsModal()"
+                            class="w-[130px] h-[38px] rounded-3xl bg-emerald-700 text-white font-bold text-sm shadow-lg border-2 border-emerald-400 inline-flex items-center justify-center cursor-pointer transform transition-all duration-300 hover:scale-105">
+                            <span class="lang-en">Trends</span><span class="lang-ur">رجحانات</span>
                         </div>
 						
 					<!-- Deals Button -->
-						<div class="relative inline-block ml-4 sm:ml-0">
+						<div class="relative inline-block">
 							<!-- Constant Glowing background aura -->
-							<div class="absolute -inset-2 bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 rounded-3xl blur-lg opacity-100 animate-pulse"></div>
+							<div class="absolute -inset-1 bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 rounded-3xl blur-md opacity-100 animate-pulse"></div>
 							
 							<!-- Actual Button -->
 							<div
 								onclick="openDealsModal()"
-								class="relative px-10 py-3 rounded-3xl bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 text-white font-bold text-lg shadow-xl border border-white/30 cursor-pointer transform transition-all duration-300 hover:scale-105 flex items-center justify-center">
-								🔥 Deals
+								class="relative w-[130px] h-[38px] rounded-3xl bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 text-white font-bold text-sm shadow-xl border border-white/30 cursor-pointer transform transition-all duration-300 hover:scale-105 flex items-center justify-center">
+								🔥 <span class="lang-en">Deals</span><span class="lang-ur">ڈیلز</span>
 							</div>
 						</div>
                     </div>
@@ -2802,6 +2803,26 @@ return `
     </div>
     
     <script>
+    window.openTrendsModal = function() {
+        const modal = document.getElementById('popupModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDesc = document.getElementById('modalDesc');
+        if (modal && modalTitle && modalDesc) {
+            const lang = document.documentElement.lang || 'en';
+            
+            const titleEn = "Price History & Trends";
+            const titleUr = "قیمتوں کی تاریخ اور رجحانات";
+            const descEn = "Track price history and trends to make smarter buying decisions. See how prices change over time, identify the best moments to purchase, and avoid overpaying. With clear insights and data, you can confidently buy at the right time and get the best value.";
+            const descUr = "زیادہ سمجھداری سے خریداری کرنے کے لیے قیمتوں کی تاریخ اور رجحانات کو ٹریک کریں۔ دیکھیں کہ وقت کے ساتھ قیمتیں کیسے تبدیل ہوتی ہیں، خریداری کے بہترین مواقع کی نشاندہی کریں، اور اضافی رقم ادا کرنے سے بچیں۔ واضح معلومات اور ڈیٹا کی مدد سے آپ اعتماد کے ساتھ درست وقت پر خریداری کر سکتے ہیں اور بہترین ویلیو حاصل کر سکتے ہیں۔";
+
+            modalTitle.textContent = (lang === 'ur') ? titleUr : titleEn;
+            modalDesc.textContent = (lang === 'ur') ? descUr : descEn;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+    };
+
     async function openDealsModal() {
         const modal = document.getElementById('dealsDetailModal');
         const container = document.getElementById('dealsListContainer');
