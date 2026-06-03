@@ -2930,14 +2930,28 @@ return `
 const installContainer = document.getElementById("installContainer");
 const installBtn = document.getElementById("installBtn");
 
-// Hide initially
+// Detect mobile device
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+// Hide by default
 installContainer.style.display = "none";
 
-// Show only when app is installable
+// If app is already installed/opened as app
+if (
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true
+) {
+    installContainer.style.display = "none";
+}
+
+// Show only on mobile when installable
 window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    installContainer.style.display = "block";
+
+    if (isMobile) {
+        installContainer.style.display = "block";
+    }
 });
 
 // Install button click
@@ -2945,10 +2959,17 @@ installBtn.addEventListener("click", async () => {
     if (!deferredPrompt) return;
 
     deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
+
+    const choice = await deferredPrompt.userChoice;
+
+    if (choice.outcome === "accepted") {
+        installContainer.style.display = "none";
+    }
+
+    deferredPrompt = null;
 });
 
-// Automatically hide after installation
+// Hide permanently after installation
 window.addEventListener("appinstalled", () => {
     installContainer.style.display = "none";
 });
