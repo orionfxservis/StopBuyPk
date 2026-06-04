@@ -111,6 +111,9 @@ window.onBackgroundDataLoaded = function(type, data) {
     } else if (type === 'broadcasts') {
         broadcasts = data || [];
         renderBroadcasts();
+    } else if (type === 'banners') {
+        banners = data || [];
+        renderBanners();
     }
 };
 
