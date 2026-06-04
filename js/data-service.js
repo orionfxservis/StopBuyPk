@@ -107,7 +107,34 @@ const DataService = {
             return cached;
         }
     },
-    getBanners: async () => JSON.parse(localStorage.getItem("admin_banners")) || [],
+    getBanners: async () => {
+        let cached = JSON.parse(localStorage.getItem("admin_banners"));
+        if (!cached || cached.length === 0) {
+            try {
+                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getBanners" }) });
+                const data = await res.json();
+                if (data.success && data.banners) {
+                    localStorage.setItem("admin_banners", JSON.stringify(data.banners));
+                    return data.banners;
+                }
+            } catch (err) { console.error(err); }
+            return [];
+        } else {
+            setTimeout(async () => {
+                try {
+                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getBanners" }) });
+                    const data = await res.json();
+                    if (data.success && data.banners) {
+                        localStorage.setItem("admin_banners", JSON.stringify(data.banners));
+                        if (typeof window.onBackgroundDataLoaded === 'function') {
+                            window.onBackgroundDataLoaded('banners', data.banners);
+                        }
+                    }
+                } catch (err) {}
+            }, 0);
+            return cached;
+        }
+    },
     getDeals: async () => {
         let cached = JSON.parse(localStorage.getItem("admin_deals"));
         if (!cached || cached.length === 0) {
@@ -282,7 +309,27 @@ const DataService = {
         }
         localStorage.setItem("admin_products", JSON.stringify(data));
     },
-    saveBanners: async (data) => localStorage.setItem("admin_banners", JSON.stringify(data)),
+    saveBanners: async (data) => {
+        try {
+            const res = await fetch(DataService.API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "syncBanners", banners: data })
+            });
+            const result = await res.json();
+            if (!result.success) {
+                console.warn("API sync failed", result.message);
+                alert("Google Sheet Sync Error (Banners): " + result.message);
+            } else {
+                alert("Banners synced to Google Sheets successfully! Count: " + (data ? data.length : 0));
+            }
+        } catch (err) {
+            console.error("Failed to sync banners to API", err);
+            alert("Failed to connect to Google Apps Script. Did you deploy a New Version?");
+        }
+        localStorage.setItem("admin_banners", JSON.stringify(data));
+        return true;
+    },
     saveDeals: async (data) => {
         try {
             const res = await fetch(DataService.API_URL, {
