@@ -608,7 +608,7 @@ html[lang='ur'] body *:not(i):not(.fas):not(.far):not(.fab):not(.fa):not([class*
     border:1px solid rgba(255,255,255,0.08);
     border-radius:14px;
     padding:10px 14px;
-    color:white;
+    color:black;
     font-size:12px;
     transition:all .3s ease;
     outline:none;
@@ -1574,4 +1574,8 @@ textarea:focus {
     background: linear-gradient(to right, #059669, #0891b2) !important;
     color: white !important;
     border-color: transparent !important;
+}
+
+.category-card {
+    opacity: 0.8;
 }
