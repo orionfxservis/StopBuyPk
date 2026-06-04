@@ -1579,3 +1579,13 @@ textarea:focus {
 .category-card {
     opacity: 0.8;
 }
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.deal-banner::-webkit-scrollbar {
+    display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.deal-banner {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
