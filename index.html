@@ -2315,6 +2315,58 @@
 
             detectUserLocation();
 
+            loadDynamicVerticalBanners();
+
+        }
+
+        // ================================
+        // LOAD DYNAMIC VERTICAL BANNERS
+        // ================================
+        async function loadDynamicVerticalBanners() {
+            try {
+                if (typeof DataService === 'undefined') return;
+                const banners = await DataService.getBanners();
+                if (!banners || banners.length === 0) return;
+
+                // Filter out vertical published banners
+                const vertBanners = banners.filter(b => {
+                    let displayType = b.type;
+                    let displayLink = b.link;
+                    // Unpack link if it contains type
+                    if (displayLink && typeof displayLink === 'string' && displayLink.includes('|')) {
+                        const parts = displayLink.split('|');
+                        if (parts[0] === 'vertical' || parts[0] === 'horizontal') {
+                            displayType = parts[0];
+                        }
+                    }
+                    return displayType === 'vertical' && (b.status === 'Publish' || !b.status);
+                });
+
+                if (vertBanners.length > 0) {
+                    const html = vertBanners.map(b => {
+                        let clickTarget = b.link || 'javascript:void(0)';
+                        if (clickTarget && typeof clickTarget === 'string' && clickTarget.includes('|')) {
+                            const parts = clickTarget.split('|');
+                            if (parts[0] === 'vertical' || parts[0] === 'horizontal') {
+                                clickTarget = parts.slice(1).join('|') || 'javascript:void(0)';
+                            }
+                        }
+                        const cursor = clickTarget !== 'javascript:void(0)' ? 'pointer' : 'default';
+                        return `
+                            <a href="${clickTarget}" target="_blank" style="display:block; width:100%; cursor:${cursor}; text-decoration:none;">
+                                <img src="${b.image}" class="w-full h-auto rounded-3xl shadow-md border border-emerald-200" onerror="this.src='https://placehold.co/120x600?text=Vertical+Ad'"/>
+                            </a>
+                        `;
+                    }).join('');
+
+                    const leftCol = document.getElementById('vertical-banner-left');
+                    const rightCol = document.getElementById('vertical-banner-right');
+                    if (leftCol) leftCol.innerHTML = html;
+                    if (rightCol) rightCol.innerHTML = html;
+                }
+            } catch (err) {
+                console.error("Failed to load vertical banners", err);
+            }
         }
 
         // ================================
@@ -2390,17 +2442,31 @@
         function autoScrollSideBanners() {
             const banners = document.querySelectorAll('.deal-banner');
             banners.forEach(banner => {
-                let scrollStep = 1;
-                setInterval(() => {
-                    if (banner.matches(':hover')) return; // pause on hover
-                    banner.scrollTop += scrollStep;
-                    // Check if reached bottom or top
-                    if (banner.scrollTop + banner.clientHeight >= banner.scrollHeight - 1) {
-                        scrollStep = -1;
-                    } else if (banner.scrollTop <= 0) {
-                        scrollStep = 1;
+                let scrollStep = 0.8;
+                let direction = 1;
+                
+                function scroll() {
+                    if (banner.matches(':hover')) {
+                        requestAnimationFrame(scroll);
+                        return;
                     }
-                }, 40); // speed of auto-scroll
+                    const maxScroll = banner.scrollHeight - banner.clientHeight;
+                    if (maxScroll > 0) {
+                        banner.scrollTop += scrollStep * direction;
+                        if (banner.scrollTop >= maxScroll) {
+                            banner.scrollTop = maxScroll;
+                            direction = -1;
+                        } else if (banner.scrollTop <= 0) {
+                            banner.scrollTop = 0;
+                            direction = 1;
+                        }
+                    }
+                    requestAnimationFrame(scroll);
+                }
+                
+                setTimeout(() => {
+                    requestAnimationFrame(scroll);
+                }, 1500);
             });
         }
 
