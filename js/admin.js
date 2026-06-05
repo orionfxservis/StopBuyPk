@@ -989,6 +989,22 @@ function showSection(sectionId) {
 
     document.querySelectorAll('.menu li').forEach(li => li.classList.remove('active'));
     try { if (typeof event !== 'undefined' && event && event.currentTarget) { event.currentTarget.classList.add('active'); } } catch (e) { }
+
+    // Performance analytics integration hook
+    if (sectionId === 'performance') {
+        if (typeof compilePerformanceMetrics === 'function') {
+            if (!performanceTargetUser) {
+                const defaultBtn = document.querySelector('.perf-filter-btn:nth-child(2)'); // This Week
+                if (typeof setPerformanceFilter === 'function') {
+                    setPerformanceFilter('week', defaultBtn);
+                } else {
+                    compilePerformanceMetrics();
+                }
+            } else {
+                compilePerformanceMetrics();
+            }
+        }
+    }
 }
 
 function logout() {
@@ -2744,23 +2760,7 @@ let performanceFilter = 'week';
 let perfCharts = {};
 let performanceTargetUser = null; // For filtering by specific user from Manage Users page
 
-// Wrap showSection to hook performance loading
-const originalShowSection = window.showSection;
-window.showSection = function(sectionId) {
-    if (typeof originalShowSection === 'function') {
-        originalShowSection(sectionId);
-    }
-    if (sectionId === 'performance') {
-        // Clear filter if not navigated from user stats
-        if (!performanceTargetUser) {
-            const defaultBtn = document.querySelector('.perf-filter-btn:nth-child(2)'); // This Week
-            setPerformanceFilter('week', defaultBtn);
-        } else {
-            // Stats button clicked - compile with target user in mind
-            compilePerformanceMetrics();
-        }
-    }
-};
+
 
 window.showPage = function(pageId) {
     window.showSection(pageId);
@@ -2819,6 +2819,7 @@ window.applyCustomDateFilter = function() {
 };
 
 function parseItemDate(item) {
+    if (!item) return new Date(0);
     if (item.createdDate) {
         return new Date(item.createdDate);
     }
@@ -3030,149 +3031,170 @@ function getWeekDaysData(filteredItems) {
 }
 
 window.renderPerformanceCharts = function(userStats, filteredProducts, filteredDeals, filteredBlogs, filteredBanners) {
-    // 1. Weekly User Activity grouped daily count
-    const weeklyCtx = document.getElementById('weeklyActivityChart');
-    if (weeklyCtx) {
-        if (perfCharts.weekly) perfCharts.weekly.destroy();
-        
-        const prodWeek = getWeekDaysData(filteredProducts);
-        const dealWeek = getWeekDaysData(filteredDeals);
-        const blogWeek = getWeekDaysData(filteredBlogs);
-        const bannerWeek = getWeekDaysData(filteredBanners);
+    if (typeof Chart === 'undefined') {
+        console.warn("Chart.js is not loaded. Skipping rendering of performance charts.");
+        return;
+    }
 
-        perfCharts.weekly = new Chart(weeklyCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                datasets: [
-                    { label: 'Products', data: prodWeek, backgroundColor: '#3b82f6' },
-                    { label: 'Deals', data: dealWeek, backgroundColor: '#f59e0b' },
-                    { label: 'Blogs', data: blogWeek, backgroundColor: '#10b981' },
-                    { label: 'Banners', data: bannerWeek, backgroundColor: '#ef4444' }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { ticks: { color: '#cbd5e1' }, grid: { display: false } },
-                    y: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+    // 1. Weekly User Activity grouped daily count
+    try {
+        const weeklyCtx = document.getElementById('weeklyActivityChart');
+        if (weeklyCtx) {
+            if (perfCharts.weekly) perfCharts.weekly.destroy();
+            
+            const prodWeek = getWeekDaysData(filteredProducts);
+            const dealWeek = getWeekDaysData(filteredDeals);
+            const blogWeek = getWeekDaysData(filteredBlogs);
+            const bannerWeek = getWeekDaysData(filteredBanners);
+
+            perfCharts.weekly = new Chart(weeklyCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [
+                        { label: 'Products', data: prodWeek, backgroundColor: '#3b82f6' },
+                        { label: 'Deals', data: dealWeek, backgroundColor: '#f59e0b' },
+                        { label: 'Blogs', data: blogWeek, backgroundColor: '#10b981' },
+                        { label: 'Banners', data: bannerWeek, backgroundColor: '#ef4444' }
+                    ]
                 },
-                plugins: { legend: { labels: { color: '#cbd5e1' } } }
-            }
-        });
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { ticks: { color: '#cbd5e1' }, grid: { display: false } },
+                        y: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                    },
+                    plugins: { legend: { labels: { color: '#cbd5e1' } } }
+                }
+            });
+        }
+    } catch (e) {
+        console.error("Error rendering weeklyActivityChart:", e);
     }
 
     // 2. Monthly User Activity weekly group breakdown
-    const monthlyCtx = document.getElementById('monthlyActivityChart');
-    if (monthlyCtx) {
-        if (perfCharts.monthly) perfCharts.monthly.destroy();
+    try {
+        const monthlyCtx = document.getElementById('monthlyActivityChart');
+        if (monthlyCtx) {
+            if (perfCharts.monthly) perfCharts.monthly.destroy();
 
-        // Split month into 4 weeks
-        const weeksData = [0, 0, 0, 0]; // Week 1, 2, 3, 4
-        const now = new Date();
-        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+            // Split month into 4 weeks
+            const weeksData = [0, 0, 0, 0]; // Week 1, 2, 3, 4
+            const now = new Date();
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
 
-        const allFiltered = [...filteredProducts, ...filteredDeals, ...filteredBlogs, ...filteredBanners];
-        allFiltered.forEach(item => {
-            const date = parseItemDate(item);
-            if (date.getTime() >= startOfMonth) {
-                const day = date.getDate();
-                if (day <= 7) weeksData[0]++;
-                else if (day <= 14) weeksData[1]++;
-                else if (day <= 21) weeksData[2]++;
-                else weeksData[3]++;
-            }
-        });
+            const allFiltered = [...filteredProducts, ...filteredDeals, ...filteredBlogs, ...filteredBanners];
+            allFiltered.forEach(item => {
+                const date = parseItemDate(item);
+                if (date.getTime() >= startOfMonth) {
+                    const day = date.getDate();
+                    if (day <= 7) weeksData[0]++;
+                    else if (day <= 14) weeksData[1]++;
+                    else if (day <= 21) weeksData[2]++;
+                    else weeksData[3]++;
+                }
+            });
 
-        perfCharts.monthly = new Chart(monthlyCtx, {
-            type: 'line',
-            data: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                datasets: [{
-                    label: 'Total Posts',
-                    data: weeksData,
-                    borderColor: '#10b981',
-                    backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { ticks: { color: '#cbd5e1' }, grid: { display: false } },
-                    y: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+            perfCharts.monthly = new Chart(monthlyCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'Total Posts',
+                        data: weeksData,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }]
                 },
-                plugins: { legend: { labels: { color: '#cbd5e1' } } }
-            }
-        });
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { ticks: { color: '#cbd5e1' }, grid: { display: false } },
+                        y: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                    },
+                    plugins: { legend: { labels: { color: '#cbd5e1' } } }
+                }
+            });
+        }
+    } catch (e) {
+        console.error("Error rendering monthlyActivityChart:", e);
     }
 
     // 3. Top 5 Performers Bar Chart
-    const topCtx = document.getElementById('topPerformersChart');
-    if (topCtx) {
-        if (perfCharts.topPerformers) perfCharts.topPerformers.destroy();
+    try {
+        const topCtx = document.getElementById('topPerformersChart');
+        if (topCtx) {
+            if (perfCharts.topPerformers) perfCharts.topPerformers.destroy();
 
-        // Sort and slice top 5
-        const sortedPerformers = [...userStats].sort((a, b) => b.total - a.total).slice(0, 5);
-        const labels = sortedPerformers.map(p => p.fullName);
-        const totals = sortedPerformers.map(p => p.total);
+            // Sort and slice top 5
+            const sortedPerformers = [...userStats].sort((a, b) => b.total - a.total).slice(0, 5);
+            const labels = sortedPerformers.map(p => p.fullName);
+            const totals = sortedPerformers.map(p => p.total);
 
-        perfCharts.topPerformers = new Chart(topCtx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Total Activity Count',
-                    data: totals,
-                    backgroundColor: ['#f59e0b', '#10b981', '#3b82f6', '#ef4444', '#8b5cf6']
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                scales: {
-                    x: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-                    y: { ticks: { color: '#cbd5e1' }, grid: { display: false } }
+            perfCharts.topPerformers = new Chart(topCtx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total Activity Count',
+                        data: totals,
+                        backgroundColor: ['#f59e0b', '#10b981', '#3b82f6', '#ef4444', '#8b5cf6']
+                    }]
                 },
-                plugins: { legend: { display: false } }
-            }
-        });
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { ticks: { color: '#cbd5e1' }, grid: { display: false } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+    } catch (e) {
+        console.error("Error rendering topPerformersChart:", e);
     }
 
     // 4. User-wise Pie Chart
-    const pieCtx = document.getElementById('userPieChart');
-    if (pieCtx) {
-        if (perfCharts.pie) perfCharts.pie.destroy();
+    try {
+        const pieCtx = document.getElementById('userPieChart');
+        if (pieCtx) {
+            if (perfCharts.pie) perfCharts.pie.destroy();
 
-        const activeUsers = userStats.filter(p => p.total > 0);
-        const labels = activeUsers.map(p => p.fullName);
-        const totals = activeUsers.map(p => p.total);
+            const activeUsers = userStats.filter(p => p.total > 0);
+            const labels = activeUsers.map(p => p.fullName);
+            const totals = activeUsers.map(p => p.total);
 
-        perfCharts.pie = new Chart(pieCtx, {
-            type: 'doughnut',
-            data: {
-                labels: labels.length > 0 ? labels : ['No Activity'],
-                datasets: [{
-                    data: totals.length > 0 ? totals : [1],
-                    backgroundColor: ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6'],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                        labels: { color: '#cbd5e1' }
+            perfCharts.pie = new Chart(pieCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels.length > 0 ? labels : ['No Activity'],
+                    datasets: [{
+                        data: totals.length > 0 ? totals : [1],
+                        backgroundColor: ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { color: '#cbd5e1' }
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
+    } catch (e) {
+        console.error("Error rendering userPieChart:", e);
     }
 };
 
