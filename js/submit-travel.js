@@ -10,6 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.textContent = 'Submitting...';
             submitBtn.disabled = true;
 
+            const cUserStr = localStorage.getItem('currentUser');
+            const currentUser = cUserStr ? JSON.parse(cUserStr) : {};
+            const userName = currentUser.fullName || currentUser.username || currentUser.userId || 'Guest';
+
             const newPkg = {
                 id: Date.now(),
                 company: document.getElementById('travelCompany').value,
@@ -34,7 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 listingType: 'Basic', // Default for user submissions
                 verified: 'No', // Default
                 status: 'Publish', // Auto-publish for user submissions
-                dateAdded: Date.now()
+                dateAdded: Date.now(),
+                addedBy: userName,
+                createdDate: new Date().toISOString(),
+                updatedDate: new Date().toISOString()
             };
 
             // 1. Try to send WhatsApp Alert via Backend
