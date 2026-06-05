@@ -55,6 +55,44 @@ async function initAdmin() {
         travelPackages = travelRes || [];
         broadcasts = broadcastsRes || [];
 
+        // Track Login and Active Days for currently logged-in user
+        try {
+            const currentUserStr = localStorage.getItem('currentUser');
+            if (currentUserStr) {
+                const currentUser = JSON.parse(currentUserStr);
+                const userIndex = users.findIndex(u => String(u.userId || '').toLowerCase() === String(currentUser.userId || '').toLowerCase());
+                if (userIndex !== -1) {
+                    const todayStr = new Date().toISOString().split('T')[0];
+                    const liveUser = users[userIndex];
+                    
+                    liveUser.lastLogin = new Date().toISOString();
+                    
+                    let daysList = liveUser.activeDaysList || [];
+                    if (typeof daysList === 'string') {
+                        try { daysList = JSON.parse(daysList); } catch(e) { daysList = []; }
+                    }
+                    if (!Array.isArray(daysList)) {
+                        daysList = [];
+                    }
+                    if (!daysList.includes(todayStr)) {
+                        daysList.push(todayStr);
+                    }
+                    liveUser.activeDaysList = daysList;
+                    liveUser.activeDays = daysList.length;
+                    
+                    currentUser.lastLogin = liveUser.lastLogin;
+                    currentUser.activeDays = liveUser.activeDays;
+                    currentUser.activeDaysList = liveUser.activeDaysList;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
+                    // Call saveUsers asynchronously so it doesn't block the UI rendering
+                    DataService.saveUsers(users).catch(err => console.error("Failed to async save users:", err));
+                }
+            }
+        } catch (err) {
+            console.error("Error tracking user login metrics:", err);
+        }
+
         updateUI();
         renderBanners();
         renderDeals();
@@ -440,9 +478,27 @@ if (bannerForm) {
             }
 
             if (bannerEditIndex === -1) {
-                banners.push({ image, link, type, addedBy: userName, status: bannerStatus });
+                banners.push({ 
+                    id: Date.now(),
+                    image, 
+                    link, 
+                    type, 
+                    addedBy: userName, 
+                    status: bannerStatus,
+                    createdDate: new Date().toISOString(),
+                    updatedDate: new Date().toISOString()
+                });
             } else {
-                banners[bannerEditIndex] = { image, link, type, addedBy: banners[bannerEditIndex].addedBy || userName, status: bannerStatus };
+                banners[bannerEditIndex] = { 
+                    id: banners[bannerEditIndex].id || Date.now(),
+                    image, 
+                    link, 
+                    type, 
+                    addedBy: banners[bannerEditIndex].addedBy || userName, 
+                    status: bannerStatus,
+                    createdDate: banners[bannerEditIndex].createdDate || new Date().toISOString(),
+                    updatedDate: new Date().toISOString()
+                };
                 cancelBannerEdit();
             }
 
@@ -664,7 +720,9 @@ if (dealForm) {
             whatsapp: document.getElementById('dealWhatsapp').value,
             video: document.getElementById('dealVideo').value,
             status: document.getElementById('dealStatus').value,
-            addedBy: dealEditIndex === -1 ? userName : (existingDeal.addedBy || userName)
+            addedBy: dealEditIndex === -1 ? userName : (existingDeal.addedBy || userName),
+            createdDate: dealEditIndex === -1 ? new Date().toISOString() : (existingDeal.createdDate || new Date().toISOString()),
+            updatedDate: new Date().toISOString()
         };
 
         if (String(cUser.userId || '').toLowerCase() !== 'admin') {
@@ -779,7 +837,7 @@ function renderUsers() {
                 <td>
                     <div class="action-buttons-group">
                         <button class="action-btn purple" onclick="alert('Super Admin cannot be edited here.')" title="Edit User"><i class="fa-solid fa-id-card"></i></button>
-                        <button class="action-btn blue" onclick="alert('Stats feature coming soon!')" title="Stats"><i class="fa-solid fa-chart-simple"></i></button>
+                        <button class="action-btn blue" onclick="showUserPerformanceStats('${u.username || u.fullName || u.userId || 'admin'}')" title="Stats"><i class="fa-solid fa-chart-simple"></i></button>
                     </div>
                 </td>
             </tr>
@@ -816,7 +874,7 @@ function renderUsers() {
                         <button class="action-btn green" onclick="setUserStatus(${index}, 'active')" title="Activate"><i class="fa-solid fa-check"></i></button>
                         <button class="action-btn red" onclick="setUserStatus(${index}, 'hold')" title="Hold"><i class="fa-solid fa-lock"></i></button>
                         <button class="action-btn purple" onclick="editUser(${index})" title="Edit User"><i class="fa-solid fa-id-card"></i></button>
-                        <button class="action-btn blue" onclick="alert('Stats feature coming soon!')" title="Stats"><i class="fa-solid fa-chart-simple"></i></button>
+                        <button class="action-btn blue" onclick="showUserPerformanceStats('${u.username || u.fullName || u.userId}')" title="Stats"><i class="fa-solid fa-chart-simple"></i></button>
                         <button class="action-btn yellow" onclick="alert('Password reset coming soon!')" title="Reset Password"><i class="fa-solid fa-key"></i></button>
                         <button class="action-btn red" onclick="deleteUser(${index})" title="Delete"><i class="fa-solid fa-trash"></i></button>
                     </div>
@@ -1432,7 +1490,9 @@ if (adminProductForm) {
             category: category,
             subCategory: subCategory,
             image: document.getElementById('prodImage').value || (productEditIndex !== -1 ? products[productEditIndex].image : 'https://via.placeholder.com/150'),
-            addedBy: productEditIndex === -1 ? userName : (products[productEditIndex].addedBy || userName)
+            addedBy: productEditIndex === -1 ? userName : (products[productEditIndex].addedBy || userName),
+            createdDate: productEditIndex === -1 ? new Date().toISOString() : (products[productEditIndex].createdDate || new Date().toISOString()),
+            updatedDate: new Date().toISOString()
         };
 
         // Extract native dynamic field values
@@ -2675,4 +2735,444 @@ if (liveRatesForm) {
 const timeField = document.getElementById("ratesUpdatedTime");
 if (timeField && !timeField.value) {
    timeField.value = new Date().toLocaleString();
-}
+}
+
+// ==========================================
+// USER PERFORMANCE & ANALYTICS LOGIC
+// ==========================================
+let performanceFilter = 'week';
+let perfCharts = {};
+let performanceTargetUser = null; // For filtering by specific user from Manage Users page
+
+// Wrap showSection to hook performance loading
+const originalShowSection = window.showSection;
+window.showSection = function(sectionId) {
+    if (typeof originalShowSection === 'function') {
+        originalShowSection(sectionId);
+    }
+    if (sectionId === 'performance') {
+        // Clear filter if not navigated from user stats
+        if (!performanceTargetUser) {
+            const defaultBtn = document.querySelector('.perf-filter-btn:nth-child(2)'); // This Week
+            setPerformanceFilter('week', defaultBtn);
+        } else {
+            // Stats button clicked - compile with target user in mind
+            compilePerformanceMetrics();
+        }
+    }
+};
+
+window.showPage = function(pageId) {
+    window.showSection(pageId);
+    const targetLi = Array.from(document.querySelectorAll('.menu li')).find(li => 
+        li.getAttribute('onclick') && li.getAttribute('onclick').includes(pageId)
+    );
+    if (targetLi) {
+        document.querySelectorAll('.menu li').forEach(li => li.classList.remove('active'));
+        targetLi.classList.add('active');
+    }
+};
+
+// Redirect user stats button to performance tab
+window.showUserPerformanceStats = function(username) {
+    performanceTargetUser = username;
+    window.showPage('performance');
+};
+
+
+
+window.setPerformanceFilter = function(filterType, btn) {
+    performanceFilter = filterType;
+    performanceTargetUser = null; // reset specific user filter
+
+    // Toggle custom date range selector
+    const customContainer = document.getElementById('customDateRangeContainer');
+    if (customContainer) {
+        if (filterType === 'custom') {
+            customContainer.classList.remove('hidden');
+        } else {
+            customContainer.classList.add('hidden');
+        }
+    }
+
+    // Toggle active class on filter buttons
+    document.querySelectorAll('.perf-filter-btn').forEach(b => {
+        b.classList.remove('bg-slate-700', 'text-white');
+        b.classList.add('text-slate-300');
+    });
+    if (btn) {
+        btn.classList.add('bg-slate-700', 'text-white');
+        btn.classList.remove('text-slate-300');
+    }
+
+    compilePerformanceMetrics();
+};
+
+window.applyCustomDateFilter = function() {
+    const start = document.getElementById('perfStartDate').value;
+    const end = document.getElementById('perfEndDate').value;
+    if (!start || !end) {
+        alert("Please select both start and end dates.");
+        return;
+    }
+    compilePerformanceMetrics();
+};
+
+function parseItemDate(item) {
+    if (item.createdDate) {
+        return new Date(item.createdDate);
+    }
+    if (item.id && !isNaN(item.id) && Number(item.id) > 1000000000) {
+        return new Date(Number(item.id));
+    }
+    if (item.date) {
+        const d = new Date(item.date);
+        if (!isNaN(d.getTime())) return d;
+    }
+    return new Date(0);
+}
+
+function isDateInFilterRange(date, filterType, customStart, customEnd) {
+    const dTime = date.getTime();
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    
+    if (filterType === 'today') {
+        return dTime >= startOfToday;
+    } else if (filterType === 'week') {
+        // Start of this week (last Sunday)
+        const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay()).getTime();
+        return dTime >= startOfWeek;
+    } else if (filterType === 'month') {
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+        return dTime >= startOfMonth;
+    } else if (filterType === '3months') {
+        const threeMonthsAgo = new Date();
+        threeMonthsAgo.setMonth(now.getMonth() - 3);
+        threeMonthsAgo.setHours(0,0,0,0);
+        return dTime >= threeMonthsAgo.getTime();
+    } else if (filterType === 'custom') {
+        if (!customStart || !customEnd) return true;
+        const sTime = new Date(customStart).setHours(0,0,0,0);
+        const eTime = new Date(customEnd).setHours(23,59,59,999);
+        return dTime >= sTime && dTime <= eTime;
+    }
+    return true;
+}
+
+window.compilePerformanceMetrics = function() {
+    // Inputs
+    const customStart = document.getElementById('perfStartDate') ? document.getElementById('perfStartDate').value : '';
+    const customEnd = document.getElementById('perfEndDate') ? document.getElementById('perfEndDate').value : '';
+
+    // Collect all posts
+    const allProducts = products || [];
+    const allDeals = deals || [];
+    const allBlogs = blogs || [];
+    const allBanners = banners || [];
+
+    // Determine range text
+    let rangeLabel = "This Week";
+    if (performanceFilter === 'today') rangeLabel = "Today";
+    else if (performanceFilter === 'month') rangeLabel = "This Month";
+    else if (performanceFilter === '3months') rangeLabel = "Last 3 Months";
+    else if (performanceFilter === 'custom') rangeLabel = `From ${customStart} to ${customEnd}`;
+
+    const labelEl = document.getElementById('activityTableFilterLabel');
+    if (labelEl) labelEl.textContent = `Filter: ${rangeLabel}` + (performanceTargetUser ? ` (User: ${performanceTargetUser})` : '');
+
+    // Get list of all users from user table or user entries
+    let userList = users.map(u => ({
+        username: u.username || u.fullName || u.userId || 'N/A',
+        fullName: u.fullName || u.username || u.userId || 'N/A',
+        role: u.role || 'user',
+        activeDays: u.activeDays || 0,
+        lastLogin: u.lastLogin || ''
+    }));
+
+    // Filter items based on active range
+    const filteredProducts = allProducts.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
+    const filteredDeals = allDeals.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
+    const filteredBlogs = allBlogs.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
+    const filteredBanners = allBanners.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
+
+    // Compile stats
+    let totalProductsCount = filteredProducts.length;
+    let totalDealsCount = filteredDeals.length;
+    let totalBlogsCount = filteredBlogs.length;
+    let totalBannersCount = filteredBanners.length;
+
+    // Apply specific user filter if requested
+    let displayUsers = [...userList];
+    if (performanceTargetUser) {
+        displayUsers = displayUsers.filter(u => u.username.toLowerCase() === performanceTargetUser.toLowerCase());
+    }
+
+    // Map stats per user
+    const userStats = displayUsers.map(user => {
+        const uLower = user.username.toLowerCase();
+        
+        const uProducts = filteredProducts.filter(p => String(p.addedBy || '').toLowerCase() === uLower).length;
+        const uDeals = filteredDeals.filter(d => String(d.addedBy || '').toLowerCase() === uLower).length;
+        const uBlogs = filteredBlogs.filter(b => String(b.addedBy || '').toLowerCase() === uLower).length;
+        const uBanners = filteredBanners.filter(b => String(b.addedBy || '').toLowerCase() === uLower).length;
+        
+        return {
+            ...user,
+            products: uProducts,
+            deals: uDeals,
+            blogs: uBlogs,
+            banners: uBanners,
+            total: uProducts + uDeals + uBlogs + uBanners
+        };
+    });
+
+    // Update top UI Stat fields
+    if (document.getElementById('perfStatProducts')) document.getElementById('perfStatProducts').textContent = totalProductsCount;
+    if (document.getElementById('perfStatDeals')) document.getElementById('perfStatDeals').textContent = totalDealsCount;
+    if (document.getElementById('perfStatBlogs')) document.getElementById('perfStatBlogs').textContent = totalBlogsCount;
+    if (document.getElementById('perfStatBanners')) document.getElementById('perfStatBanners').textContent = totalBannersCount;
+    if (document.getElementById('perfStatTotal')) document.getElementById('perfStatTotal').textContent = totalProductsCount + totalDealsCount + totalBlogsCount + totalBannersCount;
+
+    // Render User Activity Summary Table
+    const summaryBody = document.getElementById('perfActivitySummaryBody');
+    if (summaryBody) {
+        if (userStats.length === 0) {
+            summaryBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-slate-400">No user performance record found.</td></tr>`;
+        } else {
+            summaryBody.innerHTML = userStats.map(stat => `
+                <tr class="hover:bg-slate-800/20 transition-all duration-150">
+                    <td class="py-3 px-4 font-semibold text-white">${stat.fullName} <span class="text-xs text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded ml-2">${stat.role.toUpperCase()}</span></td>
+                    <td class="text-center py-3 px-4 text-sky-400 font-bold">${stat.products}</td>
+                    <td class="text-center py-3 px-4 text-amber-500 font-bold">${stat.deals}</td>
+                    <td class="text-center py-3 px-4 text-emerald-400 font-bold">${stat.blogs}</td>
+                    <td class="text-center py-3 px-4 text-rose-400 font-bold">${stat.banners}</td>
+                    <td class="text-center py-3 px-4 text-white font-extrabold">${stat.total}</td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    // Render Weekly Breakdown Table (Calculated from start of this week)
+    const weeklyStart = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - new Date().getDay());
+    const weeklyBody = document.getElementById('perfWeeklyBody');
+    if (weeklyBody) {
+        const weeklyUserStats = displayUsers.map(user => {
+            const uLower = user.username.toLowerCase();
+            const wProducts = allProducts.filter(p => String(p.addedBy || '').toLowerCase() === uLower && parseItemDate(p) >= weeklyStart).length;
+            const wDeals = allDeals.filter(d => String(d.addedBy || '').toLowerCase() === uLower && parseItemDate(d) >= weeklyStart).length;
+            const wBlogs = allBlogs.filter(b => String(b.addedBy || '').toLowerCase() === uLower && parseItemDate(b) >= weeklyStart).length;
+            const wBanners = allBanners.filter(b => String(b.addedBy || '').toLowerCase() === uLower && parseItemDate(b) >= weeklyStart).length;
+            
+            return {
+                ...user,
+                totalThisWeek: wProducts + wDeals + wBlogs + wBanners
+            };
+        });
+
+        weeklyBody.innerHTML = weeklyUserStats.map(stat => {
+            const lastLoginText = stat.lastLogin ? new Date(stat.lastLogin).toLocaleString() : 'Never';
+            return `
+                <tr class="hover:bg-slate-800/20 transition-all duration-150">
+                    <td class="py-3 px-4 text-white font-semibold">${stat.fullName}</td>
+                    <td class="text-center py-3 px-4 text-emerald-400 font-extrabold">${stat.totalThisWeek} Posts</td>
+                    <td class="text-center py-3 px-4 text-amber-400 font-semibold">${stat.activeDays} Days</td>
+                    <td class="text-right py-3 px-4 text-slate-400 text-xs">${lastLoginText}</td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // Render Monthly Breakdown Table (Calculated from start of this month)
+    const monthlyStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    const monthlyBody = document.getElementById('perfMonthlyBody');
+    if (monthlyBody) {
+        const monthlyUserStats = displayUsers.map(user => {
+            const uLower = user.username.toLowerCase();
+            const mProducts = allProducts.filter(p => String(p.addedBy || '').toLowerCase() === uLower && parseItemDate(p) >= monthlyStart).length;
+            const mDeals = allDeals.filter(d => String(d.addedBy || '').toLowerCase() === uLower && parseItemDate(d) >= monthlyStart).length;
+            const mBlogs = allBlogs.filter(b => String(b.addedBy || '').toLowerCase() === uLower && parseItemDate(b) >= monthlyStart).length;
+            const mBanners = allBanners.filter(b => String(b.addedBy || '').toLowerCase() === uLower && parseItemDate(b) >= monthlyStart).length;
+            
+            return {
+                ...user,
+                totalThisMonth: mProducts + mDeals + mBlogs + mBanners
+            };
+        });
+
+        monthlyBody.innerHTML = monthlyUserStats.map(stat => {
+            const lastLoginText = stat.lastLogin ? new Date(stat.lastLogin).toLocaleString() : 'Never';
+            return `
+                <tr class="hover:bg-slate-800/20 transition-all duration-150">
+                    <td class="py-3 px-4 text-white font-semibold">${stat.fullName}</td>
+                    <td class="text-center py-3 px-4 text-sky-400 font-extrabold">${stat.totalThisMonth} Posts</td>
+                    <td class="text-center py-3 px-4 text-amber-400 font-semibold">${stat.activeDays} Days</td>
+                    <td class="text-right py-3 px-4 text-slate-400 text-xs">${lastLoginText}</td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // Render Charts using compiled stats
+    renderPerformanceCharts(userStats, filteredProducts, filteredDeals, filteredBlogs, filteredBanners);
+};
+
+function getWeekDaysData(filteredItems) {
+    const daysData = [0, 0, 0, 0, 0, 0, 0]; // Sun to Sat
+    filteredItems.forEach(item => {
+        const d = parseItemDate(item);
+        daysData[d.getDay()]++;
+    });
+    // Shift so Mon is first: Mon, Tue, Wed, Thu, Fri, Sat, Sun
+    const sun = daysData.shift();
+    daysData.push(sun);
+    return daysData;
+}
+
+window.renderPerformanceCharts = function(userStats, filteredProducts, filteredDeals, filteredBlogs, filteredBanners) {
+    // 1. Weekly User Activity grouped daily count
+    const weeklyCtx = document.getElementById('weeklyActivityChart');
+    if (weeklyCtx) {
+        if (perfCharts.weekly) perfCharts.weekly.destroy();
+        
+        const prodWeek = getWeekDaysData(filteredProducts);
+        const dealWeek = getWeekDaysData(filteredDeals);
+        const blogWeek = getWeekDaysData(filteredBlogs);
+        const bannerWeek = getWeekDaysData(filteredBanners);
+
+        perfCharts.weekly = new Chart(weeklyCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [
+                    { label: 'Products', data: prodWeek, backgroundColor: '#3b82f6' },
+                    { label: 'Deals', data: dealWeek, backgroundColor: '#f59e0b' },
+                    { label: 'Blogs', data: blogWeek, backgroundColor: '#10b981' },
+                    { label: 'Banners', data: bannerWeek, backgroundColor: '#ef4444' }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { ticks: { color: '#cbd5e1' }, grid: { display: false } },
+                    y: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                },
+                plugins: { legend: { labels: { color: '#cbd5e1' } } }
+            }
+        });
+    }
+
+    // 2. Monthly User Activity weekly group breakdown
+    const monthlyCtx = document.getElementById('monthlyActivityChart');
+    if (monthlyCtx) {
+        if (perfCharts.monthly) perfCharts.monthly.destroy();
+
+        // Split month into 4 weeks
+        const weeksData = [0, 0, 0, 0]; // Week 1, 2, 3, 4
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+
+        const allFiltered = [...filteredProducts, ...filteredDeals, ...filteredBlogs, ...filteredBanners];
+        allFiltered.forEach(item => {
+            const date = parseItemDate(item);
+            if (date.getTime() >= startOfMonth) {
+                const day = date.getDate();
+                if (day <= 7) weeksData[0]++;
+                else if (day <= 14) weeksData[1]++;
+                else if (day <= 21) weeksData[2]++;
+                else weeksData[3]++;
+            }
+        });
+
+        perfCharts.monthly = new Chart(monthlyCtx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Total Posts',
+                    data: weeksData,
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { ticks: { color: '#cbd5e1' }, grid: { display: false } },
+                    y: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                },
+                plugins: { legend: { labels: { color: '#cbd5e1' } } }
+            }
+        });
+    }
+
+    // 3. Top 5 Performers Bar Chart
+    const topCtx = document.getElementById('topPerformersChart');
+    if (topCtx) {
+        if (perfCharts.topPerformers) perfCharts.topPerformers.destroy();
+
+        // Sort and slice top 5
+        const sortedPerformers = [...userStats].sort((a, b) => b.total - a.total).slice(0, 5);
+        const labels = sortedPerformers.map(p => p.fullName);
+        const totals = sortedPerformers.map(p => p.total);
+
+        perfCharts.topPerformers = new Chart(topCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Activity Count',
+                    data: totals,
+                    backgroundColor: ['#f59e0b', '#10b981', '#3b82f6', '#ef4444', '#8b5cf6']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    y: { ticks: { color: '#cbd5e1' }, grid: { display: false } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
+
+    // 4. User-wise Pie Chart
+    const pieCtx = document.getElementById('userPieChart');
+    if (pieCtx) {
+        if (perfCharts.pie) perfCharts.pie.destroy();
+
+        const activeUsers = userStats.filter(p => p.total > 0);
+        const labels = activeUsers.map(p => p.fullName);
+        const totals = activeUsers.map(p => p.total);
+
+        perfCharts.pie = new Chart(pieCtx, {
+            type: 'doughnut',
+            data: {
+                labels: labels.length > 0 ? labels : ['No Activity'],
+                datasets: [{
+                    data: totals.length > 0 ? totals : [1],
+                    backgroundColor: ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { color: '#cbd5e1' }
+                    }
+                }
+            }
+        });
+    }
+};
+
