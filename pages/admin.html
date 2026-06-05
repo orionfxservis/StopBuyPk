@@ -1420,7 +1420,8 @@
                         Save Rates
                      </button>
                   </form>
-               </div>
+                </div>
+            </section>
             <!-- User Performance Section -->
             <section id="performance" class="admin-section" style="display: none;">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
@@ -1456,25 +1457,29 @@
                 </div>
 
                 <!-- Metrics Summary Cards -->
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
                     <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/40 text-center">
-                        <span class="block text-xs font-medium text-slate-400 mb-1">Products Added</span>
+                        <span class="block text-xs font-medium text-slate-400 mb-1">Products</span>
                         <span id="perfStatProducts" class="text-xl font-bold text-sky-400">0</span>
                     </div>
                     <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/40 text-center">
-                        <span class="block text-xs font-medium text-slate-400 mb-1">Deals Added</span>
+                        <span class="block text-xs font-medium text-slate-400 mb-1">Deals</span>
                         <span id="perfStatDeals" class="text-xl font-bold text-amber-500">0</span>
                     </div>
                     <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/40 text-center">
-                        <span class="block text-xs font-medium text-slate-400 mb-1">Blogs Added</span>
+                        <span class="block text-xs font-medium text-slate-400 mb-1">Banners</span>
+                        <span id="perfStatBanners" class="text-xl font-bold text-rose-400">0</span>
+                    </div>
+                    <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/40 text-center">
+                        <span class="block text-xs font-medium text-slate-400 mb-1">Blogs</span>
                         <span id="perfStatBlogs" class="text-xl font-bold text-emerald-400">0</span>
                     </div>
                     <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/40 text-center">
-                        <span class="block text-xs font-medium text-slate-400 mb-1">Banners Added</span>
-                        <span id="perfStatBanners" class="text-xl font-bold text-rose-400">0</span>
+                        <span class="block text-xs font-medium text-slate-400 mb-1">Travel</span>
+                        <span id="perfStatTravel" class="text-xl font-bold text-purple-400">0</span>
                     </div>
-                    <div class="col-span-2 md:col-span-1 bg-slate-800/60 p-4 rounded-2xl border border-slate-700/60 text-center shadow-lg shadow-slate-900/10">
-                        <span class="block text-xs font-medium text-slate-300 mb-1">Total Posts</span>
+                    <div class="bg-slate-800/60 p-4 rounded-2xl border border-slate-700/60 text-center shadow-lg shadow-slate-900/10">
+                        <span class="block text-xs font-medium text-slate-300 mb-1">Total</span>
                         <span id="perfStatTotal" class="text-xl font-extrabold text-white">0</span>
                     </div>
                 </div>
@@ -1528,10 +1533,11 @@
                                 <thead>
                                     <tr>
                                         <th class="text-left py-3 px-4">User</th>
-                                        <th class="text-center py-3 px-4">Products Added</th>
-                                        <th class="text-center py-3 px-4">Deals Added</th>
-                                        <th class="text-center py-3 px-4">Blogs Added</th>
-                                        <th class="text-center py-3 px-4">Banners Added</th>
+                                        <th class="text-center py-3 px-4">Products</th>
+                                        <th class="text-center py-3 px-4">Deals</th>
+                                        <th class="text-center py-3 px-4">Banners</th>
+                                        <th class="text-center py-3 px-4">Blogs</th>
+                                        <th class="text-center py-3 px-4">Travel</th>
                                         <th class="text-center py-3 px-4">Total Activity</th>
                                     </tr>
                                 </thead>
