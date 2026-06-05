@@ -40,6 +40,7 @@
                 <li onclick="showSection('deals')"><i class="fa-solid fa-fire"></i> Manage Deals <span id="dealsPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
                 <li onclick="showSection('live-rates')"><i class="fa-solid fa-chart-line"></i> Live Rates</li>
 				<li onclick="showSection('users')"><i class="fa-solid fa-users"></i> Manage Users</li>
+                <li onclick="showSection('performance')"><i class="fa-solid fa-chart-line"></i> User Performance</li>
                 <li onclick="showSection('ads')"><i class="fa-solid fa-bullhorn"></i> Place Ads</li>
                 <li onclick="showSection('banners')"><i class="fa-solid fa-image"></i> Manage Banners <span id="bannersPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
                 <li onclick="showSection('blogs')"><i class="fa-solid fa-blog"></i> Manage Blogs <span id="blogsPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
@@ -1420,6 +1421,169 @@
                      </button>
                   </form>
                </div>
+            <!-- User Performance Section -->
+            <section id="performance" class="admin-section" style="display: none;">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-white mb-1">User Performance Analytics</h1>
+                        <p class="text-sm text-slate-400">Monitor and evaluate publishing metrics and contributions of all system and regular users.</p>
+                    </div>
+                    <!-- Date Range Selector -->
+                    <div class="flex flex-wrap items-center gap-2 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700/50">
+                        <button onclick="setPerformanceFilter('today', this)" class="perf-filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200">Today</button>
+                        <button onclick="setPerformanceFilter('week', this)" class="perf-filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-slate-700 transition-all duration-200">This Week</button>
+                        <button onclick="setPerformanceFilter('month', this)" class="perf-filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200">This Month</button>
+                        <button onclick="setPerformanceFilter('3months', this)" class="perf-filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200">Last 3 Months</button>
+                        <button onclick="setPerformanceFilter('custom', this)" class="perf-filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200">Custom Date</button>
+                    </div>
+                </div>
+
+                <!-- Custom Date Range Form (Hidden by default) -->
+                <div id="customDateRangeContainer" class="hidden bg-slate-800/50 p-4 rounded-2xl border border-slate-700/50 mb-6 transition-all duration-300">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1.5">Start Date</label>
+                            <input type="date" id="perfStartDate" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1.5">End Date</label>
+                            <input type="date" id="perfEndDate" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <button onclick="applyCustomDateFilter()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-200 shadow-lg shadow-emerald-900/20">Apply Filter</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metrics Summary Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+                    <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/40 text-center">
+                        <span class="block text-xs font-medium text-slate-400 mb-1">Products Added</span>
+                        <span id="perfStatProducts" class="text-xl font-bold text-sky-400">0</span>
+                    </div>
+                    <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/40 text-center">
+                        <span class="block text-xs font-medium text-slate-400 mb-1">Deals Added</span>
+                        <span id="perfStatDeals" class="text-xl font-bold text-amber-500">0</span>
+                    </div>
+                    <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/40 text-center">
+                        <span class="block text-xs font-medium text-slate-400 mb-1">Blogs Added</span>
+                        <span id="perfStatBlogs" class="text-xl font-bold text-emerald-400">0</span>
+                    </div>
+                    <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/40 text-center">
+                        <span class="block text-xs font-medium text-slate-400 mb-1">Banners Added</span>
+                        <span id="perfStatBanners" class="text-xl font-bold text-rose-400">0</span>
+                    </div>
+                    <div class="col-span-2 md:col-span-1 bg-slate-800/60 p-4 rounded-2xl border border-slate-700/60 text-center shadow-lg shadow-slate-900/10">
+                        <span class="block text-xs font-medium text-slate-300 mb-1">Total Posts</span>
+                        <span id="perfStatTotal" class="text-xl font-extrabold text-white">0</span>
+                    </div>
+                </div>
+
+                <!-- Charts Container Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-slate-800/40 p-5 rounded-3xl border border-slate-700/40">
+                        <h3 class="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-column text-sky-400"></i> Weekly User Activity
+                        </h3>
+                        <div class="h-64 relative">
+                            <canvas id="weeklyActivityChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800/40 p-5 rounded-3xl border border-slate-700/40">
+                        <h3 class="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-bar text-amber-500"></i> Monthly User Activity
+                        </h3>
+                        <div class="h-64 relative">
+                            <canvas id="monthlyActivityChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800/40 p-5 rounded-3xl border border-slate-700/40">
+                        <h3 class="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-award text-emerald-400"></i> Top 5 Performers
+                        </h3>
+                        <div class="h-64 relative">
+                            <canvas id="topPerformersChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800/40 p-5 rounded-3xl border border-slate-700/40">
+                        <h3 class="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-rose-400"></i> User Share Contribution
+                        </h3>
+                        <div class="h-64 relative">
+                            <canvas id="userPieChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tables Grid -->
+                <div class="grid grid-cols-1 gap-6">
+                    <!-- User Activity Summary -->
+                    <div class="bg-slate-800/30 p-5 rounded-3xl border border-slate-700/30">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-semibold text-white">User Activity Summary</h3>
+                            <span id="activityTableFilterLabel" class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-full border border-slate-700">Filter: This Week</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="admin-table w-full text-sm">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left py-3 px-4">User</th>
+                                        <th class="text-center py-3 px-4">Products Added</th>
+                                        <th class="text-center py-3 px-4">Deals Added</th>
+                                        <th class="text-center py-3 px-4">Blogs Added</th>
+                                        <th class="text-center py-3 px-4">Banners Added</th>
+                                        <th class="text-center py-3 px-4">Total Activity</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="perfActivitySummaryBody">
+                                    <!-- Dynamic rows loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Weekly Breakdown -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-800/30 p-5 rounded-3xl border border-slate-700/30">
+                            <h3 class="text-sm font-semibold text-white mb-4">Weekly Performance</h3>
+                            <div class="overflow-x-auto">
+                                <table class="admin-table w-full text-sm">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-left py-3 px-4">User</th>
+                                            <th class="text-center py-3 px-4">This Week</th>
+                                            <th class="text-center py-3 px-4">Active Days</th>
+                                            <th class="text-right py-3 px-4">Last Login</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="perfWeeklyBody">
+                                        <!-- Dynamic rows loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Monthly Breakdown -->
+                        <div class="bg-slate-800/30 p-5 rounded-3xl border border-slate-700/30">
+                            <h3 class="text-sm font-semibold text-white mb-4">Monthly Performance</h3>
+                            <div class="overflow-x-auto">
+                                <table class="admin-table w-full text-sm">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-left py-3 px-4">User</th>
+                                            <th class="text-center py-3 px-4">This Month</th>
+                                            <th class="text-center py-3 px-4">Active Days</th>
+                                            <th class="text-right py-3 px-4">Last Login</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="perfMonthlyBody">
+                                        <!-- Dynamic rows loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
         </main>
     </div>
