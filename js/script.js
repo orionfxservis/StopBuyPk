@@ -319,6 +319,8 @@ function checkUserLocation() {
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
         console.log("User location detected:", lat, lon);
+        localStorage.setItem("stopbuy_latitude", lat);
+        localStorage.setItem("stopbuy_longitude", lon);
 
         const btn = document.getElementById('headerLocationBtn');
         if (btn) {

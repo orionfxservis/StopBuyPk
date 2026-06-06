@@ -32,6 +32,10 @@ function detectUserLocation(showAlert = false) {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
             try {
+                // Save coordinates for distance calculations
+                localStorage.setItem("stopbuy_latitude", lat);
+                localStorage.setItem("stopbuy_longitude", lon);
+
                 // Reverse Geocoding API
                 const response = await fetch(
                     `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
@@ -48,6 +52,10 @@ function detectUserLocation(showAlert = false) {
             } catch (error) {
                 console.error(error);
                 currentLocationEl.textContent = "Karachi";
+            } finally {
+                if (typeof renderFoodList === 'function') {
+                    renderFoodList();
+                }
             }
         },
         (error) => {
@@ -60,6 +68,9 @@ function detectUserLocation(showAlert = false) {
             }
             if (showAlert) {
                 alert("Could not detect precise location. Defaulting to saved location or Karachi.");
+            }
+            if (typeof renderFoodList === 'function') {
+                renderFoodList();
             }
         }
     );
