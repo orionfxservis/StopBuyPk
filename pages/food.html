@@ -191,8 +191,12 @@ textarea::placeholder{
 }
 
 @keyframes scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(50%); }
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-33%);
+    }
 }
 
 <!-- MOBILE ONLY STYLE -->
@@ -737,66 +741,97 @@ textarea::placeholder{
 
       <!-- SCROLLING FEATURED ADS TICKER -->
       <div class="mt-8">
-        <h3 class="text-lg font-bold text-slate-800 mb-4 px-2">Featured Offers</h3>
+        <h3 class="text-lg font-bold text-white mb-4 px-2">
+					Featured Offers
+		</h3>
         <div class="overflow-hidden relative w-full rounded-2xl bg-white/40 backdrop-blur-md border border-white/50 py-2.5 px-2 shadow-sm" dir="ltr">
-           <div class="flex gap-4 items-center animate-[scroll_20s_linear_infinite] whitespace-nowrap min-w-max hover:[animation-play-state:paused]" style="animation: scroll 20s linear infinite;">
+           <div class="flex gap-4 items-center animate-[scroll_20s_linear_infinite] whitespace-nowrap min-w-max hover:[animation-play-state:paused]" style="animation: scroll 35s linear infinite;">
              
              <!-- Ad 1 -->
              <div class="relative rounded-xl overflow-hidden h-32 w-64 group inline-block shrink-0 shadow-md">
-               <img src="../images/ads/ad1.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+               <img src="../images/featured-adds/food/add-01.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
                <div class="absolute bottom-3 left-3 right-3 whitespace-normal">
-                 <h4 class="text-sm font-bold text-white">Burger Deal</h4>
-                 <p class="text-xs text-emerald-300">Buy 1 Get 1 Free</p>
+                 <h4 class="text-sm font-bold text-white"></h4>
+                 <p class="text-xs text-emerald-300">Nuggets</p>
                </div>
              </div>
 
              <!-- Ad 2 -->
              <div class="relative rounded-xl overflow-hidden h-32 w-64 group inline-block shrink-0 shadow-md">
-               <img src="../images/ads/ad2.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+               <img src="../images/featured-adds/food/add-02.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
                <div class="absolute bottom-3 left-3 right-3 whitespace-normal">
-                 <h4 class="text-sm font-bold text-white">Pizza Special</h4>
-                 <p class="text-xs text-emerald-300">Extra Cheese Offer</p>
+                 <h4 class="text-sm font-bold text-white"></h4>
+                 <p class="text-xs text-emerald-300">Burger</p>
                </div>
              </div>
 
              <!-- Ad 3 -->
              <div class="relative rounded-xl overflow-hidden h-32 w-64 group inline-block shrink-0 shadow-md">
-               <img src="../images/ads/ad3.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+               <img src="../images/featured-adds/food/add-03.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
                <div class="absolute bottom-3 left-3 right-3 whitespace-normal">
-                 <h4 class="text-sm font-bold text-white">Family Combo</h4>
-                 <p class="text-xs text-emerald-300">Save More Today</p>
+                 <h4 class="text-sm font-bold text-white"></h4>
+                 <p class="text-xs text-emerald-300">Haleem</p>
                </div>
              </div>
              
              <!-- Duplicate for continuous scroll effect -->
              <!-- Ad 1 -->
              <div class="relative rounded-xl overflow-hidden h-32 w-64 group inline-block shrink-0 shadow-md">
-               <img src="../images/ads/ad1.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+               <img src="../images/featured-adds/food/add-04.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
                <div class="absolute bottom-3 left-3 right-3 whitespace-normal">
-                 <h4 class="text-sm font-bold text-white">Burger Deal</h4>
-                 <p class="text-xs text-emerald-300">Buy 1 Get 1 Free</p>
+                 <h4 class="text-sm font-bold text-white"></h4>
+                 <p class="text-xs text-emerald-300">Bar BQ Platter</p>
                </div>
              </div>
              <!-- Ad 2 -->
              <div class="relative rounded-xl overflow-hidden h-32 w-64 group inline-block shrink-0 shadow-md">
-               <img src="../images/ads/ad2.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+               <img src="../images/featured-adds/food/add-05.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
                <div class="absolute bottom-3 left-3 right-3 whitespace-normal">
-                 <h4 class="text-sm font-bold text-white">Pizza Special</h4>
-                 <p class="text-xs text-emerald-300">Extra Cheese Offer</p>
+                 <h4 class="text-sm font-bold text-white"></h4>
+                 <p class="text-xs text-emerald-300">Fast Food Deal</p>
                </div>
              </div>
              <!-- Ad 3 -->
              <div class="relative rounded-xl overflow-hidden h-32 w-64 group inline-block shrink-0 shadow-md">
-               <img src="../images/ads/ad3.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+               <img src="../images/featured-adds/food/add-06.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
                <div class="absolute bottom-3 left-3 right-3 whitespace-normal">
-                 <h4 class="text-sm font-bold text-white">Family Combo</h4>
-                 <p class="text-xs text-emerald-300">Save More Today</p>
+                 <h4 class="text-sm font-bold text-white"></h4>
+                 <p class="text-xs text-emerald-300">Burger Deal</p>
+               </div>
+             </div>
+			 
+			 <!-- Duplicate for continuous scroll effect -->
+             <!-- Ad 1 -->
+             <div class="relative rounded-xl overflow-hidden h-32 w-64 group inline-block shrink-0 shadow-md">
+               <img src="../images/featured-adds/food/add-07.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+               <div class="absolute bottom-3 left-3 right-3 whitespace-normal">
+                 <h4 class="text-sm font-bold text-white"></h4>
+                 <p class="text-xs text-emerald-300">Schwarma Deal</p>
+               </div>
+             </div>
+             <!-- Ad 2 -->
+             <div class="relative rounded-xl overflow-hidden h-32 w-64 group inline-block shrink-0 shadow-md">
+               <img src="../images/featured-adds/food/add-08.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+               <div class="absolute bottom-3 left-3 right-3 whitespace-normal">
+                 <h4 class="text-sm font-bold text-white"></h4>
+                 <p class="text-xs text-emerald-300">Best Deals</p>
+               </div>
+             </div>
+             <!-- Ad 3 -->
+             <div class="relative rounded-xl overflow-hidden h-32 w-64 group inline-block shrink-0 shadow-md">
+               <img src="../images/featured-adds/food/add-09.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+               <div class="absolute bottom-3 left-3 right-3 whitespace-normal">
+                 <h4 class="text-sm font-bold text-white"></h4>
+                 <p class="text-xs text-emerald-300">Hot & Roll</p>
                </div>
              </div>
 
@@ -964,11 +999,9 @@ textarea::placeholder{
           <label class="mb-1.5 block text-[11px] font-medium text-slate-500">
             Promo
           </label>
-
           <input type="text" placeholder="OPTIONAL"
             class="h-10 w-full rounded-xl border border-slate-200 bg-white px-2 text-center text-xs font-semibold uppercase tracking-wide text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
         </div>
-
       </div>
 
       <!-- TOTAL -->
@@ -1006,41 +1039,30 @@ textarea::placeholder{
           <!-- JazzCash -->
           <button type="button"
             class="group rounded-xl border border-slate-200 bg-white py-2.5 px-2 transition hover:-translate-y-1 hover:border-yellow-400 hover:shadow-lg">
-
             <div class="text-lg transition group-hover:scale-110">⚡</div>
-
             <div class="mt-1 text-[11px] font-bold text-slate-700">
               JazzCash
             </div>
-
           </button>
 
           <!-- Easypaisa -->
           <button type="button"
             class="group rounded-2xl border border-slate-200 bg-white py-2.5 px-2 transition hover:-translate-y-1 hover:border-emerald-400 hover:shadow-lg">
-
             <div class="text-lg transition group-hover:scale-110">📱</div>
-
             <div class="mt-1 text-[11px] font-bold text-slate-700">
               Easypaisa
             </div>
-
           </button>
 
           <!-- COD -->
           <button type="button"
             class="rounded-2xl border border-emerald-500 bg-gradient-to-br from-emerald-50 to-white py-2.5 px-2 shadow-sm">
-
             <div class="text-lg">💵</div>
-
             <div class="mt-1 text-[11px] font-black text-emerald-700">
               Cash On Delivery
             </div>
-
           </button>
-
         </div>
-
       </div>
 
       <!-- CUSTOMER INFO -->
@@ -1067,7 +1089,6 @@ textarea::placeholder{
           <input type="text" placeholder="03XXXXXXXXX" dir="ltr"
             class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-end text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20">
         </div>
-
       </div>
 
       <!-- ADDRESS -->
@@ -1177,7 +1198,7 @@ goTopBtn.addEventListener("click", () => {
 
 
 <!-- FOOTER -->
-    <div class="w-full bg-[#0A3D2A] text-emerald-50 text-center py-4 text-sm mt-auto border-t border-[#052C22]">
+    <div class="w-full bg-[#0A3D2A] text-emerald-50 text-center py-1.5 text-xs border-t border-[#052C22]">
         &copy; 2026 StopBuyPk - Smart Price Comparison
     </div>
 	
