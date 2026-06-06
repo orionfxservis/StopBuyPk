@@ -1594,7 +1594,8 @@ function renderAdminProducts() {
                 details = `${prod.specification || ''} | ${prod.batteryBackup ? prod.batteryBackup + 'mAh' : ''}`;
             }
 
-            const canEdit = isSuperAdmin || prod.addedBy === userName;
+            const isPublished = prod.status === 'Publish' || prod.prodStatus === 'Publish';
+            const canEdit = isSuperAdmin || (prod.addedBy === userName && !isPublished);
             let actionButtons = '';
             if (canEdit) {
                 let approvalBtn = '';
@@ -1610,7 +1611,7 @@ function renderAdminProducts() {
                    <button class="delete-btn" onclick="deleteProduct(${index})"><i class="fa-solid fa-trash"></i></button>
                 `;
             } else {
-                actionButtons = `<span style="font-size:12px;color:#888;">View Only</span>`;
+                actionButtons = `<span style="font-size:12px;color:#888;">${isPublished ? 'Published (Locked)' : 'View Only'}</span>`;
             }
 
             return `
@@ -1630,6 +1631,17 @@ function renderAdminProducts() {
 }
 
 window.deleteProduct = async (index) => {
+    const prod = products[index];
+    const cUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+    const isPublished = prod.status === 'Publish' || prod.prodStatus === 'Publish';
+
+    if (!isSuperAdmin && (prod.addedBy !== userName || isPublished)) {
+        alert("You are not authorized to delete this product once it is published.");
+        return;
+    }
+
     if (confirm('Delete this product?')) {
         products.splice(index, 1);
         await DataService.saveProducts(products);
@@ -1640,9 +1652,18 @@ window.deleteProduct = async (index) => {
 };
 
 window.editProduct = (index) => {
-    productEditIndex = index;
     const prod = products[index];
+    const cUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+    const isPublished = prod.status === 'Publish' || prod.prodStatus === 'Publish';
 
+    if (!isSuperAdmin && (prod.addedBy !== userName || isPublished)) {
+        alert("You are not authorized to edit this product once it is published.");
+        return;
+    }
+
+    productEditIndex = index;
     const pCat = document.getElementById('prodCategory');
     const pSub = document.getElementById('prodSubCategory');
 
@@ -2047,7 +2068,7 @@ function renderBroadcasts() {
         const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
 
         broadcastList.innerHTML = broadcasts.map((b, index) => {
-            const canEdit = isSuperAdmin || b.addedBy === userName || (!b.addedBy && isSuperAdmin);
+            const canEdit = isSuperAdmin || b["Post By"] || b.postBy === userName || (!b["Post By"] || b.postBy && isSuperAdmin);
             let actionButtons = '';
             if (canEdit) {
                 let approvalBtn = '';
@@ -2913,10 +2934,21 @@ window.compilePerformanceMetrics = function() {
     const userStats = displayUsers.map(user => {
         const uLower = user.username.toLowerCase();
         
-        const uProducts = filteredProducts.filter(p => String(p.addedBy || '').toLowerCase() === uLower).length;
-        const uDeals = filteredDeals.filter(d => String(d.addedBy || '').toLowerCase() === uLower).length;
-        const uBlogs = filteredBlogs.filter(b => String(b.addedBy || '').toLowerCase() === uLower).length;
-        const uBanners = filteredBanners.filter(b => String(b.addedBy || '').toLowerCase() === uLower).length;
+        const uProducts = filteredProducts.filter(
+    p => String(p["Post By"] || p.postBy || '').toLowerCase() === user.fullName.toLowerCase()
+).length;
+
+const uDeals = filteredDeals.filter(
+    d => String(d["Post By"] || d.postBy || '').toLowerCase() === user.fullName.toLowerCase()
+).length;
+
+const uBlogs = filteredBlogs.filter(
+    b => String(b["Post By"] || b.postBy || '').toLowerCase() === user.fullName.toLowerCase()
+).length;
+
+const uBanners = filteredBanners.filter(
+    b => String(b["Post By"] || b.postBy || '').toLowerCase() === user.fullName.toLowerCase()
+).length;
         
         return {
             ...user,
@@ -2960,10 +2992,10 @@ window.compilePerformanceMetrics = function() {
     if (weeklyBody) {
         const weeklyUserStats = displayUsers.map(user => {
             const uLower = user.username.toLowerCase();
-            const wProducts = allProducts.filter(p => String(p.addedBy || '').toLowerCase() === uLower && parseItemDate(p) >= weeklyStart).length;
-            const wDeals = allDeals.filter(d => String(d.addedBy || '').toLowerCase() === uLower && parseItemDate(d) >= weeklyStart).length;
-            const wBlogs = allBlogs.filter(b => String(b.addedBy || '').toLowerCase() === uLower && parseItemDate(b) >= weeklyStart).length;
-            const wBanners = allBanners.filter(b => String(b.addedBy || '').toLowerCase() === uLower && parseItemDate(b) >= weeklyStart).length;
+            const wProducts = allProducts.filter(p => String(p["Post By"] || p.postBy || '').toLowerCase() === uLower && parseItemDate(p) >= weeklyStart).length;
+            const wDeals = allDeals.filter(d => String(d["Post By"] || d.postBy || '').toLowerCase() === uLower && parseItemDate(d) >= weeklyStart).length;
+            const wBlogs = allBlogs.filter(b => String(b["Post By"] || b.postBy || '').toLowerCase() === uLower && parseItemDate(b) >= weeklyStart).length;
+            const wBanners = allBanners.filter(b => String(b["Post By"] || b.postBy || '').toLowerCase() === uLower && parseItemDate(b) >= weeklyStart).length;
             
             return {
                 ...user,
@@ -2990,10 +3022,10 @@ window.compilePerformanceMetrics = function() {
     if (monthlyBody) {
         const monthlyUserStats = displayUsers.map(user => {
             const uLower = user.username.toLowerCase();
-            const mProducts = allProducts.filter(p => String(p.addedBy || '').toLowerCase() === uLower && parseItemDate(p) >= monthlyStart).length;
-            const mDeals = allDeals.filter(d => String(d.addedBy || '').toLowerCase() === uLower && parseItemDate(d) >= monthlyStart).length;
-            const mBlogs = allBlogs.filter(b => String(b.addedBy || '').toLowerCase() === uLower && parseItemDate(b) >= monthlyStart).length;
-            const mBanners = allBanners.filter(b => String(b.addedBy || '').toLowerCase() === uLower && parseItemDate(b) >= monthlyStart).length;
+            const mProducts = allProducts.filter(p => String(p["Post By"] || p.postBy || '').toLowerCase() === uLower && parseItemDate(p) >= monthlyStart).length;
+            const mDeals = allDeals.filter(d => String(d["Post By"] || d.postBy || '').toLowerCase() === uLower && parseItemDate(d) >= monthlyStart).length;
+            const mBlogs = allBlogs.filter(b => String(b["Post By"] || b.postBy || '').toLowerCase() === uLower && parseItemDate(b) >= monthlyStart).length;
+            const mBanners = allBanners.filter(b => String(b["Post By"] || b.postBy || '').toLowerCase() === uLower && parseItemDate(b) >= monthlyStart).length;
             
             return {
                 ...user,
