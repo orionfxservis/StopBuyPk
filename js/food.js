@@ -100,7 +100,7 @@ function renderFoodList() {
             ${f.description ? `<p class="text-[0.65rem] sm:text-[0.7rem] text-slate-500 mb-2 line-clamp-2">${f.description}</p>` : ''}
           </div>
           <div class="flex justify-between items-end">
-            <p class="text-[0.7rem] text-slate-400 font-medium">📍 ${f.address}</p>
+            <p class="text-[0.7rem] text-slate-400 font-medium">📍 ${f.fullLocation}</p>
             <span class="px-2 py-0.5 rounded border border-emerald-500/30 bg-emerald-500/10 text-[0.65rem] text-emerald-400 font-semibold shadow-sm">
               ${f.distanceKm.toFixed(1)} km
             </span>
@@ -127,7 +127,7 @@ function selectFoodItem(id, preventScroll = false) {
     // Hide placeholder, show content
     if (featuredPlaceholder) featuredPlaceholder.classList.add('hidden');
     if (featuredContent) featuredContent.classList.remove('hidden');
-
+ 
     // Populate Details
     if (fImg) fImg.src = item.image;
     if (fDistance) fDistance.textContent = `${item.distanceKm.toFixed(1)} km away`;
@@ -135,9 +135,10 @@ function selectFoodItem(id, preventScroll = false) {
     if (fVariety) fVariety.textContent = item.variety;
     if (fBrand) fBrand.textContent = item.brand || item.subCategory || 'No Brand Specified';
     if (fPrice) fPrice.innerHTML = `Rs. ${item.price} ${item.originalPrice ? `<span class="text-sm line-through text-slate-500 ml-1">Rs. ${item.originalPrice}</span>` : ''}`;
-    if (fLocation) fLocation.textContent = `${item.address}`;
+    if (fLocation) document.getElementById('fLocation').textContent =
+    item.fullLocation || item.address;
     if (fDesc) fDesc.textContent = item.description;
-
+ 
     // Handle Video Display
     const fVideoContainer = document.getElementById('fVideoContainer');
     const fVideoFrame = document.getElementById('fVideoFrame');
@@ -167,7 +168,7 @@ function selectFoodItem(id, preventScroll = false) {
         if (fVideoFrame) fVideoFrame.src = '';
       }
     }
-
+ 
     // Contact Buttons Setup
     if (item.phone) {
       if (fCallBtn) {
@@ -177,7 +178,7 @@ function selectFoodItem(id, preventScroll = false) {
     } else {
       if (fCallBtn) fCallBtn.classList.add('hidden');
     }
-
+ 
     if (fOrderBtn) {
       fOrderBtn.classList.remove('hidden');
       fOrderBtn.onclick = () => {
@@ -186,11 +187,11 @@ function selectFoodItem(id, preventScroll = false) {
         if (modalDateTime) modalDateTime.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ', ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
         if (modalRestaurant) modalRestaurant.textContent = item.variety;
         if (modalProductName) modalProductName.textContent = item.name;
-        if (modalLocation) modalLocation.textContent = `${item.address}`;
+        if (modalLocation) modalLocation.textContent = `${item.fullLocation}`;
         if (modalPhone) modalPhone.textContent = item.phone || '';
         if (modalRate) modalRate.textContent = item.price;
         if (modalQuantity) modalQuantity.value = 1;
-
+ 
         const calcTotal = () => {
           let q = parseInt(modalQuantity.value) || 1;
           if (modalTotalAmount) modalTotalAmount.textContent = `Rs. ${item.price * q}`;
@@ -216,7 +217,7 @@ function selectFoodItem(id, preventScroll = false) {
     }, 100);
   }
 }
-
+ 
 // Initial Setup
 async function initFoodDeals() {
   if (typeof DataService !== 'undefined') {
@@ -227,8 +228,13 @@ async function initFoodDeals() {
       foodDeals = foodProducts.map(p => {
         // Dynamic fields might have different capitalization, safely extract them
         const variety = p.variety || p.brand || p.subCategory || 'No Variety Specified';
-        const address = p.address || p.location || p.area || 'Unknown Address';
-        const city = p.city || 'Karachi';
+        const address = p.address || '';
+const area = p.area || p.block || p.blockNo || p.areaBlock || '';
+const city = p.city || '';
+ 
+const fullLocation = [address, area, city]
+    .filter(Boolean)
+    .join(', ');
         const distanceKm = parseFloat(p.distance || p.distanceKm) || 2.5;
         const phone = p.phone || p.contact || '';
         const whatsapp = p.whatsapp || phone;
@@ -253,7 +259,9 @@ async function initFoodDeals() {
           market: p.market || '',
           unit: p.unit || '',
           address: address,
-          city: city,
+area: area,
+city: city,
+fullLocation: fullLocation,
           distanceKm: distanceKm,
           price: parseFloat(p.price || 0),
           originalPrice: p.originalPrice ? parseFloat(p.originalPrice) : null,
