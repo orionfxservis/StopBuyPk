@@ -2068,7 +2068,6 @@
     <!-- Load Data Service FIRST -->
     <script src="js/data-service.js"></script>
     <script src="js/live-prices.js"></script>
-    <script src="js/script.js"></script>
 
     <script>
         // Language Setup
@@ -3180,6 +3179,119 @@
             installContainer.style.display = "none";
         });
     </script>
+
+    <!-- Dynamic Blog Integration Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const container = document.getElementById('dynamicBlogGrid');
+            if (!container) return;
+            try {
+                const blogsRaw = await DataService.getBlogs();
+                const blogs = (blogsRaw || []).filter(b => b.status === 'Publish' || !b.status);
+                if (blogs.length > 0) {
+                    const htmlStr = blogs.slice(0, 3).map(b => {
+                        const safeObj = encodeURIComponent(JSON.stringify(b));
+                        const categoryEn = b.categoryEn || 'Update';
+                        const categoryUr = b.categoryUr || categoryEn;
+                        const titleEn = b.titleEn || 'Untitled';
+                        const titleUr = b.titleUr || titleEn;
+                        const descEn = b.descEn || '';
+                        const descUr = b.descUr || descEn;
+                        return `
+                            <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100 flex flex-col cursor-pointer" onclick="openBlogModal('${safeObj}')">
+                                <div class="w-full h-44 bg-gray-50 flex items-center justify-center overflow-hidden rounded-t-3xl">
+                                    <img src="${b.image || 'images/placeholder.jpg'}" class="w-full h-full object-contain" onerror="this.src='images/placeholder.jpg'">
+                                </div>
+                                <div class="p-6 flex-1 flex flex-col justify-between">
+                                    <div>
+                                        <p class="text-[0.7rem] text-emerald-600 font-bold mb-1.5 uppercase tracking-wide">
+                                            <span class="lang-en">${categoryEn}</span><span class="lang-ur" style="display:none;">${categoryUr}</span>
+                                        </p>
+                                        <h3 class="font-bold text-[#0A3D2A] text-lg leading-snug" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                            <span class="lang-en">${titleEn}</span><span class="lang-ur" style="display:none;">${titleUr}</span>
+                                        </h3>
+                                        <p class="text-sm text-gray-600 mt-2 leading-relaxed" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                                            <span class="lang-en">${descEn}</span><span class="lang-ur" style="display:none;">${descUr}</span>
+                                        </p>
+                                    </div>
+                                    <button onclick="event.stopPropagation(); openBlogModal('${safeObj}')" class="read-btn mt-5 text-sm text-emerald-700 font-semibold hover:text-emerald-600 transition-colors self-start">
+                                        <span class="lang-en">Read Full Article &rarr;</span><span class="lang-ur" style="display:none;">مکمل مضمون پڑھیں &larr;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                    container.innerHTML = htmlStr;
+                    if (typeof updateLanguageUI === 'function') {
+                        updateLanguageUI(document.documentElement.lang || 'en');
+                    }
+                } else {
+                    container.innerHTML = `
+                        <p class="text-slate-500 col-span-full text-center py-4">
+                            <span class="lang-en">No blogs available at the moment.</span><span class="lang-ur">فی الحال کوئی بلاگ دستیاب نہیں ہے۔</span>
+                        </p>`;
+                }
+            } catch (e) {
+                console.error("Failed to load blogs", e);
+                container.innerHTML = `
+                    <p class="text-red-500 col-span-full text-center py-4">
+                        Failed to load blogs.
+                    </p>`;
+            }
+        });
+
+        window.openBlogModal = function (safeObj) {
+            const blogData = JSON.parse(decodeURIComponent(safeObj));
+            const modal = document.getElementById('blogModal');
+            if (!modal) return;
+
+            const imgEl = document.getElementById('modalBlogImage');
+            if (imgEl) imgEl.src = blogData.image;
+
+            const currentLang = document.documentElement.lang || 'en';
+            const titleEl = document.getElementById('modalBlogTitle');
+            const contentEl = document.getElementById('modalBlogContent');
+            const authorEl = document.getElementById('modalBlogAuthor');
+
+            if (titleEl && contentEl) {
+                if (currentLang === 'ur') {
+                    titleEl.textContent = blogData.titleUr;
+                    contentEl.textContent = blogData.contentUr;
+                    contentEl.setAttribute('dir', 'rtl');
+                    titleEl.setAttribute('dir', 'rtl');
+                } else {
+                    titleEl.textContent = blogData.titleEn;
+                    contentEl.textContent = blogData.contentEn;
+                    contentEl.setAttribute('dir', 'ltr');
+                    titleEl.setAttribute('dir', 'ltr');
+                }
+            }
+
+            if (authorEl) authorEl.textContent = blogData.author || 'Admin';
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeBlogModal = function () {
+            const modal = document.getElementById('blogModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+            document.body.style.overflow = 'auto';
+        };
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function (e) {
+            const blogModal = document.getElementById('blogModal');
+            if (blogModal && !blogModal.classList.contains('hidden') && e.target === blogModal) {
+                closeBlogModal();
+            }
+        });
+    </script>
+
     <!-- BLOG DETAIL MODAL -->
     <div id="blogModal" class="fixed inset-0 z-[999999] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
         <div class="bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl text-left">
@@ -3195,7 +3307,9 @@
 
             <!-- Modal Body (Scrollable) -->
             <div class="overflow-y-auto flex-1 p-4 md:p-8">
-                <img id="modalBlogImage" src="" class="w-full h-64 md:h-80 object-cover rounded-2xl mb-8 shadow-sm">
+                <div class="w-full max-h-[350px] md:max-h-[450px] bg-slate-50 flex items-center justify-center rounded-2xl mb-8 shadow-sm overflow-hidden">
+                    <img id="modalBlogImage" src="" class="max-w-full max-h-[350px] md:max-h-[450px] object-contain">
+                </div>
                 
                 <h1 id="modalBlogTitle" class="text-2xl md:text-4xl font-extrabold text-gray-900 leading-tight mb-4"></h1>
                 
