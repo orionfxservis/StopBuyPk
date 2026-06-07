@@ -759,7 +759,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span class="lang-en">${descEn}</span><span class="lang-ur" style="display:none;">${descUr}</span>
                             </p>
                         </div>
-                        <button onclick="event.stopPropagation(); openBlogModal('${safeObj}')" class="read-btn mt-5 text-sm text-emerald-700 font-semibold hover:text-emerald-600 transition-colors self-start">
+                        <button onclick="event.stopPropagation(); openBlogModal('${safeObj}')" class="read-btn mt-5 text-xs text-emerald-700 font-bold px-4 py-1.5 bg-white border border-emerald-100/80 rounded-full shadow-sm hover:shadow-md hover:bg-emerald-50/50 transition-all self-start">
                             <span class="lang-en">Read Full Article &rarr;</span><span class="lang-ur" style="display:none;">مکمل مضمون پڑھیں &larr;</span>
                         </button>
                     </div>
