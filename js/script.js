@@ -736,30 +736,40 @@ document.addEventListener('DOMContentLoaded', () => {
         function renderBlogCards(blogsToRender) {
             const htmlStr = blogsToRender.map(b => {
               const safeObj = encodeURIComponent(JSON.stringify(b));
+              const categoryEn = b.categoryEn || 'Update';
+              const categoryUr = b.categoryUr || categoryEn;
+              const titleEn = b.titleEn || 'Untitled';
+              const titleUr = b.titleUr || titleEn;
+              const descEn = b.descEn || '';
+              const descUr = b.descUr || descEn;
               return `
-                          <article class="glass-card p-0 overflow-hidden hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-900/80 transition flex flex-col">
-                            <div class="w-full aspect-video">
-                              <img src="${b.image}" alt="Blog Image" class="w-full h-full object-cover">
-                            </div>
-                            <div class="p-4 flex-1 flex flex-col">
-                                <p class="text-[0.65rem] text-sky-300 mb-1">
-                                    <span class="lang-en">${b.categoryEn || 'Uncategorized'}</span>
-                                    <span class="lang-ur">${b.categoryUr || 'غیر درجہ بند'}</span>
-                                </p>
-                                <h3 class="font-semibold text-sm text-slate-50 mb-1">
-                                    <span class="lang-en">${b.titleEn}</span><span class="lang-ur">${b.titleUr}</span>
-                                </h3>
-                                <p class="text-[0.7rem] text-slate-400 mb-2">
-                                    <span class="lang-en">${b.descEn || ''}</span><span class="lang-ur">${b.descUr || ''}</span>
-                                </p>
-                                <button onclick="openBlogModal('${safeObj}')" class="mt-auto self-start text-[0.7rem] text-sky-300 hover:text-sky-200">
-                                    <span class="lang-en">Read More &rarr;</span><span class="lang-ur">مزید پڑھیں &larr;</span>
-                                </button>
-                            </div>
-                          </article>
-                        `;
+                <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100 flex flex-col cursor-pointer" onclick="openBlogModal('${safeObj}')">
+                    <div class="overflow-hidden">
+                        <img src="${b.image || 'images/placeholder.jpg'}" class="w-full h-44 object-cover rounded-t-3xl" onerror="this.src='images/placeholder.jpg'">
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <p class="text-[0.7rem] text-emerald-600 font-bold mb-1.5 uppercase tracking-wide">
+                                <span class="lang-en">${categoryEn}</span><span class="lang-ur" style="display:none;">${categoryUr}</span>
+                            </p>
+                            <h3 class="font-bold text-[#0A3D2A] text-lg leading-snug" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                <span class="lang-en">${titleEn}</span><span class="lang-ur" style="display:none;">${titleUr}</span>
+                            </h3>
+                            <p class="text-sm text-gray-600 mt-2 leading-relaxed" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                                <span class="lang-en">${descEn}</span><span class="lang-ur" style="display:none;">${descUr}</span>
+                            </p>
+                        </div>
+                        <button onclick="event.stopPropagation(); openBlogModal('${safeObj}')" class="read-btn mt-5 text-sm text-emerald-700 font-semibold hover:text-emerald-600 transition-colors self-start">
+                            <span class="lang-en">Read Full Article &rarr;</span><span class="lang-ur" style="display:none;">مکمل مضمون پڑھیں &larr;</span>
+                        </button>
+                    </div>
+                </div>
+              `;
             }).join('');
             container.innerHTML = htmlStr;
+            if (typeof updateLanguageUI === 'function') {
+                updateLanguageUI(document.documentElement.lang || 'en');
+            }
         }
 
         // Initial render: show up to 3
