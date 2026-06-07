@@ -993,7 +993,7 @@
                                 class="w-full lg:w-fit bg-white/95 backdrop-blur-md border border-gray-200 rounded-3xl p-5 shadow-sm mb-6">
 
                                 <!-- CATEGORY BUTTONS -->
-                                <div class="flex flex-wrap items-center justify-end gap-2 mb-4"
+                                <div class="flex flex-wrap items-center justify-between gap-2 mb-4 w-full"
                                     id="categoryFilterContainer">
                                     <button
                                         class="cat-filter-btn px-3.5 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Food</button>
@@ -1284,15 +1284,8 @@
 
                         <!-- RIGHT BUTTON -->
                         <button onclick="window.location.href='pages/travel.html'"
-                            class="group h-[52px] px-7 rounded-2xl bg-white text-emerald-900 text-sm font-extrabold shadow-[0_8px_25px_rgba(255,255,255,.18)] hover:bg-emerald-50 transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2 whitespace-nowrap">
-
-                            <span>
-                                View All Packages
-                            </span>
-
-                            <i
-                                class="fas fa-arrow-right text-xs transition-transform duration-300 group-hover:translate-x-1"></i>
-
+                            class="flex items-center gap-1.5 text-[13px] md:text-sm font-bold px-4 md:px-5 py-2 bg-white text-emerald-800 rounded-full shadow-sm hover:shadow-md border border-emerald-100/50 transition-all hover:-translate-y-0.5 hover:bg-emerald-50">
+                            View All Packages <i class="fas fa-arrow-right text-[10px] md:text-xs"></i>
                         </button>
 
                     </div>
@@ -1415,51 +1408,8 @@
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
-                        <div
-                            class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
-                            <img src="images/blogs/04-05-26/blog_price.png"
-                                class="w-full h-44 object-cover rounded-t-3xl">
-                            <div class="p-5">
-                                <div class="font-semibold">Rising Prices in Pakistan 2025</div>
-                                <div class="text-sm text-gray-600 mt-1">What's driving inflation and how to protect your
-                                    budget.</div>
-                                <button onclick="showBlogModal(1)"
-                                    class="mt-4 text-sm text-emerald-700 font-semibold">Read
-                                    Full Article →</button>
-                            </div>
-                        </div>
-
-                        <!-- Blog Card 2 -->
-                        <div
-                            class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
-                            <img src="images/blogs/04-05-26/blog_budget.png"
-                                class="w-full h-44 object-cover rounded-t-3xl">
-                            <div class="p-5">
-                                <div class="font-semibold">How to Manage Budget in Challenging Times</div>
-                                <div class="text-sm text-gray-600 mt-1">
-                                    Practical tips for Pakistani families to save more.
-                                </div>
-                                <button onclick="showBlogModal(2)" class="mt-4 text-sm text-emerald-700 font-semibold">
-                                    Read Full Article →
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Blog Card 3 -->
-                        <div
-                            class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
-                            <img src="images/blogs/04-05-26/blog_ai.png" class="w-full h-44 object-cover rounded-t-3xl">
-                            <div class="p-5">
-                                <div class="font-semibold">How AI Can Help You Save Money</div>
-                                <div class="text-sm text-gray-600 mt-1">
-                                    Using smart tools for better financial decisions.
-                                </div>
-                                <button onclick="showBlogModal(3)" class="mt-4 text-sm text-emerald-700 font-semibold">
-                                    Read Full Article →
-                                </button>
-                            </div>
-                        </div>
+                    <div id="dynamicBlogGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+                        <!-- Dynamic blogs will be loaded here from Google Sheets -->
                     </div>
                 </div>
 
@@ -2118,6 +2068,7 @@
     <!-- Load Data Service FIRST -->
     <script src="js/data-service.js"></script>
     <script src="js/live-prices.js"></script>
+    <script src="js/script.js"></script>
 
     <script>
         // Language Setup
@@ -3229,6 +3180,36 @@
             installContainer.style.display = "none";
         });
     </script>
+    <!-- BLOG DETAIL MODAL -->
+    <div id="blogModal" class="fixed inset-0 z-[999999] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl text-left">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-4 md:p-6 border-b border-gray-100 bg-gray-50/50">
+                <div class="bg-emerald-100 text-emerald-800 px-4 py-1.5 rounded-full text-xs font-bold tracking-wide">
+                    Blog Post
+                </div>
+                <button onclick="closeBlogModal()" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-100 hover:text-red-600 transition-colors">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div class="overflow-y-auto flex-1 p-4 md:p-8">
+                <img id="modalBlogImage" src="" class="w-full h-64 md:h-80 object-cover rounded-2xl mb-8 shadow-sm">
+                
+                <h1 id="modalBlogTitle" class="text-2xl md:text-4xl font-extrabold text-gray-900 leading-tight mb-4"></h1>
+                
+                <div class="flex items-center gap-4 text-sm text-gray-500 mb-8 pb-8 border-b border-gray-100">
+                    <div class="flex items-center gap-2"><i class="far fa-user text-emerald-600"></i> <span id="modalBlogAuthor">Admin</span></div>
+                </div>
+
+                <!-- Content Area -->
+                <div id="modalBlogContent" class="prose prose-emerald max-w-none text-gray-700 leading-loose text-base md:text-lg whitespace-pre-line">
+                    <!-- Content will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
