@@ -833,6 +833,7 @@
                                 <th>User Name</th>
                                 <th>Company</th>
                                 <th>User Id</th>
+                                <th>Status</th>
                                 <th>Stats</th>
                                 <th>Action</th>
                             </tr>
@@ -851,6 +852,7 @@
                                 <th>Name</th>
                                 <th>User Id</th>
                                 <th>Status</th>
+                                <th>Stats</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -898,6 +900,10 @@
                                         </div>
                                         Delete
                                     </label>
+                                </div>
+                                <div style="margin-top: 15px;">
+                                    <label>Charges (Per post rate)</label>
+                                    <input type="number" id="rightsUserCharges" placeholder="Enter charge per post" min="0" step="0.01" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.1); color: white; margin-top: 5px;">
                                 </div>
                                 <div class="form-actions" style="margin-top: 15px;">
                                     <button type="submit" class="btn btn-primary" id="btnSaveRights">Save Rights</button>
@@ -1526,17 +1532,29 @@
                     <div class="bg-slate-800/30 p-5 rounded-3xl border border-slate-700/30">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-sm font-semibold text-white">User Activity Summary</h3>
-                            <span id="activityTableFilterLabel" class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-full border border-slate-700">Filter: This Week</span>
+                            <div class="flex items-center gap-2">
+                                <span id="perfTargetUserLabel" class="text-xs text-emerald-400 bg-emerald-950/40 px-2.5 py-1 rounded-full hidden"></span>
+                                <select id="activityTableFilterSelect" onchange="setPerformanceFilter(this.value, null)" class="text-xs bg-slate-800 px-3 py-1 rounded-full border border-slate-700 focus:outline-none cursor-pointer" style="color: darkgreen; font-weight: bold;">
+                                    <option value="today" class="bg-slate-800 text-slate-400">Today</option>
+                                    <option value="week" selected class="bg-slate-800 text-slate-400">This Week</option>
+                                    <option value="month" class="bg-slate-800 text-slate-400">This Month</option>
+                                    <option value="3months" class="bg-slate-800 text-slate-400">Last 3 Months</option>
+                                    <option value="custom" class="bg-slate-800 text-slate-400">Custom Date</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="admin-table w-full text-sm">
                                 <thead>
                                     <tr>
                                         <th class="text-left py-3 px-4">User</th>
+                                        <th class="text-center py-3 px-4">Categories</th>
                                         <th class="text-center py-3 px-4">Products</th>
                                         <th class="text-center py-3 px-4">Deals</th>
+                                        <th class="text-center py-3 px-4">Place Ads</th>
                                         <th class="text-center py-3 px-4">Banners</th>
                                         <th class="text-center py-3 px-4">Blogs</th>
+                                        <th class="text-center py-3 px-4">Broadcast</th>
                                         <th class="text-center py-3 px-4">Travel</th>
                                         <th class="text-center py-3 px-4">Total Activity</th>
                                     </tr>
@@ -1548,52 +1566,148 @@
                         </div>
                     </div>
 
-                    <!-- Weekly Breakdown -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-slate-800/30 p-5 rounded-3xl border border-slate-700/30">
-                            <h3 class="text-sm font-semibold text-white mb-4">Weekly Performance</h3>
-                            <div class="overflow-x-auto">
-                                <table class="admin-table w-full text-sm">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-left py-3 px-4">User</th>
-                                            <th class="text-center py-3 px-4">This Week</th>
-                                            <th class="text-center py-3 px-4">Active Days</th>
-                                            <th class="text-right py-3 px-4">Last Login</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="perfWeeklyBody">
-                                        <!-- Dynamic rows loaded here -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
 
-                        <!-- Monthly Breakdown -->
-                        <div class="bg-slate-800/30 p-5 rounded-3xl border border-slate-700/30">
-                            <h3 class="text-sm font-semibold text-white mb-4">Monthly Performance</h3>
-                            <div class="overflow-x-auto">
-                                <table class="admin-table w-full text-sm">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-left py-3 px-4">User</th>
-                                            <th class="text-center py-3 px-4">This Month</th>
-                                            <th class="text-center py-3 px-4">Active Days</th>
-                                            <th class="text-right py-3 px-4">Last Login</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="perfMonthlyBody">
-                                        <!-- Dynamic rows loaded here -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
         </main>
     </div>
 
+    <!-- User Posting Details Invoice Modal -->
+    <div id="userInvoiceModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 hidden">
+        <div class="bg-slate-900 border border-slate-700/50 w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden flex flex-col shadow-2xl">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950">
+                <div class="flex items-center gap-3">
+                    <img src="../images/logo/stopbuy-logo.png" alt="StopBuy Logo" class="h-8 object-contain">
+                    <span class="text-white font-bold text-lg">StopBuy Posting Invoice</span>
+                </div>
+                <button onclick="closeUserInvoiceModal()" class="text-slate-400 hover:text-white transition-colors duration-150">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Body (Printable Container) -->
+            <div class="flex-1 overflow-y-auto p-6 space-y-6" id="userInvoicePrintArea">
+                <!-- Header Info -->
+                <div class="bg-slate-850 p-6 rounded-2xl border border-slate-800 flex flex-col md:flex-row justify-between gap-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-white mb-2" id="invoiceUserFullName">User: Loading...</h2>
+                        <p class="text-sm text-slate-400">Username: <span id="invoiceUserName" class="text-slate-300 font-semibold">...</span></p>
+                        <p class="text-sm text-slate-400">Role: <span id="invoiceUserRole" class="text-slate-300 font-semibold">...</span></p>
+                        <p class="text-sm text-slate-400">Rate per Post: <span id="invoiceUserRatePerPost" class="text-slate-300 font-semibold">Rs. 0</span></p>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <!-- Date Filter Row inside Invoice -->
+                        <div class="flex flex-col gap-1.5 no-print">
+                            <label class="text-xs text-slate-400 font-medium">Invoice Period</label>
+                            <select id="invoiceFilterSelect" onchange="onInvoiceFilterChange()" class="text-xs bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700 focus:outline-none cursor-pointer" style="color: darkgreen; font-weight: bold;">
+                                <option value="today" class="bg-slate-800 text-slate-400">Today</option>
+                                <option value="week" class="bg-slate-800 text-slate-400">This Week</option>
+                                <option value="month" selected class="bg-slate-800 text-slate-400">This Month</option>
+                                <option value="3months" class="bg-slate-800 text-slate-400">Last 3 Months</option>
+                                <option value="custom" class="bg-slate-800 text-slate-400">Custom Date</option>
+                            </select>
+                        </div>
+                        
+                        <div id="invoiceCustomDateRange" class="hidden flex items-center gap-2 mt-1 no-print">
+                            <input type="date" id="invoiceStartDate" onchange="onInvoiceCustomDateChange()" class="text-xs bg-slate-800 text-white px-2 py-1 rounded border border-slate-700 focus:outline-none">
+                            <span class="text-xs text-slate-400">to</span>
+                            <input type="date" id="invoiceEndDate" onchange="onInvoiceCustomDateChange()" class="text-xs bg-slate-800 text-white px-2 py-1 rounded border border-slate-700 focus:outline-none">
+                        </div>
+                        
+                        <p class="text-xs text-slate-400 mt-2">Report Generated: <span id="invoiceGenerationDate" class="text-slate-300 font-mono"></span></p>
+                    </div>
+                </div>
+
+                <!-- Invoice Content (Items & Counts) -->
+                <div class="border border-slate-800 rounded-2xl overflow-hidden">
+                    <table class="w-full text-sm text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-950 text-slate-300 font-semibold border-b border-slate-800">
+                                <th class="py-3 px-4">Section / Category</th>
+                                <th class="py-3 px-4 text-center">Post Count</th>
+                                <th class="py-3 px-4">Item Details (Names / Dates)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoiceTableBody" class="text-slate-300 divide-y divide-slate-800 bg-slate-900/50">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-slate-950 font-bold border-t border-slate-800">
+                                <td class="py-4 px-4 text-white text-base">Total Activity</td>
+                                <td class="py-4 px-4 text-center text-sky-400 text-lg" id="invoiceTotalCount">0</td>
+                                <td class="py-4 px-4 text-xs text-slate-400">All published and draft items matching the range.</td>
+                            </tr>
+                            <tr class="bg-slate-950 font-bold border-t border-slate-800">
+                                <td class="py-4 px-4 text-white text-base">Total Payment</td>
+                                <td class="py-4 px-4 text-center text-emerald-400 text-lg" id="invoiceTotalPayment">Rs. 0</td>
+                                <td class="py-4 px-4 text-xs text-slate-400">Calculated payment based on the rate of Rs. <span id="invoiceRatePerPostFooter">0</span> per post.</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-4 border-t border-slate-800 bg-slate-950 flex items-center justify-end gap-3 no-print">
+                <button onclick="closeUserInvoiceModal()" class="btn btn-secondary px-4 py-2 text-xs text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-705 transition-colors">
+                    Close
+                </button>
+                <button onclick="printUserInvoice()" class="btn btn-primary px-4 py-2 text-xs text-white bg-emerald-600 hover:bg-emerald-500 rounded-lg flex items-center gap-2 transition-colors">
+                    <i class="fa-solid fa-print"></i> Print / Export PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Specific CSS Styling overrides to hide rest of page during print -->
+    <style>
+        @media print {
+            body > *:not(#userInvoiceModal) {
+                display: none !important;
+            }
+            #userInvoiceModal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: auto;
+                background: white !important;
+                color: black !important;
+                display: block !important;
+            }
+            #userInvoiceModal > div {
+                border: none !important;
+                max-width: 100% !important;
+                max-height: none !important;
+                box-shadow: none !important;
+                background: white !important;
+            }
+            #userInvoicePrintArea {
+                background: white !important;
+                color: black !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            #userInvoicePrintArea * {
+                color: black !important;
+                border-color: #ddd !important;
+            }
+            .bg-slate-850, .bg-slate-900/50, .bg-slate-950 {
+                background-color: #f8fafc !important;
+                border-color: #e2e8f0 !important;
+            }
+            .text-white, .text-slate-300 {
+                color: #0f172a !important;
+            }
+            .text-emerald-400 {
+                color: #047857 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
 
     <script src="../js/data-service.js"></script>
     <script src="../js/admin.js"></script>
