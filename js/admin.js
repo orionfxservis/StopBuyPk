@@ -271,7 +271,6 @@ if (categoryForm) {
         const subCatInput = document.getElementById('catSubCategory');
         const subCategory = subCatInput ? subCatInput.value : '';
 
-
         // Harvest fields
         const fieldRows = document.querySelectorAll('.field-row');
         const fields = Array.from(fieldRows).map(row => ({
@@ -279,14 +278,24 @@ if (categoryForm) {
             type: row.querySelector('.field-type').value
         })).filter(f => f.name.trim() !== "");
 
+        const cUserStr = localStorage.getItem('currentUser');
+        const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+        const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+
         if (editIndex === -1) {
             // Create
-            categories.push({ name, subCategory, fields, showOnMainPage: true });
+            categories.push({ name, subCategory, fields, showOnMainPage: true, addedBy: userName, date: new Date().toISOString() });
         } else {
             // Update
             categories[editIndex].name = name;
             categories[editIndex].subCategory = subCategory;
             categories[editIndex].fields = fields;
+            if (!categories[editIndex].addedBy) {
+                categories[editIndex].addedBy = userName;
+            }
+            if (!categories[editIndex].date) {
+                categories[editIndex].date = new Date().toISOString();
+            }
             // Kept showOnMainPage as it was
             cancelCategoryEdit();
         }
@@ -772,6 +781,13 @@ async function saveUsers() {
             perms.assignedCategories = [];
         }
         
+        // Sync charges into permissions object so it gets saved to Google Sheets
+        if (u.charges !== undefined) {
+            perms.charges = u.charges;
+        } else if (perms.charges !== undefined) {
+            u.charges = perms.charges;
+        }
+        
         u.permissions = perms;
     });
     
@@ -813,6 +829,27 @@ function renderUsers() {
         const fallbackAvatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(u.fullName || 'User') + '&background=e2e8f0&color=475569';
         const isSuperAdmin = String(u.userId).toLowerCase() === 'admin';
         
+        // Calculate total postings for this user across all sections
+        const userName = u.username || u.fullName || u.userId || 'N/A';
+        const uLower = userName.toLowerCase().trim();
+        const fullNameLower = String(u.fullName || '').toLowerCase().trim();
+        const userIdLower = String(u.userId || '').toLowerCase().trim();
+
+        const userMatches = (item) => {
+            const creator = String(item["Post By"] || item.postBy || item.addedBy || '').toLowerCase().trim();
+            if (!creator) return false;
+            return creator === uLower || creator === fullNameLower || creator === userIdLower;
+        };
+
+        const totalPosts = 
+            (categories || []).filter(userMatches).length +
+            (products || []).filter(userMatches).length +
+            (deals || []).filter(userMatches).length +
+            (banners || []).filter(userMatches).length +
+            (blogs || []).filter(userMatches).length +
+            (broadcasts || []).filter(userMatches).length +
+            (travelPackages || []).filter(userMatches).length;
+        
         if (isSuperAdmin) {
             systemHtml += `
             <tr>
@@ -835,9 +872,12 @@ function renderUsers() {
                     <span class="status-pill active" style="border:none; background:rgba(16,185,129,0.1);">ACTIVE</span>
                 </td>
                 <td>
+                    <span class="badge" style="background:#0ea5e9; color:white; font-weight:bold; cursor:pointer; font-size:11px;" onclick="showUserPerformanceStats('${userName}')">${totalPosts} Posts</span>
+                </td>
+                <td>
                     <div class="action-buttons-group">
                         <button class="action-btn purple" onclick="alert('Super Admin cannot be edited here.')" title="Edit User"><i class="fa-solid fa-id-card"></i></button>
-                        <button class="action-btn blue" onclick="showUserPerformanceStats('${u.username || u.fullName || u.userId || 'admin'}')" title="Stats"><i class="fa-solid fa-chart-simple"></i></button>
+                        <button class="action-btn blue" onclick="showUserPerformanceStats('${userName}')" title="Stats"><i class="fa-solid fa-chart-simple"></i></button>
                     </div>
                 </td>
             </tr>
@@ -870,11 +910,14 @@ function renderUsers() {
                     })()}
                 </td>
                 <td>
+                    <span class="badge" style="background:#0ea5e9; color:white; font-weight:bold; cursor:pointer; font-size:11px;" onclick="showUserPerformanceStats('${userName}')">${totalPosts} Posts</span>
+                </td>
+                <td>
                     <div class="action-buttons-group">
                         <button class="action-btn green" onclick="setUserStatus(${index}, 'active')" title="Activate"><i class="fa-solid fa-check"></i></button>
                         <button class="action-btn red" onclick="setUserStatus(${index}, 'hold')" title="Hold"><i class="fa-solid fa-lock"></i></button>
                         <button class="action-btn purple" onclick="editUser(${index})" title="Edit User"><i class="fa-solid fa-id-card"></i></button>
-                        <button class="action-btn blue" onclick="showUserPerformanceStats('${u.username || u.fullName || u.userId}')" title="Stats"><i class="fa-solid fa-chart-simple"></i></button>
+                        <button class="action-btn blue" onclick="showUserPerformanceStats('${userName}')" title="Stats"><i class="fa-solid fa-chart-simple"></i></button>
                         <button class="action-btn yellow" onclick="alert('Password reset coming soon!')" title="Reset Password"><i class="fa-solid fa-key"></i></button>
                         <button class="action-btn red" onclick="deleteUser(${index})" title="Delete"><i class="fa-solid fa-trash"></i></button>
                     </div>
@@ -2241,27 +2284,48 @@ window.populatePermissionDropdown = function() {
 window.onUserSelectChange = function() {
     const userSelect = document.getElementById('rightsUserSelect');
     const sectionCheckboxes = document.querySelectorAll('.section-checkbox');
+    const chargesInput = document.getElementById('rightsUserCharges');
     
     // Reset sections
     sectionCheckboxes.forEach(cb => cb.checked = false);
 
     if (!userSelect || !userSelect.value) {
+        if (chargesInput) chargesInput.value = '';
         loadUserPermissions();
         return;
     }
     
     const user = users.find(u => u.userId === userSelect.value);
     if (!user) {
+        if (chargesInput) chargesInput.value = '';
         loadUserPermissions();
         return;
     }
 
+    // Normalize permissions string/object safely first
+    let perms = user.permissions;
+    if (typeof perms === 'string') {
+        try { perms = JSON.parse(perms); } catch(e) { perms = {}; }
+    }
+    if (!perms || typeof perms !== 'object' || Array.isArray(perms)) {
+        perms = {};
+    }
+    user.permissions = perms;
+
+    // Sync charges from permissions if available
+    if (perms.charges !== undefined) {
+        user.charges = perms.charges;
+    }
+    if (chargesInput) {
+        chargesInput.value = user.charges !== undefined ? user.charges : '';
+    }
+
     if (user.role === 'admin' && String(user.userId).toLowerCase() === 'admin') {
         sectionCheckboxes.forEach(cb => cb.checked = true);
-    } else if (user.permissions && typeof user.permissions === 'object' && !Array.isArray(user.permissions)) {
+    } else {
         // user.permissions is like { "dashboard": ["Draft", "Publish"], "deals": ["Draft"] }
-        Object.keys(user.permissions).forEach(sectionKey => {
-            if (user.permissions[sectionKey] && user.permissions[sectionKey].length > 0) {
+        Object.keys(perms).forEach(sectionKey => {
+            if (perms[sectionKey] && perms[sectionKey].length > 0) {
                 const cb = document.querySelector(`.section-checkbox[value="${sectionKey}"]`);
                 if (cb) cb.checked = true;
             }
@@ -2286,11 +2350,21 @@ window.loadUserPermissions = function() {
     const user = users.find(u => u.userId === userSelect.value);
     if (!user) return;
     
-    if (user.permissions && typeof user.permissions === 'object' && !Array.isArray(user.permissions)) {
-        // If multiple sections are selected, we only show checkmarks if ALL selected sections have that right.
-        // Or to keep it simple, just load rights of the first selected section, or union. Let's do intersection:
+    // Normalize permissions string/object safely
+    let perms = user.permissions;
+    if (typeof perms === 'string') {
+        try { perms = JSON.parse(perms); } catch(e) { perms = {}; }
+    }
+    if (!perms || typeof perms !== 'object' || Array.isArray(perms)) {
+        perms = {};
+    }
+    user.permissions = perms;
+    
+    if (user.role === 'admin' && user.userId === 'admin') {
+        permCheckboxes.forEach(cb => cb.checked = true);
+    } else {
         if (selectedSections.length > 0) {
-            const firstSectionPerms = user.permissions[selectedSections[0]] || [];
+            const firstSectionPerms = perms[selectedSections[0]] || [];
             
             // To be accurate, we'll just show the rights of the first checked section to populate the UI.
             firstSectionPerms.forEach(action => {
@@ -2298,8 +2372,6 @@ window.loadUserPermissions = function() {
                 if (cb) cb.checked = true;
             });
         }
-    } else if (user.role === 'admin' && user.userId === 'admin') {
-        permCheckboxes.forEach(cb => cb.checked = true);
     }
 };
 
@@ -2342,6 +2414,12 @@ if (rightsForm) {
         });
         
         users[userIndex].permissions = currentPerms;
+        
+        // Save charges rate
+        const chargesInput = document.getElementById('rightsUserCharges');
+        if (chargesInput) {
+            users[userIndex].charges = parseFloat(chargesInput.value) || 0;
+        }
         
         await saveUsers();
         alert('User rights updated successfully!');
@@ -2821,9 +2899,22 @@ window.setPerformanceFilter = function(filterType, btn) {
         b.classList.remove('bg-slate-700', 'text-white');
         b.classList.add('text-slate-300');
     });
-    if (btn) {
-        btn.classList.add('bg-slate-700', 'text-white');
-        btn.classList.remove('text-slate-300');
+    
+    let targetBtn = btn;
+    if (!targetBtn) {
+        targetBtn = Array.from(document.querySelectorAll('.perf-filter-btn')).find(b => 
+            b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${filterType}'`)
+        );
+    }
+    if (targetBtn) {
+        targetBtn.classList.add('bg-slate-700', 'text-white');
+        targetBtn.classList.remove('text-slate-300');
+    }
+
+    // Sync dropdown select
+    const filterSelect = document.getElementById('activityTableFilterSelect');
+    if (filterSelect) {
+        filterSelect.value = filterType;
     }
 
     compilePerformanceMetrics();
@@ -2842,13 +2933,24 @@ window.applyCustomDateFilter = function() {
 function parseItemDate(item) {
     if (!item) return new Date(0);
     if (item.createdDate) {
-        return new Date(item.createdDate);
+        const d = new Date(item.createdDate);
+        if (!isNaN(d.getTime())) return d;
     }
     if (item.id && !isNaN(item.id) && Number(item.id) > 1000000000) {
         return new Date(Number(item.id));
     }
     if (item.date) {
-        const d = new Date(item.date);
+        const dateStr = String(item.date).trim();
+        // Handle DD/MM/YYYY or DD-MM-YYYY formats
+        const match = dateStr.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+        if (match) {
+            const day = parseInt(match[1], 10);
+            const month = parseInt(match[2], 10) - 1; // 0-indexed month
+            const year = parseInt(match[3], 10);
+            const d = new Date(year, month, day);
+            if (!isNaN(d.getTime())) return d;
+        }
+        const d = new Date(dateStr);
         if (!isNaN(d.getTime())) return d;
     }
     return new Date(0);
@@ -2862,9 +2964,8 @@ function isDateInFilterRange(date, filterType, customStart, customEnd) {
     if (filterType === 'today') {
         return dTime >= startOfToday;
     } else if (filterType === 'week') {
-        // Start of this week (last Sunday)
-        const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay()).getTime();
-        return dTime >= startOfWeek;
+        const sevenDaysAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7).getTime();
+        return dTime >= sevenDaysAgo;
     } else if (filterType === 'month') {
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
         return dTime >= startOfMonth;
@@ -2888,23 +2989,29 @@ window.compilePerformanceMetrics = function() {
     const customEnd = document.getElementById('perfEndDate') ? document.getElementById('perfEndDate').value : '';
 
     // Collect all posts
+    const allCategories = categories || [];
     const allProducts = products || [];
     const allDeals = deals || [];
-    const allBlogs = blogs || [];
+    const allAds = []; // Ad placement logic is coming soon
     const allBanners = banners || [];
+    const allBlogs = blogs || [];
+    const allBroadcasts = broadcasts || [];
+    const allTravel = travelPackages || [];
 
-    // Determine range text
-    let rangeLabel = "This Week";
-    if (performanceFilter === 'today') rangeLabel = "Today";
-    else if (performanceFilter === 'month') rangeLabel = "This Month";
-    else if (performanceFilter === '3months') rangeLabel = "Last 3 Months";
-    else if (performanceFilter === 'custom') rangeLabel = `From ${customStart} to ${customEnd}`;
-
-    const labelEl = document.getElementById('activityTableFilterLabel');
-    if (labelEl) labelEl.textContent = `Filter: ${rangeLabel}` + (performanceTargetUser ? ` (User: ${performanceTargetUser})` : '');
+    // User Label
+    const userLabel = document.getElementById('perfTargetUserLabel');
+    if (userLabel) {
+        if (performanceTargetUser) {
+            userLabel.textContent = `User: ${performanceTargetUser}`;
+            userLabel.classList.remove('hidden');
+        } else {
+            userLabel.classList.add('hidden');
+        }
+    }
 
     // Get list of all users from user table or user entries
     let userList = users.map(u => ({
+        userId: u.userId || u.id || 'N/A',
         username: u.username || u.fullName || u.userId || 'N/A',
         fullName: u.fullName || u.username || u.userId || 'N/A',
         role: u.role || 'user',
@@ -2912,74 +3019,124 @@ window.compilePerformanceMetrics = function() {
         lastLogin: u.lastLogin || ''
     }));
 
-    // Filter items based on active range
-    const filteredProducts = allProducts.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
-    const filteredDeals = allDeals.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
-    const filteredBlogs = allBlogs.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
-    const filteredBanners = allBanners.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
-
-    // Compile stats
-    let totalProductsCount = filteredProducts.length;
-    let totalDealsCount = filteredDeals.length;
-    let totalBlogsCount = filteredBlogs.length;
-    let totalBannersCount = filteredBanners.length;
-
-    // Apply specific user filter if requested
     let displayUsers = [...userList];
     if (performanceTargetUser) {
-        displayUsers = displayUsers.filter(u => u.username.toLowerCase() === performanceTargetUser.toLowerCase());
+        const targetLower = performanceTargetUser.toLowerCase().trim();
+        displayUsers = displayUsers.filter(u => 
+            u.username.toLowerCase().trim() === targetLower ||
+            u.fullName.toLowerCase().trim() === targetLower ||
+            u.userId.toLowerCase().trim() === targetLower
+        );
     }
 
-    // Map stats per user
-    const userStats = displayUsers.map(user => {
-        const uLower = user.username.toLowerCase();
-        
-        const uProducts = filteredProducts.filter(
-    p => String(p["Post By"] || p.postBy || '').toLowerCase() === user.fullName.toLowerCase()
-).length;
+    // Helper to check item author
+    const userMatches = (item, user) => {
+        const creator = String(item["Post By"] || item.postBy || item.addedBy || '').toLowerCase().trim();
+        if (!creator) return false;
+        return creator === user.fullName.toLowerCase().trim() || 
+               creator === user.username.toLowerCase().trim() || 
+               creator === (user.userId || '').toLowerCase().trim();
+    };
 
-const uDeals = filteredDeals.filter(
-    d => String(d["Post By"] || d.postBy || '').toLowerCase() === user.fullName.toLowerCase()
-).length;
+    // Filter items based on active range
+    const filteredCategories = allCategories.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
+    const filteredProducts = allProducts.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
+    const filteredDeals = allDeals.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
+    const filteredAds = allAds.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
+    const filteredBanners = allBanners.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
+    const filteredBlogs = allBlogs.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
+    const filteredBroadcasts = allBroadcasts.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
+    const filteredTravel = allTravel.filter(item => isDateInFilterRange(parseItemDate(item), performanceFilter, customStart, customEnd));
 
-const uBlogs = filteredBlogs.filter(
-    b => String(b["Post By"] || b.postBy || '').toLowerCase() === user.fullName.toLowerCase()
-).length;
+    // Prepare lists for charts. If specific user is active, charts show only their breakdown.
+    let chartCategories = filteredCategories;
+    let chartProducts = filteredProducts;
+    let chartDeals = filteredDeals;
+    let chartAds = filteredAds;
+    let chartBanners = filteredBanners;
+    let chartBlogs = filteredBlogs;
+    let chartBroadcasts = filteredBroadcasts;
+    let chartTravel = filteredTravel;
 
-const uBanners = filteredBanners.filter(
-    b => String(b["Post By"] || b.postBy || '').toLowerCase() === user.fullName.toLowerCase()
-).length;
+    if (performanceTargetUser) {
+        const targetUserObj = userList.find(u => u.username.toLowerCase() === performanceTargetUser.toLowerCase() || u.fullName.toLowerCase() === performanceTargetUser.toLowerCase() || u.userId.toLowerCase() === performanceTargetUser.toLowerCase()) || {
+            username: performanceTargetUser,
+            fullName: performanceTargetUser,
+            userId: performanceTargetUser
+        };
+        chartCategories = filteredCategories.filter(item => userMatches(item, targetUserObj));
+        chartProducts = filteredProducts.filter(item => userMatches(item, targetUserObj));
+        chartDeals = filteredDeals.filter(item => userMatches(item, targetUserObj));
+        chartAds = filteredAds.filter(item => userMatches(item, targetUserObj));
+        chartBanners = filteredBanners.filter(item => userMatches(item, targetUserObj));
+        chartBlogs = filteredBlogs.filter(item => userMatches(item, targetUserObj));
+        chartBroadcasts = filteredBroadcasts.filter(item => userMatches(item, targetUserObj));
+        chartTravel = filteredTravel.filter(item => userMatches(item, targetUserObj));
+    }
+
+    // Compile stats
+    let totalCategoriesCount = filteredCategories.length;
+    let totalProductsCount = filteredProducts.length;
+    let totalDealsCount = filteredDeals.length;
+    let totalAdsCount = filteredAds.length;
+    let totalBannersCount = filteredBanners.length;
+    let totalBlogsCount = filteredBlogs.length;
+    let totalBroadcastsCount = filteredBroadcasts.length;
+    let totalTravelCount = filteredTravel.length;
+
+    // Map stats per user (always show all users in the table and overall stats)
+    const userStats = userList.map(user => {
+        const uCategories = filteredCategories.filter(item => userMatches(item, user)).length;
+        const uProducts = filteredProducts.filter(item => userMatches(item, user)).length;
+        const uDeals = filteredDeals.filter(item => userMatches(item, user)).length;
+        const uAds = filteredAds.filter(item => userMatches(item, user)).length;
+        const uBanners = filteredBanners.filter(item => userMatches(item, user)).length;
+        const uBlogs = filteredBlogs.filter(item => userMatches(item, user)).length;
+        const uBroadcasts = filteredBroadcasts.filter(item => userMatches(item, user)).length;
+        const uTravel = filteredTravel.filter(item => userMatches(item, user)).length;
         
         return {
             ...user,
+            categories: uCategories,
             products: uProducts,
             deals: uDeals,
-            blogs: uBlogs,
+            ads: uAds,
             banners: uBanners,
-            total: uProducts + uDeals + uBlogs + uBanners
+            blogs: uBlogs,
+            broadcasts: uBroadcasts,
+            travel: uTravel,
+            total: uCategories + uProducts + uDeals + uAds + uBanners + uBlogs + uBroadcasts + uTravel
         };
     });
 
-    // Update top UI Stat fields
+    // Update top UI Stat fields (fallback or keep in sync if they exist)
     if (document.getElementById('perfStatProducts')) document.getElementById('perfStatProducts').textContent = totalProductsCount;
     if (document.getElementById('perfStatDeals')) document.getElementById('perfStatDeals').textContent = totalDealsCount;
     if (document.getElementById('perfStatBlogs')) document.getElementById('perfStatBlogs').textContent = totalBlogsCount;
     if (document.getElementById('perfStatBanners')) document.getElementById('perfStatBanners').textContent = totalBannersCount;
-    if (document.getElementById('perfStatTotal')) document.getElementById('perfStatTotal').textContent = totalProductsCount + totalDealsCount + totalBlogsCount + totalBannersCount;
+    if (document.getElementById('perfStatTravel')) document.getElementById('perfStatTravel').textContent = totalTravelCount;
+    if (document.getElementById('perfStatTotal')) {
+        document.getElementById('perfStatTotal').textContent = 
+            totalCategoriesCount + totalProductsCount + totalDealsCount + totalAdsCount + totalBannersCount + totalBlogsCount + totalBroadcastsCount + totalTravelCount;
+    }
 
     // Render User Activity Summary Table
     const summaryBody = document.getElementById('perfActivitySummaryBody');
     if (summaryBody) {
         if (userStats.length === 0) {
-            summaryBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-slate-400">No user performance record found.</td></tr>`;
+            summaryBody.innerHTML = `<tr><td colspan="10" class="text-center py-4 text-slate-400">No user performance record found.</td></tr>`;
         } else {
             summaryBody.innerHTML = userStats.map(stat => `
                 <tr class="hover:bg-slate-800/20 transition-all duration-150">
-                    <td class="py-3 px-4 font-semibold text-white">${stat.fullName} <span class="text-xs text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded ml-2">${stat.role.toUpperCase()}</span></td>
+                    <td class="py-3 px-4 font-semibold text-white"><span class="cursor-pointer hover:underline text-sky-400 inline-flex items-center gap-1.5" onclick="openUserPostingInvoice('${stat.userId}')">${stat.fullName} <i class="fa-solid fa-file-invoice text-xs opacity-75"></i></span> <span class="text-xs text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded ml-2">${stat.role.toUpperCase()}</span></td>
+                    <td class="text-center py-3 px-4 text-violet-400 font-bold">${stat.categories}</td>
                     <td class="text-center py-3 px-4 text-sky-400 font-bold">${stat.products}</td>
                     <td class="text-center py-3 px-4 text-amber-500 font-bold">${stat.deals}</td>
-                    <td class="text-center py-3 px-4 text-emerald-400 font-bold">${stat.blogs}</td>
+                    <td class="text-center py-3 px-4 text-indigo-400 font-bold">${stat.ads}</td>
                     <td class="text-center py-3 px-4 text-rose-400 font-bold">${stat.banners}</td>
+                    <td class="text-center py-3 px-4 text-emerald-400 font-bold">${stat.blogs}</td>
+                    <td class="text-center py-3 px-4 text-orange-400 font-bold">${stat.broadcasts}</td>
+                    <td class="text-center py-3 px-4 text-fuchsia-400 font-bold">${stat.travel}</td>
                     <td class="text-center py-3 px-4 text-white font-extrabold">${stat.total}</td>
                 </tr>
             `).join('');
@@ -2991,15 +3148,18 @@ const uBanners = filteredBanners.filter(
     const weeklyBody = document.getElementById('perfWeeklyBody');
     if (weeklyBody) {
         const weeklyUserStats = displayUsers.map(user => {
-            const uLower = user.username.toLowerCase();
-            const wProducts = allProducts.filter(p => String(p["Post By"] || p.postBy || '').toLowerCase() === uLower && parseItemDate(p) >= weeklyStart).length;
-            const wDeals = allDeals.filter(d => String(d["Post By"] || d.postBy || '').toLowerCase() === uLower && parseItemDate(d) >= weeklyStart).length;
-            const wBlogs = allBlogs.filter(b => String(b["Post By"] || b.postBy || '').toLowerCase() === uLower && parseItemDate(b) >= weeklyStart).length;
-            const wBanners = allBanners.filter(b => String(b["Post By"] || b.postBy || '').toLowerCase() === uLower && parseItemDate(b) >= weeklyStart).length;
+            const wCategories = allCategories.filter(p => userMatches(p, user) && parseItemDate(p) >= weeklyStart).length;
+            const wProducts = allProducts.filter(p => userMatches(p, user) && parseItemDate(p) >= weeklyStart).length;
+            const wDeals = allDeals.filter(d => userMatches(d, user) && parseItemDate(d) >= weeklyStart).length;
+            const wAds = allAds.filter(d => userMatches(d, user) && parseItemDate(d) >= weeklyStart).length;
+            const wBanners = allBanners.filter(b => userMatches(b, user) && parseItemDate(b) >= weeklyStart).length;
+            const wBlogs = allBlogs.filter(b => userMatches(b, user) && parseItemDate(b) >= weeklyStart).length;
+            const wBroadcasts = allBroadcasts.filter(b => userMatches(b, user) && parseItemDate(b) >= weeklyStart).length;
+            const wTravel = allTravel.filter(b => userMatches(b, user) && parseItemDate(b) >= weeklyStart).length;
             
             return {
                 ...user,
-                totalThisWeek: wProducts + wDeals + wBlogs + wBanners
+                totalThisWeek: wCategories + wProducts + wDeals + wAds + wBanners + wBlogs + wBroadcasts + wTravel
             };
         });
 
@@ -3021,15 +3181,18 @@ const uBanners = filteredBanners.filter(
     const monthlyBody = document.getElementById('perfMonthlyBody');
     if (monthlyBody) {
         const monthlyUserStats = displayUsers.map(user => {
-            const uLower = user.username.toLowerCase();
-            const mProducts = allProducts.filter(p => String(p["Post By"] || p.postBy || '').toLowerCase() === uLower && parseItemDate(p) >= monthlyStart).length;
-            const mDeals = allDeals.filter(d => String(d["Post By"] || d.postBy || '').toLowerCase() === uLower && parseItemDate(d) >= monthlyStart).length;
-            const mBlogs = allBlogs.filter(b => String(b["Post By"] || b.postBy || '').toLowerCase() === uLower && parseItemDate(b) >= monthlyStart).length;
-            const mBanners = allBanners.filter(b => String(b["Post By"] || b.postBy || '').toLowerCase() === uLower && parseItemDate(b) >= monthlyStart).length;
+            const mCategories = allCategories.filter(p => userMatches(p, user) && parseItemDate(p) >= monthlyStart).length;
+            const mProducts = allProducts.filter(p => userMatches(p, user) && parseItemDate(p) >= monthlyStart).length;
+            const mDeals = allDeals.filter(d => userMatches(d, user) && parseItemDate(d) >= monthlyStart).length;
+            const mAds = allAds.filter(d => userMatches(d, user) && parseItemDate(d) >= monthlyStart).length;
+            const mBanners = allBanners.filter(b => userMatches(b, user) && parseItemDate(b) >= monthlyStart).length;
+            const mBlogs = allBlogs.filter(b => userMatches(b, user) && parseItemDate(b) >= monthlyStart).length;
+            const mBroadcasts = allBroadcasts.filter(b => userMatches(b, user) && parseItemDate(b) >= monthlyStart).length;
+            const mTravel = allTravel.filter(b => userMatches(b, user) && parseItemDate(b) >= monthlyStart).length;
             
             return {
                 ...user,
-                totalThisMonth: mProducts + mDeals + mBlogs + mBanners
+                totalThisMonth: mCategories + mProducts + mDeals + mAds + mBanners + mBlogs + mBroadcasts + mTravel
             };
         });
 
@@ -3047,7 +3210,7 @@ const uBanners = filteredBanners.filter(
     }
 
     // Render Charts using compiled stats
-    renderPerformanceCharts(userStats, filteredProducts, filteredDeals, filteredBlogs, filteredBanners);
+    renderPerformanceCharts(userStats, chartCategories, chartProducts, chartDeals, chartAds, chartBanners, chartBlogs, chartBroadcasts, chartTravel);
 };
 
 function getWeekDaysData(filteredItems) {
@@ -3062,7 +3225,7 @@ function getWeekDaysData(filteredItems) {
     return daysData;
 }
 
-window.renderPerformanceCharts = function(userStats, filteredProducts, filteredDeals, filteredBlogs, filteredBanners) {
+window.renderPerformanceCharts = function(userStats, filteredCategories, filteredProducts, filteredDeals, filteredAds, filteredBanners, filteredBlogs, filteredBroadcasts, filteredTravel) {
     if (typeof Chart === 'undefined') {
         console.warn("Chart.js is not loaded. Skipping rendering of performance charts.");
         return;
@@ -3074,20 +3237,28 @@ window.renderPerformanceCharts = function(userStats, filteredProducts, filteredD
         if (weeklyCtx) {
             if (perfCharts.weekly) perfCharts.weekly.destroy();
             
+            const catWeek = getWeekDaysData(filteredCategories);
             const prodWeek = getWeekDaysData(filteredProducts);
             const dealWeek = getWeekDaysData(filteredDeals);
-            const blogWeek = getWeekDaysData(filteredBlogs);
+            const adWeek = getWeekDaysData(filteredAds);
             const bannerWeek = getWeekDaysData(filteredBanners);
+            const blogWeek = getWeekDaysData(filteredBlogs);
+            const broadcastWeek = getWeekDaysData(filteredBroadcasts);
+            const travelWeek = getWeekDaysData(filteredTravel);
 
             perfCharts.weekly = new Chart(weeklyCtx, {
                 type: 'bar',
                 data: {
                     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                     datasets: [
+                        { label: 'Categories', data: catWeek, backgroundColor: '#8b5cf6' },
                         { label: 'Products', data: prodWeek, backgroundColor: '#3b82f6' },
                         { label: 'Deals', data: dealWeek, backgroundColor: '#f59e0b' },
+                        { label: 'Place Ads', data: adWeek, backgroundColor: '#6366f1' },
+                        { label: 'Banners', data: bannerWeek, backgroundColor: '#f43f5e' },
                         { label: 'Blogs', data: blogWeek, backgroundColor: '#10b981' },
-                        { label: 'Banners', data: bannerWeek, backgroundColor: '#ef4444' }
+                        { label: 'Broadcast', data: broadcastWeek, backgroundColor: '#f97316' },
+                        { label: 'Travel', data: travelWeek, backgroundColor: '#d946ef' }
                     ]
                 },
                 options: {
@@ -3200,15 +3371,16 @@ window.renderPerformanceCharts = function(userStats, filteredProducts, filteredD
             if (perfCharts.pie) perfCharts.pie.destroy();
 
             const activeUsers = userStats.filter(p => p.total > 0);
-            const labels = activeUsers.map(p => p.fullName);
-            const totals = activeUsers.map(p => p.total);
+            const hasActivity = activeUsers.length > 0;
+            const labels = hasActivity ? activeUsers.map(p => p.fullName) : userStats.map(p => p.fullName);
+            const totals = hasActivity ? activeUsers.map(p => p.total) : userStats.map(p => 0);
 
             perfCharts.pie = new Chart(pieCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: labels.length > 0 ? labels : ['No Activity'],
+                    labels: labels.length > 0 ? labels : ['No Users'],
                     datasets: [{
-                        data: totals.length > 0 ? totals : [1],
+                        data: totals.length > 0 ? totals : [0],
                         backgroundColor: ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6'],
                         borderWidth: 0
                     }]
@@ -3228,5 +3400,161 @@ window.renderPerformanceCharts = function(userStats, filteredProducts, filteredD
     } catch (e) {
         console.error("Error rendering userPieChart:", e);
     }
+};
+
+// --- USER POSTING DETAILS INVOICE MODAL LOGIC ---
+let currentInvoiceUser = null;
+
+window.openUserPostingInvoice = function(username) {
+    currentInvoiceUser = username;
+    const modal = document.getElementById('userInvoiceModal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    
+    // Set default select to This Month
+    const filterSelect = document.getElementById('invoiceFilterSelect');
+    if (filterSelect) {
+        filterSelect.value = 'month';
+        document.getElementById('invoiceCustomDateRange').classList.add('hidden');
+    }
+    
+    document.getElementById('invoiceGenerationDate').textContent = new Date().toLocaleString();
+    
+    recalculateInvoice();
+};
+
+window.closeUserInvoiceModal = function() {
+    const modal = document.getElementById('userInvoiceModal');
+    if (modal) modal.classList.add('hidden');
+};
+
+window.onInvoiceFilterChange = function() {
+    const val = document.getElementById('invoiceFilterSelect').value;
+    const customContainer = document.getElementById('invoiceCustomDateRange');
+    if (val === 'custom') {
+        customContainer.classList.remove('hidden');
+    } else {
+        customContainer.classList.add('hidden');
+        recalculateInvoice();
+    }
+};
+
+window.onInvoiceCustomDateChange = function() {
+    recalculateInvoice();
+};
+
+window.recalculateInvoice = function() {
+    if (!currentInvoiceUser) return;
+    
+    // Construct userList from global users array so it is in scope
+    const userList = users.map(u => ({
+        ...u,
+        userId: u.userId || u.id || 'N/A',
+        username: u.username || u.fullName || u.userId || 'N/A',
+        fullName: u.fullName || u.username || u.userId || 'N/A',
+        role: u.role || 'user',
+        activeDays: u.activeDays || 0,
+        lastLogin: u.lastLogin || ''
+    }));
+
+    // Find the user object
+    const user = userList.find(u => String(u.userId).toLowerCase() === currentInvoiceUser.toLowerCase()) || {
+        username: currentInvoiceUser,
+        fullName: currentInvoiceUser,
+        role: 'user',
+        userId: currentInvoiceUser,
+        permissions: {},
+        charges: 0
+    };
+    
+    document.getElementById('invoiceUserFullName').textContent = `User: ${user.fullName}`;
+    document.getElementById('invoiceUserName').textContent = user.username;
+    document.getElementById('invoiceUserRole').textContent = user.role.toUpperCase();
+    
+    // Normalize permissions string/object safely
+    let perms = user.permissions;
+    if (typeof perms === 'string') {
+        try { perms = JSON.parse(perms); } catch(e) { perms = {}; }
+    }
+    if (!perms || typeof perms !== 'object' || Array.isArray(perms)) {
+        perms = {};
+    }
+    user.permissions = perms;
+
+    // Sync charges from permissions
+    const userRate = perms.charges !== undefined ? parseFloat(perms.charges) : (user.charges !== undefined ? parseFloat(user.charges) : 0);
+    const rateEl = document.getElementById('invoiceUserRatePerPost');
+    if (rateEl) rateEl.textContent = `Rs. ${userRate}`;
+    const rateFooterEl = document.getElementById('invoiceRatePerPostFooter');
+    if (rateFooterEl) rateFooterEl.textContent = userRate;
+    
+    // Get invoice filter settings
+    const filterType = document.getElementById('invoiceFilterSelect').value;
+    const customStart = document.getElementById('invoiceStartDate').value;
+    const customEnd = document.getElementById('invoiceEndDate').value;
+    
+    // Get all items in selected range matching this user
+    const userMatches = (item) => {
+        const creator = String(item["Post By"] || item.postBy || item.addedBy || '').toLowerCase().trim();
+        if (!creator) return false;
+        return creator === user.fullName.toLowerCase().trim() || 
+               creator === user.username.toLowerCase().trim() || 
+               creator === (user.userId || '').toLowerCase().trim();
+    };
+    
+    const filterByDate = (items) => {
+        return items.filter(item => isDateInFilterRange(parseItemDate(item), filterType, customStart, customEnd));
+    };
+    
+    const userCategories = filterByDate(categories || []).filter(userMatches);
+    const userProducts = filterByDate(products || []).filter(userMatches);
+    const userDeals = filterByDate(deals || []).filter(userMatches);
+    const userAds = filterByDate([]).filter(userMatches); // Placeholder for Ads
+    const userBanners = filterByDate(banners || []).filter(userMatches);
+    const userBlogs = filterByDate(blogs || []).filter(userMatches);
+    const userBroadcasts = filterByDate(broadcasts || []).filter(userMatches);
+    const userTravel = filterByDate(travelPackages || []).filter(userMatches);
+    
+    const getNamesList = (items) => {
+        if (items.length === 0) return `<span class="text-slate-500 italic">No posts</span>`;
+        return items.map(item => {
+            const name = item.name || item.title || item.subCategory || item.id || 'Unnamed';
+            const date = parseItemDate(item);
+            const dateStr = date.getTime() > 0 ? date.toLocaleDateString() : 'N/A';
+            return `<span class="inline-block bg-slate-800 text-slate-300 text-xs px-2 py-0.5 rounded border border-slate-700/50 mr-1.5 mb-1.5">${name} (${dateStr})</span>`;
+        }).join('');
+    };
+    
+    const sections = [
+        { name: 'Categories', count: userCategories.length, details: getNamesList(userCategories) },
+        { name: 'Products', count: userProducts.length, details: getNamesList(userProducts) },
+        { name: 'Deals', count: userDeals.length, details: getNamesList(userDeals) },
+        { name: 'Place Ads', count: userAds.length, details: getNamesList(userAds) },
+        { name: 'Banners', count: userBanners.length, details: getNamesList(userBanners) },
+        { name: 'Blogs', count: userBlogs.length, details: getNamesList(userBlogs) },
+        { name: 'Broadcast', count: userBroadcasts.length, details: getNamesList(userBroadcasts) },
+        { name: 'Travel', count: userTravel.length, details: getNamesList(userTravel) }
+    ];
+    
+    let total = 0;
+    const body = document.getElementById('invoiceTableBody');
+    body.innerHTML = sections.map(sec => {
+        total += sec.count;
+        return `
+            <tr>
+                <td class="py-3 px-4 font-semibold text-white">${sec.name}</td>
+                <td class="py-3 px-4 text-center font-bold text-sky-400">${sec.count}</td>
+                <td class="py-3 px-4 text-xs">${sec.details}</td>
+            </tr>
+        `;
+    }).join('');
+    
+    document.getElementById('invoiceTotalCount').textContent = total;
+    const paymentEl = document.getElementById('invoiceTotalPayment');
+    if (paymentEl) paymentEl.textContent = `Rs. ${(total * userRate).toFixed(2)}`;
+};
+
+window.printUserInvoice = function() {
+    window.print();
 };
 
