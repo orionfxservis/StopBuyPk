@@ -2072,10 +2072,20 @@
     <script src="js/live-prices.js"></script>
 
     <script>
-        // Language Setup
-        const currentLang = localStorage.getItem('qeematLang') || 'ur';
+        // Language Setup (defaults to English, reset once for legacy Urdu defaults)
+        if (!localStorage.getItem('qeematLangEnDefault2')) {
+            localStorage.setItem('qeematLang', 'en');
+            localStorage.setItem('qeematLangEnDefault2', 'true');
+        }
+        const currentLang = localStorage.getItem('qeematLang') || 'en';
         document.documentElement.lang = currentLang;
         document.documentElement.dir = currentLang === 'ur' ? 'rtl' : 'ltr';
+
+        // Force scroll to top / home section on load
+        if (window.history.scrollRestoration) {
+            window.history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
 
         function updateLanguageUI(lang) {
             document.querySelectorAll('.lang-en').forEach(el => {
@@ -2107,6 +2117,8 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             updateLanguageUI(currentLang);
+            // Additional scroll-to-top safety
+            setTimeout(() => { window.scrollTo(0, 0); }, 50);
         });
 
         function switchLoginTab(tab) {
