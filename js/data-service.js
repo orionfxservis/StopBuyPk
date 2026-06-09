@@ -232,7 +232,19 @@ const DataService = {
                 image: b.image,
                 status: b.status,
                 addedBy: b.added_by,
-                createdDate: b.created_date
+                createdDate: b.created_date,
+                titleEn: b.title_en || b.title,
+                titleUr: b.title_ur || '',
+                slug: b.slug || '',
+                author: b.author || '',
+                categoryEn: b.category_en || '',
+                categoryUr: b.category_ur || '',
+                descEn: b.desc_en || '',
+                descUr: b.desc_ur || '',
+                contentEn: b.content_en || b.content,
+                contentUr: b.content_ur || '',
+                views: b.views || 0,
+                date: b.date || ''
             }));
             localStorage.setItem("admin_blogs", JSON.stringify(blogs));
             return blogs;
@@ -529,12 +541,24 @@ const DataService = {
             
             const rows = data.map(b => ({
                 id: b.id,
-                title: b.title,
-                content: b.content || '',
+                title: b.titleEn || b.title || '',
+                content: b.contentEn || b.content || '',
                 image: b.image || '',
                 status: b.status || 'Draft',
                 added_by: b.addedBy || '',
-                created_date: b.createdDate || new Date().toISOString()
+                created_date: b.createdDate || new Date().toISOString(),
+                title_en: b.titleEn || '',
+                title_ur: b.titleUr || '',
+                slug: b.slug || '',
+                author: b.author || '',
+                category_en: b.categoryEn || '',
+                category_ur: b.categoryUr || '',
+                desc_en: b.descEn || '',
+                desc_ur: b.descUr || '',
+                content_en: b.contentEn || '',
+                content_ur: b.contentUr || '',
+                views: b.views || 0,
+                date: b.date || ''
             }));
             const { error } = await client.from('blogs').upsert(rows);
             if (error) throw error;
