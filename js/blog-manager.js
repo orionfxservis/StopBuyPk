@@ -180,8 +180,8 @@ async function renderBlogs() {
                 <div>${blog.views || 0}</div>
                 <div>${displayDate}</div>
                 <div style="display: flex; gap: 5px;">
-                    <button onclick="editBlog(${blog.id})" class="btn-action edit" style="background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 4px 8px; border-radius: 4px; cursor: pointer; transition: all 0.2s;"><i class="fas fa-edit"></i> Edit</button>
-                    <button onclick="deleteBlog(${blog.id})" class="btn-action delete" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 4px 8px; border-radius: 4px; cursor: pointer; transition: all 0.2s;"><i class="fas fa-trash"></i></button>
+                    <button onclick="editBlog('${blog.id}')" class="btn-action edit" style="background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 4px 8px; border-radius: 4px; cursor: pointer; transition: all 0.2s;"><i class="fas fa-edit"></i> Edit</button>
+                    <button onclick="deleteBlog('${blog.id}')" class="btn-action delete" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 4px 8px; border-radius: 4px; cursor: pointer; transition: all 0.2s;"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
             `;
