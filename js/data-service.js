@@ -23,6 +23,18 @@ const DataService = {
         return window.supabaseLoadingPromise;
     },
 
+    generateUUID: () => {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0;
+            const v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    },
+
+    isUUID: (val) => {
+        return val && typeof val === 'string' && val.includes('-');
+    },
+
     login: async (data) => {
         try {
             const client = await DataService.ensureSupabase();
@@ -296,7 +308,7 @@ const DataService = {
             }
             return null;
         } catch (err) {
-            console.error("Fetch live rates failed", err);
+            console.error("Failed to fetch live rates", err);
             return JSON.parse(localStorage.getItem("stopbuyLiveRates")) || null;
         }
     },
@@ -307,10 +319,11 @@ const DataService = {
             const { data: dbData } = await client.from('categories').select('id');
             const dbIds = (dbData || []).map(r => r.id);
             
-            // Clean/filter helper to check if ID is a valid UUID
-            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
-            
-            const currentIds = data.map(item => item.id).filter(isUUID);
+            // Assign UUIDs client-side for new items
+            data.forEach(c => {
+                if (!DataService.isUUID(c.id)) c.id = DataService.generateUUID();
+            });
+            const currentIds = data.map(item => item.id);
             
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
@@ -318,21 +331,14 @@ const DataService = {
             }
             
             const rows = data.map(c => ({
-                id: isUUID(c.id) ? c.id : undefined,
+                id: c.id,
                 name: c.name,
                 sub_category: c.subCategory || '',
                 fields: c.fields || [],
                 show_on_main_page: c.showOnMainPage !== false
             }));
-            const { data: upserted, error } = await client.from('categories').upsert(rows, { onConflict: 'name' }).select();
+            const { error } = await client.from('categories').upsert(rows, { onConflict: 'name' });
             if (error) throw error;
-            
-            if (upserted) {
-                upserted.forEach(row => {
-                    const match = data.find(item => item.name === row.name);
-                    if (match) match.id = row.id;
-                });
-            }
         } catch (err) {
             console.error("Failed to sync categories to Supabase", err);
             alert("Supabase Sync Error: " + err.message);
@@ -346,8 +352,10 @@ const DataService = {
             const { data: dbData } = await client.from('products').select('id');
             const dbIds = (dbData || []).map(r => r.id);
             
-            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
-            const currentIds = data.map(item => item.id).filter(isUUID);
+            data.forEach(p => {
+                if (!DataService.isUUID(p.id)) p.id = DataService.generateUUID();
+            });
+            const currentIds = data.map(item => item.id);
             
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
@@ -356,7 +364,7 @@ const DataService = {
             
             const rows = data.map(p => {
                 const baseFields = {
-                    id: isUUID(p.id) ? p.id : undefined,
+                    id: p.id,
                     category: p.category,
                     sub_category: p.subCategory || '',
                     image: p.image || '',
@@ -392,8 +400,10 @@ const DataService = {
             const { data: dbData } = await client.from('banners').select('id');
             const dbIds = (dbData || []).map(r => r.id);
             
-            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
-            const currentIds = data.map(item => item.id).filter(isUUID);
+            data.forEach(b => {
+                if (!DataService.isUUID(b.id)) b.id = DataService.generateUUID();
+            });
+            const currentIds = data.map(item => item.id);
             
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
@@ -401,7 +411,7 @@ const DataService = {
             }
             
             const rows = data.map(b => ({
-                id: isUUID(b.id) ? b.id : undefined,
+                id: b.id,
                 image: b.image,
                 link: b.link || '',
                 status: b.status || 'Draft',
@@ -424,8 +434,10 @@ const DataService = {
             const { data: dbData } = await client.from('deals').select('id');
             const dbIds = (dbData || []).map(r => r.id);
             
-            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
-            const currentIds = data.map(item => item.id).filter(isUUID);
+            data.forEach(d => {
+                if (!DataService.isUUID(d.id)) d.id = DataService.generateUUID();
+            });
+            const currentIds = data.map(item => item.id);
             
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
@@ -433,7 +445,7 @@ const DataService = {
             }
             
             const rows = data.map(d => ({
-                id: isUUID(d.id) ? d.id : undefined,
+                id: d.id,
                 name: d.name,
                 image: d.image || '',
                 description: d.desc || '',
@@ -461,8 +473,10 @@ const DataService = {
             const { data: dbData } = await client.from('users').select('id');
             const dbIds = (dbData || []).map(r => r.id);
             
-            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
-            const currentIds = data.map(item => item.id).filter(isUUID);
+            data.forEach(u => {
+                if (!DataService.isUUID(u.id)) u.id = DataService.generateUUID();
+            });
+            const currentIds = data.map(item => item.id);
             
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
@@ -470,7 +484,7 @@ const DataService = {
             }
             
             const rows = data.map(u => ({
-                id: isUUID(u.id) ? u.id : undefined,
+                id: u.id,
                 user_id: u.userId,
                 email: u.email || '',
                 full_name: u.fullName || '',
@@ -487,15 +501,8 @@ const DataService = {
                 active_days: u.activeDays || 0,
                 active_days_list: u.activeDaysList || []
             }));
-            const { data: upserted, error } = await client.from('users').upsert(rows, { onConflict: 'user_id' }).select();
+            const { error } = await client.from('users').upsert(rows, { onConflict: 'user_id' });
             if (error) throw error;
-            
-            if (upserted) {
-                upserted.forEach(row => {
-                    const match = data.find(item => item.userId === row.user_id);
-                    if (match) match.id = row.id;
-                });
-            }
         } catch (err) {
             console.error("Failed to sync users to Supabase", err);
             alert("Supabase Sync Error (Users): " + err.message);
@@ -510,8 +517,10 @@ const DataService = {
             const { data: dbData } = await client.from('blogs').select('id');
             const dbIds = (dbData || []).map(r => r.id);
             
-            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
-            const currentIds = data.map(item => item.id).filter(isUUID);
+            data.forEach(b => {
+                if (!DataService.isUUID(b.id)) b.id = DataService.generateUUID();
+            });
+            const currentIds = data.map(item => item.id);
             
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
@@ -519,7 +528,7 @@ const DataService = {
             }
             
             const rows = data.map(b => ({
-                id: isUUID(b.id) ? b.id : undefined,
+                id: b.id,
                 title: b.title,
                 content: b.content || '',
                 image: b.image || '',
@@ -542,8 +551,10 @@ const DataService = {
             const { data: dbData } = await client.from('travel_packages').select('id');
             const dbIds = (dbData || []).map(r => r.id);
             
-            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
-            const currentIds = data.map(item => item.id).filter(isUUID);
+            data.forEach(tp => {
+                if (!DataService.isUUID(tp.id)) tp.id = DataService.generateUUID();
+            });
+            const currentIds = data.map(item => item.id);
             
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
@@ -551,7 +562,7 @@ const DataService = {
             }
             
             const rows = data.map(tp => ({
-                id: isUUID(tp.id) ? tp.id : undefined,
+                id: tp.id,
                 title: tp.title,
                 image: tp.image || '',
                 description: tp.desc || '',
@@ -575,8 +586,10 @@ const DataService = {
             const { data: dbData } = await client.from('broadcasts').select('id');
             const dbIds = (dbData || []).map(r => r.id);
             
-            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
-            const currentIds = data.map(item => item.id).filter(isUUID);
+            data.forEach(b => {
+                if (!DataService.isUUID(b.id)) b.id = DataService.generateUUID();
+            });
+            const currentIds = data.map(item => item.id);
             
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
@@ -584,7 +597,7 @@ const DataService = {
             }
             
             const rows = data.map(b => ({
-                id: isUUID(b.id) ? b.id : undefined,
+                id: b.id,
                 message: b.message,
                 target: b.target || 'All',
                 target_user: b.targetUser || '',
