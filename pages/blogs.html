@@ -290,7 +290,7 @@ body{
 
         <!-- Modal Body (Scrollable) -->
         <div class="overflow-y-auto flex-1 p-4 md:p-8">
-            <img id="modal-image" src="" class="w-full h-64 md:h-80 object-cover rounded-2xl mb-8 shadow-sm">
+            <img id="modal-image" src="" class="w-full max-h-[350px] md:max-h-[450px] object-contain bg-slate-50/50 rounded-2xl mb-8 shadow-sm">
             
             <h1 id="modal-title" class="text-2xl md:text-4xl font-extrabold text-gray-900 leading-tight mb-4"></h1>
             
@@ -411,7 +411,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <div class="blog-badge lang-ur" style="display:none;">${catUr}</div>
 
                     <div class="overflow-hidden">
-                        <img src="${image}" class="w-full h-52 object-cover rounded-t-3xl" onerror="this.src='../images/placeholder.jpg'">
+                        <img src="${image}" class="w-full h-52 object-contain bg-emerald-50/30 rounded-t-3xl" onerror="this.src='../images/placeholder.jpg'">
                     </div>
                     <div class="p-6">
                         <!-- EN Content -->
