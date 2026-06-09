@@ -1,8 +1,21 @@
-// Language Setup (runs immediately)
-const currentLang = localStorage.getItem('qeematLang') || 'ur';
+// Language Setup (defaults to English, reset once for legacy Urdu defaults)
+if (!localStorage.getItem('qeematLangEnDefault2')) {
+  localStorage.setItem('qeematLang', 'en');
+  localStorage.setItem('qeematLangEnDefault2', 'true');
+}
+const currentLang = localStorage.getItem('qeematLang') || 'en';
 
 document.documentElement.lang = currentLang;
 document.documentElement.dir = currentLang === 'ur' ? 'rtl' : 'ltr';
+
+// Force scroll to top / home section on load
+if (window.history.scrollRestoration) {
+  window.history.scrollRestoration = 'manual';
+}
+window.scrollTo(0, 0);
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => { window.scrollTo(0, 0); }, 50);
+});
 
 // Function to update visible language content
 function updateLanguageUI(lang) {
