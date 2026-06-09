@@ -193,7 +193,7 @@ function renderFoodList() {
   // Add event listeners to newly rendered items
   document.querySelectorAll('.food-item').forEach(el => {
     el.addEventListener('click', function() {
-      const id = parseInt(this.getAttribute('data-id'));
+      const id = this.getAttribute('data-id');
       selectFoodItem(id);
     });
   });

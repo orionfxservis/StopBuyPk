@@ -60,8 +60,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Handle old blogs that might have missing fields
                 const oldBlog = editId ? localBlogs.find(b => b.id == editId) : null;
 
+                const cUserStr = localStorage.getItem('currentUser');
+                const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+                const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+
                 const newBlog = {
-                    id: editId ? Number(editId) : Date.now(),
+                    id: editId ? editId : Date.now(),
                     titleEn: document.getElementById("blogTitleEn").value,
                     titleUr: document.getElementById("blogTitleUr").value,
                     slug: document.getElementById("blogSlug").value,
@@ -77,7 +81,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     contentEn: document.getElementById("blogContentEn").value,
                     contentUr: document.getElementById("blogContentUr").value,
                     views: oldBlog ? (oldBlog.views || 0) : 0,
-                    date: oldBlog ? (oldBlog.date || new Date().toLocaleDateString()) : new Date().toLocaleDateString()
+                    date: oldBlog ? (oldBlog.date || new Date().toLocaleDateString()) : new Date().toLocaleDateString(),
+                    addedBy: oldBlog ? (oldBlog.addedBy || userName) : userName,
+                    createdDate: oldBlog ? (oldBlog.createdDate || new Date().toISOString()) : new Date().toISOString(),
+                    updatedDate: new Date().toISOString()
                 };
 
                 if (editId) {
