@@ -745,7 +745,7 @@ document.addEventListener('DOMContentLoaded', () => {
               return `
                 <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100 flex flex-col cursor-pointer" onclick="openBlogModal('${safeObj}')">
                     <div class="overflow-hidden">
-                        <img src="${b.image || 'images/placeholder.jpg'}" class="w-full h-44 object-contain bg-emerald-50/30 rounded-t-3xl" onerror="this.src='images/placeholder.jpg'">
+                        <img src="${b.image || 'images/placeholder.jpg'}" class="w-full aspect-video object-cover rounded-t-3xl" onerror="this.src='images/placeholder.jpg'">
                     </div>
                     <div class="p-6 flex-1 flex flex-col justify-between">
                         <div>
