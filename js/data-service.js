@@ -2,20 +2,25 @@ const DataService = {
 
     ensureSupabase: async () => {
         if (window.supabaseClient) return window.supabaseClient;
-        if (!window.supabase) {
-            await new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-                script.onload = resolve;
-                script.onerror = reject;
-                document.head.appendChild(script);
-            });
+        if (!window.supabaseLoadingPromise) {
+            window.supabaseLoadingPromise = (async () => {
+                if (!window.supabase) {
+                    await new Promise((resolve, reject) => {
+                        const script = document.createElement('script');
+                        script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+                        script.onload = resolve;
+                        script.onerror = reject;
+                        document.head.appendChild(script);
+                    });
+                }
+                const supabaseUrl = "https://aywuxnimzuqmocjccvbv.supabase.co";
+                const supabaseKey = "sb_publishable_rnxMaJuE7KAjchYt3VN53Q_lYuJQpW7";
+                window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+                window.supabase = window.supabaseClient; // Keep globally compatible
+                return window.supabaseClient;
+            })();
         }
-        const supabaseUrl = "https://aywuxnimzuqmocjccvbv.supabase.co";
-        const supabaseKey = "sb_publishable_rnxMaJuE7KAjchYt3VN53Q_lYuJQpW7";
-        window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-        window.supabase = window.supabaseClient; // Keep globally compatible
-        return window.supabaseClient;
+        return window.supabaseLoadingPromise;
     },
 
     login: async (data) => {
