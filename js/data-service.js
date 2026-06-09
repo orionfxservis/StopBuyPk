@@ -1,25 +1,56 @@
 const DataService = {
 
-    API_URL: "https://script.google.com/macros/s/AKfycbzyEB5zYLsk68L_bUVpXWZXLTdqcxmmAyaH0oAy0I5p_NXZlD2jT_kM0ueFofmLu66qOQ/exec",
+    ensureSupabase: async () => {
+        if (window.supabaseClient) return window.supabaseClient;
+        if (!window.supabase) {
+            await new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+        const supabaseUrl = "https://aywuxnimzuqmocjccvbv.supabase.co";
+        const supabaseKey = "sb_publishable_rnxMaJuE7KAjchYt3VN53Q_lYuJQpW7";
+        window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+        window.supabase = window.supabaseClient; // Keep globally compatible
+        return window.supabaseClient;
+    },
 
     login: async (data) => {
         try {
-            // Attempt to hit the live endpoint
-            const res = await fetch(DataService.API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "login", ...data })
-            });
-            const result = await res.json();
+            const client = await DataService.ensureSupabase();
+            const { data: users, error } = await client
+                .from('users')
+                .select('*')
+                .eq('user_id', data.userId)
+                .eq('password', data.password);
             
-            if (result.success) {
-                return result;
-            } else {
-                console.warn("Backend rejected login, checking local fallback");
-                throw new Error("Backend authentication failed");
+            if (error) throw error;
+            if (users && users.length > 0) {
+                const user = users[0];
+                const formattedUser = {
+                    id: user.id,
+                    userId: user.user_id,
+                    fullName: user.full_name,
+                    username: user.username,
+                    role: user.role,
+                    status: user.status,
+                    pic: user.pic,
+                    companyName: user.company_name,
+                    permissions: user.permissions,
+                    assignedCategories: user.assigned_categories,
+                    charges: user.charges,
+                    lastLogin: user.last_login,
+                    activeDays: user.active_days,
+                    activeDaysList: user.active_days_list
+                };
+                return { success: true, user: formattedUser };
             }
+            return { success: false, message: "Invalid credentials" };
         } catch (err) {
-            console.warn("Backend unavailable or failed auth, falling back to LocalStorage authentication", err);
+            console.warn("Backend authentication failed, checking local fallback", err);
             
             // Fallback: Check local storage 'admin_users'
             const users = JSON.parse(localStorage.getItem("admin_users")) || [];
@@ -32,7 +63,6 @@ const DataService = {
                     const uRole = String(u.role || '').trim().toLowerCase();
                     return (uId === targetId) && (String(u.password) === String(data.password)) && (uRole === 'admin' || uRole === 'sub-admin');
                 });
-                // Hardcoded fallback admin for demo purposes
                 if (!foundUser && data.userId === 'admin' && data.password === 'admin123') {
                     foundUser = { role: 'admin', userId: 'admin', username: 'Admin Demo' };
                 }
@@ -50,372 +80,538 @@ const DataService = {
         }
     },
 
-    // Mock DataService methods using LocalStorage to prevent admin dashboard from getting stuck
     getCategories: async () => {
-        let cached = JSON.parse(localStorage.getItem("admin_categories"));
-        if (!cached || cached.length === 0) {
-            try {
-                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getCategories" }) });
-                const data = await res.json();
-                if (data.success && data.categories) {
-                    localStorage.setItem("admin_categories", JSON.stringify(data.categories));
-                    return data.categories;
-                }
-            } catch (err) { console.error(err); }
-            return [];
-        } else {
-            setTimeout(async () => {
-                try {
-                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getCategories" }) });
-                    const data = await res.json();
-                    if (data.success && data.categories) {
-                        localStorage.setItem("admin_categories", JSON.stringify(data.categories));
-                        if (typeof window.onBackgroundDataLoaded === 'function') {
-                            window.onBackgroundDataLoaded('categories', data.categories);
-                        }
-                    }
-                } catch (err) {}
-            }, 0);
-            return cached;
+        try {
+            const client = await DataService.ensureSupabase();
+            const { data, error } = await client.from('categories').select('*');
+            if (error) throw error;
+            const categories = data.map(c => ({
+                id: c.id,
+                name: c.name,
+                subCategory: c.sub_category,
+                fields: c.fields,
+                showOnMainPage: c.show_on_main_page
+            }));
+            localStorage.setItem("admin_categories", JSON.stringify(categories));
+            return categories;
+        } catch (err) {
+            console.error(err);
+            return JSON.parse(localStorage.getItem("admin_categories")) || [];
         }
     },
+
     getProducts: async () => {
-        let cached = JSON.parse(localStorage.getItem("admin_products"));
-        if (!cached || cached.length === 0) {
-            try {
-                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getProducts" }) });
-                const data = await res.json();
-                if (data.success && data.products) {
-                    localStorage.setItem("admin_products", JSON.stringify(data.products));
-                    return data.products;
-                }
-            } catch (err) { console.error(err); }
-            return [];
-        } else {
-            setTimeout(async () => {
-                try {
-                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getProducts" }) });
-                    const data = await res.json();
-                    if (data.success && data.products) {
-                        localStorage.setItem("admin_products", JSON.stringify(data.products));
-                        if (typeof window.onBackgroundDataLoaded === 'function') {
-                            window.onBackgroundDataLoaded('products', data.products);
-                        }
-                    }
-                } catch (err) {}
-            }, 0);
-            return cached;
+        try {
+            const client = await DataService.ensureSupabase();
+            const { data, error } = await client.from('products').select('*');
+            if (error) throw error;
+            const products = data.map(p => ({
+                id: p.id,
+                category: p.category,
+                subCategory: p.sub_category,
+                image: p.image,
+                status: p.status,
+                addedBy: p.added_by,
+                createdDate: p.created_date,
+                updatedDate: p.updated_date,
+                ...(p.extra_fields || {})
+            }));
+            localStorage.setItem("admin_products", JSON.stringify(products));
+            return products;
+        } catch (err) {
+            console.error(err);
+            return JSON.parse(localStorage.getItem("admin_products")) || [];
         }
     },
+
     getBanners: async () => {
-        let cached = JSON.parse(localStorage.getItem("admin_banners"));
-        if (!cached || cached.length === 0) {
-            try {
-                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getBanners" }) });
-                const data = await res.json();
-                if (data.success && data.banners) {
-                    localStorage.setItem("admin_banners", JSON.stringify(data.banners));
-                    return data.banners;
-                }
-            } catch (err) { console.error(err); }
-            return [];
-        } else {
-            setTimeout(async () => {
-                try {
-                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getBanners" }) });
-                    const data = await res.json();
-                    if (data.success && data.banners) {
-                        localStorage.setItem("admin_banners", JSON.stringify(data.banners));
-                        if (typeof window.onBackgroundDataLoaded === 'function') {
-                            window.onBackgroundDataLoaded('banners', data.banners);
-                        }
-                    }
-                } catch (err) {}
-            }, 0);
-            return cached;
+        try {
+            const client = await DataService.ensureSupabase();
+            const { data, error } = await client.from('banners').select('*');
+            if (error) throw error;
+            const banners = data.map(b => ({
+                id: b.id,
+                image: b.image,
+                link: b.link,
+                status: b.status,
+                addedBy: b.added_by,
+                createdDate: b.created_date
+            }));
+            localStorage.setItem("admin_banners", JSON.stringify(banners));
+            return banners;
+        } catch (err) {
+            console.error(err);
+            return JSON.parse(localStorage.getItem("admin_banners")) || [];
         }
     },
+
     getDeals: async () => {
-        let cached = JSON.parse(localStorage.getItem("admin_deals"));
-        if (!cached || cached.length === 0) {
-            try {
-                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getDeals" }) });
-                const data = await res.json();
-                if (data.success && data.deals) {
-                    localStorage.setItem("admin_deals", JSON.stringify(data.deals));
-                    return data.deals;
-                }
-            } catch (err) { console.error(err); }
-            return [];
-        } else {
-            setTimeout(async () => {
-                try {
-                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getDeals" }) });
-                    const data = await res.json();
-                    if (data.success && data.deals) {
-                        localStorage.setItem("admin_deals", JSON.stringify(data.deals));
-                        if (typeof window.onBackgroundDataLoaded === 'function') {
-                            window.onBackgroundDataLoaded('deals', data.deals);
-                        }
-                    }
-                } catch (err) {}
-            }, 0);
-            return cached;
+        try {
+            const client = await DataService.ensureSupabase();
+            const { data, error } = await client.from('deals').select('*');
+            if (error) throw error;
+            const deals = data.map(d => ({
+                id: d.id,
+                name: d.name,
+                image: d.image,
+                desc: d.description,
+                price: d.price,
+                location: d.location,
+                whatsapp: d.whatsapp,
+                video: d.video,
+                status: d.status,
+                addedBy: d.added_by,
+                createdDate: d.created_date,
+                updatedDate: d.updated_date
+            }));
+            localStorage.setItem("admin_deals", JSON.stringify(deals));
+            return deals;
+        } catch (err) {
+            console.error(err);
+            return JSON.parse(localStorage.getItem("admin_deals")) || [];
         }
     },
+
     getUsers: async () => {
-        let cached = JSON.parse(localStorage.getItem("admin_users"));
-        if (!cached || cached.length === 0) {
-            try {
-                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getUsers" }) });
-                const data = await res.json();
-                if (data.success && data.users) {
-                    localStorage.setItem("admin_users", JSON.stringify(data.users));
-                    return data.users;
-                }
-            } catch (err) { console.error(err); }
-            return [];
-        } else {
-            setTimeout(async () => {
-                try {
-                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getUsers" }) });
-                    const data = await res.json();
-                    if (data.success && data.users) {
-                        localStorage.setItem("admin_users", JSON.stringify(data.users));
-                        if (typeof window.onBackgroundDataLoaded === 'function') {
-                            window.onBackgroundDataLoaded('users', data.users);
-                        }
-                    }
-                } catch (err) {}
-            }, 0);
-            return cached;
+        try {
+            const client = await DataService.ensureSupabase();
+            const { data, error } = await client.from('users').select('*');
+            if (error) throw error;
+            const users = data.map(u => ({
+                id: u.id,
+                userId: u.user_id,
+                email: u.email,
+                fullName: u.full_name,
+                username: u.username,
+                password: u.password,
+                role: u.role,
+                status: u.status,
+                pic: u.pic,
+                companyName: u.company_name,
+                permissions: u.permissions,
+                assignedCategories: u.assigned_categories,
+                charges: u.charges,
+                lastLogin: u.last_login,
+                activeDays: u.active_days,
+                activeDaysList: u.active_days_list
+            }));
+            localStorage.setItem("admin_users", JSON.stringify(users));
+            return users;
+        } catch (err) {
+            console.error(err);
+            return JSON.parse(localStorage.getItem("admin_users")) || [];
         }
     },
+
     getBlogs: async () => {
         try {
-            const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getBlogs" }) });
-            const data = await res.json();
-            if (data.success && data.blogs) {
-                localStorage.setItem("admin_blogs", JSON.stringify(data.blogs));
-                return data.blogs;
-            }
-        } catch (err) { console.error(err); }
-        return JSON.parse(localStorage.getItem("admin_blogs")) || [];
-    },
-    getTravelPackages: async () => {
-        let cached = JSON.parse(localStorage.getItem("admin_travel_packages"));
-        if (!cached || cached.length === 0) {
-            try {
-                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getTravelPackages" }) });
-                const data = await res.json();
-                if (data.success && data.travelPackages) {
-                    localStorage.setItem("admin_travel_packages", JSON.stringify(data.travelPackages));
-                    return data.travelPackages;
-                }
-            } catch (err) { console.error(err); }
-            return [];
-        } else {
-            setTimeout(async () => {
-                try {
-                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getTravelPackages" }) });
-                    const data = await res.json();
-                    if (data.success && data.travelPackages) {
-                        localStorage.setItem("admin_travel_packages", JSON.stringify(data.travelPackages));
-                        if (typeof window.onBackgroundDataLoaded === 'function') {
-                            window.onBackgroundDataLoaded('travelPackages', data.travelPackages);
-                        }
-                    }
-                } catch (err) {}
-            }, 0);
-            return cached;
+            const client = await DataService.ensureSupabase();
+            const { data, error } = await client.from('blogs').select('*');
+            if (error) throw error;
+            const blogs = data.map(b => ({
+                id: b.id,
+                title: b.title,
+                content: b.content,
+                image: b.image,
+                status: b.status,
+                addedBy: b.added_by,
+                createdDate: b.created_date
+            }));
+            localStorage.setItem("admin_blogs", JSON.stringify(blogs));
+            return blogs;
+        } catch (err) {
+            console.error(err);
+            return JSON.parse(localStorage.getItem("admin_blogs")) || [];
         }
     },
+
+    getTravelPackages: async () => {
+        try {
+            const client = await DataService.ensureSupabase();
+            const { data, error } = await client.from('travel_packages').select('*');
+            if (error) throw error;
+            const travelPackages = data.map(tp => ({
+                id: tp.id,
+                title: tp.title,
+                image: tp.image,
+                desc: tp.description,
+                price: tp.price,
+                status: tp.status,
+                addedBy: tp.added_by,
+                createdDate: tp.created_date
+            }));
+            localStorage.setItem("admin_travel_packages", JSON.stringify(travelPackages));
+            return travelPackages;
+        } catch (err) {
+            console.error(err);
+            return JSON.parse(localStorage.getItem("admin_travel_packages")) || [];
+        }
+    },
+
     getBroadcasts: async () => {
-        let cached = JSON.parse(localStorage.getItem("admin_broadcasts"));
-        if (!cached || cached.length === 0) {
-            try {
-                const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getBroadcasts" }) });
-                const data = await res.json();
-                if (data.success && data.broadcasts) {
-                    localStorage.setItem("admin_broadcasts", JSON.stringify(data.broadcasts));
-                    return data.broadcasts;
-                }
-            } catch (err) { console.error(err); }
-            return [];
-        } else {
-            setTimeout(async () => {
-                try {
-                    const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getBroadcasts" }) });
-                    const data = await res.json();
-                    if (data.success && data.broadcasts) {
-                        localStorage.setItem("admin_broadcasts", JSON.stringify(data.broadcasts));
-                        if (typeof window.onBackgroundDataLoaded === 'function') {
-                            window.onBackgroundDataLoaded('broadcasts', data.broadcasts);
-                        }
-                    }
-                } catch (err) {}
-            }, 0);
-            return cached;
+        try {
+            const client = await DataService.ensureSupabase();
+            const { data, error } = await client.from('broadcasts').select('*');
+            if (error) throw error;
+            const broadcasts = data.map(b => ({
+                id: b.id,
+                message: b.message,
+                target: b.target,
+                targetUser: b.target_user,
+                status: b.status,
+                date: b.date,
+                addedBy: b.added_by
+            }));
+            localStorage.setItem("admin_broadcasts", JSON.stringify(broadcasts));
+            return broadcasts;
+        } catch (err) {
+            console.error(err);
+            return JSON.parse(localStorage.getItem("admin_broadcasts")) || [];
         }
     },
 
     getLiveRates: async () => {
         try {
-            const res = await fetch(DataService.API_URL, { method: "POST", body: JSON.stringify({ action: "getLiveRates" }) });
-            const data = await res.json();
-            if (data.success && data.rates) {
-                localStorage.setItem("stopbuyLiveRates", JSON.stringify(data.rates));
-                return data.rates;
+            const client = await DataService.ensureSupabase();
+            const { data, error } = await client.from('live_rates').select('*').order('id', { ascending: false }).limit(1);
+            if (error) throw error;
+            if (data && data.length > 0) {
+                const r = data[0];
+                const rates = {
+                    petrol: r.petrol,
+                    petrolOld: r.petrol_old,
+                    diesel: r.diesel,
+                    dieselOld: r.diesel_old,
+                    gold: r.gold,
+                    goldOld: r.gold_old,
+                    updated: r.updated
+                };
+                localStorage.setItem("stopbuyLiveRates", JSON.stringify(rates));
+                return rates;
             }
+            return null;
         } catch (err) {
             console.error("Fetch live rates failed", err);
+            return JSON.parse(localStorage.getItem("stopbuyLiveRates")) || null;
         }
-        return JSON.parse(localStorage.getItem("stopbuyLiveRates")) || null;
     },
 
     saveCategories: async (data) => {
         try {
-            const res = await fetch(DataService.API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "syncCategories", categories: data })
-            });
-            const result = await res.json();
-            if (!result.success) {
-                console.warn("API sync failed", result.message);
-                alert("Google Sheet Sync Error: " + result.message);
+            const client = await DataService.ensureSupabase();
+            const { data: dbData } = await client.from('categories').select('id');
+            const dbIds = (dbData || []).map(r => r.id);
+            
+            // Clean/filter helper to check if ID is a valid UUID
+            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
+            
+            const currentIds = data.map(item => item.id).filter(isUUID);
+            
+            const toDelete = dbIds.filter(id => !currentIds.includes(id));
+            if (toDelete.length > 0) {
+                await client.from('categories').delete().in('id', toDelete);
+            }
+            
+            const rows = data.map(c => ({
+                id: isUUID(c.id) ? c.id : undefined,
+                name: c.name,
+                sub_category: c.subCategory || '',
+                fields: c.fields || [],
+                show_on_main_page: c.showOnMainPage !== false
+            }));
+            const { data: upserted, error } = await client.from('categories').upsert(rows, { onConflict: 'name' }).select();
+            if (error) throw error;
+            
+            if (upserted) {
+                upserted.forEach(row => {
+                    const match = data.find(item => item.name === row.name);
+                    if (match) match.id = row.id;
+                });
             }
         } catch (err) {
-            console.error("Failed to sync categories to API", err);
-            alert("Failed to connect to Google Apps Script. Did you deploy a New Version?");
+            console.error("Failed to sync categories to Supabase", err);
+            alert("Supabase Sync Error: " + err.message);
         }
         localStorage.setItem("admin_categories", JSON.stringify(data));
     },
+
     saveProducts: async (data) => {
         try {
-            const res = await fetch(DataService.API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "syncProducts", products: data })
-            });
-            const result = await res.json();
-            if (!result.success) {
-                console.warn("API sync failed", result.message);
-                alert("Google Sheet Sync Error (Products): " + result.message);
+            const client = await DataService.ensureSupabase();
+            const { data: dbData } = await client.from('products').select('id');
+            const dbIds = (dbData || []).map(r => r.id);
+            
+            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
+            const currentIds = data.map(item => item.id).filter(isUUID);
+            
+            const toDelete = dbIds.filter(id => !currentIds.includes(id));
+            if (toDelete.length > 0) {
+                await client.from('products').delete().in('id', toDelete);
             }
+            
+            const rows = data.map(p => {
+                const baseFields = {
+                    id: isUUID(p.id) ? p.id : undefined,
+                    category: p.category,
+                    sub_category: p.subCategory || '',
+                    image: p.image || '',
+                    status: p.status || 'Draft',
+                    added_by: p.addedBy || '',
+                    created_date: p.createdDate || new Date().toISOString(),
+                    updated_date: new Date().toISOString()
+                };
+                const extra_fields = { ...p };
+                delete extra_fields.id;
+                delete extra_fields.category;
+                delete extra_fields.subCategory;
+                delete extra_fields.image;
+                delete extra_fields.status;
+                delete extra_fields.addedBy;
+                delete extra_fields.createdDate;
+                delete extra_fields.updatedDate;
+                baseFields.extra_fields = extra_fields;
+                return baseFields;
+            });
+            const { error } = await client.from('products').upsert(rows);
+            if (error) throw error;
         } catch (err) {
-            console.error("Failed to sync products to API", err);
-            alert("Failed to connect to Google Apps Script. Did you deploy a New Version?");
+            console.error("Failed to sync products to Supabase", err);
+            alert("Supabase Sync Error (Products): " + err.message);
         }
         localStorage.setItem("admin_products", JSON.stringify(data));
     },
+
     saveBanners: async (data) => {
         try {
-            const res = await fetch(DataService.API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "syncBanners", banners: data })
-            });
-            const result = await res.json();
-            if (!result.success) {
-                console.warn("API sync failed", result.message);
-                alert("Google Sheet Sync Error (Banners): " + result.message);
-            } else {
-                alert("Banners synced to Google Sheets successfully! Count: " + (data ? data.length : 0));
+            const client = await DataService.ensureSupabase();
+            const { data: dbData } = await client.from('banners').select('id');
+            const dbIds = (dbData || []).map(r => r.id);
+            
+            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
+            const currentIds = data.map(item => item.id).filter(isUUID);
+            
+            const toDelete = dbIds.filter(id => !currentIds.includes(id));
+            if (toDelete.length > 0) {
+                await client.from('banners').delete().in('id', toDelete);
             }
+            
+            const rows = data.map(b => ({
+                id: isUUID(b.id) ? b.id : undefined,
+                image: b.image,
+                link: b.link || '',
+                status: b.status || 'Draft',
+                added_by: b.addedBy || '',
+                created_date: b.createdDate || new Date().toISOString()
+            }));
+            const { error } = await client.from('banners').upsert(rows);
+            if (error) throw error;
         } catch (err) {
-            console.error("Failed to sync banners to API", err);
-            alert("Failed to connect to Google Apps Script. Did you deploy a New Version?");
+            console.error("Failed to sync banners to Supabase", err);
+            alert("Supabase Sync Error (Banners): " + err.message);
         }
         localStorage.setItem("admin_banners", JSON.stringify(data));
         return true;
     },
+
     saveDeals: async (data) => {
         try {
-            const res = await fetch(DataService.API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "syncDeals", deals: data })
-            });
-            const result = await res.json();
-            if (!result.success) console.warn("API sync failed", result.message);
+            const client = await DataService.ensureSupabase();
+            const { data: dbData } = await client.from('deals').select('id');
+            const dbIds = (dbData || []).map(r => r.id);
+            
+            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
+            const currentIds = data.map(item => item.id).filter(isUUID);
+            
+            const toDelete = dbIds.filter(id => !currentIds.includes(id));
+            if (toDelete.length > 0) {
+                await client.from('deals').delete().in('id', toDelete);
+            }
+            
+            const rows = data.map(d => ({
+                id: isUUID(d.id) ? d.id : undefined,
+                name: d.name,
+                image: d.image || '',
+                description: d.desc || '',
+                price: d.price || '',
+                location: d.location || '',
+                whatsapp: d.whatsapp || '',
+                video: d.video || '',
+                status: d.status || 'Draft',
+                added_by: d.addedBy || '',
+                created_date: d.createdDate || new Date().toISOString(),
+                updated_date: new Date().toISOString()
+            }));
+            const { error } = await client.from('deals').upsert(rows);
+            if (error) throw error;
         } catch (err) {
-            console.error("Failed to sync deals to API", err);
+            console.error("Failed to sync deals to Supabase", err);
         }
         localStorage.setItem("admin_deals", JSON.stringify(data));
         return true;
     },
+
     saveUsers: async (data) => {
         try {
-            const res = await fetch(DataService.API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "syncUsers", users: data })
-            });
-            const result = await res.json();
-            if (!result.success) console.warn("API sync failed", result.message);
+            const client = await DataService.ensureSupabase();
+            const { data: dbData } = await client.from('users').select('id');
+            const dbIds = (dbData || []).map(r => r.id);
+            
+            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
+            const currentIds = data.map(item => item.id).filter(isUUID);
+            
+            const toDelete = dbIds.filter(id => !currentIds.includes(id));
+            if (toDelete.length > 0) {
+                await client.from('users').delete().in('id', toDelete);
+            }
+            
+            const rows = data.map(u => ({
+                id: isUUID(u.id) ? u.id : undefined,
+                user_id: u.userId,
+                email: u.email || '',
+                full_name: u.fullName || '',
+                username: u.username || '',
+                password: u.password,
+                role: u.role || 'user',
+                status: u.status || 'active',
+                pic: u.pic || '',
+                company_name: u.companyName || '',
+                permissions: u.permissions || {},
+                assigned_categories: u.assignedCategories || [],
+                charges: u.charges || 0,
+                last_login: u.lastLogin || null,
+                active_days: u.activeDays || 0,
+                active_days_list: u.activeDaysList || []
+            }));
+            const { data: upserted, error } = await client.from('users').upsert(rows, { onConflict: 'user_id' }).select();
+            if (error) throw error;
+            
+            if (upserted) {
+                upserted.forEach(row => {
+                    const match = data.find(item => item.userId === row.user_id);
+                    if (match) match.id = row.id;
+                });
+            }
         } catch (err) {
-            console.error("Failed to sync users to API", err);
+            console.error("Failed to sync users to Supabase", err);
+            alert("Supabase Sync Error (Users): " + err.message);
         }
         localStorage.setItem("admin_users", JSON.stringify(data));
         return true;
     },
+
     saveBlogs: async (data) => {
         try {
-            const res = await fetch(DataService.API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "syncBlogs", blogs: data })
-            });
-            const result = await res.json();
-            if (!result.success) console.warn("API sync failed", result.message);
+            const client = await DataService.ensureSupabase();
+            const { data: dbData } = await client.from('blogs').select('id');
+            const dbIds = (dbData || []).map(r => r.id);
+            
+            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
+            const currentIds = data.map(item => item.id).filter(isUUID);
+            
+            const toDelete = dbIds.filter(id => !currentIds.includes(id));
+            if (toDelete.length > 0) {
+                await client.from('blogs').delete().in('id', toDelete);
+            }
+            
+            const rows = data.map(b => ({
+                id: isUUID(b.id) ? b.id : undefined,
+                title: b.title,
+                content: b.content || '',
+                image: b.image || '',
+                status: b.status || 'Draft',
+                added_by: b.addedBy || '',
+                created_date: b.createdDate || new Date().toISOString()
+            }));
+            const { error } = await client.from('blogs').upsert(rows);
+            if (error) throw error;
         } catch (err) {
-            console.error("Failed to sync blogs to API", err);
+            console.error("Failed to sync blogs to Supabase", err);
         }
         localStorage.setItem("admin_blogs", JSON.stringify(data));
         return true;
     },
+
     saveTravelPackages: async (data) => {
         try {
-            const res = await fetch(DataService.API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "syncTravelPackages", travelPackages: data })
-            });
-            const result = await res.json();
-            if (!result.success) console.warn("API sync failed", result.message);
+            const client = await DataService.ensureSupabase();
+            const { data: dbData } = await client.from('travel_packages').select('id');
+            const dbIds = (dbData || []).map(r => r.id);
+            
+            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
+            const currentIds = data.map(item => item.id).filter(isUUID);
+            
+            const toDelete = dbIds.filter(id => !currentIds.includes(id));
+            if (toDelete.length > 0) {
+                await client.from('travel_packages').delete().in('id', toDelete);
+            }
+            
+            const rows = data.map(tp => ({
+                id: isUUID(tp.id) ? tp.id : undefined,
+                title: tp.title,
+                image: tp.image || '',
+                description: tp.desc || '',
+                price: tp.price || '',
+                status: tp.status || 'Draft',
+                added_by: tp.addedBy || '',
+                created_date: tp.createdDate || new Date().toISOString()
+            }));
+            const { error } = await client.from('travel_packages').upsert(rows);
+            if (error) throw error;
         } catch (err) {
-            console.error("Failed to sync travel packages to API", err);
+            console.error("Failed to sync travel packages to Supabase", err);
         }
         localStorage.setItem("admin_travel_packages", JSON.stringify(data));
         return true;
     },
+
     saveBroadcasts: async (data) => {
         try {
-            const res = await fetch(DataService.API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "syncBroadcasts", broadcasts: data })
-            });
-            const result = await res.json();
-            if (!result.success) console.warn("API sync failed", result.message);
+            const client = await DataService.ensureSupabase();
+            const { data: dbData } = await client.from('broadcasts').select('id');
+            const dbIds = (dbData || []).map(r => r.id);
+            
+            const isUUID = (val) => val && typeof val === 'string' && val.includes('-');
+            const currentIds = data.map(item => item.id).filter(isUUID);
+            
+            const toDelete = dbIds.filter(id => !currentIds.includes(id));
+            if (toDelete.length > 0) {
+                await client.from('broadcasts').delete().in('id', toDelete);
+            }
+            
+            const rows = data.map(b => ({
+                id: isUUID(b.id) ? b.id : undefined,
+                message: b.message,
+                target: b.target || 'All',
+                target_user: b.targetUser || '',
+                status: b.status || 'Draft',
+                date: b.date || '',
+                added_by: b.addedBy || ''
+            }));
+            const { error } = await client.from('broadcasts').upsert(rows);
+            if (error) throw error;
         } catch (err) {
-            console.error("Failed to sync broadcasts to API", err);
+            console.error("Failed to sync broadcasts to Supabase", err);
         }
         localStorage.setItem("admin_broadcasts", JSON.stringify(data));
         return true;
     },
+
     saveLiveRates: async (data) => {
         try {
-            const res = await fetch(DataService.API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "syncLiveRates", rates: data })
-            });
-            const result = await res.json();
-            if (!result.success) console.warn("API sync failed", result.message);
+            const client = await DataService.ensureSupabase();
+            const row = {
+                petrol: data.petrol || '',
+                petrol_old: data.petrolOld || '',
+                diesel: data.diesel || '',
+                diesel_old: data.dieselOld || '',
+                gold: data.gold || '',
+                gold_old: data.goldOld || '',
+                updated: data.updated || ''
+            };
+            const { error } = await client.from('live_rates').insert([row]);
+            if (error) throw error;
         } catch (err) {
-            console.error("Failed to sync live rates to API", err);
+            console.error("Failed to sync live rates to Supabase", err);
         }
         localStorage.setItem("stopbuyLiveRates", JSON.stringify(data));
         return true;
