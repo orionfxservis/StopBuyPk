@@ -3,6 +3,13 @@
 // Initial Data Loading
 let categories = [];
 let products = [];
+
+// Product Filters & Pagination state
+let prodSearchQuery = "";
+let prodFilterCategory = "";
+let prodFilterPostBy = "";
+let prodCurrentPage = 1;
+const prodPageSize = 15;
 let banners = [];
 let deals = [];
 let blogs = [];
@@ -1525,6 +1532,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const pSub = document.getElementById('prodSubCategory');
     if (pCat) pCat.addEventListener('change', renderDynamicAdminFields);
     if (pSub) pSub.addEventListener('change', renderDynamicAdminFields);
+
+    // Filter controls event listeners
+    const searchInput = document.getElementById('prodSearchInput');
+    const filterCat = document.getElementById('prodFilterCategory');
+    const filterPost = document.getElementById('prodFilterPostBy');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            prodSearchQuery = e.target.value.toLowerCase().trim();
+            prodCurrentPage = 1;
+            renderAdminProducts();
+        });
+    }
+    if (filterCat) {
+        filterCat.addEventListener('change', (e) => {
+            prodFilterCategory = e.target.value;
+            prodCurrentPage = 1;
+            renderAdminProducts();
+        });
+    }
+    if (filterPost) {
+        filterPost.addEventListener('change', (e) => {
+            prodFilterPostBy = e.target.value;
+            prodCurrentPage = 1;
+            renderAdminProducts();
+        });
+    }
 });
 
 const adminProductForm = document.getElementById('adminProductForm');
@@ -1621,57 +1655,196 @@ if (adminProductForm) {
     });
 }
 
+
+function populateProductFilterOptions() {
+    const catSelect = document.getElementById('prodFilterCategory');
+    const postSelect = document.getElementById('prodFilterPostBy');
+    
+    if (catSelect) {
+        const uniqueCats = [...new Set(products.map(p => p.category).filter(Boolean))];
+        const currentVal = catSelect.value;
+        catSelect.innerHTML = '<option value="">All Categories</option>' + 
+            uniqueCats.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+        catSelect.value = uniqueCats.includes(currentVal) ? currentVal : '';
+    }
+    if (postSelect) {
+        const uniquePosts = [...new Set(products.map(p => p.addedBy || 'Admin').filter(Boolean))];
+        const currentVal = postSelect.value;
+        postSelect.innerHTML = '<option value="">All Authors</option>' + 
+            uniquePosts.map(post => `<option value="${post}">${post}</option>`).join('');
+        postSelect.value = uniquePosts.includes(currentVal) ? currentVal : '';
+    }
+}
+
+window.resetProductFilters = function() {
+    prodSearchQuery = "";
+    prodFilterCategory = "";
+    prodFilterPostBy = "";
+    prodCurrentPage = 1;
+    
+    const searchInput = document.getElementById('prodSearchInput');
+    const catSelect = document.getElementById('prodFilterCategory');
+    const postSelect = document.getElementById('prodFilterPostBy');
+    
+    if (searchInput) searchInput.value = "";
+    if (catSelect) catSelect.value = "";
+    if (postSelect) postSelect.value = "";
+    
+    renderAdminProducts();
+};
+
 function renderAdminProducts() {
     const adminProductList = document.getElementById('adminProductList');
+    const paginationContainer = document.getElementById('adminProductPagination');
     const cUserStr = localStorage.getItem('currentUser');
     const cUser = cUserStr ? JSON.parse(cUserStr) : {};
     const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
     const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
 
+    // Update dynamic options in dropdowns first
+    populateProductFilterOptions();
+
     if (adminProductList) {
-        adminProductList.innerHTML = products.map((prod, index) => {
-            let details = prod.variety || '';
-            if (prod.category === 'Vehicles' || prod.category === 'Vehicle') {
-                details = `${prod.year || ''} Model | ${prod.kMs || prod.kms || 0} km`;
-            } else if (prod.category === 'Mobiles') {
-                details = `${prod.specification || ''} | ${prod.batteryBackup ? prod.batteryBackup + 'mAh' : ''}`;
-            }
+        // Map products to keep their original index
+        const mappedProducts = products.map((prod, index) => ({ prod, index }));
 
-            const isPublished = prod.status === 'Publish' || prod.prodStatus === 'Publish';
-            const canEdit = isSuperAdmin || (prod.addedBy === userName && !isPublished);
-            let actionButtons = '';
-            if (canEdit) {
-                let approvalBtn = '';
-                if (isSuperAdmin) {
-                    const isDraft = prod.status === 'Draft' || prod.prodStatus === 'Draft';
-                    const color = isDraft ? '#e74c3c' : '#2ecc71';
-                    const title = isDraft ? 'Approve (Draft)' : 'Approved (Publish)';
-                    approvalBtn = `<button onclick="toggleApproval('products', ${index})" style="background: ${color}; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-right: 5px;" title="${title}"><i class="fa-solid fa-check-circle"></i></button>`;
+        // Apply filters
+        const filteredProducts = mappedProducts.filter(item => {
+            const { prod } = item;
+            
+            // Search filter
+            if (prodSearchQuery) {
+                const nameMatch = String(prod.name || '').toLowerCase().includes(prodSearchQuery);
+                const brandMatch = String(prod.brand || '').toLowerCase().includes(prodSearchQuery);
+                const varietyMatch = String(prod.variety || '').toLowerCase().includes(prodSearchQuery);
+                const catMatch = String(prod.category || '').toLowerCase().includes(prodSearchQuery);
+                const subCatMatch = String(prod.subCategory || '').toLowerCase().includes(prodSearchQuery);
+                if (!nameMatch && !brandMatch && !varietyMatch && !catMatch && !subCatMatch) {
+                    return false;
                 }
-                actionButtons = `
-                   ${approvalBtn}
-                   <button class="edit-btn" onclick="editProduct(${index})"><i class="fa-solid fa-pen"></i></button>
-                   <button class="delete-btn" onclick="deleteProduct(${index})"><i class="fa-solid fa-trash"></i></button>
-                `;
-            } else {
-                actionButtons = `<span style="font-size:12px;color:#888;">${isPublished ? 'Published (Locked)' : 'View Only'}</span>`;
             }
 
-            return `
-            <div class="product-row">
-                <img src="${prod.image}" alt="${prod.name}">
-                <div>${prod.name}<br><small>${details}</small></div>
-                <div>${prod.category} <br> <small>${prod.subCategory}</small></div>
-                <div style="color: var(--primary-color)">Rs. ${prod.price}</div>
-                <div style="display: flex; gap: 5px; align-items: center; white-space: nowrap;">
-                    ${actionButtons}
+            // Category filter
+            if (prodFilterCategory && prod.category !== prodFilterCategory) {
+                return false;
+            }
+
+            // Post By (Author) filter
+            if (prodFilterPostBy) {
+                const author = prod.addedBy || 'Admin';
+                if (author !== prodFilterPostBy) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+        // Pagination calculation
+        const totalItems = filteredProducts.length;
+        const totalPages = Math.ceil(totalItems / prodPageSize) || 1;
+        if (prodCurrentPage > totalPages) {
+            prodCurrentPage = totalPages;
+        }
+
+        const startIndex = (prodCurrentPage - 1) * prodPageSize;
+        const endIndex = startIndex + prodPageSize;
+        const pageItems = filteredProducts.slice(startIndex, endIndex);
+
+        // Render page products
+        if (pageItems.length === 0) {
+            adminProductList.innerHTML = `
+                <div style="padding: 30px; text-align: center; color: #64748b; font-weight: 600;">
+                    <i class="fa-solid fa-box-open" style="font-size: 2rem; margin-bottom: 10px; display: block; color: #cbd5e1;"></i>
+                    No matching products found.
                 </div>
-                <div style="font-size: 0.85rem; color: #ffffff; font-weight: 600;">${prod.addedBy || 'Admin'}</div>
-            </div>
             `;
-        }).join('');
+        } else {
+            adminProductList.innerHTML = pageItems.map(item => {
+                const { prod, index } = item;
+                let details = prod.variety || '';
+                if (prod.category === 'Vehicles' || prod.category === 'Vehicle') {
+                    details = `${prod.year || ''} Model | ${prod.kMs || prod.kms || 0} km`;
+                } else if (prod.category === 'Mobiles') {
+                    details = `${prod.specification || ''} | ${prod.batteryBackup ? prod.batteryBackup + 'mAh' : ''}`;
+                }
+
+                const isPublished = prod.status === 'Publish' || prod.prodStatus === 'Publish';
+                const canEdit = isSuperAdmin || (prod.addedBy === userName && !isPublished);
+                let actionButtons = '';
+                if (canEdit) {
+                    let approvalBtn = '';
+                    if (isSuperAdmin) {
+                        const isDraft = prod.status === 'Draft' || prod.prodStatus === 'Draft';
+                        const color = isDraft ? '#e74c3c' : '#2ecc71';
+                        const title = isDraft ? 'Approve (Draft)' : 'Approved (Publish)';
+                        approvalBtn = `<button onclick="toggleApproval('products', ${index})" style="background: ${color}; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-right: 5px;" title="${title}"><i class="fa-solid fa-check-circle"></i></button>`;
+                    }
+                    actionButtons = `
+                       ${approvalBtn}
+                       <button class="edit-btn" onclick="editProduct(${index})"><i class="fa-solid fa-pen"></i></button>
+                       <button class="delete-btn" onclick="deleteProduct(${index})"><i class="fa-solid fa-trash"></i></button>
+                    `;
+                } else {
+                    actionButtons = `<span style="font-size:12px;color:#888;">${isPublished ? 'Published (Locked)' : 'View Only'}</span>`;
+                }
+
+                return `
+                <div class="product-row">
+                    <img src="${prod.image}" alt="${prod.name}">
+                    <div>${prod.name}<br><small>${details}</small></div>
+                    <div>${prod.category} <br> <small>${prod.subCategory}</small></div>
+                    <div style="color: var(--primary-color)">Rs. ${prod.price}</div>
+                    <div style="display: flex; gap: 5px; align-items: center; white-space: nowrap;">
+                        ${actionButtons}
+                    </div>
+                    <div style="font-size: 0.85rem; color: #ffffff; font-weight: 600;">${prod.addedBy || 'Admin'}</div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Render Pagination Controls
+        if (paginationContainer) {
+            if (totalItems <= prodPageSize) {
+                paginationContainer.style.display = 'none';
+            } else {
+                paginationContainer.style.display = 'flex';
+                const showFrom = totalItems === 0 ? 0 : startIndex + 1;
+                const showTo = Math.min(endIndex, totalItems);
+                
+                let pagesHtml = '';
+                // Prev Button
+                pagesHtml += `<button onclick="changeProdPage(${prodCurrentPage - 1})" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" ${prodCurrentPage === 1 ? 'disabled style="opacity: 0.5; pointer-events: none;"' : ''}><i class="fa-solid fa-chevron-left"></i> Prev</button>`;
+                
+                // Page numbers
+                pagesHtml += `<span style="font-weight: 600; color: #334155; font-size: 0.8rem; margin: 0 10px;">Page ${prodCurrentPage} of ${totalPages}</span>`;
+                
+                // Next Button
+                pagesHtml += `<button onclick="changeProdPage(${prodCurrentPage + 1})" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" ${prodCurrentPage === totalPages ? 'disabled style="opacity: 0.5; pointer-events: none;"' : ''}>Next <i class="fa-solid fa-chevron-right"></i></button>`;
+
+                paginationContainer.innerHTML = `
+                    <div style="color: #475569; font-weight: 500; font-size: 0.8rem;">
+                        Showing ${showFrom} - ${showTo} of ${totalItems} products
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        ${pagesHtml}
+                    </div>
+                `;
+            }
+        }
     }
 }
+
+// Page change handler
+window.changeProdPage = function(page) {
+    prodCurrentPage = page;
+    renderAdminProducts();
+    const productListEl = document.querySelector('.grid-table-header');
+    if (productListEl) {
+        productListEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+};
 
 window.deleteProduct = async (index) => {
     const prod = products[index];
