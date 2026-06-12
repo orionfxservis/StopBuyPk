@@ -658,6 +658,25 @@
                     </form>
                 </div>
 
+                <!-- Search & Filters Toolbar -->
+                <div class="form-container" style="padding: 15px; margin-bottom: 15px; border-top: 4px solid var(--primary-color);">
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-weight: 700; color: #1e293b;"><i class="fa-solid fa-filter"></i> Filters & Search</span>
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; flex: 1; justify-content: flex-end; align-items: center;">
+                            <input type="text" id="prodSearchInput" placeholder="Search by name/brand..." class="admin-input" style="max-width: 250px; margin-bottom: 0;">
+                            <select id="prodFilterCategory" class="admin-input" style="max-width: 180px; margin-bottom: 0;">
+                                <option value="">All Categories</option>
+                            </select>
+                            <select id="prodFilterPostBy" class="admin-input" style="max-width: 180px; margin-bottom: 0;">
+                                <option value="">All Authors</option>
+                            </select>
+                            <button type="button" class="btn btn-secondary" onclick="resetProductFilters()" style="padding: 0 15px; height: 30px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; border-radius: 10px; margin-bottom: 8px;">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="grid-table-header">
 					<div>Image</div>
 					<div>Name</div>
@@ -668,6 +687,10 @@
 				</div>
                 <div id="adminProductList">
                     <!-- Products injected here via JS -->
+                </div>
+                <!-- Pagination Controls -->
+                <div id="adminProductPagination" style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 10px 15px; background: rgba(30, 41, 59, 0.05); border-radius: 10px; border: 1px solid var(--border-color); color: #334155; font-size: 0.9rem;">
+                    <!-- Injected dynamically -->
                 </div>
             </section>
 
