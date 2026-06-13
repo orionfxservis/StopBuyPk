@@ -1448,16 +1448,29 @@ function renderDynamicAdminFields() {
 
             <div class="form-row">
                 <div class="input-group">
-                    <label>Qty</label>
-                    <select id="prodQty" class="dynamic-admin-field" required>
-                        <option value="Nos">Nos</option>
-                        <option value="Qtr">Qtr</option>
-                        <option value="Half">Half</option>
-                        <option value="Full">Full</option>
-                        <option value="Half Kg">Half Kg</option>
-                        <option value="1 Kg">1 Kg</option>
-                        <option value="2 Kg">2 Kg</option>
-                    </select>
+                    <label>Qty / Gram</label>
+                    <div style="display: flex; gap: 8px; align-items: center; width: 100%;">
+                        <select id="prodQty" class="dynamic-admin-field" required style="flex: 1; margin-bottom: 0;">
+                            <option value="Extra Large">Extra Large</option>
+                            <option value="Large">Large</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Small">Small</option>
+                            <option value="Full">Full</option>
+                            <option value="Half">Half</option>
+                            <option value="Qtr">Qtr</option>
+                            <option value="2 Kg">2 Kg</option>
+                            <option value="1 Kg">1 Kg</option>
+                            <option value="Half Kg">Half Kg</option>
+                            <option value="1">1</option>
+                        </select>
+                        <select id="prodGram" class="dynamic-admin-field" style="flex: 1; margin-bottom: 0;">
+                            <option value="">Select Gram</option>
+                            <option value="500 gram">500 gram</option>
+                            <option value="250 gram">250 gram</option>
+                            <option value="100 gram">100 gram</option>
+                            <option value="50 gram">50 gram</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="input-group">
                     <label>Price (Rs.)</label>
@@ -1479,24 +1492,21 @@ function renderDynamicAdminFields() {
             </div>
             
             <div class="form-row">
-                <div class="input-group" style="width: 100%;">
+                <div class="input-group">
                     <label>Video Link (Optional)</label>
                     <input type="url" id="prodVideoLink" class="dynamic-admin-field" placeholder="https://youtube.com/..." />
                 </div>
-            </div>
-
-            <div class="form-row">
                 <div class="input-group">
                     <label>Brand</label>
                     <input type="text" id="prodBrand" class="dynamic-admin-field" placeholder="Brand Name">
                 </div>
+            </div>
+
+            <div class="form-row">
                 <div class="input-group">
                     <label>Contact No</label>
                     <input type="text" id="prodContact" class="dynamic-admin-field" placeholder="0300-1234567">
                 </div>
-            </div>
-
-            <div class="form-row">
                 <div class="input-group">
                     <label>Whatsapp No</label>
                     <input type="text" id="prodWhatsapp" class="dynamic-admin-field" placeholder="0300-1234567">
@@ -1767,6 +1777,13 @@ function renderAdminProducts() {
                     details = `${prod.year || ''} Model | ${prod.kMs || prod.kms || 0} km`;
                 } else if (prod.category === 'Mobiles') {
                     details = `${prod.specification || ''} | ${prod.batteryBackup ? prod.batteryBackup + 'mAh' : ''}`;
+                } else {
+                    const parts = [];
+                    if (prod.qty) parts.push(prod.qty);
+                    if (prod.gram) parts.push(prod.gram);
+                    if (parts.length > 0) {
+                        details += (details ? ' | ' : '') + parts.join(' - ');
+                    }
                 }
 
                 const isPublished = prod.status === 'Publish' || prod.prodStatus === 'Publish';
