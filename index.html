@@ -169,7 +169,12 @@
                             <!-- USER FORM -->
                             <div id="form-user" class="space-y-2.5">
                                 <input type="text" placeholder="User ID" class="login-input">
-                                <input type="password" placeholder="Password" class="login-input">
+                                <div class="relative w-full mb-2.5">
+                                    <input type="password" placeholder="Password" class="login-input !mb-0 pr-10">
+                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-500 transition-colors" onclick="togglePasswordVisibility(this)">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </div>
                                 <button type="button" onclick="loginUser()" class="login-btn">
                                     Login as User
                                 </button>
@@ -180,7 +185,12 @@
                                 <input type="text" placeholder="User Name" class="login-input">
                                 <input type="text" placeholder="Company Name" class="login-input">
                                 <input type="text" placeholder="User ID" class="login-input">
-                                <input type="password" placeholder="Password" class="login-input">
+                                <div class="relative w-full mb-2.5">
+                                    <input type="password" placeholder="Password" class="login-input !mb-0 pr-10">
+                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-500 transition-colors" onclick="togglePasswordVisibility(this)">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </div>
                                 <button type="button" onclick="loginCompany()" class="login-btn">
                                     Login as Company
                                 </button>
@@ -191,7 +201,12 @@
 
                                 <input type="text" placeholder="Admin ID" class="login-input">
 
-                                <input type="password" placeholder="Password" class="login-input">
+                                <div class="relative w-full mb-2.5">
+                                    <input type="password" placeholder="Password" class="login-input !mb-0 pr-10">
+                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-500 transition-colors" onclick="togglePasswordVisibility(this)">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </div>
 
                                 <button type="button" onclick="loginAdmin()" class="login-btn">
                                     Login as Admin
@@ -3125,7 +3140,7 @@
                                     </div>
                                 </div>
                                 
-                                <button class="w-full py-2.5 rounded-[0.85rem] bg-[#0d9488] text-white text-[12px] font-bold tracking-wide hover:bg-[#0f766e] hover:shadow-md transition-all duration-300" 
+                                                                <button class="w-full py-2.5 rounded-[0.85rem] bg-[#0d9488] text-white text-[12px] font-bold tracking-wide hover:bg-[#0f766e] hover:shadow-md transition-all duration-300" 
                                     onclick="openProductModal('${safeName}', '${safeVariety}', '${minPrice}', '${maxPrice}', '${img}')">
                                     View Full Comparison
                                 </button>
@@ -3213,9 +3228,9 @@
                         const descUr = b.descUr || descEn;
                         return `
                             <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100 flex flex-col cursor-pointer" onclick="openBlogModal('${safeObj}')">
-                                <div class="w-full h-44 bg-gray-50 flex items-center justify-center overflow-hidden rounded-t-3xl">
-                                    <img src="${b.image || 'images/placeholder.jpg'}" class="w-full h-full object-contain" onerror="this.src='images/placeholder.jpg'">
-                                </div>
+                                <div class="overflow-hidden">
+                                      <img src="${b.image || 'images/placeholder.jpg'}" class="w-full aspect-video object-cover rounded-t-3xl" onerror="this.src='images/placeholder.jpg'">
+                                  </div>
                                 <div class="p-6 flex-1 flex flex-col justify-between">
                                     <div>
                                         <p class="text-[0.7rem] text-emerald-600 font-bold mb-1.5 uppercase tracking-wide">
@@ -3338,6 +3353,25 @@
             </div>
         </div>
     </div>
+
+<script>
+    function togglePasswordVisibility(btn) {
+        const input = btn.previousElementSibling;
+        const icon = btn.querySelector('i');
+        if (!icon) return;
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
+
 </body>
 
 </html>
