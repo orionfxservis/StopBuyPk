@@ -1346,6 +1346,213 @@ function renderDynamicAdminFields() {
                 </div>
             </div>
         `;
+    } else if (category === 'Electronics' && (!subCategory || subCategory === '')) {
+        container.innerHTML = `
+            <div style="padding: 20px; text-align: center; color: #64748b; font-style: italic;">
+                Please select a Sub Category (e.g. Laptops) to view the product form.
+            </div>
+        `;
+    } else if (category === 'Electronics' && subCategory === 'Laptops') {
+        container.innerHTML = `
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Laptop Title / Name</label>
+                    <input type="text" id="prodName" class="dynamic-admin-field" placeholder="e.g., Hp EliteBook 840 G5" required>
+                </div>
+                <div class="input-group">
+                    <label>Brand</label>
+                    <select id="prodBrand" class="dynamic-admin-field" required>
+                        <option value="">Select Brand</option>
+                        <option value="Hp">Hp</option>
+                        <option value="Dell">Dell</option>
+                        <option value="Lenovo">Lenovo</option>
+                        <option value="Toshiba">Toshiba</option>
+                        <option value="Acer">Acer</option>
+                        <option value="ASUS">ASUS</option>
+                        <option value="Samsung">Samsung</option>
+                        <option value="Infinix">Infinix</option>
+                        <option value="Razer">Razer</option>
+                        <option value="Apple">Apple</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Type</label>
+                    <select id="prodType" class="dynamic-admin-field" required>
+                        <option value="">Select Type</option>
+                        <option value="Other Laptops">Other Laptops</option>
+                        <option value="Ultrabooks">Ultrabooks</option>
+                        <option value="Chrome Books">Chrome Books</option>
+                        <option value="Netbooks">Netbooks</option>
+                        <option value="Macbooks">Macbooks</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Condition</label>
+                    <select id="prodCondition" class="dynamic-admin-field" required>
+                        <option value="">Select Condition</option>
+                        <option value="New">New</option>
+                        <option value="Used">Used</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Model</label>
+                    <input type="text" id="prodModel" class="dynamic-admin-field" placeholder="e.g., EliteBook 840 G5" required>
+                </div>
+                <div class="input-group">
+                    <label>Operating System</label>
+                    <select id="prodOS" class="dynamic-admin-field" required>
+                        <option value="">Select OS</option>
+                        <option value="Windows">Windows</option>
+                        <option value="Chrome OS">Chrome OS</option>
+                        <option value="Linux">Linux</option>
+                        <option value="MAC">MAC</option>
+                        <option value="DOS">DOS</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Processor (CPU)</label>
+                    <input type="text" id="prodCPU" class="dynamic-admin-field" placeholder="e.g., Intel Core i5 8th Gen" required>
+                </div>
+                <div class="input-group">
+                    <label>RAM</label>
+                    <input type="text" id="prodRAM" class="dynamic-admin-field" placeholder="e.g., 8GB DDR4" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Storage Type</label>
+                    <select id="prodStorageType" class="dynamic-admin-field" required>
+                        <option value="">Select Type</option>
+                        <option value="SSD">SSD</option>
+                        <option value="HDD">HDD</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Storage Capacity</label>
+                    <input type="text" id="prodStorage" class="dynamic-admin-field" placeholder="e.g., 256GB" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Graphics Card (GPU)</label>
+                    <input type="text" id="prodGPU" class="dynamic-admin-field" placeholder="e.g., Intel UHD 620" required>
+                </div>
+                <div class="input-group">
+                    <label>Screen Size</label>
+                    <input type="text" id="prodScreenSize" class="dynamic-admin-field" placeholder="e.g., 14 inch" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Display Resolution</label>
+                    <input type="text" id="prodResolution" class="dynamic-admin-field" placeholder="e.g., 1920x1080" required>
+                </div>
+                <div class="input-group">
+                    <label>Refresh Rate</label>
+                    <input type="text" id="prodRefreshRate" class="dynamic-admin-field" placeholder="e.g., 60Hz" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Battery Backup</label>
+                    <input type="text" id="prodBattery" class="dynamic-admin-field" placeholder="e.g., 4 Hours" required>
+                </div>
+                <div class="input-group">
+                    <label>Weight</label>
+                    <input type="text" id="prodWeight" class="dynamic-admin-field" placeholder="e.g., 1.5 kg" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Price</label>
+                    <input type="number" id="prodPrice" class="dynamic-admin-field" placeholder="e.g., 50000" required>
+                </div>
+                <div class="input-group">
+                    <label>Availability</label>
+                    <select id="prodAvailability" class="dynamic-admin-field" required>
+                        <option value="In Stock">In Stock</option>
+                        <option value="Out of Stock">Out of Stock</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Delivery</label>
+                    <select id="prodDelivery" class="dynamic-admin-field" required>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Featured Product</label>
+                    <select id="prodFeatured" class="dynamic-admin-field" required>
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group" style="width: 100%; margin-bottom: 8px;">
+                    <label>Product Details (Description)</label>
+                    <textarea id="productDetail" class="dynamic-admin-field" placeholder="Optional details..." rows="2" style="width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:10px;"></textarea>
+                </div>
+            </div>
+
+            <h4 style="margin-top: 15px; margin-bottom: 10px; color: var(--primary-color);">Shop Information</h4>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Shop Name</label>
+                    <input type="text" id="prodShopName" class="dynamic-admin-field" required>
+                </div>
+                <div class="input-group">
+                    <label>Area / Block No.</label>
+                    <input type="text" id="prodShopArea" class="dynamic-admin-field" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>City</label>
+                    <input type="text" id="prodShopCity" class="dynamic-admin-field" required>
+                </div>
+                <div class="input-group">
+                    <label>Address</label>
+                    <input type="text" id="prodShopAddress" class="dynamic-admin-field" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Phone Number</label>
+                    <input type="text" id="prodShopPhone" class="dynamic-admin-field" required>
+                </div>
+                <div class="input-group">
+                    <label>WhatsApp</label>
+                    <input type="text" id="prodShopWhatsapp" class="dynamic-admin-field" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Website (Optional)</label>
+                    <input type="url" id="prodShopWebsite" class="dynamic-admin-field" placeholder="https://...">
+                </div>
+                <div class="input-group">
+                </div>
+            </div>
+        `;
     } else if (category === 'Mobiles' && subCategory === 'Mobile Phones') {
         container.innerHTML = `
             <div class="form-row">
@@ -3747,4 +3954,4 @@ window.recalculateInvoice = function() {
 window.printUserInvoice = function() {
     window.print();
 };
-
+
