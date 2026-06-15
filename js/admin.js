@@ -1356,10 +1356,6 @@ function renderDynamicAdminFields() {
         container.innerHTML = `
             <div class="form-row">
                 <div class="input-group">
-                    <label>Laptop Title / Name</label>
-                    <input type="text" id="prodName" class="dynamic-admin-field" placeholder="e.g., Hp EliteBook 840 G5" required>
-                </div>
-                <div class="input-group">
                     <label>Brand</label>
                     <select id="prodBrand" class="dynamic-admin-field" required>
                         <option value="">Select Brand</option>
@@ -1375,8 +1371,10 @@ function renderDynamicAdminFields() {
                         <option value="Apple">Apple</option>
                     </select>
                 </div>
-            </div>
-            <div class="form-row">
+                <div class="input-group">
+                    <label>Model</label>
+                    <input type="text" id="prodModel" class="dynamic-admin-field" placeholder="e.g., EliteBook 840 G5" required>
+                </div>
                 <div class="input-group">
                     <label>Type</label>
                     <select id="prodType" class="dynamic-admin-field" required>
@@ -1388,6 +1386,8 @@ function renderDynamicAdminFields() {
                         <option value="Macbooks">Macbooks</option>
                     </select>
                 </div>
+            </div>
+            <div class="form-row">
                 <div class="input-group">
                     <label>Condition</label>
                     <select id="prodCondition" class="dynamic-admin-field" required>
@@ -1395,13 +1395,6 @@ function renderDynamicAdminFields() {
                         <option value="New">New</option>
                         <option value="Used">Used</option>
                     </select>
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="input-group">
-                    <label>Model</label>
-                    <input type="text" id="prodModel" class="dynamic-admin-field" placeholder="e.g., EliteBook 840 G5" required>
                 </div>
                 <div class="input-group">
                     <label>Operating System</label>
@@ -1425,9 +1418,6 @@ function renderDynamicAdminFields() {
                     <label>RAM</label>
                     <input type="text" id="prodRAM" class="dynamic-admin-field" placeholder="e.g., 8GB DDR4" required>
                 </div>
-            </div>
-
-            <div class="form-row">
                 <div class="input-group">
                     <label>Storage Type</label>
                     <select id="prodStorageType" class="dynamic-admin-field" required>
@@ -1451,9 +1441,6 @@ function renderDynamicAdminFields() {
                     <label>Screen Size</label>
                     <input type="text" id="prodScreenSize" class="dynamic-admin-field" placeholder="e.g., 14 inch" required>
                 </div>
-            </div>
-
-            <div class="form-row">
                 <div class="input-group">
                     <label>Display Resolution</label>
                     <input type="text" id="prodResolution" class="dynamic-admin-field" placeholder="e.g., 1920x1080" required>
@@ -1473,9 +1460,6 @@ function renderDynamicAdminFields() {
                     <label>Weight</label>
                     <input type="text" id="prodWeight" class="dynamic-admin-field" placeholder="e.g., 1.5 kg" required>
                 </div>
-            </div>
-
-            <div class="form-row">
                 <div class="input-group">
                     <label>Price</label>
                     <input type="number" id="prodPrice" class="dynamic-admin-field" placeholder="e.g., 50000" required>
@@ -1520,21 +1504,19 @@ function renderDynamicAdminFields() {
                     <input type="text" id="prodShopName" class="dynamic-admin-field" required>
                 </div>
                 <div class="input-group">
-                    <label>Area / Block No.</label>
-                    <input type="text" id="prodShopArea" class="dynamic-admin-field" required>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="input-group">
-                    <label>City</label>
-                    <input type="text" id="prodShopCity" class="dynamic-admin-field" required>
-                </div>
-                <div class="input-group">
                     <label>Address</label>
                     <input type="text" id="prodShopAddress" class="dynamic-admin-field" required>
                 </div>
             </div>
             <div class="form-row">
+                <div class="input-group">
+                    <label>Area / Block No.</label>
+                    <input type="text" id="prodShopArea" class="dynamic-admin-field" required>
+                </div>
+                <div class="input-group">
+                    <label>City</label>
+                    <input type="text" id="prodShopCity" class="dynamic-admin-field" required>
+                </div>
                 <div class="input-group">
                     <label>Phone Number</label>
                     <input type="text" id="prodShopPhone" class="dynamic-admin-field" required>
@@ -1550,6 +1532,11 @@ function renderDynamicAdminFields() {
                     <input type="url" id="prodShopWebsite" class="dynamic-admin-field" placeholder="https://...">
                 </div>
                 <div class="input-group">
+                    <label>Status</label>
+                    <select id="prodStatus" class="dynamic-admin-field" required>
+                        <option value="Publish">Publish</option>
+                        <option value="Draft">Draft</option>
+                    </select>
                 </div>
             </div>
         `;
@@ -1814,7 +1801,10 @@ if (adminProductForm) {
         });
 
         // Ensure name is set for generic layout consistency
-        if (!newProduct.name && document.getElementById('prodName')) {
+        if (category === 'Electronics' && subCategory === 'Laptops') {
+            newProduct.name = ((newProduct.brand || '') + ' ' + (newProduct.model || '')).trim();
+            if (!newProduct.name) newProduct.name = 'Laptop';
+        } else if (!newProduct.name && document.getElementById('prodName')) {
             newProduct.name = document.getElementById('prodName').value;
         }
         if (!newProduct.price && document.getElementById('prodPrice')) {
