@@ -213,7 +213,47 @@
         &copy; 2026 StopBuyPk - Smart Price Comparison
     </div>
 
+<script src="../js/data-service.js"></script>
 <script src="../js/location.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const container = document.querySelector('.card-grid');
+    if (!container) return;
+
+    try {
+      const products = await DataService.getProducts();
+      // Filter by category 'Electronics' and status 'Publish' (case-insensitive)
+      const electronics = products.filter(p => 
+        p.category && 
+        p.category.toLowerCase() === 'electronics' && 
+        (p.status === 'Publish' || p.prodStatus === 'Publish' || (!p.status && !p.prodStatus))
+      );
+
+      if (electronics.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 20px; font-style: italic;">No electronics products found.</div>';
+        return;
+      }
+
+      container.innerHTML = electronics.map(p => {
+        const imgUrl = p.image || '../images/placeholder.jpg';
+        const priceStr = p.price ? `Rs. ${Number(p.price).toLocaleString()}` : 'Rs. -';
+        const name = p.name || `${p.brand || ''} ${p.model || ''}`.trim() || 'Electronic Product';
+        
+        return `
+          <div class="card">
+            <img src="${imgUrl}" onerror="this.src='../images/placeholder.jpg'">
+            <h4 style="font-weight: 600; color: #1e293b; margin-top: 10px; font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${name}">${name}</h4>
+            <p style="color: #2563eb; font-weight: bold; margin-top: 5px;">${priceStr}</p>
+            ${p.subCategory ? `<div style="font-size: 11px; color: #64748b; margin-top: 2px;">${p.subCategory}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+    } catch (err) {
+      console.error("Error loading electronics products:", err);
+      container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #ef4444; padding: 20px;">Failed to load products.</div>';
+    }
+  });
+</script>
 </body>
 
 </html>
