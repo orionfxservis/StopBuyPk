@@ -899,7 +899,7 @@ textarea::placeholder{
 
         <div
           class="rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white py-2.5 px-2 shadow-sm">
-          <div class="mb-1 text-[11px] font-medium uppercase tracking-wide text-slate-500">
+          <div class="mb-1 text-[11px] font-bold uppercase tracking-wide text-black">
             <span class="lang-en">Date & Time</span>
             <span class="lang-ur">تاریخ اور وقت</span>
           </div>
@@ -912,7 +912,7 @@ textarea::placeholder{
 
         <div
           class="rounded-2xl border border-orange-100 bg-gradient-to-br from-orange-50 to-white py-2.5 px-2 shadow-sm">
-          <div class="mb-1 text-[11px] font-medium uppercase tracking-wide text-slate-500">
+          <div class="mb-1 text-[11px] font-bold uppercase tracking-wide text-black">
             <span class="lang-en">Restaurant</span>
             <span class="lang-ur">ریسٹورنٹ</span>
           </div>
@@ -936,7 +936,7 @@ textarea::placeholder{
 
         <div class="pl-2">
 
-          <div class="mb-1 text-[11px] uppercase tracking-wide text-slate-500">
+          <div class="mb-1 text-[11px] font-bold uppercase tracking-wide text-black">
             <span class="lang-en">Selected Deal</span>
             <span class="lang-ur">منتخب ڈیل</span>
           </div>
@@ -970,7 +970,7 @@ textarea::placeholder{
 
         <!-- RATE -->
         <div>
-          <label class="mb-1.5 block text-[11px] font-medium text-slate-500">
+          <label class="mb-1.5 block text-[11px] font-bold text-black">
             <span class="lang-en">Rate</span>
             <span class="lang-ur">قیمت</span>
           </label>
@@ -984,7 +984,7 @@ textarea::placeholder{
 
         <!-- QTY -->
         <div>
-          <label class="mb-1.5 block text-[11px] font-medium text-slate-500">
+          <label class="mb-1.5 block text-[11px] font-bold text-black">
             <span class="lang-en">Quantity</span>
             <span class="lang-ur">تعداد</span>
           </label>
@@ -995,7 +995,7 @@ textarea::placeholder{
 
         <!-- PROMO -->
         <div>
-          <label class="mb-1.5 block text-[11px] font-medium text-slate-500">
+          <label class="mb-1.5 block text-[11px] font-bold text-black">
             Promo
           </label>
           <input type="text" placeholder="OPTIONAL"
@@ -1008,7 +1008,7 @@ textarea::placeholder{
         class="mt-5 flex items-center justify-between rounded-xl border border-emerald-200 bg-gradient-to-r from-emerald-50 to-white px-4 py-2.5 shadow-sm">
 
         <div>
-          <div class="text-[11px] uppercase tracking-wide text-slate-500">
+          <div class="text-[11px] font-bold uppercase tracking-wide text-black">
             <span class="lang-en">Grand Total</span>
             <span class="lang-ur">کل رقم</span>
           </div>
@@ -1028,7 +1028,7 @@ textarea::placeholder{
       <!-- PAYMENT -->
       <div class="mt-6">
 
-        <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <div class="mb-2 text-xs font-bold uppercase tracking-wide text-black">
           <span class="lang-en">Payment Method</span>
           <span class="lang-ur">ادائیگی کا طریقہ</span>
         </div>
@@ -1069,7 +1069,7 @@ textarea::placeholder{
 
         <!-- NAME -->
         <div>
-          <label class="mb-1.5 block text-xs font-medium text-slate-500">
+          <label class="mb-1.5 block text-xs font-bold text-black">
             <span class="lang-en">Customer Name</span>
             <span class="lang-ur">صارف کا نام</span>
           </label>
@@ -1080,7 +1080,7 @@ textarea::placeholder{
 
         <!-- PHONE -->
         <div>
-          <label class="mb-1.5 block text-xs font-medium text-slate-500">
+          <label class="mb-1.5 block text-xs font-bold text-black">
             <span class="lang-en">WhatsApp Number</span>
             <span class="lang-ur">واٹس ایپ نمبر</span>
           </label>
@@ -1093,7 +1093,7 @@ textarea::placeholder{
       <!-- ADDRESS -->
       <div class="mt-5">
 
-        <label class="mb-1.5 block text-xs font-medium text-slate-500">
+        <label class="mb-1.5 block text-xs font-bold text-black">
           <span class="lang-en">Delivery Address</span>
           <span class="lang-ur">مکمل پتہ</span>
         </label>
@@ -1102,6 +1102,43 @@ textarea::placeholder{
           class="w-full resize-none rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"></textarea>
 
       </div>
+
+      <!-- REVIEW & REMARKS -->
+      <div class="mt-5">
+        <label class="mb-1.5 block text-xs font-bold text-black">
+          <span class="lang-en">Remarks & Rating</span>
+          <span class="lang-ur">ریمارکس اور ریٹنگ</span>
+        </label>
+
+        <!-- Star Rating -->
+        <div class="mb-2 flex items-center gap-1 text-2xl text-slate-300" id="orderRatingStars">
+          <i class="fas fa-star cursor-pointer transition hover:text-yellow-400" onclick="setOrderRating(1)"></i>
+          <i class="fas fa-star cursor-pointer transition hover:text-yellow-400" onclick="setOrderRating(2)"></i>
+          <i class="fas fa-star cursor-pointer transition hover:text-yellow-400" onclick="setOrderRating(3)"></i>
+          <i class="fas fa-star cursor-pointer transition hover:text-yellow-400" onclick="setOrderRating(4)"></i>
+          <i class="fas fa-star cursor-pointer transition hover:text-yellow-400" onclick="setOrderRating(5)"></i>
+          <input type="hidden" id="modalRating" value="0">
+        </div>
+
+        <textarea rows="2" placeholder="Any remarks or special instructions?" id="modalRemarks"
+          class="w-full resize-none rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"></textarea>
+      </div>
+
+      <script>
+        function setOrderRating(stars) {
+          document.getElementById('modalRating').value = stars;
+          const starElements = document.getElementById('orderRatingStars').querySelectorAll('i');
+          starElements.forEach((star, index) => {
+            if (index < stars) {
+              star.classList.remove('text-slate-300');
+              star.classList.add('text-yellow-400');
+            } else {
+              star.classList.add('text-slate-300');
+              star.classList.remove('text-yellow-400');
+            }
+          });
+        }
+      </script>
 
       <!-- NOTE -->
       <div
