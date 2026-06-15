@@ -967,7 +967,7 @@ html[lang='ur'] .lang-en { display: none !important; }
 
 /* Labels */
 #orderModal label{
-    color:#d1d5db;
+    color: #000000 !important;
     font-size:0.92rem;
     margin-bottom:6px;
     display:block;
