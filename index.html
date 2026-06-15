@@ -3054,7 +3054,14 @@
                 deals = deals.filter(d => (d.category || '').toLowerCase() === categoryFilter.toLowerCase());
             }
             if (subCategoryFilter) {
-                deals = deals.filter(d => (d.subCategory || '').toLowerCase() === subCategoryFilter.toLowerCase());
+                deals = deals.filter(d => {
+                    const sub = (d.subCategory || '').toLowerCase().trim();
+                    const filter = subCategoryFilter.toLowerCase().trim();
+                    if (filter === 'laptop') {
+                        return sub === 'laptop' || sub === 'laptops' || sub === 'laotop';
+                    }
+                    return sub === filter;
+                });
             }
 
             if (deals.length === 0) {
