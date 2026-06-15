@@ -167,20 +167,35 @@ const DataService = {
             const client = await DataService.ensureSupabase();
             const { data, error } = await client.from('deals').select('*');
             if (error) throw error;
-            const deals = data.map(d => ({
+            const deals = data.map(d => {
+                let desc = d.description || '';
+                let cat = '', sub = '';
+                let match = desc.match(/<!--META:(.*?)-->/);
+                if (match) {
+                    try {
+                        let meta = JSON.parse(match[1]);
+                        cat = meta.c || '';
+                        sub = meta.s || '';
+                    } catch(e) {}
+                    desc = desc.replace(/<!--META:.*?-->/g, '').trim();
+                }
+                return {
                 id: d.id,
                 name: d.name,
                 image: d.image,
-                desc: d.description,
+                desc: desc,
                 price: d.price,
                 location: d.location,
                 whatsapp: d.whatsapp,
                 video: d.video,
                 status: d.status,
+                category: cat,
+                subCategory: sub,
                 addedBy: d.added_by,
                 createdDate: d.created_date,
                 updatedDate: d.updated_date
-            }));
+                };
+            });
             localStorage.setItem("admin_deals", JSON.stringify(deals));
             return deals;
         } catch (err) {
@@ -456,11 +471,14 @@ const DataService = {
                 await client.from('deals').delete().in('id', toDelete);
             }
             
-            const rows = data.map(d => ({
+            const rows = data.map(d => {
+                let catData = JSON.stringify({c: d.category || '', s: d.subCategory || ''});
+                let descWithMeta = (d.desc || '') + ' <!--META:' + catData + '-->';
+                return {
                 id: d.id,
                 name: d.name,
                 image: d.image || '',
-                description: d.desc || '',
+                description: descWithMeta,
                 price: d.price || '',
                 location: d.location || '',
                 whatsapp: d.whatsapp || '',
@@ -469,7 +487,8 @@ const DataService = {
                 added_by: d.addedBy || '',
                 created_date: d.createdDate || new Date().toISOString(),
                 updated_date: new Date().toISOString()
-            }));
+                };
+            });
             const { error } = await client.from('deals').upsert(rows);
             if (error) throw error;
         } catch (err) {
