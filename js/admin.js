@@ -1776,6 +1776,14 @@ function renderDynamicAdminFields() {
             </div>
         `;
     }
+    const staticStatus = document.getElementById('staticStatusContainer');
+    if (staticStatus) {
+        if (category === 'Electronics') {
+            staticStatus.style.display = 'none';
+        } else {
+            staticStatus.style.display = 'block';
+        }
+    }
 }
 
 // Add event listeners to redraw when category or subcategory changes
