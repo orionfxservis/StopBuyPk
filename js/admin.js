@@ -599,6 +599,16 @@ window.editDeal = (index) => {
     dealEditIndex = index;
     const deal = deals[index];
 
+    const dCat = document.getElementById('dealCategory');
+    if (dCat) {
+        dCat.value = deal.category || '';
+        dCat.dispatchEvent(new Event('change'));
+        const dSub = document.getElementById('dealSubCategory');
+        if (dSub) {
+            dSub.value = deal.subCategory || '';
+        }
+    }
+
     document.getElementById('dealName').value = deal.name || '';
     document.getElementById('dealImage').value = deal.image || '';
     document.getElementById('dealDesc').value = deal.desc || '';
@@ -728,6 +738,8 @@ if (dealForm) {
         const newDeal = {
             ...existingDeal,
             id: dealEditIndex === -1 ? Date.now() : existingDeal.id,
+            category: document.getElementById('dealCategory') ? document.getElementById('dealCategory').value : (existingDeal.category || ''),
+            subCategory: document.getElementById('dealSubCategory') ? document.getElementById('dealSubCategory').value : (existingDeal.subCategory || ''),
             name: document.getElementById('dealName').value,
             image: document.getElementById('dealImage').value,
             desc: document.getElementById('dealDesc').value,
@@ -1070,76 +1082,76 @@ window.addEventListener('load', initAdmin);
 let productEditIndex = -1;
 
 function populateCategoryDropdown() {
-    const prodCategorySelect = document.getElementById('prodCategory');
-    if (prodCategorySelect) {
-        const uniqueCategories = [...new Set(categories.map(c => c.name))];
-        const currentSelection = prodCategorySelect.value;
-
-        const cUserStr = localStorage.getItem('currentUser');
-        let allowedCategories = uniqueCategories;
-        if (cUserStr) {
-            const currentUser = JSON.parse(cUserStr);
-            const isSuperAdmin = String(currentUser.userId || '').toLowerCase() === 'admin';
-            if (!isSuperAdmin) {
-                // Find fresh live user in the users list
-                const cUid = String(currentUser.userId || '').trim().toLowerCase();
-                const cUname = String(currentUser.username || '').trim().toLowerCase();
-                const liveUser = users.find(u => {
-                    const uId = String(u.userId || u.id || '').trim().toLowerCase();
-                    const uEmail = String(u.email || '').trim().toLowerCase();
-                    const uName = String(u.username || u.userName || '').trim().toLowerCase();
-                    return (uId && uId === cUid) || 
-                           (uEmail && uEmail === cUid) || 
-                           (uName && uName === cUname) ||
-                           (uName && uName === cUid);
-                });
-                
-                // Helper to get assigned categories from permissions or assignedCategories
-                const getAssigned = (usr) => {
-                    if (!usr) return [];
-                    let perms = usr.permissions;
-                    let loopCount = 0;
-                    while (typeof perms === 'string' && loopCount < 3) {
-                        try { perms = JSON.parse(perms); } catch(e) { break; }
-                        loopCount++;
-                    }
-                    if (perms && typeof perms === 'object' && !Array.isArray(perms) && perms.assignedCategories) {
-                        return perms.assignedCategories;
-                    }
-                    return usr.assignedCategories || [];
-                };
-
-                let assigned = (liveUser && getAssigned(liveUser).length > 0)
-                    ? getAssigned(liveUser)
-                    : getAssigned(currentUser);
-
+    const uniqueCategories = [...new Set(categories.map(c => c.name))];
+    const cUserStr = localStorage.getItem('currentUser');
+    let allowedCategories = uniqueCategories;
+    if (cUserStr) {
+        const currentUser = JSON.parse(cUserStr);
+        const isSuperAdmin = String(currentUser.userId || '').toLowerCase() === 'admin';
+        if (!isSuperAdmin) {
+            // Find fresh live user in the users list
+            const cUid = String(currentUser.userId || '').trim().toLowerCase();
+            const cUname = String(currentUser.username || '').trim().toLowerCase();
+            const liveUser = users.find(u => {
+                const uId = String(u.userId || u.id || '').trim().toLowerCase();
+                const uEmail = String(u.email || '').trim().toLowerCase();
+                const uName = String(u.username || u.userName || '').trim().toLowerCase();
+                return (uId && uId === cUid) || 
+                       (uEmail && uEmail === cUid) || 
+                       (uName && uName === cUname) ||
+                       (uName && uName === cUid);
+            });
+            
+            // Helper to get assigned categories from permissions or assignedCategories
+            const getAssigned = (usr) => {
+                if (!usr) return [];
+                let perms = usr.permissions;
                 let loopCount = 0;
-                while (typeof assigned === 'string' && loopCount < 3) {
-                    try {
-                        assigned = JSON.parse(assigned);
-                    } catch(e) {
-                        if (assigned.includes(',')) {
-                            assigned = assigned.split(',').map(s => s.trim());
-                        } else if (assigned) {
-                            assigned = [assigned];
-                        } else {
-                            assigned = [];
-                        }
-                        break;
-                    }
+                while (typeof perms === 'string' && loopCount < 3) {
+                    try { perms = JSON.parse(perms); } catch(e) { break; }
                     loopCount++;
                 }
-
-                if (assigned && Array.isArray(assigned) && assigned.length > 0) {
-                    const assignedLower = assigned.map(a => String(a).trim().toLowerCase());
-                    allowedCategories = uniqueCategories.filter(name => 
-                        assignedLower.includes(String(name).trim().toLowerCase())
-                    );
-                } else {
-                    allowedCategories = []; // Restricted users with no assigned categories see nothing
+                if (perms && typeof perms === 'object' && !Array.isArray(perms) && perms.assignedCategories) {
+                    return perms.assignedCategories;
                 }
+                return usr.assignedCategories || [];
+            };
+
+            let assigned = (liveUser && getAssigned(liveUser).length > 0)
+                ? getAssigned(liveUser)
+                : getAssigned(currentUser);
+
+            let loopCount = 0;
+            while (typeof assigned === 'string' && loopCount < 3) {
+                try {
+                    assigned = JSON.parse(assigned);
+                } catch(e) {
+                    if (assigned.includes(',')) {
+                        assigned = assigned.split(',').map(s => s.trim());
+                    } else if (assigned) {
+                        assigned = [assigned];
+                    } else {
+                        assigned = [];
+                    }
+                    break;
+                }
+                loopCount++;
+            }
+
+            if (assigned && Array.isArray(assigned) && assigned.length > 0) {
+                const assignedLower = assigned.map(a => String(a).trim().toLowerCase());
+                allowedCategories = uniqueCategories.filter(name => 
+                    assignedLower.includes(String(name).trim().toLowerCase())
+                );
+            } else {
+                allowedCategories = []; // Restricted users with no assigned categories see nothing
             }
         }
+    }
+
+    const prodCategorySelect = document.getElementById('prodCategory');
+    if (prodCategorySelect) {
+        const currentSelection = prodCategorySelect.value;
 
         prodCategorySelect.innerHTML = '<option value="">Select Category</option>' +
             allowedCategories.map(name => `<option value="${name}">${name}</option>`).join('');
@@ -1176,6 +1188,42 @@ function populateCategoryDropdown() {
 
         // Trigger manually to initialize or restore sub-category state
         prodCategorySelect.onchange();
+    }
+
+    const dealCategorySelect = document.getElementById('dealCategory');
+    if (dealCategorySelect && typeof allowedCategories !== 'undefined') {
+        const currentSelectionDeal = dealCategorySelect.value;
+        dealCategorySelect.innerHTML = '<option value="">Select Category</option>' +
+            allowedCategories.map(name => `<option value="${name}">${name}</option>`).join('');
+
+        if (allowedCategories.includes(currentSelectionDeal)) {
+            dealCategorySelect.value = currentSelectionDeal;
+        } else if (currentSelectionDeal) {
+            dealCategorySelect.innerHTML += `<option value="${currentSelectionDeal}">${currentSelectionDeal}</option>`;
+            dealCategorySelect.value = currentSelectionDeal;
+        } else {
+            dealCategorySelect.value = '';
+        }
+
+        dealCategorySelect.onchange = () => {
+            const selectedCat = dealCategorySelect.value;
+            const dealSubCategorySelect = document.getElementById('dealSubCategory');
+            if (dealSubCategorySelect) {
+                const relevantCats = categories.filter(c => c.name === selectedCat);
+                let subCats = [];
+                relevantCats.forEach(cat => {
+                    if (cat.subCategory) {
+                        subCats.push(...cat.subCategory.split(',').map(s => s.trim()).filter(s => s));
+                    }
+                });
+                const uniqueSubCats = [...new Set(subCats)];
+
+                dealSubCategorySelect.innerHTML = '<option value="">Select Sub Category</option>' +
+                    uniqueSubCats.map(sub => `<option value="${sub}">${sub}</option>`).join('');
+            }
+        };
+
+        dealCategorySelect.onchange();
     }
 }
 
