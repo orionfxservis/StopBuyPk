@@ -710,6 +710,20 @@
                     <h3 id="dealFormTitle">Add New Deal</h3>
                     <form id="dealForm">
                         <div class="form-row">
+                            <div class="input-group" style="max-width: 180px;">
+                                <label>Category</label>
+                                <select id="dealCategory" required>
+                                    <option value="">Select Category</option>
+                                    <!-- Populated via JS -->
+                                </select>
+                            </div>
+                            <div class="input-group" style="max-width: 180px;">
+                                <label>Sub Category</label>
+                                <select id="dealSubCategory" required>
+                                    <option value="">Select Sub Category</option>
+                                    <!-- Populated via JS -->
+                                </select>
+                            </div>
                             <div class="input-group" style="flex: 1;">
                                 <label>Deal Title / Name</label>
                                 <input type="text" id="dealName" placeholder="e.g., Nike Running Shoes" required
