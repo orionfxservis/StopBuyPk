@@ -25,7 +25,7 @@
             class="max-w-screen-2xl mx-auto px-4 py-2 sm:py-0 sm:h-[60px] flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-3 gap-x-2 sm:gap-4">
 
             <!-- LEFT: Logo -->
-            <div onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex items-center gap-2 flex-shrink-0 order-1 sm:order-none cursor-pointer">
+            <div class="flex items-center gap-2 flex-shrink-0 order-1 sm:order-none">
 
                 <div class="bg-white p-1 rounded-xl shadow-sm w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center">
                     <img src="./images/logo/stopbuy-logo.png" alt="StopBuy"
@@ -169,12 +169,7 @@
                             <!-- USER FORM -->
                             <div id="form-user" class="space-y-2.5">
                                 <input type="text" placeholder="User ID" class="login-input">
-                                <div class="relative w-full mb-2.5">
-                                    <input type="password" placeholder="Password" class="login-input !mb-0 pr-10">
-                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-500 transition-colors" onclick="togglePasswordVisibility(this)">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                </div>
+                                <input type="password" placeholder="Password" class="login-input">
                                 <button type="button" onclick="loginUser()" class="login-btn">
                                     Login as User
                                 </button>
@@ -185,12 +180,7 @@
                                 <input type="text" placeholder="User Name" class="login-input">
                                 <input type="text" placeholder="Company Name" class="login-input">
                                 <input type="text" placeholder="User ID" class="login-input">
-                                <div class="relative w-full mb-2.5">
-                                    <input type="password" placeholder="Password" class="login-input !mb-0 pr-10">
-                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-500 transition-colors" onclick="togglePasswordVisibility(this)">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                </div>
+                                <input type="password" placeholder="Password" class="login-input">
                                 <button type="button" onclick="loginCompany()" class="login-btn">
                                     Login as Company
                                 </button>
@@ -201,12 +191,7 @@
 
                                 <input type="text" placeholder="Admin ID" class="login-input">
 
-                                <div class="relative w-full mb-2.5">
-                                    <input type="password" placeholder="Password" class="login-input !mb-0 pr-10">
-                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-500 transition-colors" onclick="togglePasswordVisibility(this)">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                </div>
+                                <input type="password" placeholder="Password" class="login-input">
 
                                 <button type="button" onclick="loginAdmin()" class="login-btn">
                                     Login as Admin
@@ -322,7 +307,7 @@
                     <span class="lang-ur">روزمرہ کی اشیائے خوردونوش</span>
                 </a>
 
-                <a href="./pages/electronics.html" class="hover:text-emerald-300 transition font-medium">
+                <a href="./pages/electronics.html" class="hidden hover:text-emerald-300 transition font-medium">
                     <span class="lang-en">Electronics</span>
                     <span class="lang-ur">الیکٹرونکس</span>
                 </a>
@@ -439,7 +424,7 @@
                             <span class="lang-en">Trends</span><span class="lang-ur">رجحانات</span>
                         </div>
 
-                        <!-- Deals Button -->
+                        <!-- Food Deals Button -->
                         <div class="relative inline-block">
                             <!-- Constant Glowing background aura -->
                             <div
@@ -447,9 +432,23 @@
                             </div>
 
                             <!-- Actual Button -->
-                            <div onclick="openDealsModal()"
+                            <div onclick="openDealsModal('Food', null, '🔥 Food Deals')"
                                 class="relative w-[130px] h-[38px] rounded-3xl bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 text-white font-bold text-sm shadow-xl border border-white/30 cursor-pointer transform transition-all duration-300 hover:scale-105 flex items-center justify-center">
-                                🔥 <span class="lang-en">Deals</span><span class="lang-ur">ڈیلز</span>
+                                🔥 <span class="lang-en">Food Deals</span><span class="lang-ur">فوڈ ڈیلز</span>
+                            </div>
+                        </div>
+
+                        <!-- Laptop Deals Button -->
+                        <div class="relative inline-block">
+                            <!-- Constant Glowing background aura -->
+                            <div
+                                class="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 rounded-3xl blur-md opacity-100 animate-pulse">
+                            </div>
+
+                            <!-- Actual Button -->
+                            <div onclick="openDealsModal('Electronics', 'Laptop', '💻 Laptop Deals')"
+                                class="relative w-[130px] h-[38px] rounded-3xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 text-white font-bold text-sm shadow-xl border border-white/30 cursor-pointer transform transition-all duration-300 hover:scale-105 flex items-center justify-center">
+                                💻 <span class="lang-en">Laptop Deals</span><span class="lang-ur">لیپ ٹاپ ڈیلز</span>
                             </div>
                         </div>
                     </div>
@@ -1008,7 +1007,7 @@
                                 class="w-full lg:w-fit bg-white/95 backdrop-blur-md border border-gray-200 rounded-3xl p-5 shadow-sm mb-6">
 
                                 <!-- CATEGORY BUTTONS -->
-                                <div class="flex flex-wrap items-center justify-between gap-2 mb-4 w-full"
+                                <div class="flex flex-wrap items-center justify-end gap-2 mb-4"
                                     id="categoryFilterContainer">
                                     <button
                                         class="cat-filter-btn px-3.5 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Food</button>
@@ -1109,7 +1108,7 @@
         </div>
 
         <!-- Compare by Category -->
-        <div id="compareCategorySection" class="hidden max-w-screen-2xl mx-auto px-4 pt-4">
+        <div class="max-w-screen-2xl mx-auto px-4 pt-4">
 
             <!-- Outer Box -->
             <div
@@ -1299,8 +1298,15 @@
 
                         <!-- RIGHT BUTTON -->
                         <button onclick="window.location.href='pages/travel.html'"
-                            class="flex items-center gap-1.5 text-[13px] md:text-sm font-bold px-4 md:px-5 py-2 bg-white text-emerald-800 rounded-full shadow-sm hover:shadow-md border border-emerald-100/50 transition-all hover:-translate-y-0.5 hover:bg-emerald-50">
-                            View All Packages <i class="fas fa-arrow-right text-[10px] md:text-xs"></i>
+                            class="group h-[52px] px-7 rounded-2xl bg-white text-emerald-900 text-sm font-extrabold shadow-[0_8px_25px_rgba(255,255,255,.18)] hover:bg-emerald-50 transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2 whitespace-nowrap">
+
+                            <span>
+                                View All Packages
+                            </span>
+
+                            <i
+                                class="fas fa-arrow-right text-xs transition-transform duration-300 group-hover:translate-x-1"></i>
+
                         </button>
 
                     </div>
@@ -1423,8 +1429,51 @@
                         </button>
                     </div>
 
-                    <div id="dynamicBlogGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
-                        <!-- Dynamic blogs will be loaded here from Google Sheets -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+                        <div
+                            class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
+                            <img src="images/blogs/04-05-26/blog_price.png"
+                                class="w-full h-44 object-cover rounded-t-3xl">
+                            <div class="p-5">
+                                <div class="font-semibold">Rising Prices in Pakistan 2025</div>
+                                <div class="text-sm text-gray-600 mt-1">What's driving inflation and how to protect your
+                                    budget.</div>
+                                <button onclick="showBlogModal(1)"
+                                    class="mt-4 text-sm text-emerald-700 font-semibold">Read
+                                    Full Article →</button>
+                            </div>
+                        </div>
+
+                        <!-- Blog Card 2 -->
+                        <div
+                            class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
+                            <img src="images/blogs/04-05-26/blog_budget.png"
+                                class="w-full h-44 object-cover rounded-t-3xl">
+                            <div class="p-5">
+                                <div class="font-semibold">How to Manage Budget in Challenging Times</div>
+                                <div class="text-sm text-gray-600 mt-1">
+                                    Practical tips for Pakistani families to save more.
+                                </div>
+                                <button onclick="showBlogModal(2)" class="mt-4 text-sm text-emerald-700 font-semibold">
+                                    Read Full Article →
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Blog Card 3 -->
+                        <div
+                            class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100">
+                            <img src="images/blogs/04-05-26/blog_ai.png" class="w-full h-44 object-cover rounded-t-3xl">
+                            <div class="p-5">
+                                <div class="font-semibold">How AI Can Help You Save Money</div>
+                                <div class="text-sm text-gray-600 mt-1">
+                                    Using smart tools for better financial decisions.
+                                </div>
+                                <button onclick="showBlogModal(3)" class="mt-4 text-sm text-emerald-700 font-semibold">
+                                    Read Full Article →
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1691,10 +1740,8 @@
                                     کریں</span>
                             </h3>
 
-                            <p class="mt-3 text-slate-500 leading-6 text-sm flex flex-col items-center justify-center">
-                                <span class="font-semibold text-slate-700">+92 333 0257246, +92 333 0360487</span>
-                                <span>from 9 AM to 9 PM</span>
-                                <span>7 days a week.</span>
+                            <p class="mt-3 text-slate-500 leading-6 text-sm">
+                                Reach us at +92 300 1234567 from 9 AM to 9 PM, 7 days a week.
                             </p>
 
                         </div>
@@ -2087,20 +2134,10 @@
     <script src="js/live-prices.js"></script>
 
     <script>
-        // Language Setup (defaults to English, reset once for legacy Urdu defaults)
-        if (!localStorage.getItem('qeematLangEnDefault2')) {
-            localStorage.setItem('qeematLang', 'en');
-            localStorage.setItem('qeematLangEnDefault2', 'true');
-        }
-        const currentLang = localStorage.getItem('qeematLang') || 'en';
+        // Language Setup
+        const currentLang = localStorage.getItem('qeematLang') || 'ur';
         document.documentElement.lang = currentLang;
         document.documentElement.dir = currentLang === 'ur' ? 'rtl' : 'ltr';
-
-        // Force scroll to top / home section on load
-        if (window.history.scrollRestoration) {
-            window.history.scrollRestoration = 'manual';
-        }
-        window.scrollTo(0, 0);
 
         function updateLanguageUI(lang) {
             document.querySelectorAll('.lang-en').forEach(el => {
@@ -2132,8 +2169,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             updateLanguageUI(currentLang);
-            // Additional scroll-to-top safety
-            setTimeout(() => { window.scrollTo(0, 0); }, 50);
         });
 
         function switchLoginTab(tab) {
@@ -2957,7 +2992,7 @@
             id="dealsModalContent" onclick="event.stopPropagation()">
             <!-- Header -->
             <div class="relative bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 p-4">
-                <h3 class="text-white font-bold text-lg flex items-center gap-2">🔥 Hot Deals</h3>
+                <h3 class="text-white font-bold text-lg flex items-center gap-2" id="dealsModalTitle">🔥 Hot Deals</h3>
                 <button onclick="closeDealsModal()"
                     class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all">&times;</button>
             </div>
@@ -2992,9 +3027,11 @@
             }
         };
 
-        async function openDealsModal() {
+        async function openDealsModal(categoryFilter = null, subCategoryFilter = null, modalTitle = '🔥 Hot Deals') {
             const modal = document.getElementById('dealsDetailModal');
             const container = document.getElementById('dealsListContainer');
+            const titleElem = document.getElementById('dealsModalTitle');
+            if (titleElem) titleElem.textContent = modalTitle;
 
             // Show Modal
             modal.classList.remove('hidden');
@@ -3012,6 +3049,13 @@
                 deals = await DataService.getDeals();
             } catch (e) {
                 deals = JSON.parse(localStorage.getItem("admin_deals")) || [];
+            }
+
+            if (categoryFilter) {
+                deals = deals.filter(d => (d.category || '').toLowerCase() === categoryFilter.toLowerCase());
+            }
+            if (subCategoryFilter) {
+                deals = deals.filter(d => (d.subCategory || '').toLowerCase() === subCategoryFilter.toLowerCase());
             }
 
             if (deals.length === 0) {
@@ -3140,7 +3184,7 @@
                                     </div>
                                 </div>
                                 
-                                                                <button class="w-full py-2.5 rounded-[0.85rem] bg-[#0d9488] text-white text-[12px] font-bold tracking-wide hover:bg-[#0f766e] hover:shadow-md transition-all duration-300" 
+                                <button class="w-full py-2.5 rounded-[0.85rem] bg-[#0d9488] text-white text-[12px] font-bold tracking-wide hover:bg-[#0f766e] hover:shadow-md transition-all duration-300" 
                                     onclick="openProductModal('${safeName}', '${safeVariety}', '${minPrice}', '${maxPrice}', '${img}')">
                                     View Full Comparison
                                 </button>
@@ -3208,170 +3252,6 @@
             installContainer.style.display = "none";
         });
     </script>
-
-    <!-- Dynamic Blog Integration Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const container = document.getElementById('dynamicBlogGrid');
-            if (!container) return;
-            try {
-                const blogsRaw = await DataService.getBlogs();
-                const blogs = (blogsRaw || []).filter(b => b.status === 'Publish' || !b.status);
-                if (blogs.length > 0) {
-                    const htmlStr = blogs.slice(0, 3).map(b => {
-                        const safeObj = encodeURIComponent(JSON.stringify(b));
-                        const categoryEn = b.categoryEn || 'Update';
-                        const categoryUr = b.categoryUr || categoryEn;
-                        const titleEn = b.titleEn || 'Untitled';
-                        const titleUr = b.titleUr || titleEn;
-                        const descEn = b.descEn || '';
-                        const descUr = b.descUr || descEn;
-                        return `
-                            <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100 flex flex-col cursor-pointer" onclick="openBlogModal('${safeObj}')">
-                                <div class="overflow-hidden">
-                                      <img src="${b.image || 'images/placeholder.jpg'}" class="w-full aspect-video object-cover rounded-t-3xl" onerror="this.src='images/placeholder.jpg'">
-                                  </div>
-                                <div class="p-6 flex-1 flex flex-col justify-between">
-                                    <div>
-                                        <p class="text-[0.7rem] text-emerald-600 font-bold mb-1.5 uppercase tracking-wide">
-                                            <span class="lang-en">${categoryEn}</span><span class="lang-ur" style="display:none;">${categoryUr}</span>
-                                        </p>
-                                        <h3 class="font-bold text-[#0A3D2A] text-lg leading-snug" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                                            <span class="lang-en">${titleEn}</span><span class="lang-ur" style="display:none;">${titleUr}</span>
-                                        </h3>
-                                        <p class="text-sm text-gray-600 mt-2 leading-relaxed" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                                            <span class="lang-en">${descEn}</span><span class="lang-ur" style="display:none;">${descUr}</span>
-                                        </p>
-                                    </div>
-                                    <button onclick="event.stopPropagation(); openBlogModal('${safeObj}')" class="read-btn mt-5 text-xs text-emerald-700 font-bold px-4 py-1.5 bg-white border border-emerald-100/80 rounded-full shadow-sm hover:shadow-md hover:bg-emerald-50/50 transition-all self-start">
-                                        <span class="lang-en">Read Full Article &rarr;</span><span class="lang-ur" style="display:none;">مکمل مضمون پڑھیں &larr;</span>
-                                    </button>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-                    container.innerHTML = htmlStr;
-                    if (typeof updateLanguageUI === 'function') {
-                        updateLanguageUI(document.documentElement.lang || 'en');
-                    }
-                } else {
-                    container.innerHTML = `
-                        <p class="text-slate-500 col-span-full text-center py-4">
-                            <span class="lang-en">No blogs available at the moment.</span><span class="lang-ur">فی الحال کوئی بلاگ دستیاب نہیں ہے۔</span>
-                        </p>`;
-                }
-            } catch (e) {
-                console.error("Failed to load blogs", e);
-                container.innerHTML = `
-                    <p class="text-red-500 col-span-full text-center py-4">
-                        Failed to load blogs.
-                    </p>`;
-            }
-        });
-
-        window.openBlogModal = function (safeObj) {
-            const blogData = JSON.parse(decodeURIComponent(safeObj));
-            const modal = document.getElementById('blogModal');
-            if (!modal) return;
-
-            const imgEl = document.getElementById('modalBlogImage');
-            if (imgEl) imgEl.src = blogData.image;
-
-            const currentLang = document.documentElement.lang || 'en';
-            const titleEl = document.getElementById('modalBlogTitle');
-            const contentEl = document.getElementById('modalBlogContent');
-            const authorEl = document.getElementById('modalBlogAuthor');
-
-            if (titleEl && contentEl) {
-                if (currentLang === 'ur') {
-                    titleEl.textContent = blogData.titleUr;
-                    contentEl.textContent = blogData.contentUr;
-                    contentEl.setAttribute('dir', 'rtl');
-                    titleEl.setAttribute('dir', 'rtl');
-                } else {
-                    titleEl.textContent = blogData.titleEn;
-                    contentEl.textContent = blogData.contentEn;
-                    contentEl.setAttribute('dir', 'ltr');
-                    titleEl.setAttribute('dir', 'ltr');
-                }
-            }
-
-            if (authorEl) authorEl.textContent = blogData.author || 'Admin';
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
-        };
-
-        window.closeBlogModal = function () {
-            const modal = document.getElementById('blogModal');
-            if (modal) {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
-            document.body.style.overflow = 'auto';
-        };
-
-        // Close modal when clicking outside
-        document.addEventListener('click', function (e) {
-            const blogModal = document.getElementById('blogModal');
-            if (blogModal && !blogModal.classList.contains('hidden') && e.target === blogModal) {
-                closeBlogModal();
-            }
-        });
-    </script>
-
-    <!-- BLOG DETAIL MODAL -->
-    <div id="blogModal" class="fixed inset-0 z-[999999] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-        <div class="bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl text-left">
-            <!-- Modal Header -->
-            <div class="flex items-center justify-between p-4 md:p-6 border-b border-gray-100 bg-gray-50/50">
-                <div class="bg-emerald-100 text-emerald-800 px-4 py-1.5 rounded-full text-xs font-bold tracking-wide">
-                    Blog Post
-                </div>
-                <button onclick="closeBlogModal()" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-100 hover:text-red-600 transition-colors">
-                    <i class="fas fa-times text-lg"></i>
-                </button>
-            </div>
-
-            <!-- Modal Body (Scrollable) -->
-            <div class="overflow-y-auto flex-1 p-4 md:p-8">
-                <div class="w-full max-h-[350px] md:max-h-[450px] bg-slate-50 flex items-center justify-center rounded-2xl mb-8 shadow-sm overflow-hidden">
-                    <img id="modalBlogImage" src="" class="max-w-full max-h-[350px] md:max-h-[450px] object-contain">
-                </div>
-                
-                <h1 id="modalBlogTitle" class="text-2xl md:text-4xl font-extrabold text-gray-900 leading-tight mb-4"></h1>
-                
-                <div class="flex items-center gap-4 text-sm text-gray-500 mb-8 pb-8 border-b border-gray-100">
-                    <div class="flex items-center gap-2"><i class="far fa-user text-emerald-600"></i> <span id="modalBlogAuthor">Admin</span></div>
-                </div>
-
-                <!-- Content Area -->
-                <div id="modalBlogContent" class="prose prose-emerald max-w-none text-gray-700 leading-loose text-base md:text-lg whitespace-pre-line">
-                    <!-- Content will be injected here -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-<script>
-    function togglePasswordVisibility(btn) {
-        const input = btn.previousElementSibling;
-        const icon = btn.querySelector('i');
-        if (!icon) return;
-        
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            input.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
-    }
-</script>
-
 </body>
 
 </html>
