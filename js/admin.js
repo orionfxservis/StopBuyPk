@@ -1615,9 +1615,10 @@ function renderDynamicAdminFields() {
 
             <div class="form-row">
                 <div class="input-group">
-                    <label>Qty / Gram</label>
+                    <label>Qty / Weight</label>
                     <div style="display: flex; gap: 8px; align-items: center; width: 100%;">
                         <select id="prodQty" class="dynamic-admin-field" required style="flex: 1; margin-bottom: 0;">
+                            <option value=""></option>
                             <option value="Extra Large">Extra Large</option>
                             <option value="Large">Large</option>
                             <option value="Medium">Medium</option>
@@ -1632,10 +1633,12 @@ function renderDynamicAdminFields() {
                         </select>
                         <select id="prodGram" class="dynamic-admin-field" style="flex: 1; margin-bottom: 0;">
                             <option value="">Select Gram</option>
-                            <option value="500 gram">500 gram</option>
-                            <option value="250 gram">250 gram</option>
-                            <option value="100 gram">100 gram</option>
                             <option value="50 gram">50 gram</option>
+                            <option value="100 gram">100 gram</option>
+                            <option value="250 gram">250 gram</option>
+                            <option value="350 gram">350 gram</option>
+                            <option value="500 gram">500 gram</option>
+                            <option value="700 gram">700 gram</option>
                         </select>
                     </div>
                 </div>
