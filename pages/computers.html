@@ -9,7 +9,7 @@
 
   <link rel="stylesheet" href="../css/style.css">
 
-  <!-- ✅ Tailwind for navbar -->
+  <!-- ✅ Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -40,7 +40,6 @@
       border-radius: 14px;
       background: #fff;
       border-left: 6px solid #14b8a6;
-      /* 🟢 computers color */
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
@@ -78,21 +77,30 @@
       font-weight: bold;
     }
 
-    
-
     /* FIX LOGO SIZE */
     .logo-fix {
       height: 40px !important;
       width: auto !important;
     }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    /* Translation classes (in case style.css lacks it) */
+    html[lang="ur"] .lang-en { display: none !important; }
+    html[lang="en"] .lang-ur { display: none !important; }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
-<body>
+<body class="bg-[#F4F9F2] text-[#1F2937] antialiased min-h-screen flex flex-col">
 
-  <!-- ✅ STANDARD NAVBAR -->
-  <!-- Top Navigation Bar -->
+  <!-- Nav Placeholder (will be replaced by update_pages.js) -->
   <nav class="bg-[#0A3D2A] text-white sticky top-0 z-[99999]">
         <div
             class="max-w-screen-2xl mx-auto px-4 py-2 sm:py-0 sm:h-[60px] flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-3 gap-x-2 sm:gap-4">
@@ -171,87 +179,863 @@
     </nav>
 
   <!-- HERO -->
-    <div class="max-w-screen-2xl mx-auto px-4 py-6">
-        <div class="relative w-full rounded-3xl overflow-hidden shadow-lg border border-emerald-200 mb-2 bg-[#F4F9F2]">
-            <img src="../images/grafix/browse-computers.png" alt="Category Banner"
-                class="w-full h-[150px] sm:h-[200px] md:h-[300px] object-cover md:object-fill">
-        </div>
+  <div class="max-w-screen-2xl mx-auto px-4 py-6 w-full">
+    <div class="relative w-full rounded-3xl overflow-hidden shadow-lg border border-emerald-200 bg-[#F4F9F2]">
+      <img src="../images/grafix/browse-computers.png" alt="Category Banner"
+        class="w-full h-[150px] sm:h-[200px] md:h-[300px] object-cover md:object-fill">
     </div>
+  </div>
 
   <!-- CONTENT -->
-  <section class="section-box">
-    <h2>💻 Computers</h2>
+  <div class="max-w-screen-2xl mx-auto px-4 py-6 w-full flex-1">
+    <div class="flex flex-col lg:flex-row gap-6">
+      
+      <!-- LEFT COLUMN: Search & Filter Sidebar -->
+      <aside class="w-full lg:w-[320px] bg-white rounded-3xl p-5 border border-emerald-100 shadow-md shrink-0 self-start">
+        <div class="flex items-center justify-between pb-4 border-b border-emerald-50 mb-4">
+          <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+            <i class="fas fa-sliders-h text-emerald-600"></i>
+            <span class="lang-en">Search & Filters</span>
+            <span class="lang-ur">تلاش اور فلٹرز</span>
+          </h3>
+          <button onclick="clearAllFilters()" class="text-xs text-emerald-600 hover:text-emerald-800 font-medium">
+            <span class="lang-en">Clear All</span>
+            <span class="lang-ur">سب صاف کریں</span>
+          </button>
+        </div>
 
-    <div class="card-grid">
+        <!-- Scrollable filter content -->
+        <div class="space-y-5 max-h-[70vh] lg:max-h-none overflow-y-auto pr-1">
+          
+          <!-- 1. Text Search -->
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              <span class="lang-en">Search Computers</span>
+              <span class="lang-ur">کمپیوٹر تلاش کریں</span>
+            </label>
+            <div class="relative">
+              <input type="text" id="compSearch" placeholder="Type Model, specs..." data-en-placeholder="Type Model, specs..." data-ur-placeholder="ماڈل، تفصیلات لکھیں..."
+                class="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition">
+              <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+            </div>
+          </div>
 
-      <div class="card">
-        <img src="../images/placeholder.jpg">
-        <h4>Product Name</h4>
-        <p>Rs. ---</p>
-      </div>
+          <!-- 2. Shortcut Checkboxes -->
+          <div class="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
+            <label class="block text-xs font-bold text-emerald-800 uppercase tracking-wider mb-2">
+              <span class="lang-en">Popular Tags</span>
+              <span class="lang-ur">مقبول ٹیگز</span>
+            </label>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <label class="flex items-center gap-1.5 cursor-pointer text-emerald-900 font-medium">
+                <input type="checkbox" value="Dell" class="quick-tag rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Dell</span><span class="lang-ur">ڈیل</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-emerald-900 font-medium">
+                <input type="checkbox" value="HP" class="quick-tag rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">HP</span><span class="lang-ur">ایچ پی</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-emerald-900 font-medium">
+                <input type="checkbox" value="Lenovo" class="quick-tag rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Lenovo</span><span class="lang-ur">لینووو</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-emerald-900 font-medium">
+                <input type="checkbox" value="Core i7" class="quick-tag rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Core i7</span><span class="lang-ur">کور i7</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-emerald-900 font-medium col-span-2">
+                <input type="checkbox" value="Gaming PC" class="quick-tag rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Gaming PC</span><span class="lang-ur">گیمنگ پی سی</span>
+              </label>
+            </div>
+          </div>
 
-      <div class="card">
-        <img src="../images/placeholder.jpg">
-        <h4>Product Name</h4>
-        <p>Rs. ---</p>
-      </div>
+          <!-- 3. Category -->
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              <span class="lang-en">🖥 Category</span>
+              <span class="lang-ur">🖥 زمرہ</span>
+            </label>
+            <div class="space-y-1.5 text-sm">
+              <label class="flex items-center gap-2 cursor-pointer text-gray-700 hover:text-emerald-700">
+                <input type="radio" name="compCategory" value="all" checked class="text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">All Computers</span><span class="lang-ur">تمام کمپیوٹرز</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-gray-700 hover:text-emerald-700">
+                <input type="radio" name="compCategory" value="desktop" class="text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Desktop PC</span><span class="lang-ur">ڈیسک ٹاپ پی سی</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-gray-700 hover:text-emerald-700">
+                <input type="radio" name="compCategory" value="gaming" class="text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Gaming PC</span><span class="lang-ur">گیمنگ پی سی</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-gray-700 hover:text-emerald-700">
+                <input type="radio" name="compCategory" value="workstation" class="text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Workstation</span><span class="lang-ur">ورک سٹیشن</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-gray-700 hover:text-emerald-700">
+                <input type="radio" name="compCategory" value="mini" class="text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Mini PC</span><span class="lang-ur">منی پی سی</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-gray-700 hover:text-emerald-700">
+                <input type="radio" name="compCategory" value="all-in-one" class="text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">All-in-One PC</span><span class="lang-ur">آل ان ون پی سی</span>
+              </label>
+            </div>
+          </div>
 
-      <div class="card">
-        <img src="../images/placeholder.jpg">
-        <h4>Product Name</h4>
-        <p>Rs. ---</p>
-      </div>
+          <!-- 4. Brand -->
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              <span class="lang-en">💻 Brand</span>
+              <span class="lang-ur">💻 برانڈ</span>
+            </label>
+            <div class="grid grid-cols-2 gap-2 text-sm">
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="Dell" class="brand-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Dell</span><span class="lang-ur">ڈیل</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="HP" class="brand-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">HP</span><span class="lang-ur">ایچ پی</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="Lenovo" class="brand-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Lenovo</span><span class="lang-ur">لینووو</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="Asus" class="brand-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Asus</span><span class="lang-ur">ایسوس</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="Acer" class="brand-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Acer</span><span class="lang-ur">ایسر</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="MSI" class="brand-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">MSI</span><span class="lang-ur">ایم ایس آئی</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="Apple" class="brand-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Apple</span><span class="lang-ur">ایپل</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700 col-span-2">
+                <input type="checkbox" value="Custom Build" class="brand-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Custom Build</span><span class="lang-ur">کسٹم بلڈ</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 5. Processor -->
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              <span class="lang-en">⚙ Processor</span>
+              <span class="lang-ur">⚙ پروسیسر</span>
+            </label>
+            <div class="space-y-1.5 text-xs text-gray-700">
+              <div class="grid grid-cols-2 gap-2">
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="i3" class="proc-filter rounded text-emerald-600 focus:ring-emerald-500">
+                  <span>Core i3</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="i5" class="proc-filter rounded text-emerald-600 focus:ring-emerald-500">
+                  <span>Core i5</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="i7" class="proc-filter rounded text-emerald-600 focus:ring-emerald-500">
+                  <span>Core i7</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="i9" class="proc-filter rounded text-emerald-600 focus:ring-emerald-500">
+                  <span>Core i9</span>
+                </label>
+              </div>
+              <div class="border-t border-emerald-50 my-1 pt-1.5 grid grid-cols-2 gap-2">
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="ryzen 3" class="proc-filter rounded text-emerald-600 focus:ring-emerald-500">
+                  <span>Ryzen 3</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="ryzen 5" class="proc-filter rounded text-emerald-600 focus:ring-emerald-500">
+                  <span>Ryzen 5</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="ryzen 7" class="proc-filter rounded text-emerald-600 focus:ring-emerald-500">
+                  <span>Ryzen 7</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="ryzen 9" class="proc-filter rounded text-emerald-600 focus:ring-emerald-500">
+                  <span>Ryzen 9</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. RAM -->
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              <span class="lang-en">🧠 RAM</span>
+              <span class="lang-ur">🧠 ریم</span>
+            </label>
+            <div class="grid grid-cols-2 gap-2 text-sm">
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="4gb" class="ram-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span>4 GB</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="8gb" class="ram-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span>8 GB</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="16gb" class="ram-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span>16 GB</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="32gb" class="ram-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span>32 GB</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700 col-span-2">
+                <input type="checkbox" value="64gb" class="ram-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span>64 GB+</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 7. Storage -->
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              <span class="lang-en">💾 Storage</span>
+              <span class="lang-ur">💾 اسٹوریج</span>
+            </label>
+            <div class="space-y-2 text-xs text-gray-700">
+              <div class="grid grid-cols-2 gap-2">
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="128gb ssd" class="storage-filter rounded text-emerald-600 focus:ring-emerald-500">
+                  <span>128 GB SSD</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="256gb ssd" class="storage-filter rounded text-emerald-600 focus:ring-emerald-500">
+                  <span>256 GB SSD</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="512gb ssd" class="storage-filter rounded text-emerald-600 focus:ring-emerald-500">
+                  <span>512 GB SSD</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="1tb ssd" class="storage-filter rounded text-emerald-600 focus:ring-emerald-500">
+                  <span>1 TB SSD</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer col-span-2">
+                  <input type="checkbox" value="2tb ssd" class="storage-filter rounded text-emerald-600 focus:ring-emerald-500">
+                  <span>2 TB SSD+</span>
+                </label>
+              </div>
+              <div class="border-t border-emerald-50 my-1 pt-1.5 flex gap-3 flex-wrap">
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="hdd" class="storage-type rounded text-emerald-600 focus:ring-emerald-500">
+                  <span class="lang-en">HDD Only</span><span class="lang-ur">صرف ایچ ڈی ڈی</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="ssd" class="storage-type rounded text-emerald-600 focus:ring-emerald-500">
+                  <span class="lang-en">SSD Only</span><span class="lang-ur">صرف ایس ایس ڈی</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="ssd + hdd" class="storage-type rounded text-emerald-600 focus:ring-emerald-500">
+                  <span class="lang-en">SSD + HDD</span><span class="lang-ur">SSD + HDD</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 8. Graphics Card -->
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              <span class="lang-en">🎮 Graphics Card</span>
+              <span class="lang-ur">🎮 گرافکس کارڈ</span>
+            </label>
+            <div class="space-y-1.5 text-sm">
+              <label class="flex items-center gap-2 cursor-pointer text-gray-700">
+                <input type="checkbox" value="integrated" class="gpu-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Integrated Graphics</span><span class="lang-ur">انٹیگریٹڈ گرافکس</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-gray-700">
+                <input type="checkbox" value="gtx" class="gpu-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span>NVIDIA GTX</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-gray-700">
+                <input type="checkbox" value="rtx" class="gpu-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span>NVIDIA RTX</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-gray-700">
+                <input type="checkbox" value="radeon" class="gpu-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span>AMD Radeon</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 9. Screen Size -->
+          <div id="screenSizeFilterBox" class="hidden">
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              <span class="lang-en">📺 Screen Size</span>
+              <span class="lang-ur">📺 اسکرین سائز</span>
+            </label>
+            <div class="grid grid-cols-2 gap-2 text-sm">
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="19" class="screen-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span>19"</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="22" class="screen-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span>22"</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="24" class="screen-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span>24"</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="27" class="screen-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span>27"</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700 col-span-2">
+                <input type="checkbox" value="32" class="screen-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span>32"+</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 10. Condition -->
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              <span class="lang-en">🏷 Condition</span>
+              <span class="lang-ur">🏷 حالت</span>
+            </label>
+            <div class="grid grid-cols-2 gap-2 text-sm">
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="New" class="cond-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">New</span><span class="lang-ur">نیا</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="Used" class="cond-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Used</span><span class="lang-ur">استعمال شدہ</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="Refurbished" class="cond-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Refurbished</span><span class="lang-ur">ری فربشڈ</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="Open Box" class="cond-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Open Box</span><span class="lang-ur">اوپن باکس</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 11. Price Range -->
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              <span class="lang-en">💰 Price Range (Rs)</span>
+              <span class="lang-ur">💰 قیمت کی حد (روپے)</span>
+            </label>
+            <div class="flex gap-2 items-center">
+              <input type="number" id="priceMin" placeholder="Min" data-en-placeholder="Min" data-ur-placeholder="کم سے کم"
+                class="w-full px-2 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-emerald-500">
+              <span class="text-gray-400 text-xs">-</span>
+              <input type="number" id="priceMax" placeholder="Max" data-en-placeholder="Max" data-ur-placeholder="زیادہ سے زیادہ"
+                class="w-full px-2 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-emerald-500">
+            </div>
+          </div>
+
+          <!-- 12. Location -->
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              <span class="lang-en">📍 Location</span>
+              <span class="lang-ur">📍 مقام</span>
+            </label>
+            <div class="grid grid-cols-2 gap-2 text-xs mb-2">
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="Karachi" class="loc-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Karachi</span><span class="lang-ur">کراچی</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="Lahore" class="loc-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Lahore</span><span class="lang-ur">لاہور</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="Islamabad" class="loc-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Islamabad</span><span class="lang-ur">اسلام آباد</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="Rawalpindi" class="loc-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Rawalpindi</span><span class="lang-ur">راولپنڈی</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="Faisalabad" class="loc-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Faisalabad</span><span class="lang-ur">فیصل آباد</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-gray-700">
+                <input type="checkbox" value="Multan" class="loc-filter rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Multan</span><span class="lang-ur">ملتان</span>
+              </label>
+            </div>
+            <input type="text" id="locArea" placeholder="Area / Block No." data-en-placeholder="Area / Block No." data-ur-placeholder="علاقہ / بلاک نمبر"
+              class="w-full px-2 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-emerald-500">
+          </div>
+
+          <!-- 13. Additional Filters -->
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              <span class="lang-en">🚚 Shipping & Stock</span>
+              <span class="lang-ur">🚚 ترسیل اور اسٹاک</span>
+            </label>
+            <div class="space-y-1.5 text-sm">
+              <label class="flex items-center gap-2 cursor-pointer text-gray-700">
+                <input type="checkbox" id="filterInStock" class="rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">In Stock</span><span class="lang-ur">اسٹاک میں ہے</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-gray-700">
+                <input type="checkbox" id="filterFreeDelivery" class="rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Free Delivery</span><span class="lang-ur">مفت ترسیل</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-gray-700">
+                <input type="checkbox" id="filterWarranty" class="rounded text-emerald-600 focus:ring-emerald-500">
+                <span class="lang-en">Warranty Available</span><span class="lang-ur">وارنٹی دستیاب ہے</span>
+              </label>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+      <!-- RIGHT COLUMN: Products Grid & Quick Filters -->
+      <main class="flex-1">
+        
+        <!-- Quick Filters Buttons Row -->
+        <div class="mb-5 overflow-x-auto pb-2 -mx-1 px-1 flex gap-2 no-scrollbar scroll-smooth">
+          <button onclick="toggleQuickFilter('gaming', this)" class="quick-btn px-4 py-2 text-xs font-bold rounded-full border border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100 transition whitespace-nowrap">
+            <span class="lang-en">🔥 Gaming PCs</span><span class="lang-ur">🔥 گیمنگ کمپیوٹرز</span>
+          </button>
+          <button onclick="toggleQuickFilter('office', this)" class="quick-btn px-4 py-2 text-xs font-bold rounded-full border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 transition whitespace-nowrap">
+            <span class="lang-en">💼 Office PCs</span><span class="lang-ur">💼 آفس کمپیوٹرز</span>
+          </button>
+          <button onclick="toggleQuickFilter('design', this)" class="quick-btn px-4 py-2 text-xs font-bold rounded-full border border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100 transition whitespace-nowrap">
+            <span class="lang-en">🎨 Graphic Machine</span><span class="lang-ur">🎨 گرافک مشین</span>
+          </button>
+          <button onclick="toggleQuickFilter('workstations', this)" class="quick-btn px-4 py-2 text-xs font-bold rounded-full border border-teal-200 bg-teal-50 text-teal-700 hover:bg-teal-100 transition whitespace-nowrap">
+            <span class="lang-en">🖥 Workstations</span><span class="lang-ur">🖥 ورک سٹیشنز</span>
+          </button>
+          <button onclick="toggleQuickFilter('rated', this)" class="quick-btn px-4 py-2 text-xs font-bold rounded-full border border-yellow-200 bg-yellow-50 text-yellow-700 hover:bg-yellow-100 transition whitespace-nowrap">
+            <span class="lang-en">⭐ Top Rated</span><span class="lang-ur">⭐ ٹاپ ریٹیڈ</span>
+          </button>
+          <button onclick="toggleQuickFilter('deals', this)" class="quick-btn px-4 py-2 text-xs font-bold rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition whitespace-nowrap">
+            <span class="lang-en">💸 Best Deals</span><span class="lang-ur">💸 بہترین ڈیلز</span>
+          </button>
+          <button onclick="toggleQuickFilter('new', this)" class="quick-btn px-4 py-2 text-xs font-bold rounded-full border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition whitespace-nowrap">
+            <span class="lang-en">🆕 Newly Added</span><span class="lang-ur">🆕 نیا شامل کیا گیا</span>
+          </button>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="flex items-center justify-between mb-4 bg-white p-3 rounded-2xl border border-emerald-50">
+          <div class="text-sm text-gray-500 font-medium">
+            <span class="lang-en">Showing</span><span class="lang-ur">دکھائے جا رہے ہیں</span> 
+            <span id="compResultCount" class="text-emerald-700 font-bold">0</span> 
+            <span class="lang-en">products</span><span class="lang-ur">پروڈکٹس</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-gray-400 font-medium">
+              <span class="lang-en">Sort By:</span><span class="lang-ur">ترتیب دیں:</span>
+            </span>
+            <select id="compSort" class="bg-slate-50 border border-slate-200 text-xs font-semibold rounded-lg px-2.5 py-1.5 outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer">
+              <option value="" class="lang-en">Recommended</option>
+              <option value="" class="lang-ur">تجویز کردہ</option>
+              <option value="price-low" class="lang-en">Lowest Price</option>
+              <option value="price-low" class="lang-ur">کم ترین قیمت</option>
+              <option value="price-high" class="lang-en">Highest Price</option>
+              <option value="price-high" class="lang-ur">زیادہ سے زیادہ قیمت</option>
+              <option value="name-asc" class="lang-en">Name A-Z</option>
+              <option value="name-asc" class="lang-ur">نام A-Z</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Card Grid -->
+        <div class="card-grid">
+          <!-- Dynamic computer cards will load here -->
+        </div>
+
+      </main>
 
     </div>
-  </section>
-
-
+  </div>
 
 <script src="../js/data-service.js"></script>
+
+
+
+
+<script src="../js/location.js"></script>
+<script>
+  let activeQuickFilter = null;
+  let allComputers = [];
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    // Attach event listeners
+    document.getElementById('compSearch').addEventListener('input', applyFilters);
+    document.getElementById('compSort').addEventListener('change', applyFilters);
+    document.getElementById('priceMin').addEventListener('input', applyFilters);
+    document.getElementById('priceMax').addEventListener('input', applyFilters);
+    document.getElementById('locArea').addEventListener('input', applyFilters);
+    document.getElementById('filterInStock').addEventListener('change', applyFilters);
+    document.getElementById('filterFreeDelivery').addEventListener('change', applyFilters);
+    document.getElementById('filterWarranty').addEventListener('change', applyFilters);
+    
+    document.querySelectorAll('.quick-tag').forEach(cb => cb.addEventListener('change', applyFilters));
+    document.querySelectorAll('input[name="compCategory"]').forEach(r => r.addEventListener('change', (e) => {
+      // Toggle screen size visibility for All-in-One PC
+      const screenBox = document.getElementById('screenSizeFilterBox');
+      if (e.target.value === 'all-in-one') {
+        screenBox.classList.remove('hidden');
+      } else {
+        screenBox.classList.add('hidden');
+      }
+      applyFilters();
+    }));
+    document.querySelectorAll('.brand-filter').forEach(cb => cb.addEventListener('change', applyFilters));
+    document.querySelectorAll('.proc-filter').forEach(cb => cb.addEventListener('change', applyFilters));
+    document.querySelectorAll('.ram-filter').forEach(cb => cb.addEventListener('change', applyFilters));
+    document.querySelectorAll('.storage-filter').forEach(cb => cb.addEventListener('change', applyFilters));
+    document.querySelectorAll('.storage-type').forEach(cb => cb.addEventListener('change', applyFilters));
+    document.querySelectorAll('.gpu-filter').forEach(cb => cb.addEventListener('change', applyFilters));
+    document.querySelectorAll('.screen-filter').forEach(cb => cb.addEventListener('change', applyFilters));
+    document.querySelectorAll('.cond-filter').forEach(cb => cb.addEventListener('change', applyFilters));
+    document.querySelectorAll('.loc-filter').forEach(cb => cb.addEventListener('change', applyFilters));
+
+    try {
+      const products = await DataService.getProducts();
+      // Filter by category 'Computer' (case-insensitive)
+      allComputers = products.filter(p => 
+        p.category && 
+        p.category.toLowerCase() === 'computer' && 
+        (p.status === 'Publish' || p.prodStatus === 'Publish' || (!p.status && !p.prodStatus))
+      );
+      applyFilters();
+    } catch (err) {
+      console.error("Error fetching computers data:", err);
+      const container = document.querySelector('.card-grid');
+      if (container) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #ef4444; padding: 20px;">Failed to load products.</div>';
+      }
+    }
+  });
+
+  function toggleQuickFilter(filterType, btnElement) {
+    // Clear active style from all quick filter buttons
+    document.querySelectorAll('.quick-btn').forEach(btn => {
+      btn.classList.remove('ring-4', 'ring-emerald-300', 'scale-[1.03]');
+    });
+
+    if (activeQuickFilter === filterType) {
+      activeQuickFilter = null;
+    } else {
+      activeQuickFilter = filterType;
+      btnElement.classList.add('ring-4', 'ring-emerald-300', 'scale-[1.03]');
+    }
+    applyFilters();
+  }
+
+  function clearAllFilters() {
+    document.getElementById('compSearch').value = '';
+    document.getElementById('compSort').value = '';
+    document.getElementById('priceMin').value = '';
+    document.getElementById('priceMax').value = '';
+    document.getElementById('locArea').value = '';
+    document.getElementById('filterInStock').checked = false;
+    document.getElementById('filterFreeDelivery').checked = false;
+    document.getElementById('filterWarranty').checked = false;
+    
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+    const defaultRadio = document.querySelector('input[name="compCategory"][value="all"]');
+    if (defaultRadio) defaultRadio.checked = true;
+    
+    document.getElementById('screenSizeFilterBox').classList.add('hidden');
+    
+    // Clear quick filters
+    activeQuickFilter = null;
+    document.querySelectorAll('.quick-btn').forEach(btn => {
+      btn.classList.remove('ring-4', 'ring-emerald-300', 'scale-[1.03]');
+    });
+
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const container = document.querySelector('.card-grid');
+    if (!container) return;
+
+    const query = document.getElementById('compSearch').value.toLowerCase().trim();
+    const sortVal = document.getElementById('compSort').value;
+    const minP = parseFloat(document.getElementById('priceMin').value) || 0;
+    const maxP = parseFloat(document.getElementById('priceMax').value) || Infinity;
+    const areaQuery = document.getElementById('locArea').value.toLowerCase().trim();
+    const isStockOnly = document.getElementById('filterInStock').checked;
+    const isFreeDel = document.getElementById('filterFreeDelivery').checked;
+    const isWarranty = document.getElementById('filterWarranty').checked;
+
+    // Grab values of checkboxes
+    const activeTags = Array.from(document.querySelectorAll('.quick-tag:checked')).map(cb => cb.value.toLowerCase());
+    const selectedCategory = document.querySelector('input[name="compCategory"]:checked')?.value || 'all';
+    
+    const activeBrands = Array.from(document.querySelectorAll('.brand-filter:checked')).map(cb => cb.value.toLowerCase());
+    const activeProcs = Array.from(document.querySelectorAll('.proc-filter:checked')).map(cb => cb.value.toLowerCase());
+    const activeRams = Array.from(document.querySelectorAll('.ram-filter:checked')).map(cb => cb.value.toLowerCase());
+    const activeStorages = Array.from(document.querySelectorAll('.storage-filter:checked')).map(cb => cb.value.toLowerCase());
+    const activeStorageTypes = Array.from(document.querySelectorAll('.storage-type:checked')).map(cb => cb.value.toLowerCase());
+    const activeGpus = Array.from(document.querySelectorAll('.gpu-filter:checked')).map(cb => cb.value.toLowerCase());
+    const activeScreens = Array.from(document.querySelectorAll('.screen-filter:checked')).map(cb => cb.value.toLowerCase());
+    const activeConds = Array.from(document.querySelectorAll('.cond-filter:checked')).map(cb => cb.value.toLowerCase());
+    const activeLocs = Array.from(document.querySelectorAll('.loc-filter:checked')).map(cb => cb.value.toLowerCase());
+
+    // Perform filter match
+    let filtered = allComputers.filter(p => {
+      const name = (p.name || `${p.brand || ''} ${p.model || ''}`).trim();
+      const desc = (p.description || '').toLowerCase();
+      const pNameLower = name.toLowerCase();
+      const brand = (p.brand || '').toLowerCase();
+      const subCat = (p.subCategory || '').toLowerCase();
+      
+      // Dynamic details fields
+      const price = parseFloat(p.price) || 0;
+      const condition = (p.condition || '').toLowerCase();
+      const processor = (p.processor || p.os || '').toLowerCase();
+      const ram = (p.ram || '').toLowerCase();
+      const storage = (p.storage || '').toLowerCase();
+      const gpu = (p.graphicsCard || p.gpu || '').toLowerCase();
+      const screenSize = (p.screenSize || '').toLowerCase();
+      const location = (p.city || p.address || '').toLowerCase();
+      const area = (p.area || p.address || '').toLowerCase();
+      const tags = (p.tags || '').toLowerCase();
+      
+      // Delivery & Stock & Warranty status checks
+      const delivery = (p.delivery || p.shipping || '').toLowerCase();
+      const inStock = p.quantity !== undefined ? parseInt(p.quantity) > 0 : true;
+      const warranty = (p.warranty || '').toLowerCase();
+
+      // Filter: Search Text
+      if (query && !pNameLower.includes(query) && !desc.includes(query) && !brand.includes(query)) return false;
+
+      // Filter: Popular tags checkbox shortcuts
+      if (activeTags.length > 0) {
+        const matchTag = activeTags.some(tag => {
+          if (tag === 'dell') return brand === 'dell';
+          if (tag === 'hp') return brand === 'hp';
+          if (tag === 'lenovo') return brand === 'lenovo';
+          if (tag === 'core i7') return processor.includes('i7') || desc.includes('i7');
+          if (tag === 'gaming pc') return subCat.includes('gaming') || desc.includes('gaming') || tags.includes('gaming');
+          return false;
+        });
+        if (!matchTag) return false;
+      }
+
+      // Filter: Category selection
+      if (selectedCategory !== 'all') {
+        if (selectedCategory === 'desktop' && !subCat.includes('desktop')) return false;
+        if (selectedCategory === 'gaming' && !subCat.includes('gaming') && !desc.includes('gaming')) return false;
+        if (selectedCategory === 'workstation' && !subCat.includes('workstation') && !desc.includes('workstation')) return false;
+        if (selectedCategory === 'mini' && !subCat.includes('mini') && !desc.includes('mini')) return false;
+        if (selectedCategory === 'all-in-one' && !subCat.includes('all-in-one') && !subCat.includes('aio')) return false;
+      }
+
+      // Filter: Brand
+      if (activeBrands.length > 0) {
+        const matchBrand = activeBrands.some(b => {
+          if (b === 'custom build') return brand.includes('custom') || desc.includes('custom build');
+          return brand === b;
+        });
+        if (!matchBrand) return false;
+      }
+
+      // Filter: Processor
+      if (activeProcs.length > 0) {
+        const matchProc = activeProcs.some(proc => processor.includes(proc) || desc.includes(proc));
+        if (!matchProc) return false;
+      }
+
+      // Filter: RAM
+      if (activeRams.length > 0) {
+        const matchRam = activeRams.some(r => ram.includes(r.replace('gb','')) || desc.includes(r));
+        if (!matchRam) return false;
+      }
+
+      // Filter: Storage
+      if (activeStorages.length > 0) {
+        const matchStorageVal = activeStorages.some(s => storage.includes(s.split(' ')[0]) || desc.includes(s));
+        if (!matchStorageVal) return false;
+      }
+      if (activeStorageTypes.length > 0) {
+        const matchStorageType = activeStorageTypes.some(t => {
+          if (t === 'ssd + hdd') return (storage.includes('ssd') && storage.includes('hdd')) || desc.includes('ssd + hdd');
+          if (t === 'ssd') return storage.includes('ssd') || desc.includes('ssd');
+          if (t === 'hdd') return storage.includes('hdd') || desc.includes('hdd');
+          return false;
+        });
+        if (!matchStorageType) return false;
+      }
+
+      // Filter: GPU
+      if (activeGpus.length > 0) {
+        const matchGpu = activeGpus.some(g => gpu.includes(g) || desc.includes(g));
+        if (!matchGpu) return false;
+      }
+
+      // Filter: Screen Size
+      if (activeScreens.length > 0 && selectedCategory === 'all-in-one') {
+        const matchScreen = activeScreens.some(s => screenSize.includes(s) || desc.includes(s + '"'));
+        if (!matchScreen) return false;
+      }
+
+      // Filter: Condition
+      if (activeConds.length > 0 && !activeConds.includes(condition)) return false;
+
+      // Filter: Price
+      if (price < minP || price > maxP) return false;
+
+      // Filter: Location
+      if (activeLocs.length > 0 && !activeLocs.some(loc => location.includes(loc))) return false;
+      if (areaQuery && !area.includes(areaQuery)) return false;
+
+      // Filter: Shipping & Stock status
+      if (isStockOnly && !inStock) return false;
+      if (isFreeDel && !delivery.includes('free')) return false;
+      if (isWarranty && !warranty && !desc.includes('warranty') && warranty === 'no') return false;
+
+      // Quick Filters logic
+      if (activeQuickFilter) {
+        if (activeQuickFilter === 'gaming') return subCat.includes('gaming') || desc.includes('gaming') || gpu.includes('rtx') || gpu.includes('gtx');
+        if (activeQuickFilter === 'office') return subCat.includes('office') || desc.includes('office') || desc.includes('student');
+        if (activeQuickFilter === 'design') return desc.includes('design') || desc.includes('editing') || ram.includes('16') || ram.includes('32');
+        if (activeQuickFilter === 'workstations') return subCat.includes('workstation') || desc.includes('workstation');
+        if (activeQuickFilter === 'rated') return p.rating ? parseFloat(p.rating) >= 4.5 : true;
+        if (activeQuickFilter === 'deals') return price > 0 && desc.includes('deal') || desc.includes('off') || desc.includes('discount');
+        if (activeQuickFilter === 'new') return condition === 'new';
+      }
+
+      return true;
+    });
+
+    // Handle sorting
+    if (sortVal === 'price-low') {
+      filtered.sort((a, b) => (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0));
+    } else if (sortVal === 'price-high') {
+      filtered.sort((a, b) => (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0));
+    } else if (sortVal === 'name-asc') {
+      filtered.sort((a, b) => {
+        const nameA = (a.name || `${a.brand || ''} ${a.model || ''}`).toLowerCase();
+        const nameB = (b.name || `${b.brand || ''} ${b.model || ''}`).toLowerCase();
+        return nameA.localeCompare(nameB);
+      });
+    }
+
+    // Update results count
+    document.getElementById('compResultCount').textContent = filtered.length;
+
+    // Render Cards
+    if (filtered.length === 0) {
+      const isUrdu = document.documentElement.lang === 'ur';
+      const noProductMsg = isUrdu 
+        ? 'آپ کے معیار کے مطابق کوئی کمپیوٹر نہیں ملا۔ فلٹرز کو تبدیل کرنے کی کوشش کریں۔' 
+        : 'No computers matched your criteria. Try adjusting the filters.';
+      container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px; font-style: italic;">${noProductMsg}</div>`;
+      return;
+    }
+
+    container.innerHTML = filtered.map(p => {
+      const imgUrl = p.image || '../images/placeholder.jpg';
+      const priceStr = p.price ? `Rs. ${Number(p.price).toLocaleString()}` : 'Rs. -';
+      const name = p.name || `${p.brand || ''} ${p.model || ''}`.trim() || 'Computer';
+      const condBadge = p.condition ? `<span class="absolute top-2 right-2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm z-10">${p.condition}</span>` : '';
+      
+      return `
+        <div class="card relative flex flex-col justify-between">
+          <div>
+            <div class="relative overflow-hidden rounded-xl">
+              ${condBadge}
+              <img src="${imgUrl}" onerror="this.src='../images/placeholder.jpg'" class="hover:scale-105 transition-transform duration-300">
+            </div>
+            <h4 style="font-weight: 600; color: #1e293b; margin-top: 10px; font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${name}">${name}</h4>
+          </div>
+          <div>
+            <p style="color: #059669; font-weight: bold; margin-top: 8px; font-size: 15px;">${priceStr}</p>
+            <div class="flex items-center justify-between mt-2 border-t border-slate-50 pt-2 text-[11px] text-gray-500">
+              <span>${p.subCategory || 'Laptops'}</span>
+              <span>📍 ${p.city || 'Pakistan'}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  
+  // Dynamic Placeholder Translation toggling
+  const langToggleBtn = document.getElementById('lang-toggle-btn');
+  if (langToggleBtn) {
+    langToggleBtn.addEventListener('click', togglePlaceholders);
+  }
+  
+  function togglePlaceholders() {
+    setTimeout(() => {
+      const currentLang = document.documentElement.lang;
+      const inputs = document.querySelectorAll('input[placeholder]');
+      inputs.forEach(input => {
+        const urPlaceholder = input.getAttribute('data-ur-placeholder');
+        const enPlaceholder = input.getAttribute('data-en-placeholder');
+        if (currentLang === 'ur' && urPlaceholder) {
+          input.placeholder = urPlaceholder;
+        } else if (currentLang === 'en' && enPlaceholder) {
+          input.placeholder = enPlaceholder;
+        }
+      });
+      // Re-run filter so "No products" message flips language correctly
+      applyFilters();
+    }, 100);
+  }
+  
+  // Set placeholders on initial page load
+  window.addEventListener('load', () => {
+    setTimeout(togglePlaceholders, 150);
+  });
+</script>
 <!-- FOOTER -->
     <div class="w-full bg-[#0A3D2A] text-emerald-50 text-center py-4 text-sm mt-auto border-t border-[#052C22]">
         &copy; 2026 StopBuyPk - Smart Price Comparison
     </div>
 
-<script src="../js/location.js"></script>
+<!-- LANG_TOGGLE_SCRIPT -->
 <script>
-  document.addEventListener("DOMContentLoaded", async () => {
-    const container = document.querySelector('.card-grid');
-    if (!container) return;
+    const currentLang = localStorage.getItem('qeematLang') || 'en';
+    document.documentElement.lang = currentLang;
+    document.documentElement.dir = currentLang === 'ur' ? 'rtl' : 'ltr';
 
-    try {
-      const products = await DataService.getProducts();
-      // Filter by category 'Computer' and status 'Publish' (case-insensitive)
-      const computers = products.filter(p => 
-        p.category && 
-        p.category.toLowerCase() === 'computer' && 
-        (p.status === 'Publish' || p.prodStatus === 'Publish' || (!p.status && !p.prodStatus))
-      );
-
-      if (computers.length === 0) {
-        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 20px; font-style: italic;">No computer products found.</div>';
-        return;
-      }
-
-      container.innerHTML = computers.map(p => {
-        const imgUrl = p.image || '../images/placeholder.jpg';
-        const priceStr = p.price ? `Rs. ${Number(p.price).toLocaleString()}` : 'Rs. -';
-        const name = p.name || `${p.brand || ''} ${p.model || ''}`.trim() || 'Computer Product';
+    function updateLanguageUI(lang) {
+        const toggleText = document.getElementById('lang-toggle-text');
+        if (toggleText) toggleText.textContent = lang === 'ur' ? 'English' : 'اردو';
         
-        return `
-          <div class="card">
-            <img src="${imgUrl}" onerror="this.src='../images/placeholder.jpg'">
-            <h4 style="font-weight: 600; color: #1e293b; margin-top: 10px; font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${name}">${name}</h4>
-            <p style="color: #2563eb; font-weight: bold; margin-top: 5px;">${priceStr}</p>
-            ${p.subCategory ? `<div style="font-size: 11px; color: #64748b; margin-top: 2px;">${p.subCategory}</div>` : ''}
-          </div>
-        `;
-      }).join('');
-    } catch (err) {
-      console.error("Error loading computer products:", err);
-      container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #ef4444; padding: 20px;">Failed to load products.</div>';
+        // Custom placeholder toggling if function exists
+        if (typeof togglePlaceholders === 'function') {
+            togglePlaceholders();
+        }
     }
-  });
+
+    function toggleLanguage() {
+        const newLang = document.documentElement.lang === 'ur' ? 'en' : 'ur';
+        document.documentElement.lang = newLang;
+        document.documentElement.dir = newLang === 'ur' ? 'rtl' : 'ltr';
+        localStorage.setItem('qeematLang', newLang);
+        updateLanguageUI(newLang);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateLanguageUI(currentLang);
+    });
 </script>
 </body>
 
