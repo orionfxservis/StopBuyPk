@@ -3002,6 +3002,41 @@
                     <!-- Deals injected here via JS -->
                 </div>
             </div>
+    </div>
+
+    <!-- Single Deal Detail Modal -->
+    <div id="singleDealDetailModal"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-[100000] opacity-0 transition-opacity duration-300"
+        onclick="closeSingleDealModal()">
+        <div class="bg-white rounded-2xl max-w-[330px] w-full mx-4 shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300 flex flex-col"
+            id="singleDealContent" onclick="event.stopPropagation()">
+            <!-- Image Header -->
+            <div class="relative h-36 w-full bg-slate-50 flex items-center justify-center border-b border-slate-100 p-2">
+                <img id="sdm-image" src="" class="max-w-full max-h-full w-auto h-auto object-contain">
+                <button onclick="closeSingleDealModal()"
+                    class="absolute top-2 right-2 w-7 h-7 flex items-center justify-center bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full text-white transition-all text-lg font-bold">&times;</button>
+            </div>
+            <!-- Body -->
+            <div class="p-4 flex flex-col gap-3">
+                <div>
+                    <h3 id="sdm-title" class="font-bold text-base text-slate-800 leading-snug">Deal Title</h3>
+                    <div id="sdm-location" class="text-[11px] text-slate-400 mt-0.5"><i class="fas fa-map-marker-alt"></i> Location</div>
+                </div>
+                <div class="border-t border-b border-slate-100 py-2">
+                    <div class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Deal Price</div>
+                    <div class="text-xl font-bold text-emerald-600 mt-0.5" id="sdm-price">Rs 0</div>
+                </div>
+                <div>
+                    <div class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Details</div>
+                    <div id="sdm-desc" class="text-xs text-slate-600 leading-relaxed max-h-24 overflow-y-auto custom-scrollbar">
+                        Full details here.
+                    </div>
+                </div>
+                <!-- WhatsApp Action -->
+                <a id="sdm-whatsapp" href="#" target="_blank" class="w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-sm text-center">
+                    <i class="fab fa-whatsapp text-sm"></i> Get Deal (WhatsApp)
+                </a>
+            </div>
         </div>
     </div>
 
@@ -3075,14 +3110,22 @@
                 const locationHtml = deal.location ? `<div class="text-xs text-slate-400 mt-1"><i class="fas fa-map-marker-alt"></i> ${deal.location}</div>` : '';
                 const whatsappLink = deal.whatsapp ? `https://wa.me/${deal.whatsapp}` : '#';
 
+                const safeName = (deal.name || '').replace(/'/g, "\\'");
+                const safeImage = (deal.image || '').replace(/'/g, "\\'");
+                const safeDesc = (deal.desc || '').replace(/'/g, "\\'").replace(/\n/g, "\\n");
+                const safePrice = (deal.price || '').replace(/'/g, "\\'");
+                const safeLocation = (deal.location || '').replace(/'/g, "\\'");
+                const safeWhatsapp = (deal.whatsapp || '').replace(/'/g, "\\'");
+
                 container.innerHTML += `
-                <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-200 flex flex-col hover:shadow-md transition-shadow">
+                <div onclick="openSingleDealModal('${safeName}', '${safeImage}', '${safeDesc}', '${safePrice}', '${safeLocation}', '${safeWhatsapp}')"
+                    class="bg-white p-3 rounded-xl shadow-sm border border-slate-200 flex flex-col hover:shadow-md transition-shadow cursor-pointer">
                     <img src="${deal.image || 'https://via.placeholder.com/150'}" class="w-full h-32 object-cover rounded-lg mb-3">
                     <h4 class="font-bold text-sm text-slate-800 line-clamp-2">${deal.name}</h4>
                     <div class="text-xs text-slate-500 mt-1 mb-2 line-clamp-2 flex-1">${deal.desc || ''}</div>
                     ${priceHtml}
                     ${locationHtml}
-                    <button onclick="window.open('${whatsappLink}', '_blank')" class="mt-3 w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition-colors">
+                    <button onclick="event.stopPropagation(); window.open('${whatsappLink}', '_blank')" class="mt-3 w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition-colors">
                         <i class="fab fa-whatsapp"></i> Get Deal
                     </button>
                 </div>
@@ -3099,6 +3142,39 @@
                 modal.classList.remove('flex');
             }, 300);
         }
+
+        window.openSingleDealModal = function(name, image, desc, price, location, whatsapp) {
+            document.getElementById('sdm-image').src = image || 'images/placeholder.jpg';
+            document.getElementById('sdm-title').textContent = name;
+            document.getElementById('sdm-location').innerHTML = location ? `<i class="fas fa-map-marker-alt text-emerald-500 mr-1"></i>${location}` : '';
+            document.getElementById('sdm-price').textContent = price ? `Rs. ${Number(price).toLocaleString()}` : 'Rs. -';
+            document.getElementById('sdm-desc').textContent = desc || 'No description available for this deal.';
+            document.getElementById('sdm-whatsapp').href = whatsapp ? `https://wa.me/${whatsapp}` : '#';
+            
+            const modal = document.getElementById('singleDealDetailModal');
+            const content = document.getElementById('singleDealContent');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        };
+
+        window.closeSingleDealModal = function() {
+            const modal = document.getElementById('singleDealDetailModal');
+            const content = document.getElementById('singleDealContent');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        };
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
