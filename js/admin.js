@@ -1626,6 +1626,8 @@ function renderDynamicAdminFields() {
                             <option value="Full">Full</option>
                             <option value="Half">Half</option>
                             <option value="Qtr">Qtr</option>
+                            <option value="Double Surving">Double Surving</option>
+                            <option value="Single Surving">Single Surving</option>
                             <option value="2 Kg">2 Kg</option>
                             <option value="1 Kg">1 Kg</option>
                             <option value="Half Kg">Half Kg</option>
