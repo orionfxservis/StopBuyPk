@@ -3147,7 +3147,17 @@
             document.getElementById('sdm-image').src = image || 'images/placeholder.jpg';
             document.getElementById('sdm-title').textContent = name;
             document.getElementById('sdm-location').innerHTML = location ? `<i class="fas fa-map-marker-alt text-emerald-500 mr-1"></i>${location}` : '';
-            document.getElementById('sdm-price').textContent = price ? `Rs. ${Number(price).toLocaleString()}` : 'Rs. -';
+            let formattedPrice = 'Rs. -';
+            if (price) {
+                const cleanPrice = price.toString().replace(/[^0-9.]/g, '');
+                const numericPrice = parseFloat(cleanPrice);
+                if (!isNaN(numericPrice)) {
+                    formattedPrice = `Rs. ${numericPrice.toLocaleString()}`;
+                } else {
+                    formattedPrice = price.toString().includes('Rs') ? price : `Rs. ${price}`;
+                }
+            }
+            document.getElementById('sdm-price').textContent = formattedPrice;
             document.getElementById('sdm-desc').textContent = desc || 'No description available for this deal.';
             document.getElementById('sdm-whatsapp').href = whatsapp ? `https://wa.me/${whatsapp}` : '#';
             
