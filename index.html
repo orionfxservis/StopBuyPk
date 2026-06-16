@@ -1018,7 +1018,7 @@
                                     <button
                                         class="cat-filter-btn flex-1 text-center px-2 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Mobiles</button>
                                     <button
-                                        class="cat-filter-btn flex-1 text-center px-2 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Laptops</button>
+                                        class="cat-filter-btn flex-1 text-center px-2 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Computers</button>
                                     <button
                                         class="cat-filter-btn flex-1 text-center px-2 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Property</button>
                                     <button
@@ -3202,7 +3202,20 @@
 
             function getActiveCategory() {
                 const activeBtn = document.querySelector('.cat-filter-btn.active');
-                return activeBtn ? activeBtn.innerText.trim().toLowerCase() : '';
+                if (!activeBtn) return '';
+                const text = activeBtn.innerText.trim().toLowerCase();
+                const mapping = {
+                    'food': 'food',
+                    'groceries': 'grocery',
+                    'electronics': 'electronics',
+                    'mobiles': 'mobiles',
+                    'computers': 'computer',
+                    'property': 'property',
+                    'fashion': 'fashion',
+                    'personal care': 'personal care',
+                    'kids': 'kids'
+                };
+                return mapping[text] || text;
             }
 
             if (searchBtn) {
@@ -3210,6 +3223,8 @@
                     const query = searchInput.value.trim().toLowerCase();
                     const activeCategory = getActiveCategory();
                     const location = locationSelect ? locationSelect.value : '';
+
+
 
 
 
