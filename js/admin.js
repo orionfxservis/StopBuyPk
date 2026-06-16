@@ -1629,6 +1629,8 @@ function renderDynamicAdminFields() {
                             <option value="2 Kg">2 Kg</option>
                             <option value="1 Kg">1 Kg</option>
                             <option value="Half Kg">Half Kg</option>
+                            <option value="Fulll Plate">Fulll Plate</option>
+                            <option value="Half Plate">Half Plate</option>
                             <option value="12">12</option>
                             <option value="11">11</option>
                             <option value="10">10</option>
