@@ -49,6 +49,16 @@
       gap: 15px;
     }
 
+    .card-grid.list-view {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .card-grid.list-view .card:hover {
+      transform: translateX(5px);
+    }
+
     .card {
       background: #fff;
       padding: 10px;
@@ -103,7 +113,7 @@
   <!-- Nav Placeholder (will be replaced by update_pages.js) -->
   <nav class="bg-[#0A3D2A] text-white sticky top-0 z-[99999]">
         <div
-            class="max-w-screen-2xl mx-auto px-4 py-2 sm:py-0 sm:h-[60px] flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-3 gap-x-2 sm:gap-4">
+            class="max-w-screen-2xl mx-auto px-4 py-2 sm:py-0 sm:h-[60px] flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-3 gap-x-2 sm:gap-4 relative">
 
             <!-- LEFT: Logo -->
             <a href="../index.html" class="flex items-center gap-2 flex-shrink-0 order-1 sm:order-none cursor-pointer">
@@ -130,7 +140,7 @@
 
 
             <!-- CENTER: Location -->
-            <div class="order-3 sm:order-none w-full sm:w-auto flex justify-center sm:flex-1">
+            <div class="order-3 sm:order-none w-full sm:w-auto flex justify-center sm:flex-1 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:transform">
                 <div class="hidden lg:flex items-center gap-1 text-slate-700 text-sm bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 cursor-pointer hover:bg-slate-200 transition whitespace-nowrap"
                     onclick="showLocationModal()" id="locationBox">
                     <span>📍</span>
@@ -654,6 +664,19 @@
             <span class="lang-en">products</span><span class="lang-ur">پروڈکٹس</span>
           </div>
           <div class="flex items-center gap-2">
+            <!-- View Selector Row vs Cards -->
+            <div class="flex items-center gap-1.5 mr-2">
+              <span class="text-xs text-gray-400 font-medium">
+                <span class="lang-en">View:</span><span class="lang-ur">ملاحظہ کریں:</span>
+              </span>
+              <button onclick="changeViewMode('list')" id="btnViewList" class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:bg-slate-50 hover:text-slate-600 transition-all cursor-pointer" title="List/Row View">
+                <i class="fas fa-list text-sm"></i>
+              </button>
+              <button onclick="changeViewMode('grid')" id="btnViewGrid" class="w-8 h-8 flex items-center justify-center rounded-lg border border-emerald-600 bg-emerald-50 text-emerald-700 transition-all cursor-pointer" title="Card/Grid View">
+                <i class="fas fa-border-all text-sm"></i>
+              </button>
+            </div>
+
             <span class="text-xs text-gray-400 font-medium">
               <span class="lang-en">Sort By:</span><span class="lang-ur">ترتیب دیں:</span>
             </span>
@@ -689,6 +712,7 @@
 <script>
   let activeQuickFilter = null;
   let allComputers = [];
+  let currentViewMode = 'grid';
 
   document.addEventListener("DOMContentLoaded", async () => {
     // Attach event listeners
@@ -739,6 +763,24 @@
       }
     }
   });
+
+  function changeViewMode(mode) {
+    currentViewMode = mode;
+    const container = document.querySelector('.card-grid');
+    const btnList = document.getElementById('btnViewList');
+    const btnGrid = document.getElementById('btnViewGrid');
+    
+    if (mode === 'list') {
+      container.classList.add('list-view');
+      btnList.className = "w-8 h-8 flex items-center justify-center rounded-lg border border-emerald-600 bg-emerald-50 text-emerald-700 font-bold transition-all cursor-pointer";
+      btnGrid.className = "w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:bg-slate-50 hover:text-slate-600 transition-all cursor-pointer";
+    } else {
+      container.classList.remove('list-view');
+      btnList.className = "w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:bg-slate-50 hover:text-slate-600 transition-all cursor-pointer";
+      btnGrid.className = "w-8 h-8 flex items-center justify-center rounded-lg border border-emerald-600 bg-emerald-50 text-emerald-700 font-bold transition-all cursor-pointer";
+    }
+    applyFilters();
+  }
 
   function toggleQuickFilter(filterType, btnElement) {
     // Clear active style from all quick filter buttons
@@ -970,6 +1012,29 @@
       const name = p.name || `${p.brand || ''} ${p.model || ''}`.trim() || 'Computer';
       const condBadge = p.condition ? `<span class="absolute top-2 right-2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm z-10">${p.condition}</span>` : '';
       
+      if (currentViewMode === 'list') {
+        return `
+          <div class="card relative flex flex-row items-center justify-between w-full gap-4 p-4 hover:shadow-md transition-all">
+            <div class="flex items-center gap-4 flex-1">
+              <div class="relative overflow-hidden rounded-xl w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 bg-slate-50 flex items-center justify-center border border-slate-100">
+                ${condBadge}
+                <img src="${imgUrl}" onerror="this.src='../images/placeholder.jpg'" class="max-w-full max-h-full w-auto h-auto object-contain hover:scale-105 transition-transform duration-300">
+              </div>
+              <div class="flex-1 min-w-0">
+                <h4 style="font-weight: 600; color: #1e293b; font-size: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${name}">${name}</h4>
+                <div class="flex items-center gap-4 mt-2 text-[12px] text-gray-500">
+                  <span>📂 ${p.subCategory || 'Laptops'}</span>
+                  <span>📍 ${p.city || 'Pakistan'}</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-right flex-shrink-0 min-w-[120px] flex flex-col items-end justify-center">
+              <p style="color: #059669; font-weight: bold; font-size: 17px;">${priceStr}</p>
+            </div>
+          </div>
+        `;
+      }
+      
       return `
         <div class="card relative flex flex-col justify-between">
           <div>
@@ -1020,6 +1085,12 @@
     setTimeout(togglePlaceholders, 150);
   });
 </script>
+
+
+
+
+
+
 
 
 
