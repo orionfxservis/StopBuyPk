@@ -610,7 +610,19 @@
       <main class="flex-1">
         
         <!-- Quick Filters Buttons Row -->
-        <div class="mb-5 overflow-x-auto pb-2 -mx-1 px-1 flex gap-2 no-scrollbar scroll-smooth">
+        <div class="mb-5 flex flex-wrap gap-2 -mx-1 px-1 justify-center items-center">
+          <button onclick="toggleQuickFilter('laptops-quick', this)" class="quick-btn px-4 py-2 text-xs font-bold rounded-full border border-pink-200 bg-pink-50 text-pink-700 hover:bg-pink-100 transition whitespace-nowrap">
+            <span class="lang-en">💻 Laptops</span><span class="lang-ur">💻 لیپ ٹاپس</span>
+          </button>
+          <button onclick="toggleQuickFilter('chromebooks-quick', this)" class="quick-btn px-4 py-2 text-xs font-bold rounded-full border border-sky-200 bg-sky-50 text-sky-700 hover:bg-sky-100 transition whitespace-nowrap">
+            <span class="lang-en">🌐 Chromebooks</span><span class="lang-ur">🌐 کروم بکس</span>
+          </button>
+          <button onclick="toggleQuickFilter('pcs-quick', this)" class="quick-btn px-4 py-2 text-xs font-bold rounded-full border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition whitespace-nowrap">
+            <span class="lang-en">🖥 PCs</span><span class="lang-ur">🖥 پی سیز</span>
+          </button>
+          <button onclick="toggleQuickFilter('chargers-quick', this)" class="quick-btn px-4 py-2 text-xs font-bold rounded-full border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 transition whitespace-nowrap">
+            <span class="lang-en">🔌 Chargers</span><span class="lang-ur">🔌 چارجرز</span>
+          </button>
           <button onclick="toggleQuickFilter('gaming', this)" class="quick-btn px-4 py-2 text-xs font-bold rounded-full border border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100 transition whitespace-nowrap">
             <span class="lang-en">🔥 Gaming PCs</span><span class="lang-ur">🔥 گیمنگ کمپیوٹرز</span>
           </button>
@@ -910,6 +922,10 @@
 
       // Quick Filters logic
       if (activeQuickFilter) {
+        if (activeQuickFilter === 'laptops-quick') return subCat.includes('laptop') || desc.includes('laptop') || pNameLower.includes('laptop');
+        if (activeQuickFilter === 'chromebooks-quick') return subCat.includes('chromebook') || desc.includes('chromebook') || pNameLower.includes('chromebook');
+        if (activeQuickFilter === 'pcs-quick') return subCat.includes('pc') || subCat.includes('desktop') || pNameLower.includes('desktop') || pNameLower.includes(' pc');
+        if (activeQuickFilter === 'chargers-quick') return subCat.includes('charger') || desc.includes('charger') || pNameLower.includes('charger');
         if (activeQuickFilter === 'gaming') return subCat.includes('gaming') || desc.includes('gaming') || gpu.includes('rtx') || gpu.includes('gtx');
         if (activeQuickFilter === 'office') return subCat.includes('office') || desc.includes('office') || desc.includes('student');
         if (activeQuickFilter === 'design') return desc.includes('design') || desc.includes('editing') || ram.includes('16') || ram.includes('32');
@@ -1004,6 +1020,15 @@
     setTimeout(togglePlaceholders, 150);
   });
 </script>
+
+
+
+
+
+
+
+
+
 <!-- FOOTER -->
     <div class="w-full bg-[#0A3D2A] text-emerald-50 text-center py-4 text-sm mt-auto border-t border-[#052C22]">
         &copy; 2026 StopBuyPk - Smart Price Comparison
