@@ -1400,11 +1400,13 @@ function renderDynamicAdminFields() {
                 Please select a Sub Category (e.g. Laptops) to view the product form.
             </div>
         `;
-    } else if (category === 'Computer' && subCategory === 'Laptops') {
-        container.innerHTML = `
-            <div class="form-row">
-                <div class="input-group">
-                    <label>Type</label>
+    } else if (category === 'Computer' && (subCategory === 'Laptops' || subCategory === 'ChromeBook' || subCategory === 'Chromebook' || subCategory === 'Chromebooks')) {
+        const isChromebook = (subCategory === 'ChromeBook' || subCategory === 'Chromebook' || subCategory === 'Chromebooks');
+        const typeSelectHtml = isChromebook ? `
+                    <select id="prodType" class="dynamic-admin-field" required>
+                        <option value="Chromebook">Chromebook</option>
+                    </select>
+        ` : `
                     <select id="prodType" class="dynamic-admin-field" required>
                         <option value="">Select Type</option>
                         <option value="Other Laptops">Other Laptops</option>
@@ -1412,6 +1414,29 @@ function renderDynamicAdminFields() {
                         <option value="Ultrabooks">Ultrabooks</option>
                         <option value="Chrome">Chrome</option>
                     </select>
+        `;
+        const osSelectHtml = isChromebook ? `
+                    <select id="prodOS" class="dynamic-admin-field" required>
+                        <option value="">Select OS</option>
+                        <option value="Windows">Windows</option>
+                        <option value="Chrome OS">Chrome OS</option>
+                    </select>
+        ` : `
+                    <select id="prodOS" class="dynamic-admin-field" required>
+                        <option value="">Select OS</option>
+                        <option value="Windows">Windows</option>
+                        <option value="MAC">MAC</option>
+                        <option value="Chrome OS">Chrome OS</option>
+                        <option value="Linux">Linux</option>
+                        <option value="DOS">DOS</option>
+                        <option value="Others">Others</option>
+                    </select>
+        `;
+        container.innerHTML = `
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Type</label>
+                    ${typeSelectHtml}
                 </div>
                 <div class="input-group">
                     <label>Brand</label>
@@ -1473,15 +1498,7 @@ function renderDynamicAdminFields() {
                 </div>
                 <div class="input-group">
                     <label>Operating System</label>
-                    <select id="prodOS" class="dynamic-admin-field" required>
-                        <option value="">Select OS</option>
-                        <option value="Windows">Windows</option>
-                        <option value="MAC">MAC</option>
-                        <option value="Chrome OS">Chrome OS</option>
-                        <option value="Linux">Linux</option>
-                        <option value="DOS">DOS</option>
-                        <option value="Others">Others</option>
-                    </select>
+                    ${osSelectHtml}
                 </div>
                 <div class="input-group">
                     <label>Price</label>
@@ -1865,10 +1882,11 @@ if (adminProductForm) {
             newProduct[key] = field.value;
         });
 
-        // Ensure name is set for generic layout consistency
-        if (category === 'Computer' && subCategory === 'Laptops') {
+        if (category === 'Computer' && (subCategory === 'Laptops' || subCategory === 'ChromeBook' || subCategory === 'Chromebook' || subCategory === 'Chromebooks')) {
             newProduct.name = ((newProduct.brand || '') + ' ' + (newProduct.model || '')).trim();
-            if (!newProduct.name) newProduct.name = 'Laptop';
+            if (!newProduct.name) {
+                newProduct.name = (subCategory === 'ChromeBook' || subCategory === 'Chromebook' || subCategory === 'Chromebooks') ? 'Chromebook' : 'Laptop';
+            }
         } else if (!newProduct.name && document.getElementById('prodName')) {
             newProduct.name = document.getElementById('prodName').value;
         }
@@ -2039,7 +2057,7 @@ function renderAdminProducts() {
                     details = `${prod.year || ''} Model | ${prod.kMs || prod.kms || 0} km`;
                 } else if (prod.category === 'Mobiles') {
                     details = `${prod.specification || ''} | ${prod.batteryBackup ? prod.batteryBackup + 'mAh' : ''}`;
-                } else if ((prod.category === 'Computer' || prod.category === 'Computers') && prod.subCategory === 'Laptops') {
+                } else if ((prod.category === 'Computer' || prod.category === 'Computers') && (prod.subCategory === 'Laptops' || prod.subCategory === 'ChromeBook' || prod.subCategory === 'Chromebook' || prod.subCategory === 'Chromebooks')) {
                     details = `${prod.brand || ''} ${prod.model || ''} (${prod.generation || ''}) | ${prod.ram || ''} RAM | ${prod.hdd || ''} ${prod.hddType || ''} | OS: ${prod.os || ''} | ${prod.condition || ''}`;
                 } else {
                     const parts = [];
@@ -2186,7 +2204,7 @@ window.editProduct = (index) => {
                 }
             });
 
-            if (prod.category === 'Computer' && prod.subCategory === 'Laptops') {
+            if (prod.category === 'Computer' && (prod.subCategory === 'Laptops' || prod.subCategory === 'ChromeBook' || prod.subCategory === 'Chromebook' || prod.subCategory === 'Chromebooks')) {
                 window.toggleLaptopShopField();
             }
 
