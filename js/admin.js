@@ -1417,13 +1417,25 @@ function renderDynamicAdminFields() {
                         <option value="Samsung">Samsung</option>
                         <option value="MSI">MSI</option>
                         <option value="Razer">Razer</option>
-                        <option value="infinix">infinix</option>
+                        <option value="Infinix">Infinix</option>
                     </select>
                 </div>
                 <div class="input-group">
                     <label>Model</label>
                     <input type="text" id="prodModel" class="dynamic-admin-field" placeholder="Model" required>
                 </div>
+                <div class="input-group">
+                    <label>Type</label>
+                    <select id="prodType" class="dynamic-admin-field" required>
+                        <option value="">Select Type</option>
+                        <option value="MacBooks">MacBooks</option>
+                        <option value="Ultrabooks">Ultrabooks</option>
+                        <option value="Chromebooks">Chromebooks</option>
+                        <option value="Notebooks">Notebooks</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
                 <div class="input-group">
                     <label>Condition</label>
                     <select id="prodCondition" class="dynamic-admin-field" required>
@@ -1432,8 +1444,6 @@ function renderDynamicAdminFields() {
                         <option value="Used">Used</option>
                     </select>
                 </div>
-            </div>
-            <div class="form-row">
                 <div class="input-group">
                     <label>Operating System</label>
                     <select id="prodOS" class="dynamic-admin-field" required>
@@ -1441,70 +1451,77 @@ function renderDynamicAdminFields() {
                         <option value="Windows">Windows</option>
                         <option value="MAC">MAC</option>
                         <option value="Chrome OS">Chrome OS</option>
+                        <option value="Linux">Linux</option>
                         <option value="DOS">DOS</option>
-                        <option value="LINUX">LINUX</option>
-                        <option value="Other">Other</option>
+                        <option value="Others">Others</option>
                     </select>
                 </div>
                 <div class="input-group">
                     <label>Price</label>
                     <input type="number" id="prodPrice" class="dynamic-admin-field" placeholder="Price" required>
                 </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="width: 100%; margin-bottom: 8px;">
+                    <label>Product Details</label>
+                    <textarea id="prodDetails" class="dynamic-admin-field admin-input" rows="3" placeholder="Write product details..." style="width: 100%; resize: vertical; min-height: 80px;" required></textarea>
+                </div>
+            </div>
+            <div class="form-row">
                 <div class="input-group">
                     <label>Seller</label>
-                    <select id="prodSeller" class="dynamic-admin-field" required>
+                    <select id="prodSeller" class="dynamic-admin-field" required onchange="window.toggleLaptopShopField()">
                         <option value="">Select Seller Type</option>
                         <option value="Owner">Owner</option>
                         <option value="Retailer">Retailer</option>
                         <option value="Wholesaler">Wholesaler</option>
                     </select>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="input-group">
-                    <label>Seller Name</label>
-                    <input type="text" id="prodSellerName" class="dynamic-admin-field" placeholder="Seller Name" required>
-                </div>
-                <div class="input-group">
-                    <label>Company Name</label>
-                    <input type="text" id="prodCompanyName" class="dynamic-admin-field" placeholder="Company Name">
+                <div class="input-group" id="laptopCompanyGroup" style="opacity: 0.4; pointer-events: none;">
+                    <label>Shop / Office / Company Name</label>
+                    <input type="text" id="prodCompanyName" class="dynamic-admin-field" placeholder="Shop / Office / Company Name" disabled>
                 </div>
             </div>
             <div class="form-row">
                 <div class="input-group">
                     <label>Address</label>
-                    <input type="text" id="prodShopAddress" class="dynamic-admin-field" placeholder="Address" required>
+                    <input type="text" id="prodAddress" class="dynamic-admin-field" placeholder="Address" required>
                 </div>
                 <div class="input-group">
                     <label>Area / Block No.</label>
-                    <input type="text" id="prodShopArea" class="dynamic-admin-field" placeholder="Area / Block No." required>
+                    <input type="text" id="prodArea" class="dynamic-admin-field" placeholder="Area / Block No." required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="input-group">
                     <label>City</label>
-                    <select id="prodShopCity" class="dynamic-admin-field" required>
+                    <select id="prodCity" class="dynamic-admin-field" required>
                         <option value="">Select City</option>
                         <option value="Karachi">Karachi</option>
                         <option value="Lahore">Lahore</option>
                         <option value="Islamabad">Islamabad</option>
+                        <option value="Rawalpindi">Rawalpindi</option>
+                        <option value="Peshawar">Peshawar</option>
+                        <option value="Multan">Multan</option>
+                        <option value="Faisalabad">Faisalabad</option>
+                        <option value="Other">Other</option>
                     </select>
                 </div>
                 <div class="input-group">
-                    <label>Contact No.</label>
-                    <input type="text" id="prodShopPhone" class="dynamic-admin-field" placeholder="Contact No." required>
+                    <label>Phone No.</label>
+                    <input type="text" id="prodPhone" class="dynamic-admin-field" placeholder="Phone No." required>
                 </div>
                 <div class="input-group">
-                    <label>WhatsApp No.</label>
-                    <input type="text" id="prodShopWhatsapp" class="dynamic-admin-field" placeholder="WhatsApp No." required>
+                    <label>Whatsapp No.</label>
+                    <input type="text" id="prodWhatsapp" class="dynamic-admin-field" placeholder="Whatsapp No." required>
                 </div>
             </div>
             <div class="form-row">
-                <div class="input-group">
-                    <label>Website address</label>
-                    <input type="url" id="prodShopWebsite" class="dynamic-admin-field" placeholder="https://...">
+                <div class="input-group" style="flex: 2;">
+                    <label>Website address (if available)</label>
+                    <input type="url" id="prodWebsite" class="dynamic-admin-field" placeholder="https://...">
                 </div>
-                <div class="input-group">
+                <div class="input-group" style="flex: 1;">
                     <label>Status</label>
                     <select id="prodStatus" class="dynamic-admin-field" required>
                         <option value="Publish">Publish</option>
@@ -1513,6 +1530,8 @@ function renderDynamicAdminFields() {
                 </div>
             </div>
         `;
+        // Set initial state for Shop/Company name element
+        setTimeout(() => { window.toggleLaptopShopField(); }, 0);
     } else if (category === 'Mobiles' && subCategory === 'Mobile Phones') {
         container.innerHTML = `
             <div class="form-row">
@@ -1728,6 +1747,26 @@ function renderDynamicAdminFields() {
         }
     }
 }
+
+window.toggleLaptopShopField = function() {
+    const seller = document.getElementById('prodSeller')?.value;
+    const shopField = document.getElementById('prodCompanyName');
+    const shopGroup = document.getElementById('laptopCompanyGroup');
+    if (shopField && shopGroup) {
+        if (seller === 'Retailer' || seller === 'Wholesaler') {
+            shopField.disabled = false;
+            shopField.required = true;
+            shopGroup.style.opacity = '1';
+            shopGroup.style.pointerEvents = 'auto';
+        } else {
+            shopField.disabled = true;
+            shopField.required = false;
+            shopField.value = '';
+            shopGroup.style.opacity = '0.4';
+            shopGroup.style.pointerEvents = 'none';
+        }
+    }
+};
 
 // Add event listeners to redraw when category or subcategory changes
 document.addEventListener('DOMContentLoaded', () => {
@@ -1973,6 +2012,8 @@ function renderAdminProducts() {
                     details = `${prod.year || ''} Model | ${prod.kMs || prod.kms || 0} km`;
                 } else if (prod.category === 'Mobiles') {
                     details = `${prod.specification || ''} | ${prod.batteryBackup ? prod.batteryBackup + 'mAh' : ''}`;
+                } else if ((prod.category === 'Computer' || prod.category === 'Computers') && prod.subCategory === 'Laptops') {
+                    details = `${prod.brand || ''} ${prod.model || ''} | ${prod.type || ''} | OS: ${prod.os || ''} | ${prod.condition || ''}`;
                 } else {
                     const parts = [];
                     if (prod.qty) parts.push(prod.qty);
@@ -2117,6 +2158,10 @@ window.editProduct = (index) => {
                     field.value = prod[key];
                 }
             });
+
+            if (prod.category === 'Computer' && prod.subCategory === 'Laptops') {
+                window.toggleLaptopShopField();
+            }
 
             if (document.getElementById('productDetail')) {
                 document.getElementById('productDetail').value = prod.details || prod.description || '';
