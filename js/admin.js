@@ -1432,14 +1432,20 @@ function renderDynamicAdminFields() {
                         <option value="Others">Others</option>
                     </select>
         `;
-        container.innerHTML = `
-            <div class="form-row">
-                <div class="input-group">
-                    <label>Type</label>
-                    ${typeSelectHtml}
-                </div>
-                <div class="input-group">
-                    <label>Brand</label>
+        const brandSelectHtml = isChromebook ? `
+                    <select id="prodBrand" class="dynamic-admin-field" required>
+                        <option value="">Select Brand</option>
+                        <option value="CTL">CTL</option>
+                        <option value="Atom">Atom</option>
+                        <option value="Dell">Dell</option>
+                        <option value="Hp">Hp</option>
+                        <option value="Lenovo">Lenovo</option>
+                        <option value="ASUS">ASUS</option>
+                        <option value="Acer">Acer</option>
+                        <option value="Samsung">Samsung</option>
+                        <option value="Toshiba">Toshiba</option>
+                    </select>
+        ` : `
                     <select id="prodBrand" class="dynamic-admin-field" required>
                         <option value="">Select Brand</option>
                         <option value="Dell">Dell</option>
@@ -1454,6 +1460,32 @@ function renderDynamicAdminFields() {
                         <option value="Razer">Razer</option>
                         <option value="Infinix">Infinix</option>
                     </select>
+        `;
+        const hddTypeSelectHtml = isChromebook ? `
+                    <select id="prodHDDType" class="dynamic-admin-field" required>
+                        <option value="">Select Storage Type</option>
+                        <option value="SSD">SSD</option>
+                        <option value="HDD">HDD</option>
+                        <option value="SSD + HDD">SSD + HDD</option>
+                        <option value="DDR4">DDR4</option>
+                    </select>
+        ` : `
+                    <select id="prodHDDType" class="dynamic-admin-field" required>
+                        <option value="">Select Storage Type</option>
+                        <option value="SSD">SSD</option>
+                        <option value="HDD">HDD</option>
+                        <option value="SSD + HDD">SSD + HDD</option>
+                    </select>
+        `;
+        container.innerHTML = `
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Type</label>
+                    ${typeSelectHtml}
+                </div>
+                <div class="input-group">
+                    <label>Brand</label>
+                    ${brandSelectHtml}
                 </div>
                 <div class="input-group">
                     <label>Model</label>
@@ -1475,12 +1507,7 @@ function renderDynamicAdminFields() {
                 </div>
                 <div class="input-group">
                     <label>HDD type</label>
-                    <select id="prodHDDType" class="dynamic-admin-field" required>
-                        <option value="">Select Storage Type</option>
-                        <option value="SSD">SSD</option>
-                        <option value="HDD">HDD</option>
-                        <option value="SSD + HDD">SSD + HDD</option>
-                    </select>
+                    ${hddTypeSelectHtml}
                 </div>
                 <div class="input-group">
                     <label>Screen Size</label>
