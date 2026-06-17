@@ -1404,6 +1404,16 @@ function renderDynamicAdminFields() {
         container.innerHTML = `
             <div class="form-row">
                 <div class="input-group">
+                    <label>Type</label>
+                    <select id="prodType" class="dynamic-admin-field" required>
+                        <option value="">Select Type</option>
+                        <option value="Other Laptops">Other Laptops</option>
+                        <option value="MacBooks">MacBooks</option>
+                        <option value="Ultrabooks">Ultrabooks</option>
+                        <option value="Chrome">Chrome</option>
+                    </select>
+                </div>
+                <div class="input-group">
                     <label>Brand</label>
                     <select id="prodBrand" class="dynamic-admin-field" required>
                         <option value="">Select Brand</option>
@@ -1425,14 +1435,31 @@ function renderDynamicAdminFields() {
                     <input type="text" id="prodModel" class="dynamic-admin-field" placeholder="Model" required>
                 </div>
                 <div class="input-group">
-                    <label>Type</label>
-                    <select id="prodType" class="dynamic-admin-field" required>
-                        <option value="">Select Type</option>
-                        <option value="MacBooks">MacBooks</option>
-                        <option value="Ultrabooks">Ultrabooks</option>
-                        <option value="Chromebooks">Chromebooks</option>
-                        <option value="Notebooks">Notebooks</option>
+                    <label>Generation</label>
+                    <input type="text" id="prodGeneration" class="dynamic-admin-field" placeholder="e.g., 10th Gen" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Ram</label>
+                    <input type="text" id="prodRam" class="dynamic-admin-field" placeholder="e.g., 8 GB" required>
+                </div>
+                <div class="input-group">
+                    <label>HDD</label>
+                    <input type="text" id="prodHDD" class="dynamic-admin-field" placeholder="e.g., 256 GB" required>
+                </div>
+                <div class="input-group">
+                    <label>HDD type</label>
+                    <select id="prodHDDType" class="dynamic-admin-field" required>
+                        <option value="">Select Storage Type</option>
+                        <option value="SSD">SSD</option>
+                        <option value="HDD">HDD</option>
+                        <option value="SSD + HDD">SSD + HDD</option>
                     </select>
+                </div>
+                <div class="input-group">
+                    <label>Screen Size</label>
+                    <input type="text" id="prodScreenSize" class="dynamic-admin-field" placeholder="e.g., 14 inches" required>
                 </div>
             </div>
             <div class="form-row">
@@ -2013,7 +2040,7 @@ function renderAdminProducts() {
                 } else if (prod.category === 'Mobiles') {
                     details = `${prod.specification || ''} | ${prod.batteryBackup ? prod.batteryBackup + 'mAh' : ''}`;
                 } else if ((prod.category === 'Computer' || prod.category === 'Computers') && prod.subCategory === 'Laptops') {
-                    details = `${prod.brand || ''} ${prod.model || ''} | ${prod.type || ''} | OS: ${prod.os || ''} | ${prod.condition || ''}`;
+                    details = `${prod.brand || ''} ${prod.model || ''} (${prod.generation || ''}) | ${prod.ram || ''} RAM | ${prod.hdd || ''} ${prod.hddType || ''} | OS: ${prod.os || ''} | ${prod.condition || ''}`;
                 } else {
                     const parts = [];
                     if (prod.qty) parts.push(prod.qty);
