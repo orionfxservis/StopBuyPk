@@ -3468,8 +3468,69 @@
             }, 300);
         };
 
-        // Initialize alerts count and register interval
+        // Dynamic Blog Injection for Home Page
+        function loadHomeBlogs() {
+            const container = document.getElementById('dynamicBlogGrid');
+            if (!container || typeof DataService === 'undefined') return;
+            
+            DataService.getBlogs().then(blogsRaw => {
+                const blogs = (blogsRaw || []).filter(b => b.status === 'Publish');
+                if (blogs.length > 0) {
+                    blogs.sort((a, b) => new Date(b.createdDate || b.date || 0) - new Date(a.createdDate || a.date || 0));
+                    
+                    const blogsToRender = blogs.slice(0, 3);
+                    container.innerHTML = blogsToRender.map(b => {
+                        const safeObj = encodeURIComponent(JSON.stringify(b));
+                        const categoryEn = b.categoryEn || 'Update';
+                        const categoryUr = b.categoryUr || categoryEn;
+                        const titleEn = b.titleEn || 'Untitled';
+                        const titleUr = b.titleUr || titleEn;
+                        const descEn = b.descEn || '';
+                        const descUr = b.descUr || descEn;
+                        
+                        return `
+                            <div class="blog-card bg-white rounded-3xl overflow-hidden modern-shadow border border-emerald-100 flex flex-col cursor-pointer" onclick="openBlogModal('${safeObj}')">
+                                <div class="overflow-hidden">
+                                    <img src="${b.image || 'images/placeholder.jpg'}" class="w-full aspect-video object-cover rounded-t-3xl" onerror="this.src='images/placeholder.jpg'">
+                                </div>
+                                <div class="p-6 flex-1 flex flex-col justify-between">
+                                    <div>
+                                        <p class="text-[0.7rem] text-emerald-600 font-bold mb-1.5 uppercase tracking-wide">
+                                            <span class="lang-en">${categoryEn}</span><span class="lang-ur" style="display:none;">${categoryUr}</span>
+                                        </p>
+                                        <h3 class="font-bold text-[#0A3D2A] text-lg leading-snug" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                            <span class="lang-en">${titleEn}</span><span class="lang-ur" style="display:none;">${titleUr}</span>
+                                        </h3>
+                                        <p class="text-sm text-gray-600 mt-2 leading-relaxed" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                                            <span class="lang-en">${descEn}</span><span class="lang-ur" style="display:none;">${descUr}</span>
+                                        </p>
+                                    </div>
+                                    <button onclick="event.stopPropagation(); openBlogModal('${safeObj}')" class="read-btn mt-5 text-xs text-emerald-700 font-bold px-4 py-1.5 bg-white border border-emerald-100/80 rounded-full shadow-sm hover:shadow-md hover:bg-emerald-50/50 transition-all self-start">
+                                        <span class="lang-en">Read Full Article &rarr;</span><span class="lang-ur" style="display:none;">مکمل مضمون پڑھیں &larr;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                    
+                    if (typeof updateLanguageUI === 'function') {
+                        updateLanguageUI(document.documentElement.lang || 'en');
+                    }
+                } else {
+                    container.innerHTML = `
+                        <p class="text-slate-500 col-span-full text-center py-4">
+                            <span class="lang-en">No blogs available at the moment.</span><span class="lang-ur">فی الحال کوئی بلاگ دستیاب نہیں ہے۔</span>
+                        </p>`;
+                }
+            }).catch(e => {
+                console.error("Failed to load blogs on home page", e);
+                container.innerHTML = `<p class="text-red-500 col-span-full text-center py-4">Failed to load blogs.</p>`;
+            });
+        }
+
+        // Initialize alerts count, blogs, and register interval
         updateSuperAdminAlerts();
+        loadHomeBlogs();
         setInterval(updateSuperAdminAlerts, 30000);
     </script>
 </body>
