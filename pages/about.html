@@ -22,7 +22,7 @@
       <!-- Top Navigation Bar -->
     <nav class="bg-[#0A3D2A] text-white sticky top-0 z-[99999]">
         <div
-            class="max-w-screen-2xl mx-auto px-4 py-2 sm:py-0 sm:h-[60px] flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-3 gap-x-2 sm:gap-4">
+            class="max-w-screen-2xl mx-auto px-4 py-2 sm:py-0 sm:h-[60px] flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-3 gap-x-2 sm:gap-4 relative">
 
             <!-- LEFT: Logo -->
             <a href="../index.html" class="flex items-center gap-2 flex-shrink-0 order-1 sm:order-none cursor-pointer">
@@ -38,18 +38,18 @@
                         </span>
                         <div
                             class="hidden md:block border border-[#24533e] bg-emerald-900/20 text-[#58b284] px-2 py-[2px] rounded text-[10px] font-semibold tracking-wide">
-                            Price Smart, Save More
+                            <span class="lang-en">Price Smart, Save More</span><span class="lang-ur">سمارٹ قیمت، زیادہ بچت</span>
                         </div>
                     </div>
                     <span class="hidden md:block text-[11px] text-gray-300 mt-0.5">
-                        Smart Price Comparison for Pakistan
+                        <span class="lang-en">Smart Price Comparison for Pakistan</span><span class="lang-ur">پاکستان کے لیے سمارٹ پرائس کیئر</span>
                     </span>
                 </div>
             </a>
 
 
             <!-- CENTER: Location -->
-            <div class="order-3 sm:order-none w-full sm:w-auto flex justify-center sm:flex-1">
+            <div class="order-3 sm:order-none w-full sm:w-auto flex justify-center sm:flex-1 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:transform">
                 <div class="hidden lg:flex items-center gap-1 text-slate-700 text-sm bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 cursor-pointer hover:bg-slate-200 transition whitespace-nowrap"
                     onclick="showLocationModal()" id="locationBox">
                     <span>📍</span>
@@ -61,9 +61,10 @@
             <!-- RIGHT: Actions -->
             <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0 order-2 sm:order-none">
                 <!-- Language Toggle -->
-                <div
-                    class="flex items-center justify-center w-[60px] sm:w-[70px] h-[34px] sm:h-[38px] bg-white/10 hover:bg-white/20 rounded-full text-[13px] sm:text-sm font-medium cursor-pointer transition-colors">
-                    <span class="text-center">اردو</span>
+                <div onclick="toggleLanguage()" id="lang-toggle-btn"
+                    class="flex items-center justify-center w-[60px] sm:w-[70px] h-[34px] sm:h-[38px] bg-white/10 hover:bg-white/20 rounded-full text-[13px] sm:text-sm font-medium cursor-pointer transition-colors"
+                    title="Switch to Urdu">
+                    <span id="lang-toggle-text" class="text-center">اردو</span>
                 </div>
 
                 <!-- Login Profile Icon -->
@@ -78,19 +79,20 @@
         </div>
         <!-- Category Bar -->
         <div class="bg-[#052C22] px-4 py-2 relative z-50 min-h-[40px]">
-            <div class="max-w-screen-2xl mx-auto w-full flex items-center relative">
-                <!-- Navigation Links -->
-                <div class="flex items-center gap-5 z-10">
-                    <!-- Home Link -->
-                    <a href="../index.html"
-                        class="text-emerald-400 hover:text-emerald-300 font-semibold text-sm transition-colors flex items-center">
-                        <i class="fas fa-arrow-left mr-1.5"></i> Home
-                    </a>
-                </div>
-
+            <div class="max-w-screen-2xl mx-auto w-full flex items-center justify-start relative">
                 <!-- Centered Heading -->
                 <h1
                     class="text-[15px] tracking-wide font-bold text-white absolute left-1/2 -translate-x-1/2 whitespace-nowrap">About</h1>
+
+                <!-- Navigation Links -->
+                <div class="flex items-center z-10">
+                    <!-- Home Link -->
+                    <a href="../index.html"
+                        class="text-emerald-400 hover:text-emerald-300 font-semibold text-sm transition-colors flex items-center">
+                        <span class="lang-en"><i class="fas fa-arrow-left mr-1.5"></i> Home</span>
+                        <span class="lang-ur">Home <i class="fas fa-arrow-right ml-1.5"></i></span>
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
@@ -183,11 +185,62 @@
 
 
 
+
+
+
+
+
+
+
+
+<script src="../js/location.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- FOOTER -->
     <div class="w-full bg-[#0A3D2A] text-emerald-50 text-center py-4 text-sm mt-auto border-t border-[#052C22]">
         &copy; 2026 StopBuyPk - Smart Price Comparison
     </div>
 
-<script src="../js/location.js"></script>
+<!-- LANG_TOGGLE_SCRIPT -->
+<script>
+    const currentLang = localStorage.getItem('qeematLang') || 'en';
+    document.documentElement.lang = currentLang;
+    document.documentElement.dir = currentLang === 'ur' ? 'rtl' : 'ltr';
+
+    function updateLanguageUI(lang) {
+        const toggleText = document.getElementById('lang-toggle-text');
+        if (toggleText) toggleText.textContent = lang === 'ur' ? 'English' : 'اردو';
+        
+        // Custom placeholder toggling if function exists
+        if (typeof togglePlaceholders === 'function') {
+            togglePlaceholders();
+        }
+    }
+
+    function toggleLanguage() {
+        const newLang = document.documentElement.lang === 'ur' ? 'en' : 'ur';
+        document.documentElement.lang = newLang;
+        document.documentElement.dir = newLang === 'ur' ? 'rtl' : 'ltr';
+        localStorage.setItem('qeematLang', newLang);
+        updateLanguageUI(newLang);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateLanguageUI(currentLang);
+    });
+</script>
 </body>
 </html>

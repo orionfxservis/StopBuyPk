@@ -754,6 +754,16 @@
         p.category.toLowerCase() === 'computer' && 
         (p.status === 'Publish' || p.prodStatus === 'Publish' || (!p.status && !p.prodStatus))
       );
+      
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchQuery = urlParams.get('search');
+      if (searchQuery) {
+        const compSearchInput = document.getElementById('compSearch');
+        if (compSearchInput) {
+          compSearchInput.value = searchQuery;
+        }
+      }
+      
       applyFilters();
     } catch (err) {
       console.error("Error fetching computers data:", err);

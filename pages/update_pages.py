@@ -31,7 +31,7 @@ standard_footer = footer_match.group(1)
 files_to_update = [
     'about.html', 'blogs.html', 'contact.html', 'electronics.html', 
     'fashion.html', 'food.html', 'grocery.html', 'kids.html', 
-    'laptops.html', 'mobiles.html', 'personal-care.html', 
+    'computers.html', 'mobiles.html', 'personal-care.html', 
     'property.html', 'support.html', 'travel.html'
 ]
 
@@ -69,11 +69,43 @@ for filename in files_to_update:
     # Remove existing <!-- FOOTER --> ... </div> blocks
     content = re.sub(r'<!-- FOOTER -->\s*<div class="footer">.*?</div>', '', content, flags=re.DOTALL)
     
-    # Insert standard footer right before <script src="../js/location.js"></script> or </body>
-    if '<script src="../js/location.js"></script>' in content:
-        content = content.replace('<script src="../js/location.js"></script>', f'{standard_footer}\n\n<script src="../js/location.js"></script>')
+    # Remove any existing LANG_TOGGLE_SCRIPT blocks
+    content = re.sub(r'<!-- LANG_TOGGLE_SCRIPT -->.*?<\/script>', '', content, flags=re.DOTALL)
+
+    lang_toggle_script = """<!-- LANG_TOGGLE_SCRIPT -->
+<script>
+    const currentLang = localStorage.getItem('qeematLang') || 'en';
+    document.documentElement.lang = currentLang;
+    document.documentElement.dir = currentLang === 'ur' ? 'rtl' : 'ltr';
+
+    function updateLanguageUI(lang) {
+        const toggleText = document.getElementById('lang-toggle-text');
+        if (toggleText) toggleText.textContent = lang === 'ur' ? 'English' : 'اردو';
+        
+        // Custom placeholder toggling if function exists
+        if (typeof togglePlaceholders === 'function') {
+            togglePlaceholders();
+        }
+    }
+
+    function toggleLanguage() {
+        const newLang = document.documentElement.lang === 'ur' ? 'en' : 'ur';
+        document.documentElement.lang = newLang;
+        document.documentElement.dir = newLang === 'ur' ? 'rtl' : 'ltr';
+        localStorage.setItem('qeematLang', newLang);
+        updateLanguageUI(newLang);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateLanguageUI(currentLang);
+    });
+</script>"""
+
+    # Insert standard footer and language script right before </body>
+    if '</body>' in content:
+        content = content.replace('</body>', f'{standard_footer}\n\n{lang_toggle_script}\n</body>')
     else:
-        content = content.replace('</body>', f'{standard_footer}\n</body>')
+        content += f'\n{standard_footer}\n\n{lang_toggle_script}'
 
     write_file(filepath, content)
     print(f"Updated {filename} with page name: {page_name}")

@@ -1951,11 +1951,11 @@
                 if (computerSlider && window.computerProducts.length > 0) {
                     // Populate Filter
                     if (computerFilter) {
-                        const uniqueNames = [...new Set(window.computerProducts.map(p => p.name).filter(n => n))];
-                        uniqueNames.forEach(name => {
+                        const uniqueSubCategories = [...new Set(window.computerProducts.map(p => p.subCategory).filter(s => s))];
+                        uniqueSubCategories.forEach(sub => {
                             const opt = document.createElement('option');
-                            opt.value = name;
-                            opt.textContent = name;
+                            opt.value = sub;
+                            opt.textContent = sub;
                             computerFilter.appendChild(opt);
                         });
                         
@@ -2016,10 +2016,10 @@
         const computerSlider = document.getElementById('laptopsSlider');
         if (!computerSlider) return;
         
-        const filterName = document.getElementById('computerProductFilter')?.value || '';
+        const filterSub = document.getElementById('computerProductFilter')?.value || '';
         const sortType = document.getElementById('computerPriceSort')?.value || '';
         
-        let filtered = filterName ? window.computerProducts.filter(p => p.name === filterName) : [...window.computerProducts];
+        let filtered = filterSub ? window.computerProducts.filter(p => p.subCategory === filterSub) : [...window.computerProducts];
         
         if (sortType === 'Lowest Price') {
             filtered.sort((a, b) => (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0));

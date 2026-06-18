@@ -33,7 +33,7 @@ const standardFooter = footerMatch[1];
 const filesToUpdate = [
     'about.html', 'blogs.html', 'contact.html', 'electronics.html', 
     'fashion.html', 'food.html', 'grocery.html', 'kids.html', 
-    'laptops.html', 'mobiles.html', 'personal-care.html', 
+    'computers.html', 'mobiles.html', 'personal-care.html', 
     'property.html', 'support.html', 'travel.html'
 ];
 
@@ -72,11 +72,43 @@ for (const filename of filesToUpdate) {
     // Remove existing <!-- FOOTER --> ... </div> blocks
     content = content.replace(/<!-- FOOTER -->\s*<div[^>]*>[\s\S]*?<\/div>/g, '');
     
-    // Insert standard footer right before <script src="../js/location.js"></script> or </body>
-    if (content.includes('<script src="../js/location.js"></script>')) {
-        content = content.replace('<script src="../js/location.js"></script>', `${standardFooter}\n\n<script src="../js/location.js"></script>`);
+    // Remove any existing LANG_TOGGLE_SCRIPT blocks
+    content = content.replace(/<!-- LANG_TOGGLE_SCRIPT -->[\s\S]*?<\/script>/g, '');
+
+    const langToggleScript = `<!-- LANG_TOGGLE_SCRIPT -->
+<script>
+    const currentLang = localStorage.getItem('qeematLang') || 'en';
+    document.documentElement.lang = currentLang;
+    document.documentElement.dir = currentLang === 'ur' ? 'rtl' : 'ltr';
+
+    function updateLanguageUI(lang) {
+        const toggleText = document.getElementById('lang-toggle-text');
+        if (toggleText) toggleText.textContent = lang === 'ur' ? 'English' : 'اردو';
+        
+        // Custom placeholder toggling if function exists
+        if (typeof togglePlaceholders === 'function') {
+            togglePlaceholders();
+        }
+    }
+
+    function toggleLanguage() {
+        const newLang = document.documentElement.lang === 'ur' ? 'en' : 'ur';
+        document.documentElement.lang = newLang;
+        document.documentElement.dir = newLang === 'ur' ? 'rtl' : 'ltr';
+        localStorage.setItem('qeematLang', newLang);
+        updateLanguageUI(newLang);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateLanguageUI(currentLang);
+    });
+</script>`;
+
+    // Insert standard footer and language script right before </body>
+    if (content.includes('</body>')) {
+        content = content.replace('</body>', `${standardFooter}\n\n${langToggleScript}\n</body>`);
     } else {
-        content = content.replace('</body>', `${standardFooter}\n</body>`);
+        content += `\n${standardFooter}\n\n${langToggleScript}`;
     }
 
     writeFile(filepath, content);

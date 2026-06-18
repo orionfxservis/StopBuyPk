@@ -308,8 +308,13 @@ async function initFoodDeals() {
     const foodProducts = allProducts.filter(p => p.category && p.category.toLowerCase() === 'food' && (p.status === 'Publish' || p.prodStatus === 'Publish' || (!p.status && !p.prodStatus && (!p.addedBy || p.addedBy.toLowerCase() === 'admin'))));
         // Map to the format food.js expects
       foodDeals = foodProducts.map(p => {
-        // Dynamic fields might have different capitalization, safely extract them
-        const variety = p.variety || p.brand || p.subCategory || 'No Variety Specified';
+        let variety = p.variety || p.brand || p.subCategory || 'No Variety Specified';
+        const parts = [];
+        if (p.qty) parts.push(p.qty);
+        if (p.gram) parts.push(p.gram);
+        if (parts.length > 0) {
+          variety = `${variety} (${parts.join(' - ')})`;
+        }
         const address = p.address || '';
 const area = p.area || p.block || p.blockNo || p.areaBlock || '';
 const city = p.city || '';
