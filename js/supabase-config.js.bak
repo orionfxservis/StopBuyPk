@@ -1,0 +1,7 @@
+// Supabase configuration for OrionFx
+// Replace URL and Anon Key with your own Supabase project details.
+const SUPABASE_URL = "https://your-project-id.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.your-anon-key";
+
+// Initialize Supabase Client
+const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;

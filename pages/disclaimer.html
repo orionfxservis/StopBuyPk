@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Disclaimer — Orion Fx</title>
+  <meta name="description" content="Orion Fx Disclaimer. General informational purposes and professional disclaimers regarding our website and services." />
+  <meta name="theme-color" content="#00E5FF" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⚡</text></svg>">
+
+  <!-- Google Fonts: Outfit (modern/tech) + Inter (readability) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      /* Premium Dark Palette */
+      --bg: #030508;
+      --card-bg: rgba(10, 15, 30, 0.65);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --card-shine: rgba(255, 255, 255, 0.05);
+
+      --muted: #94a3b8;
+      --text: #f8fafc;
+
+      /* Refined Accents */
+      --primary: #00E5FF;
+      --accent: #7B61FF;
+      --tertiary: #FF2E7E;
+
+      --radius: 24px;
+      --shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
+      --glass: blur(20px) saturate(180%);
+
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    /* Fixed Background */
+    .app-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background: url('../assets/animated-01.gif') no-repeat center center;
+      background-size: cover;
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+    }
+
+    .bg-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: radial-gradient(circle at 50% 50%, rgba(3, 5, 8, 0.5), rgba(3, 5, 8, 0.75));
+      pointer-events: none;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: 0.3s ease;
+    }
+
+    a:hover {
+      color: #fff;
+      text-shadow: 0 0 20px var(--primary);
+    }
+
+    /* Typography */
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      line-height: 1.2;
+      margin-top: 0;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: clamp(22px, 3vw, 28px);
+      font-weight: 600;
+      margin-top: 40px;
+      margin-bottom: 16px;
+      color: var(--primary);
+      border-left: 3px solid var(--primary);
+      padding-left: 12px;
+    }
+
+    h3 {
+      font-size: clamp(18px, 2vw, 20px);
+      font-weight: 600;
+      margin-top: 24px;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    p.meta {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    ul {
+      margin-top: 0;
+      margin-bottom: 24px;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 40px 0;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 30px;
+    }
+
+    /* Navigation */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 10px 0;
+      background: rgba(5, 5, 8, 0.7);
+      backdrop-filter: var(--glass);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 48px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+
+    .brand-logo {
+      height: 2.4em;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .brand .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow: 0 0 15px var(--primary);
+    }
+
+    nav ul {
+      display: flex;
+      gap: 12px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav a {
+      color: var(--primary);
+      font-weight: 500;
+      font-size: 12px;
+      padding: 7.5px 20px;
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      background: transparent;
+      border: 1px solid var(--primary);
+      text-align: center;
+      display: inline-block;
+    }
+
+    nav a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+      color: #000;
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* Content Area */
+    .policy-content {
+      padding: 140px 0 80px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius);
+      padding: 48px;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+    }
+
+    /* Footer Style with theme-matched Blue background */
+    .footer {
+      background: rgba(10, 20, 40, 0.85); /* Deep theme-matching blue background */
+      border-top: 1px solid var(--card-border);
+      backdrop-filter: var(--glass);
+      padding: 30px 0 20px;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      font-size: 13px;
+      transition: 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: #fff;
+      text-shadow: 0 0 10px var(--primary);
+    }
+
+    .footer p {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        padding: 24px;
+      }
+      nav ul {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-bg"></div>
+  <div class="bg-overlay"></div>
+
+  <header id="header">
+    <div class="container nav">
+      <a href="../index.html" class="brand" aria-label="Brand">
+        <img src="../assets/logo/logo.png" alt="Orion Fx Logo" class="brand-logo">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Orion Fx</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <ul>
+          <li><a href="../index.html#home">Home</a></li>
+          <li><a href="../index.html#services">Services</a></li>
+          <li><a href="../index.html#process">Process</a></li>
+          <li><a href="../index.html#projects">Our Projects</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="../index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container policy-content">
+    <article class="card">
+      <h1>Disclaimer</h1>
+      <p class="meta"><strong>Last Updated:</strong> June 2026</p>
+
+      <p>The information provided on the OrionFx website is for general informational purposes only.</p>
+
+      <h2>Professional Disclaimer</h2>
+      <p>While we strive to provide accurate and up-to-date information, OrionFx makes no guarantees regarding the completeness, accuracy, reliability, or availability of information presented on this website.</p>
+
+      <hr />
+
+      <h2>No Professional Advice</h2>
+      <p>Content on this website should not be considered:</p>
+      <ul>
+        <li>Legal Advice</li>
+        <li>Financial Advice</li>
+        <li>Tax Advice</li>
+        <li>Business Advice</li>
+      </ul>
+      <p>Users should consult qualified professionals before making important decisions.</p>
+
+      <hr />
+
+      <h2>External Links Disclaimer</h2>
+      <p>Our website may contain links to external websites.</p>
+      <p>OrionFx does not control and is not responsible for the content, accuracy, or practices of third-party websites.</p>
+
+      <hr />
+
+      <h2>Service Results Disclaimer</h2>
+      <p>Website design, SEO, and digital marketing results may vary depending on:</p>
+      <ul>
+        <li>Industry competition</li>
+        <li>Search engine algorithms</li>
+        <li>Marketing budgets</li>
+        <li>Business circumstances</li>
+      </ul>
+      <p>We do not guarantee specific rankings, traffic levels, sales, or business outcomes.</p>
+
+      <hr />
+
+      <h2>Limitation of Liability</h2>
+      <p>OrionFx shall not be liable for any direct, indirect, incidental, or consequential damages resulting from the use of this website.</p>
+
+      <hr />
+
+      <h2>Consent</h2>
+      <p>By using this website, you agree to this Disclaimer and its terms.</p>
+
+      <hr />
+
+      <h2>Updates</h2>
+      <p>We reserve the right to modify this Disclaimer at any time without prior notice.</p>
+
+      <hr />
+
+      <h2>Contact</h2>
+      <p>If you have questions regarding this Disclaimer, please contact OrionFx through our website.</p>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-links">
+        <a href="../pages/privacy-policy.html">Privacy Policy</a>
+        <a href="../pages/terms-of-service.html">Terms of Service</a>
+        <a href="../pages/cookie-policy.html">Cookie Policy</a>
+        <a href="../pages/disclaimer.html">Disclaimer</a>
+      </div>
+      <p>&copy; 2026 OrionFx. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+
+</html>
