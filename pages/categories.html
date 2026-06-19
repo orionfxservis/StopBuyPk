@@ -2018,9 +2018,16 @@
             const price = p.price || '---';
             const image = p.image || 'https://via.placeholder.com/600x400?text=No+Image';
             
+            let specs = [];
+            if (p.brand) specs.push(`Brand: ${p.brand}`);
+            if (p.origin) specs.push(`Origin: ${p.origin}`);
+            if (p.weight || p.volume) specs.push(`Size: ${p.weight || p.volume}`);
+            if (p.description || p.details) specs.push(`Details: ${p.description || p.details}`);
+            const descString = specs.length > 0 ? specs.join("\n") : "No details available.";
+
             const safeName = variety.replace(/'/g, "\\'");
             const safeImage = image.replace(/'/g, "\\'");
-            const safeDesc = (p.description || p.details || '').replace(/'/g, "\\'").replace(/\n/g, "\\n");
+            const safeDesc = descString.replace(/'/g, "\\'").replace(/\n/g, "\\n");
             const safePrice = price.toString().replace(/'/g, "\\'");
             const safeOrigPrice = (p.originalPrice || '').toString().replace(/'/g, "\\'");
             const safeCategory = (p.category || '').replace(/'/g, "\\'");
@@ -2061,9 +2068,21 @@
             const price = p.price || '---';
             const image = p.image || 'https://via.placeholder.com/600x400?text=No+Image';
             
+            let specs = [];
+            if (p.brand) specs.push(`Brand: ${p.brand}`);
+            if (p.model) specs.push(`Model: ${p.model}`);
+            if (p.generation) specs.push(`Generation: ${p.generation}`);
+            if (p.ram) specs.push(`RAM: ${p.ram}`);
+            if (p.hdd) specs.push(`Storage: ${p.hdd} ${p.hddType || ''}`);
+            if (p.screenSize) specs.push(`Screen Size: ${p.screenSize}`);
+            if (p.os) specs.push(`OS: ${p.os}`);
+            if (p.condition) specs.push(`Condition: ${p.condition}`);
+            if (p.description || p.details) specs.push(`Details: ${p.description || p.details}`);
+            const descString = specs.length > 0 ? specs.join("\n") : "No specifications available.";
+
             const safeName = variety.replace(/'/g, "\\'");
             const safeImage = image.replace(/'/g, "\\'");
-            const safeDesc = (p.description || p.details || '').replace(/'/g, "\\'").replace(/\n/g, "\\n");
+            const safeDesc = descString.replace(/'/g, "\\'").replace(/\n/g, "\\n");
             const safePrice = price.toString().replace(/'/g, "\\'");
             const safeOrigPrice = (p.originalPrice || '').toString().replace(/'/g, "\\'");
             const safeCategory = (p.category || '').replace(/'/g, "\\'");
@@ -2213,7 +2232,7 @@
                 origPriceContainer.classList.add('hidden');
             }
             
-            document.getElementById('pm-desc').textContent = desc || 'Compare prices from multiple stores and find the best deals.';
+            document.getElementById('pm-desc').innerHTML = desc ? desc.replace(/\n/g, '<br>') : 'Compare prices from multiple stores and find the best deals.';
             
             const whatsappBtn = document.getElementById('pm-whatsapp');
             if (whatsapp && whatsapp !== 'undefined' && whatsapp !== '') {
