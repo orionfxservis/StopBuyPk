@@ -958,7 +958,6 @@
                 <a href="computers.html"
                     class="text-teal-600 hover:text-teal-800 font-semibold text-sm transition-all hover:translate-x-1 flex items-center gap-1">
                     View More
-                    <i class="fas fa-arrow-right text-[10px]"></i>
                 </a>
             </div>
 
@@ -998,9 +997,23 @@
             </div>
         </div>
 
-        <!-- NETFLIX STYLE SCROLL -->
-        <div id="laptopsSlider"
-            class="flex gap-5 overflow-x-auto scroll-smooth no-scrollbar pb-2 relative z-10">
+        <!-- slider container wrapper to support relative positioning for mobile-only arrows -->
+        <div class="relative">
+            <!-- Mobile-only Left Arrow -->
+            <button onclick="scrollLaptops(-1)"
+                class="absolute -left-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/95 border border-teal-100 shadow hover:bg-teal-50 transition flex items-center justify-center md:hidden">
+                <i class="fas fa-chevron-left text-teal-600 text-sm"></i>
+            </button>
+
+            <!-- Mobile-only Right Arrow -->
+            <button onclick="scrollLaptops(1)"
+                class="absolute -right-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/95 border border-teal-100 shadow hover:bg-teal-50 transition flex items-center justify-center md:hidden">
+                <i class="fas fa-chevron-right text-teal-600 text-sm"></i>
+            </button>
+
+            <!-- NETFLIX STYLE SCROLL -->
+            <div id="laptopsSlider"
+                class="flex gap-5 overflow-x-auto scroll-smooth no-scrollbar pb-2 relative z-10">
 
             <!-- CARD -->
             <div
@@ -1144,6 +1157,7 @@
 
         </div>
     </div>
+</div>
 </section>
 
         <!-- PROPERTY - NETFLIX STYLE -->
