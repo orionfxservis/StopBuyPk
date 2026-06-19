@@ -418,9 +418,9 @@
                 <div class="flex-1">
 
                     <!-- Trends Box (Centered above banner) -->
-                    <div class="w-full text-center pb-2 flex items-center justify-center gap-3">
+                    <div class="w-full text-center pb-2 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
                         <div onclick="openTrendsModal()"
-                            class="w-[130px] h-[38px] rounded-3xl bg-emerald-700 text-white font-bold text-sm shadow-lg border-2 border-emerald-400 inline-flex items-center justify-center cursor-pointer transform transition-all duration-300 hover:scale-105">
+                            class="w-[110px] sm:w-[130px] h-[34px] sm:h-[38px] rounded-3xl bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-lg border-2 border-emerald-400 inline-flex items-center justify-center cursor-pointer transform transition-all duration-300 hover:scale-105">
                             <span class="lang-en">Trends</span><span class="lang-ur">رجحانات</span>
                         </div>
 
@@ -433,7 +433,7 @@
 
                             <!-- Actual Button -->
                             <div onclick="openDealsModal('Food', null, '🔥 Food Deals')"
-                                class="relative w-[130px] h-[38px] rounded-3xl bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 text-white font-bold text-sm shadow-xl border border-white/30 cursor-pointer transform transition-all duration-300 hover:scale-105 flex items-center justify-center">
+                                class="relative w-[110px] sm:w-[130px] h-[34px] sm:h-[38px] rounded-3xl bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 text-white font-bold text-xs sm:text-sm shadow-xl border border-white/30 cursor-pointer transform transition-all duration-300 hover:scale-105 flex items-center justify-center">
                                 🔥 <span class="lang-en">Food Deals</span><span class="lang-ur">فوڈ ڈیلز</span>
                             </div>
                         </div>
@@ -447,7 +447,7 @@
 
                             <!-- Actual Button -->
                             <div onclick="openDealsModal('Computer', null, '💻 Computer Deals')"
-                                class="relative w-[150px] h-[38px] rounded-3xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 text-white font-bold text-sm shadow-xl border border-white/30 cursor-pointer transform transition-all duration-300 hover:scale-105 flex items-center justify-center">
+                                class="relative w-[130px] sm:w-[150px] h-[34px] sm:h-[38px] rounded-3xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 text-white font-bold text-xs sm:text-sm shadow-xl border border-white/30 cursor-pointer transform transition-all duration-300 hover:scale-105 flex items-center justify-center">
                                 💻 <span class="lang-en">Computer Deals</span><span class="lang-ur">کمپیوٹر ڈیلز</span>
                             </div>
                         </div>
@@ -518,9 +518,9 @@
                     <section class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
 
                         <!-- Left Side: Grocery Basket & Nearby (Spans 2 columns) -->
-                        <div class="sm:col-span-2">
+                        <div class="sm:col-span-2 overflow-hidden sm:overflow-visible">
                             <div
-                                class="flex flex-col gap-3 scale-[0.75] origin-top-left rtl:origin-top-right w-[133.33%] -mb-[160px] sm:-mb-[180px] md:-mb-[200px] lg:-mb-[160px]">
+                                class="flex flex-col gap-3 sm:scale-[0.75] sm:origin-top-left sm:rtl:origin-top-right sm:w-[133.33%] sm:-mb-[160px] md:-mb-[180px] lg:-mb-[160px] w-full">
 
                                 <!-- ROW 1: Grocery Basket + Nearby -->
                                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-3">
@@ -1007,7 +1007,7 @@
                                 class="w-full lg:w-[900px] bg-white/95 backdrop-blur-md border border-gray-200 rounded-3xl p-5 shadow-sm mb-6">
 
                                 <!-- CATEGORY BUTTONS -->
-                                <div class="flex w-full items-center justify-between gap-2 mb-4"
+                                <div class="flex w-full items-center gap-2 mb-4 overflow-x-auto pb-2 no-scrollbar"
                                     id="categoryFilterContainer">
                                     <button
                                         class="cat-filter-btn flex-1 text-center px-2 py-2 rounded-lg text-[12px] font-medium shadow-sm transition-all duration-300">Food</button>
@@ -1041,7 +1041,7 @@
                                 </script>
 
                                 <!-- SEARCH ROW -->
-                                <div class="grid grid-cols-5 gap-2 mt-2 w-full">
+                                <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 mt-2 w-full">
 
                                     <!-- SEARCH -->
                                     <div>
