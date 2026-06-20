@@ -1447,7 +1447,7 @@ function renderDynamicAdminFields() {
                         <option value="Avita">Avita</option>
                     </select>
                 </div>
-                <div class="input-group">
+                <div class="input-group" id="prodNameContainer">
                     <label>Product Name</label>
                     <input type="text" id="prodName" class="dynamic-admin-field" placeholder="e.g., Dell Laptop Charger 65W" required>
                 </div>
@@ -1617,7 +1617,83 @@ function renderDynamicAdminFields() {
                 </div>
             </div>
         `;
-        setTimeout(() => { window.toggleLaptopShopField(); }, 0);
+        setTimeout(() => { 
+            window.toggleLaptopShopField(); 
+            const brandSelect = document.getElementById('prodBrand');
+            if (brandSelect) {
+                const handleBrandChange = () => {
+                    const brand = brandSelect.value;
+                    const nameContainer = document.getElementById('prodNameContainer');
+                    if (!nameContainer) return;
+                    
+                    const brandNames = {
+                        'Dell': [
+                            'Dell 45W Laptop Charger',
+                            'Dell 65W Laptop Charger',
+                            'Dell 90W Laptop Charger',
+                            'Dell 130W Laptop Charger',
+                            'Dell USB-C 65W Charger',
+                            'Dell Latitude Laptop Charger',
+                            'Dell Inspiron Laptop Charger',
+                            'Dell Vostro Laptop Charger',
+                            'Dell Precision Laptop Charger'
+                        ],
+                        'HP': [
+                            'HP 45W Laptop Charger',
+                            'HP 65W Laptop Charger',
+                            'HP 90W Laptop Charger',
+                            'HP Blue Pin Charger',
+                            'HP Smart Pin Charger',
+                            'HP EliteBook Charger',
+                            'HP ProBook Charger',
+                            'HP Pavilion Charger',
+                            'HP Chromebook Charger'
+                        ],
+                        'Lenovo': [
+                            'Lenovo 45W Laptop Charger',
+                            'Lenovo 65W Laptop Charger',
+                            'Lenovo 90W Laptop Charger',
+                            'Lenovo USB-C Charger',
+                            'Lenovo ThinkPad Charger',
+                            'Lenovo IdeaPad Charger',
+                            'Lenovo Yoga Charger'
+                        ],
+                        'Asus': [
+                            'Asus 45W Laptop Charger',
+                            'Asus 65W Laptop Charger',
+                            'Asus 90W Laptop Charger',
+                            'Asus VivoBook Charger',
+                            'Asus ZenBook Charger',
+                            'Asus TUF Gaming Charger',
+                            'Asus ROG Charger'
+                        ],
+                        'Acer': [
+                            'Acer 45W Laptop Charger',
+                            'Acer 65W Laptop Charger',
+                            'Acer Aspire Charger',
+                            'Acer Nitro Charger',
+                            'Acer Predator Charger'
+                        ]
+                    };
+                    
+                    if (brandNames[brand]) {
+                        nameContainer.innerHTML = `
+                            <label>Product Name</label>
+                            <select id="prodName" class="dynamic-admin-field" required>
+                                <option value="">Select Product Name</option>
+                                ${brandNames[brand].map(name => `<option value="${name}">${name}</option>`).join('')}
+                            </select>
+                        `;
+                    } else {
+                        nameContainer.innerHTML = `
+                            <label>Product Name</label>
+                            <input type="text" id="prodName" class="dynamic-admin-field" placeholder="e.g., Dell Laptop Charger 65W" required>
+                        `;
+                    }
+                };
+                brandSelect.addEventListener('change', handleBrandChange);
+            }
+        }, 0);
     } else if (category === 'Computer' && (subCategory === 'Laptops' || subCategory === 'ChromeBook' || subCategory === 'Chromebook' || subCategory === 'Chromebooks')) {
         const isChromebook = (subCategory === 'ChromeBook' || subCategory === 'Chromebook' || subCategory === 'Chromebooks');
         const typeSelectHtml = isChromebook ? `
@@ -2453,6 +2529,16 @@ window.editProduct = (index) => {
 
             if (prod.category === 'Computer' && (prod.subCategory === 'Laptops' || prod.subCategory === 'ChromeBook' || prod.subCategory === 'Chromebook' || prod.subCategory === 'Chromebooks' || prod.subCategory === 'Laptop Charger')) {
                 window.toggleLaptopShopField();
+            }
+            if (prod.category === 'Computer' && prod.subCategory === 'Laptop Charger') {
+                const brandSelect = document.getElementById('prodBrand');
+                if (brandSelect) {
+                    brandSelect.dispatchEvent(new Event('change'));
+                    const nameField = document.getElementById('prodName');
+                    if (nameField && prod.name) {
+                        nameField.value = prod.name;
+                    }
+                }
             }
 
             if (document.getElementById('productDetail')) {
