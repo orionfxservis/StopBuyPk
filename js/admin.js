@@ -1400,6 +1400,207 @@ function renderDynamicAdminFields() {
                 Please select a Sub Category (e.g. Laptops) to view the product form.
             </div>
         `;
+    } else if (category === 'Computer' && subCategory === 'Laptop Charger') {
+        container.innerHTML = `
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Brand</label>
+                    <select id="prodBrand" class="dynamic-admin-field" required>
+                        <option value="">Select Brand</option>
+                        <option value="Dell">Dell</option>
+                        <option value="HP">HP</option>
+                        <option value="Lenovo">Lenovo</option>
+                        <option value="Asus">Asus</option>
+                        <option value="Acer">Acer</option>
+                        <option value="Apple">Apple</option>
+                        <option value="MSI">MSI</option>
+                        <option value="Samsung">Samsung</option>
+                        <option value="Toshiba">Toshiba</option>
+                        <option value="Sony">Sony</option>
+                        <option value="Fujitsu">Fujitsu</option>
+                        <option value="Panasonic">Panasonic</option>
+                        <option value="Microsoft">Microsoft</option>
+                        <option value="Surface">Surface</option>
+                        <option value="Huawei">Huawei</option>
+                        <option value="LG">LG</option>
+                        <option value="Razer">Razer</option>
+                        <option value="Alienware">Alienware</option>
+                        <option value="Gigabyte">Gigabyte</option>
+                        <option value="Chuwi">Chuwi</option>
+                        <option value="Avita">Avita</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Product Name</label>
+                    <input type="text" id="prodName" class="dynamic-admin-field" placeholder="e.g., Dell Laptop Charger 65W" required>
+                </div>
+                <div class="input-group">
+                    <label>Compatible Brand</label>
+                    <input type="text" id="prodCompatibleBrand" class="dynamic-admin-field" placeholder="e.g., Dell" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group" style="flex: 2;">
+                    <label>Compatible Models</label>
+                    <input type="text" id="prodCompatibleModels" class="dynamic-admin-field" placeholder="e.g., Latitude 5400, Inspiron 15, Vostro 3400" required>
+                </div>
+                <div class="input-group">
+                    <label>Wattage</label>
+                    <input type="text" id="prodWattage" class="dynamic-admin-field" placeholder="e.g., 45W / 65W / 90W / 130W" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Voltage</label>
+                    <input type="text" id="prodVoltage" class="dynamic-admin-field" placeholder="e.g., 19.5V" required>
+                </div>
+                <div class="input-group">
+                    <label>Amperage</label>
+                    <input type="text" id="prodAmperage" class="dynamic-admin-field" placeholder="e.g., 3.34A" required>
+                </div>
+                <div class="input-group">
+                    <label>Connector Type</label>
+                    <select id="prodConnectorType" class="dynamic-admin-field" required>
+                        <option value="">Select Connector Type</option>
+                        <option value="Small Pin">Small Pin</option>
+                        <option value="Big Pin">Big Pin</option>
+                        <option value="USB-C">USB-C</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Connector Size</label>
+                    <input type="text" id="prodConnectorSize" class="dynamic-admin-field" placeholder="e.g., 4.5mm × 3.0mm" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Original / OEM / Compatible</label>
+                    <select id="prodOriginalOEM" class="dynamic-admin-field" required>
+                        <option value="">Select Type</option>
+                        <option value="Original">Original</option>
+                        <option value="OEM">OEM</option>
+                        <option value="Compatible">Compatible</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Condition</label>
+                    <select id="prodCondition" class="dynamic-admin-field" required>
+                        <option value="">Select Condition</option>
+                        <option value="New">New</option>
+                        <option value="Used">Used</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Warranty</label>
+                    <select id="prodWarranty" class="dynamic-admin-field" required>
+                        <option value="">Select Warranty</option>
+                        <option value="7 Days">7 Days</option>
+                        <option value="30 Days">30 Days</option>
+                        <option value="No Warranty">No Warranty</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Power Cable Included</label>
+                    <select id="prodPowerCable" class="dynamic-admin-field" required>
+                        <option value="">Select Option</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Fast Charging Support</label>
+                    <select id="prodFastCharging" class="dynamic-admin-field" required>
+                        <option value="">Select Option</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Availability</label>
+                    <select id="prodAvailability" class="dynamic-admin-field" required>
+                        <option value="">Select Availability</option>
+                        <option value="In Stock">In Stock</option>
+                        <option value="Out of Stock">Out of Stock</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Price</label>
+                    <input type="number" id="prodPrice" class="dynamic-admin-field" placeholder="Price" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="width: 100%; margin-bottom: 8px;">
+                    <label>Product Description</label>
+                    <textarea id="productDetail" class="dynamic-admin-field admin-input" rows="3" placeholder="Write product description..." style="width: 100%; resize: vertical; min-height: 80px;" required></textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Seller</label>
+                    <select id="prodSeller" class="dynamic-admin-field" required onchange="window.toggleLaptopShopField()">
+                        <option value="">Select Seller Type</option>
+                        <option value="Owner">Owner</option>
+                        <option value="Retailer">Retailer</option>
+                        <option value="Wholesaler">Wholesaler</option>
+                    </select>
+                </div>
+                <div class="input-group" id="laptopCompanyGroup" style="opacity: 0.4; pointer-events: none;">
+                    <label>Shop / Office / Company Name</label>
+                    <input type="text" id="prodCompanyName" class="dynamic-admin-field" placeholder="Shop / Office / Company Name" disabled>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Address</label>
+                    <input type="text" id="prodAddress" class="dynamic-admin-field" placeholder="Address" required>
+                </div>
+                <div class="input-group">
+                    <label>Area / Block No.</label>
+                    <input type="text" id="prodArea" class="dynamic-admin-field" placeholder="Area / Block No." required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>City</label>
+                    <select id="prodCity" class="dynamic-admin-field" required>
+                        <option value="">Select City</option>
+                        <option value="Karachi">Karachi</option>
+                        <option value="Lahore">Lahore</option>
+                        <option value="Islamabad">Islamabad</option>
+                        <option value="Rawalpindi">Rawalpindi</option>
+                        <option value="Peshawar">Peshawar</option>
+                        <option value="Multan">Multan</option>
+                        <option value="Faisalabad">Faisalabad</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Phone No.</label>
+                    <input type="text" id="prodPhone" class="dynamic-admin-field" placeholder="Phone No." required>
+                </div>
+                <div class="input-group">
+                    <label>Whatsapp No.</label>
+                    <input type="text" id="prodWhatsapp" class="dynamic-admin-field" placeholder="Whatsapp No." required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group" style="flex: 2;">
+                    <label>Website address (if available)</label>
+                    <input type="url" id="prodWebsite" class="dynamic-admin-field" placeholder="https://...">
+                </div>
+                <div class="input-group" style="flex: 1;">
+                    <label>Status</label>
+                    <select id="prodStatus" class="dynamic-admin-field" required>
+                        <option value="Publish">Publish</option>
+                        <option value="Draft">Draft</option>
+                    </select>
+                </div>
+            </div>
+        `;
+        setTimeout(() => { window.toggleLaptopShopField(); }, 0);
     } else if (category === 'Computer' && (subCategory === 'Laptops' || subCategory === 'ChromeBook' || subCategory === 'Chromebook' || subCategory === 'Chromebooks')) {
         const isChromebook = (subCategory === 'ChromeBook' || subCategory === 'Chromebook' || subCategory === 'Chromebooks');
         const typeSelectHtml = isChromebook ? `
@@ -2086,6 +2287,8 @@ function renderAdminProducts() {
                     details = `${prod.specification || ''} | ${prod.batteryBackup ? prod.batteryBackup + 'mAh' : ''}`;
                 } else if ((prod.category === 'Computer' || prod.category === 'Computers') && (prod.subCategory === 'Laptops' || prod.subCategory === 'ChromeBook' || prod.subCategory === 'Chromebook' || prod.subCategory === 'Chromebooks')) {
                     details = `${prod.brand || ''} ${prod.model || ''} (${prod.generation || ''}) | ${prod.ram || ''} RAM | ${prod.hdd || ''} ${prod.hddType || ''} | OS: ${prod.os || ''} | ${prod.condition || ''}`;
+                } else if ((prod.category === 'Computer' || prod.category === 'Computers') && prod.subCategory === 'Laptop Charger') {
+                    details = `${prod.brand || ''} | Compatible: ${prod.compatibleBrand || ''} | Wattage: ${prod.wattage || ''} | Voltage: ${prod.voltage || ''} | Connector: ${prod.connectorType || ''} (${prod.connectorSize || ''}) | ${prod.condition || ''}`;
                 } else {
                     const parts = [];
                     if (prod.qty) parts.push(prod.qty);
@@ -2231,7 +2434,7 @@ window.editProduct = (index) => {
                 }
             });
 
-            if (prod.category === 'Computer' && (prod.subCategory === 'Laptops' || prod.subCategory === 'ChromeBook' || prod.subCategory === 'Chromebook' || prod.subCategory === 'Chromebooks')) {
+            if (prod.category === 'Computer' && (prod.subCategory === 'Laptops' || prod.subCategory === 'ChromeBook' || prod.subCategory === 'Chromebook' || prod.subCategory === 'Chromebooks' || prod.subCategory === 'Laptop Charger')) {
                 window.toggleLaptopShopField();
             }
 
