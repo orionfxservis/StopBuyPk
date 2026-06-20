@@ -21,6 +21,23 @@ let dealEditIndex = -1; // State to track deal editing
 let broadcasts = [];
 let broadcastEditIndex = -1;
 
+function hasPublishPermission(cUser, section) {
+    if (!cUser || !cUser.userId) return false;
+    if (String(cUser.userId).toLowerCase() === 'admin') return true;
+    
+    let perms = cUser.permissions;
+    let loopCount = 0;
+    while (typeof perms === 'string' && loopCount < 3) {
+        try { perms = JSON.parse(perms); } catch(e) { break; }
+        loopCount++;
+    }
+    if (perms && typeof perms === 'object' && !Array.isArray(perms)) {
+        const sectionRights = perms[section] || [];
+        return sectionRights.includes('Publish');
+    }
+    return false;
+}
+
 // DOM Elements
 const categoryForm = document.getElementById('categoryForm');
 const categoryList = document.getElementById('categoryList');
@@ -488,8 +505,8 @@ if (bannerForm) {
 
             // Workaround: Backend might drop the 'type' field, so we pack it into the 'link' field
             const link = `${type}|${rawLink}`;
-            let bannerStatus = 'Publish';
-            if (String(cUser.userId || '').toLowerCase() !== 'admin') {
+            let bannerStatus = document.getElementById('bannerStatus') ? document.getElementById('bannerStatus').value : 'Publish';
+            if (!hasPublishPermission(cUser, 'banners')) {
                 bannerStatus = 'Draft';
             }
 
@@ -753,7 +770,7 @@ if (dealForm) {
             updatedDate: new Date().toISOString()
         };
 
-        if (String(cUser.userId || '').toLowerCase() !== 'admin') {
+        if (!hasPublishPermission(cUser, 'deals')) {
             newDeal.status = 'Draft';
         }
 
@@ -2132,8 +2149,8 @@ if (adminProductForm) {
             newProduct.status = document.getElementById('prodStatus').value;
         }
 
-        // Force Draft if not Super Admin
-        if (String(cUser.userId || '').toLowerCase() !== 'admin') {
+        // Force Draft if not Super Admin and doesn't have Publish permission
+        if (!hasPublishPermission(cUser, 'products')) {
             newProduct.status = 'Draft';
         }
 
@@ -2669,7 +2686,7 @@ if (travelForm) {
             addedBy: travelEditIndex === -1 ? userName : (travelPackages[travelEditIndex].addedBy || userName)
         };
 
-        if (String(cUser.userId || '').toLowerCase() !== 'admin') {
+        if (!hasPublishPermission(cUser, 'travel')) {
             newPkg.status = 'Draft';
         }
 
@@ -2933,7 +2950,7 @@ if (broadcastForm) {
             addedBy: broadcastEditIndex === -1 ? userName : (broadcasts[broadcastEditIndex].addedBy || userName)
         };
 
-        if (String(cUser.userId || '').toLowerCase() !== 'admin') {
+        if (!hasPublishPermission(cUser, 'broadcasts')) {
             newBroadcast.status = 'Draft';
         }
 
