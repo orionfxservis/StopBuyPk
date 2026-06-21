@@ -2025,14 +2025,14 @@
             if (p.description || p.details) specs.push(`Details: ${p.description || p.details}`);
             const descString = specs.length > 0 ? specs.join("\n") : "No details available.";
 
-            const safeName = variety.replace(/'/g, "\\'");
-            const safeImage = image.replace(/'/g, "\\'");
-            const safeDesc = descString.replace(/'/g, "\\'").replace(/\n/g, "\\n");
-            const safePrice = price.toString().replace(/'/g, "\\'");
-            const safeOrigPrice = (p.originalPrice || '').toString().replace(/'/g, "\\'");
-            const safeCategory = (p.category || '').replace(/'/g, "\\'");
-            const safeSubCategory = (p.subCategory || '').replace(/'/g, "\\'");
-            const safeWhatsapp = (p.whatsapp || p.contact || '').replace(/'/g, "\\'");
+            const safeName = variety.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeImage = image.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeDesc = descString.replace(/'/g, "\\'").replace(/\n/g, "\\n").replace(/"/g, "&quot;");
+            const safePrice = price.toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeOrigPrice = (p.originalPrice || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeCategory = (p.category || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeSubCategory = (p.subCategory || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeWhatsapp = (p.whatsapp || p.contact || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
             
             return `
             <div class="flex-none w-[80vw] min-w-[80vw] md:w-[220px] md:min-w-[220px] lg:w-[calc((100%-5rem)/5)] snap-start snap-always bg-white rounded-3xl overflow-hidden border border-orange-100 shadow-md hover:shadow-2xl transition duration-300 cursor-pointer" onclick="openProductDetailModal('${safeName}', '${safeImage}', '${safeDesc}', '${safePrice}', '${safeOrigPrice}', '${safeCategory}', '${safeSubCategory}', '${safeWhatsapp}')">
@@ -2072,25 +2072,47 @@
             if (p.brand) specs.push(`Brand: ${p.brand}`);
             if (p.model) specs.push(`Model: ${p.model}`);
             if (p.generation) specs.push(`Generation: ${p.generation}`);
+            if (p.processor) specs.push(`Processor: ${p.processor}`);
             if (p.ram) specs.push(`RAM: ${p.ram}`);
-            if (p.hdd) specs.push(`Storage: ${p.hdd} ${p.hddType || ''}`);
+            
+            const storageVal = p.storage || p.hdd;
+            const storageTypeVal = p.storageType || p.hddType || '';
+            if (storageVal) specs.push(`Storage: ${storageVal} ${storageTypeVal}`.trim());
+            
+            const gpuVal = p.graphicsCard || p.gpu;
+            if (gpuVal) specs.push(`GPU: ${gpuVal}`);
+            
             if (p.screenSize) specs.push(`Screen Size: ${p.screenSize}`);
-            if (p.os) specs.push(`OS: ${p.os}`);
+            
+            const osVal = p.os || p.operatingSystem;
+            if (osVal) specs.push(`OS: ${osVal}`);
+            
             if (p.condition) specs.push(`Condition: ${p.condition}`);
+            if (p.warranty) specs.push(`Warranty: ${p.warranty}`);
+            if (p.delivery || p.shipping) specs.push(`Delivery: ${p.delivery || p.shipping}`);
             if (p.description || p.details) specs.push(`Details: ${p.description || p.details}`);
             const descString = specs.length > 0 ? specs.join("\n") : "No specifications available.";
 
-            const safeName = variety.replace(/'/g, "\\'");
-            const safeImage = image.replace(/'/g, "\\'");
-            const safeDesc = descString.replace(/'/g, "\\'").replace(/\n/g, "\\n");
-            const safePrice = price.toString().replace(/'/g, "\\'");
-            const safeOrigPrice = (p.originalPrice || '').toString().replace(/'/g, "\\'");
-            const safeCategory = (p.category || '').replace(/'/g, "\\'");
-            const safeSubCategory = (p.subCategory || '').replace(/'/g, "\\'");
-            const safeWhatsapp = (p.whatsapp || p.contact || '').replace(/'/g, "\\'");
+            const safeName = variety.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeImage = image.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeDesc = descString.replace(/'/g, "\\'").replace(/\n/g, "\\n").replace(/"/g, "&quot;");
+            const safePrice = price.toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeOrigPrice = (p.originalPrice || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeCategory = (p.category || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeSubCategory = (p.subCategory || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeWhatsapp = (p.whatsapp || p.contact || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeModel = (p.model || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeRam = (p.ram || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeStorage = (p.storage || p.hdd || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeBrand = (p.brand || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeSeries = (p.series || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeProcessor = (p.processor || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeAddedBy = (p.addedBy || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeCreatedDate = (p.createdDate || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeCompanyName = (p.companyName || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
             
             return `
-            <div class="flex-none w-[80vw] min-w-[80vw] md:w-[220px] md:min-w-[220px] lg:w-[calc((100%-5rem)/5)] snap-start snap-always bg-white rounded-3xl overflow-hidden border border-teal-100 shadow-md hover:shadow-2xl transition duration-300 cursor-pointer" onclick="openProductDetailModal('${safeName}', '${safeImage}', '${safeDesc}', '${safePrice}', '${safeOrigPrice}', '${safeCategory}', '${safeSubCategory}', '${safeWhatsapp}')">
+            <div class="flex-none w-[80vw] min-w-[80vw] md:w-[220px] md:min-w-[220px] lg:w-[calc((100%-5rem)/5)] snap-start snap-always bg-white rounded-3xl overflow-hidden border border-teal-100 shadow-md hover:shadow-2xl transition duration-300 cursor-pointer" onclick="openProductDetailModal('${safeName}', '${safeImage}', '${safeDesc}', '${safePrice}', '${safeOrigPrice}', '${safeCategory}', '${safeSubCategory}', '${safeWhatsapp}', '${safeModel}', '${safeRam}', '${safeStorage}', '${safeBrand}', '${safeSeries}', '${safeProcessor}', '${safeAddedBy}', '${safeCreatedDate}', '${safeCompanyName}')">
                 <img src="${image}" class="w-full h-40 object-cover">
                 <div class="p-4">
                     <h4 class="font-bold text-gray-800 text-base truncate">${variety}</h4>
@@ -2218,10 +2240,57 @@
             updateLanguageUI(currentLang);
         });
 
-        window.openProductDetailModal = function(name, image, desc, price, originalPrice, category, subCategory, whatsapp) {
+        window.openProductDetailModal = function(name, image, desc, price, originalPrice, category, subCategory, whatsapp, model, ram, storage, brand, series, processor, addedBy, createdDate, companyName) {
             document.getElementById('pm-image').src = image || 'https://via.placeholder.com/150';
             document.getElementById('pm-title').textContent = name;
             document.getElementById('pm-category').textContent = subCategory || category || 'Product';
+            
+            // Add Post Date
+            let dateText = '';
+            if (createdDate && createdDate !== 'undefined' && createdDate !== 'null' && createdDate.trim() !== '') {
+                try {
+                    const dateObj = new Date(createdDate);
+                    if (!isNaN(dateObj.getTime())) {
+                        dateText = dateObj.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' });
+                    } else {
+                        dateText = createdDate;
+                    }
+                } catch (e) {
+                    dateText = createdDate;
+                }
+            }
+            const postDateEl = document.getElementById('pm-post-date');
+            if (postDateEl) {
+                postDateEl.textContent = dateText ? dateText : '';
+            }
+
+            // Add Shop Name
+            const shopNameEl = document.getElementById('pm-shop-name');
+            if (shopNameEl) {
+                const displayShop = (companyName && companyName !== 'undefined' && companyName !== 'null' && companyName.trim() !== '') ? companyName.trim() : ((addedBy && addedBy !== 'undefined' && addedBy !== 'null') ? addedBy.trim() : 'Admin');
+                shopNameEl.textContent = displayShop;
+            }
+
+            // Add Brand + Series + Model + Processor + RAM + Storage specs summary
+            const specsSummaryEl = document.getElementById('pm-specs-summary');
+            if (specsSummaryEl) {
+                let specParts = [];
+                if (brand && brand !== 'undefined' && brand !== 'null' && brand.trim() !== '') specParts.push(brand.trim());
+                if (series && series !== 'undefined' && series !== 'null' && series.trim() !== '') specParts.push(series.trim());
+                if (model && model !== 'undefined' && model !== 'null' && model.trim() !== '') specParts.push(model.trim());
+                if (processor && processor !== 'undefined' && processor !== 'null' && processor.trim() !== '') specParts.push(processor.trim());
+                if (ram && ram !== 'undefined' && ram !== 'null' && ram.trim() !== '') specParts.push(ram.trim());
+                if (storage && storage !== 'undefined' && storage !== 'null' && storage.trim() !== '') specParts.push(storage.trim());
+                
+                if (specParts.length > 0) {
+                    specsSummaryEl.textContent = specParts.join(' + ');
+                    specsSummaryEl.classList.remove('hidden');
+                } else {
+                    specsSummaryEl.textContent = '';
+                    specsSummaryEl.classList.add('hidden');
+                }
+            }
+            
             document.getElementById('pm-price').textContent = price ? (price.toString().includes('Rs') ? price : `Rs. ${price}`) : 'Rs. -';
             
             const origPriceContainer = document.getElementById('pm-original-price-container');
@@ -2268,35 +2337,44 @@
     <!-- Product Detail Modal -->
     <div id="productDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-[999999] opacity-0 transition-opacity duration-300" onclick="closeProductModal()">
         <div class="bg-white rounded-2xl max-w-[340px] w-full mx-4 shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="productModalContent" onclick="event.stopPropagation()">
-            <!-- Image Header -->
-            <div class="relative h-44 w-full bg-slate-50 flex items-center justify-center border-b border-slate-100 p-2">
-                <img id="pm-image" src="" class="max-w-full max-h-full w-auto h-auto object-contain">
+            <!-- Image Header with proper top/bottom space -->
+            <div class="relative h-[155px] w-full bg-slate-50 flex items-center justify-center border-b border-slate-100 p-3">
+                <img id="pm-image" src="" class="max-w-[90%] max-h-[85%] w-auto h-auto object-contain">
                 <button onclick="closeProductModal()" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full text-white transition-all text-lg font-bold">&times;</button>
             </div>
             <!-- Body -->
             <div class="p-5 flex flex-col gap-3 text-left">
                 <div>
-                    <span id="pm-category" class="bg-emerald-50 text-emerald-700 border border-emerald-200/50 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Category</span>
-                    <h3 id="pm-title" class="font-bold text-lg text-slate-800 leading-snug mt-2">Product Title</h3>
+                    <div class="flex justify-between items-center">
+                        <span id="pm-category" class="bg-emerald-50 text-emerald-700 border border-emerald-200/50 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Category</span>
+                        <span id="pm-post-date" class="text-[10px] text-slate-400 font-semibold"></span>
+                    </div>
+                    <h3 id="pm-title" class="font-bold text-lg text-slate-800 leading-snug mt-1.5">Product Title</h3>
+                    <!-- Specs Summary Container under Laptops Name -->
+                    <div id="pm-specs-summary" class="text-[11px] text-slate-400 mt-1 font-semibold"></div>
                 </div>
-                <div class="border-t border-b border-slate-100 py-2.5 flex justify-between items-center">
+                <div class="border-t border-b border-slate-100 py-2 flex justify-between items-center">
                     <div>
-                        <div class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Price</div>
+                        <div class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">Price</div>
                         <div class="text-xl font-extrabold text-emerald-600 mt-0.5" id="pm-price">Rs. -</div>
                     </div>
+                    <div class="text-center px-1">
+                        <div class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">Shop Name</div>
+                        <div class="text-[11px] font-bold text-slate-700 mt-0.5 truncate max-w-[100px]" id="pm-shop-name">-</div>
+                    </div>
                     <div id="pm-original-price-container" class="hidden text-right">
-                        <div class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Original Price</div>
+                        <div class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">Original Price</div>
                         <div class="text-sm font-medium line-through text-slate-400 mt-0.5" id="pm-original-price">Rs. -</div>
                     </div>
                 </div>
                 <div>
-                    <div class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mb-1">Details</div>
-                    <div id="pm-desc" class="text-xs text-slate-600 leading-relaxed max-h-28 overflow-y-auto custom-scrollbar">
+                    <div class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Details</div>
+                    <div id="pm-desc" class="text-xs text-slate-600 leading-relaxed max-h-16 overflow-y-auto custom-scrollbar">
                         Product details description here.
                     </div>
                 </div>
                 <!-- WhatsApp Action / Call Action -->
-                <div class="flex gap-2 mt-2">
+                <div class="flex gap-2 mt-1">
                     <a id="pm-whatsapp" href="#" target="_blank" class="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-sm text-center">
                         <i class="fab fa-whatsapp text-sm"></i> WhatsApp
                     </a>

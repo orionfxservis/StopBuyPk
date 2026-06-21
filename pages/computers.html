@@ -61,25 +61,31 @@
 
     .card {
       background: #fff;
-      padding: 10px;
-      border-radius: 12px;
-      border: 1px solid #e5e7eb;
-      transition: 0.3s;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid #f1f5f9;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.03);
     }
 
     .card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08);
+      border-color: #cbd5e1;
     }
 
     .card img {
       width: 100%;
-      height: 130px;
-      object-fit: cover;
-      border-radius: 10px;
+      height: 140px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: #f8fafc;
+      padding: 12px;
     }
 
     .card h4 {
-      margin: 6px 0;
+      margin-top: 12px;
+      margin-bottom: 8px;
     }
 
     .card p {
@@ -1121,10 +1127,20 @@
       const safeCategory = (p.category || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
       const safeSubCategory = (p.subCategory || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
       const safeWhatsapp = (p.whatsapp || p.contact || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+      const safeModel = (p.model || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+      const safeRam = (p.ram || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+      const safeStorage = (p.storage || p.hdd || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+
+      const safeBrand = (p.brand || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+      const safeSeries = (p.series || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+      const safeProcessor = (p.processor || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+      const safeAddedBy = (p.addedBy || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+      const safeCreatedDate = (p.createdDate || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+      const safeCompanyName = (p.companyName || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
 
       if (currentViewMode === 'list') {
         return `
-          <div onclick="openProductDetailModal('${safeName}', '${safeImage}', '${safeDesc}', '${safePrice}', '${safeOrigPrice}', '${safeCategory}', '${safeSubCategory}', '${safeWhatsapp}')" class="card relative flex flex-row items-center justify-between w-full gap-4 p-4 hover:shadow-md transition-all cursor-pointer">
+          <div onclick="openProductDetailModal('${safeName}', '${safeImage}', '${safeDesc}', '${safePrice}', '${safeOrigPrice}', '${safeCategory}', '${safeSubCategory}', '${safeWhatsapp}', '${safeModel}', '${safeRam}', '${safeStorage}', '${safeBrand}', '${safeSeries}', '${safeProcessor}', '${safeAddedBy}', '${safeCreatedDate}', '${safeCompanyName}')" class="card relative flex flex-row items-center justify-between w-full gap-4 p-4 hover:shadow-md transition-all cursor-pointer">
             <div class="flex items-center gap-4 flex-1">
               <div class="relative overflow-hidden rounded-xl w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 bg-slate-50 flex items-center justify-center border border-slate-100">
                 ${condBadge}
@@ -1146,7 +1162,7 @@
       }
       
       return `
-        <div onclick="openProductDetailModal('${safeName}', '${safeImage}', '${safeDesc}', '${safePrice}', '${safeOrigPrice}', '${safeCategory}', '${safeSubCategory}', '${safeWhatsapp}')" class="card relative flex flex-col justify-between cursor-pointer">
+        <div onclick="openProductDetailModal('${safeName}', '${safeImage}', '${safeDesc}', '${safePrice}', '${safeOrigPrice}', '${safeCategory}', '${safeSubCategory}', '${safeWhatsapp}', '${safeModel}', '${safeRam}', '${safeStorage}', '${safeBrand}', '${safeSeries}', '${safeProcessor}', '${safeAddedBy}', '${safeCreatedDate}', '${safeCompanyName}')" class="card relative flex flex-col justify-between cursor-pointer">
           <div>
             <div class="relative overflow-hidden rounded-xl">
               ${condBadge}
@@ -1206,10 +1222,6 @@
 
 
 
-
-
-
-
 <!-- FOOTER -->
     <div class="w-full bg-[#0A3D2A] text-emerald-50 text-center py-4 text-sm mt-auto border-t border-[#052C22]">
         &copy; 2026 StopBuyPk - Smart Price Comparison
@@ -1256,7 +1268,10 @@
         if (!qtyInput || !totalInput) return;
         const qty = parseInt(qtyInput.value) || 1;
         const total = currentProductPriceVal * qty;
-        totalInput.value = total > 0 ? `Rs. ${total.toLocaleString()}` : 'Rs. -';
+        const totalText = total > 0 ? `Rs. ${total.toLocaleString()}` : 'Rs. -';
+        totalInput.value = totalText;
+        const displayEl = document.getElementById('of-total-amount-display');
+        if (displayEl) displayEl.textContent = totalText;
     };
 
     window.selectPaymentMethod = function(method) {
@@ -1279,20 +1294,98 @@
         });
     };
 
-    window.openProductDetailModal = function(name, image, desc, price, originalPrice, category, subCategory, whatsapp) {
+    window.openProductDetailModal = function(name, image, desc, price, originalPrice, category, subCategory, whatsapp, model, ram, storage, brand, series, processor, addedBy, createdDate, companyName) {
         document.getElementById('pm-image').src = image || 'https://via.placeholder.com/150';
         document.getElementById('pm-title').textContent = name;
         document.getElementById('pm-category').textContent = subCategory || category || 'Product';
         
-        const priceText = price ? (price.toString().includes('Rs') ? price : `Rs. ${Number(price).toLocaleString()}`) : 'Rs. -';
-        document.getElementById('pm-price').textContent = priceText;
+        // Add Post Date
+        let dateText = '';
+        if (createdDate && createdDate !== 'undefined' && createdDate !== 'null' && createdDate.trim() !== '') {
+            try {
+                const dateObj = new Date(createdDate);
+                if (!isNaN(dateObj.getTime())) {
+                    dateText = dateObj.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' });
+                } else {
+                    dateText = createdDate;
+                }
+            } catch (e) {
+                dateText = createdDate;
+            }
+        }
+        const postDateEl = document.getElementById('pm-post-date');
+        if (postDateEl) {
+            postDateEl.textContent = dateText ? dateText : '';
+        }
+
+        // Add Shop Name
+        const shopNameEl = document.getElementById('pm-shop-name');
+        if (shopNameEl) {
+            const displayShop = (companyName && companyName !== 'undefined' && companyName !== 'null' && companyName.trim() !== '') ? companyName.trim() : ((addedBy && addedBy !== 'undefined' && addedBy !== 'null') ? addedBy.trim() : 'Admin');
+            shopNameEl.textContent = displayShop;
+        }
+
+        // Add Brand + Series + Model + Processor + RAM + Storage specs summary
+        const specsSummaryEl = document.getElementById('pm-specs-summary');
+        if (specsSummaryEl) {
+            let specParts = [];
+            if (brand && brand !== 'undefined' && brand !== 'null' && brand.trim() !== '') specParts.push(brand.trim());
+            if (series && series !== 'undefined' && series !== 'null' && series.trim() !== '') specParts.push(series.trim());
+            if (model && model !== 'undefined' && model !== 'null' && model.trim() !== '') specParts.push(model.trim());
+            if (processor && processor !== 'undefined' && processor !== 'null' && processor.trim() !== '') specParts.push(processor.trim());
+            if (ram && ram !== 'undefined' && ram !== 'null' && ram.trim() !== '') specParts.push(ram.trim());
+            if (storage && storage !== 'undefined' && storage !== 'null' && storage.trim() !== '') specParts.push(storage.trim());
+            
+            if (specParts.length > 0) {
+                specsSummaryEl.textContent = specParts.join(' + ');
+                specsSummaryEl.classList.remove('hidden');
+            } else {
+                specsSummaryEl.textContent = '';
+                specsSummaryEl.classList.add('hidden');
+            }
+        }
         
-        const origPriceContainer = document.getElementById('pm-original-price-container');
-        if (originalPrice && originalPrice !== 'undefined' && originalPrice !== '') {
-            document.getElementById('pm-original-price').textContent = originalPrice.toString().includes('Rs') ? originalPrice : `Rs. ${Number(originalPrice).toLocaleString()}`;
-            origPriceContainer.classList.remove('hidden');
-        } else {
-            origPriceContainer.classList.add('hidden');
+        // Find matching computers for price comparison
+        const normModel = (model || '').toLowerCase().trim();
+        const normRam = (ram || '').toLowerCase().trim();
+        const normStorage = (storage || '').toLowerCase().trim();
+
+        let highestPrice = 0;
+        let bestPrice = parseFloat(price.toString().replace(/[^0-9.]/g, '')) || 0;
+
+        if (normModel || normRam || normStorage) {
+            const matches = allComputers.filter(p => {
+                const mModel = (p.model || '').toLowerCase().trim();
+                const mRam = (p.ram || '').toLowerCase().trim();
+                const mStorage = (p.storage || p.hdd || '').toLowerCase().trim();
+                
+                // Compare model, ram, and storage
+                const matchModel = !normModel || mModel === normModel;
+                const matchRam = !normRam || mRam === normRam;
+                const matchStorage = !normStorage || mStorage === normStorage;
+
+                return matchModel && matchRam && matchStorage;
+            });
+
+            if (matches.length > 0) {
+                const prices = matches.map(p => parseFloat(p.price) || 0).filter(p => p > 0);
+                if (prices.length > 0) {
+                    highestPrice = Math.max(...prices);
+                    bestPrice = Math.min(...prices);
+                }
+            }
+        }
+
+        if (highestPrice === 0 || highestPrice < bestPrice) {
+            highestPrice = parseFloat(price.toString().replace(/[^0-9.]/g, '')) || 0;
+        }
+
+        const priceText = bestPrice ? `Rs. ${bestPrice.toLocaleString()}` : 'Rs. -';
+        const highestPriceText = highestPrice ? `Rs. ${highestPrice.toLocaleString()}` : 'Rs. -';
+
+        document.getElementById('pm-price').textContent = priceText;
+        if (document.getElementById('pm-highest-price')) {
+            document.getElementById('pm-highest-price').textContent = highestPriceText;
         }
         
         document.getElementById('pm-desc').innerHTML = desc ? desc.replace(/\n/g, '<br>') : 'Compare prices from multiple stores and find the best deals.';
@@ -1306,7 +1399,7 @@
         }
 
         // Parse numeric price for total calculation
-        currentProductPriceVal = price ? parseFloat(price.toString().replace(/[^0-9.]/g, '')) || 0 : 0;
+        currentProductPriceVal = bestPrice;
 
         // Reset form fields first
         if (document.getElementById('orderSubmitForm')) {
@@ -1316,12 +1409,22 @@
 
         // Fill Order Form fields
         document.getElementById('of-product-name').value = name;
+        if (document.getElementById('of-product-name-display')) {
+            document.getElementById('of-product-name-display').textContent = name;
+        }
+        
         document.getElementById('of-product-price').value = priceText;
+        if (document.getElementById('of-product-price-display')) {
+            document.getElementById('of-product-price-display').textContent = priceText;
+        }
         
         // Auto-load Date & Time
         const now = new Date();
         const dateStr = now.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         document.getElementById('of-datetime').value = dateStr;
+        if (document.getElementById('of-datetime-display')) {
+            document.getElementById('of-datetime-display').textContent = dateStr;
+        }
 
         // Reset payment method selector to Cash On Delivery
         selectPaymentMethod('Cash On Delivery');
@@ -1345,7 +1448,8 @@
         modal.classList.add('flex');
         setTimeout(() => {
             modal.classList.remove('opacity-0');
-            content.classList.remove('scale-95');
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
         }, 10);
     };
 
@@ -1353,7 +1457,8 @@
         const modal = document.getElementById('productDetailModal');
         const content = document.getElementById('productModalContent');
         modal.classList.add('opacity-0');
-        content.classList.add('scale-95');
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
         setTimeout(() => {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
@@ -1419,43 +1524,52 @@
 </script>
 
 <!-- Product Detail Modal -->
-<div id="productDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-[999999] opacity-0 transition-opacity duration-300" onclick="closeProductModal()">
-    <div class="bg-transparent max-w-[340px] w-[90vw] md:max-w-[696px] md:w-full mx-4 transform scale-95 transition-all duration-500 overflow-hidden h-[510px] rounded-2xl shadow-2xl relative" id="productModalContent" onclick="event.stopPropagation()">
+<div id="productDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md hidden items-center justify-center z-[999999] opacity-0 transition-opacity duration-300" onclick="closeProductModal()">
+    <div class="bg-transparent max-w-[340px] w-[90vw] md:max-w-[696px] md:w-full mx-4 transform scale-95 opacity-0 transition-all duration-500 overflow-hidden md:overflow-visible h-[510px] rounded-2xl relative" id="productModalContent" onclick="event.stopPropagation()">
         
         <!-- Sliding Track -->
-        <div class="flex w-[200%] md:w-full h-full transition-transform duration-500 ease-in-out transform translate-x-0" id="modalSlider">
+        <div class="flex items-center w-[200%] md:w-full h-full transition-transform duration-500 ease-in-out transform translate-x-0" id="modalSlider">
             
             <!-- Pane 1: Product Detail Card -->
-            <div id="detailsPane" class="bg-white w-1/2 md:w-[340px] h-[510px] flex flex-col justify-between overflow-hidden flex-shrink-0">
-                <!-- Image Header -->
-                <div class="relative h-44 w-full bg-slate-50 flex items-center justify-center border-b border-slate-100 p-2">
-                    <img id="pm-image" src="" class="max-w-full max-h-full w-auto h-auto object-contain">
+            <div id="detailsPane" class="bg-white rounded-2xl shadow-xl md:shadow-2xl w-1/2 md:w-[340px] h-[510px] flex flex-col justify-between overflow-hidden flex-shrink-0">
+                <!-- Image Header with proper top/bottom space -->
+                <div class="relative h-[155px] w-full bg-slate-50 flex items-center justify-center border-b border-slate-100 p-3">
+                    <img id="pm-image" src="" class="max-w-[90%] max-h-[85%] w-auto h-auto object-contain">
                     <button onclick="closeProductModal()" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full text-white transition-all text-lg font-bold">&times;</button>
                 </div>
-                <!-- Body -->
-                <div class="p-5 flex flex-col gap-3 text-left flex-1 justify-between">
+                <!-- Body with proper bottom spacing and layout -->
+                <div class="pt-3 pb-5 px-5 flex flex-col gap-3 text-left flex-1 justify-between">
                     <div>
-                        <span id="pm-category" class="bg-emerald-50 text-emerald-700 border border-emerald-200/50 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Category</span>
-                        <h3 id="pm-title" class="font-bold text-lg text-slate-800 leading-snug mt-2">Product Title</h3>
+                        <div class="flex justify-between items-center">
+                            <span id="pm-category" class="bg-emerald-50 text-emerald-700 border border-emerald-200/50 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Category</span>
+                            <span id="pm-post-date" class="text-[10px] text-slate-400 font-semibold"></span>
+                        </div>
+                        <h3 id="pm-title" class="font-bold text-lg text-slate-800 leading-snug mt-1.5">Product Title</h3>
+                        <!-- Specs Summary Container under Laptops Name -->
+                        <div id="pm-specs-summary" class="text-[11px] text-slate-400 mt-1 font-semibold"></div>
                     </div>
-                    <div class="border-t border-b border-slate-100 py-2.5 flex justify-between items-center">
+                    <div class="border-t border-b border-slate-100 py-2 flex justify-between items-center">
                         <div>
-                            <div class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Price</div>
-                            <div class="text-xl font-extrabold text-emerald-600 mt-0.5" id="pm-price">Rs. -</div>
+                            <div class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">Highest Price</div>
+                            <div class="text-sm font-bold text-red-500 mt-0.5" id="pm-highest-price">Rs. -</div>
                         </div>
-                        <div id="pm-original-price-container" class="hidden text-right">
-                            <div class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Original Price</div>
-                            <div class="text-sm font-medium line-through text-slate-400 mt-0.5" id="pm-original-price">Rs. -</div>
+                        <div class="text-center px-1">
+                            <div class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">Shop Name</div>
+                            <div class="text-[11px] font-bold text-slate-700 mt-0.5 truncate max-w-[100px]" id="pm-shop-name">-</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">Best Price</div>
+                            <div class="text-lg font-extrabold text-emerald-600 mt-0.5" id="pm-price">Rs. -</div>
                         </div>
                     </div>
                     <div>
-                        <div class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mb-1">Details</div>
-                        <div id="pm-desc" class="text-xs text-slate-600 leading-relaxed max-h-24 overflow-y-auto custom-scrollbar">
+                        <div class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Details</div>
+                        <div id="pm-desc" class="text-xs text-slate-600 leading-relaxed max-h-[64px] overflow-y-auto custom-scrollbar">
                             Product details description here.
                         </div>
                     </div>
                     <!-- Action Buttons -->
-                    <div class="flex gap-2 mt-2">
+                    <div class="flex gap-2 mt-1">
                         <button id="pm-whatsapp" onclick="showOrderForm()" class="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-sm text-center">
                             <i class="fab fa-whatsapp text-sm"></i> Order Now
                         </button>
@@ -1470,42 +1584,47 @@
             <div class="hidden md:block w-4 flex-shrink-0 h-full bg-transparent"></div>
 
             <!-- Pane 2: Order Form Card -->
-            <div id="orderFormPane" class="bg-white w-1/2 md:w-[340px] h-[510px] flex flex-col justify-between overflow-hidden flex-shrink-0 transition-opacity duration-500 opacity-0 pointer-events-none hidden">
-                <!-- Header -->
-                <div class="relative py-3.5 px-5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
-                    <h3 class="font-bold text-slate-800 text-sm">📋 Order Details</h3>
-                    <button onclick="hideOrderForm()" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
+            <div id="orderFormPane" class="bg-white rounded-2xl shadow-xl md:shadow-2xl w-1/2 md:w-[340px] h-[510px] flex flex-col justify-between overflow-hidden flex-shrink-0 transition-opacity duration-500 opacity-0 pointer-events-none hidden">
+                <!-- Compact Header to match screenshot -->
+                <div class="relative py-3 px-5 border-b border-slate-100 flex items-center justify-between bg-white">
+                    <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                        <span class="text-base">📋</span> Order Details
+                    </h3>
+                    <button onclick="hideOrderForm()" class="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-100 rounded-full text-[10px] font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 transition-all shadow-sm">
                         <i class="fas fa-arrow-left"></i> Back
                     </button>
                 </div>
-                <!-- Body -->
-                <form id="orderSubmitForm" onsubmit="submitWhatsAppOrder(event)" class="p-5 flex flex-col gap-2.5 text-left flex-1 justify-between">
-                    <!-- Date & Time -->
+                <!-- Body with proper spacing -->
+                <form id="orderSubmitForm" onsubmit="submitWhatsAppOrder(event)" class="pt-3 pb-5 px-5 flex flex-col gap-2.5 text-left flex-1 justify-between">
+                    <!-- Order Date & Time -->
                     <div>
                         <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Order Date & Time</label>
-                        <input type="text" id="of-datetime" readonly class="w-full bg-slate-100 border border-slate-200 rounded-lg py-1 px-3 text-xs text-slate-500 font-medium cursor-not-allowed select-none focus:outline-none">
+                        <input type="text" id="of-datetime" readonly class="w-full border border-slate-200 rounded-xl py-1 px-3 text-xs text-slate-600 bg-slate-50/50 font-medium focus:outline-none">
                     </div>
+                    <!-- Product -->
                     <div>
                         <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Product</label>
-                        <input type="text" id="of-product-name" readonly class="w-full bg-slate-100 border border-slate-200 rounded-lg py-1 px-3 text-xs text-slate-500 font-medium cursor-not-allowed select-none focus:outline-none">
+                        <input type="text" id="of-product-name" readonly class="w-full border border-slate-200 rounded-xl py-1 px-3 text-xs text-slate-600 bg-slate-50/50 font-medium focus:outline-none">
                     </div>
+                    <!-- Price, Quantity, Total -->
                     <div class="grid grid-cols-3 gap-2">
                         <div>
                             <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Price</label>
-                            <input type="text" id="of-product-price" readonly class="w-full bg-slate-100 border border-slate-200 rounded-lg py-1 px-2 text-xs text-slate-500 font-medium cursor-not-allowed select-none focus:outline-none">
+                            <input type="text" id="of-product-price" readonly class="w-full border border-slate-200 rounded-xl py-1 px-2 text-xs text-slate-600 bg-slate-50/50 font-medium text-center focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Quantity</label>
-                            <input type="number" id="of-quantity" min="1" value="1" required class="w-full border border-slate-200 rounded-lg py-1 px-2 text-xs text-slate-700 font-medium focus:border-emerald-500 focus:outline-none">
+                            <input type="number" id="of-quantity" min="1" value="1" required class="w-full border border-slate-200 rounded-xl py-1 px-2 text-xs text-slate-700 font-medium text-center focus:border-emerald-500 focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Total</label>
-                            <input type="text" id="of-total-amount" readonly class="w-full bg-slate-100 border border-slate-200 rounded-lg py-1 px-2 text-xs text-emerald-600 font-bold cursor-not-allowed select-none focus:outline-none">
+                            <div class="w-full border border-slate-200 bg-white rounded-xl py-1 px-2 text-xs text-emerald-700 font-bold text-center" style="min-height: 26px; line-height: 1.5;" id="of-total-amount-display">Rs. -</div>
+                            <input type="hidden" id="of-total-amount">
                         </div>
                     </div>
                     <!-- Payment Method -->
                     <div>
-                        <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-1">Payment Method</label>
+                        <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Payment Method</label>
                         <div class="grid grid-cols-3 gap-2" id="payment-methods-container">
                             <!-- JazzCash -->
                             <div onclick="selectPaymentMethod('JazzCash')" id="pm-option-JazzCash" class="cursor-pointer border border-slate-200 rounded-xl py-1 px-1.5 flex flex-col items-center justify-center gap-0.5 bg-white text-slate-600 hover:border-slate-300 transition-all">
@@ -1535,7 +1654,7 @@
                     </div>
                     <div>
                         <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Shipping Address</label>
-                        <textarea id="of-address" required rows="1.5" placeholder="Complete address for home delivery" class="w-full border border-slate-200 rounded-lg py-1 px-3 text-xs text-slate-700 font-medium focus:border-emerald-500 focus:outline-none resize-none"></textarea>
+                        <textarea id="of-address" required rows="1" placeholder="Complete address for home delivery" class="w-full border border-slate-200 rounded-lg py-1 px-3 text-xs text-slate-700 font-medium focus:border-emerald-500 focus:outline-none resize-none"></textarea>
                     </div>
                     <!-- Submit -->
                     <button type="submit" class="w-full mt-1.5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-sm text-center">
