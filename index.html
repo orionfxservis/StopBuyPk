@@ -2052,9 +2052,8 @@
             <div
                 class="border-t border-[#2b3544] pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
                 <div>
-                    <span class="lang-en">© 2026 StopBuyPk. All rights reserved. Pakistan’s trusted smart price
-                        comparison platform.</span><span class="lang-ur">© 2026 سٹاپ بائے پی کے۔ جملہ حقوق محفوظ ہیں۔
-                        پاکستان کا بھروسہ مند سمارٹ پرائس موازنہ پلیٹ فارم۔</span>
+                    <span class="lang-en">© 2026 StopBuyPk. All rights reserved. Pakistan’s trusted smart price comparison platform. Designed & Developed by <strong>"Orion FX"</strong>.</span>
+                    <span class="lang-ur">© 2026 اسٹاپ بائے پی کے۔ جملہ حقوق محفوظ ہیں۔ پاکستان کا قابلِ اعتماد سمارٹ پرائس کمپیریزن پلیٹ فارم۔ ڈیزائن اور ڈیولپمنٹ: <strong>اورین ایف ایکس</strong>۔</span>
                 </div>
                 <div class="flex gap-5">
                     <a href="./pages/terms.html" class="hover:text-white transition-colors">
@@ -3206,12 +3205,12 @@
         };
     </script>
     <script>
+        let allProducts = [];
         document.addEventListener("DOMContentLoaded", () => {
             const searchInput = document.getElementById('mainSearchInput');
             const searchBtn = document.getElementById('mainSearchBtn');
             const locationSelect = document.getElementById('mainLocationSelect');
             const productGrid = document.getElementById('product-grid');
-            let allProducts = [];
 
             if (typeof DataService !== 'undefined') {
                 DataService.getProducts().then(products => {
@@ -3270,12 +3269,86 @@
                     }
 
                     productGrid.innerHTML = filtered.slice(0, 4).map(p => {
-                        const minPrice = parseFloat(p.price || 0);
-                        const maxPrice = p.originalPrice ? parseFloat(p.originalPrice) : (minPrice * 1.2).toFixed(0);
+                        let minPrice = parseFloat(p.price || 0);
+                        let maxPrice = 0;
+
+                        const normModel = (p.model || '').toLowerCase().trim();
+                        const normRam = (p.ram || '').toLowerCase().trim();
+                        const normStorage = (p.storage || p.hdd || '').toLowerCase().trim();
+
+                        if (p.category && p.category.toLowerCase() === 'computer' && (normModel || normRam || normStorage)) {
+                            const matches = (allProducts || []).filter(item => {
+                                if (!item.category || item.category.toLowerCase() !== 'computer') return false;
+                                const mModel = (item.model || '').toLowerCase().trim();
+                                const mRam = (item.ram || '').toLowerCase().trim();
+                                const mStorage = (item.storage || item.hdd || '').toLowerCase().trim();
+                                
+                                const matchModel = !normModel || mModel === normModel;
+                                const matchRam = !normRam || mRam === normRam;
+                                const matchStorage = !normStorage || mStorage === normStorage;
+
+                                return matchModel && matchRam && matchStorage;
+                            });
+
+                            if (matches.length > 0) {
+                                const prices = matches.map(item => parseFloat(item.price) || 0).filter(pr => pr > 0);
+                                if (prices.length > 0) {
+                                    maxPrice = Math.max(...prices);
+                                    minPrice = Math.min(...prices);
+                                }
+                            }
+                        }
+
+                        if (maxPrice === 0 || maxPrice < minPrice) {
+                            maxPrice = minPrice;
+                        }
+
                         const img = p.image || 'https://via.placeholder.com/600x400?text=No+Image';
 
-                        const safeName = p.name ? p.name.replace(/'/g, "\\'") : '';
-                        const safeVariety = p.variety ? p.variety.replace(/'/g, "\\'") : '';
+                        let specs = [];
+                        if (p.brand) specs.push(`Brand: ${p.brand}`);
+                        if (p.model) specs.push(`Model: ${p.model}`);
+                        if (p.generation) specs.push(`Generation: ${p.generation}`);
+                        if (p.processor) specs.push(`Processor: ${p.processor}`);
+                        if (p.ram) specs.push(`RAM: ${p.ram}`);
+                        
+                        const storageVal = p.storage || p.hdd;
+                        const storageTypeVal = p.storageType || p.hddType || '';
+                        if (storageVal) specs.push(`Storage: ${storageVal} ${storageTypeVal}`.trim());
+                        
+                        const gpuVal = p.graphicsCard || p.gpu;
+                        if (gpuVal) specs.push(`GPU: ${gpuVal}`);
+                        
+                        if (p.screenSize) specs.push(`Screen Size: ${p.screenSize}`);
+                        
+                        const osVal = p.os || p.operatingSystem;
+                        if (osVal) specs.push(`OS: ${osVal}`);
+                        
+                        if (p.condition) specs.push(`Condition: ${p.condition}`);
+                        if (p.warranty) specs.push(`Warranty: ${p.warranty}`);
+                        if (p.delivery || p.shipping) specs.push(`Delivery: ${p.delivery || p.shipping}`);
+                        if (p.description || p.details) specs.push(`Details: ${p.description || p.details}`);
+                        const descString = specs.length > 0 ? specs.join("\n") : "No specifications available.";
+
+                        const name = p.name || `${p.brand || ''} ${p.model || ''}`.trim() || 'Computer';
+
+                        const safeName = name.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeImage = img.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeDesc = descString.replace(/'/g, "\\'").replace(/\n/g, "\\n").replace(/"/g, "&quot;");
+                        const safePrice = p.price ? p.price.toString().replace(/'/g, "\\'").replace(/"/g, "&quot;") : '';
+                        const safeOrigPrice = (p.originalPrice || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeCategory = (p.category || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeSubCategory = (p.subCategory || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeWhatsapp = (p.whatsapp || p.contact || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeModel = (p.model || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeRam = (p.ram || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeStorage = (p.storage || p.hdd || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeBrand = (p.brand || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeSeries = (p.series || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeProcessor = (p.processor || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeAddedBy = (p.addedBy || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeCreatedDate = (p.createdDate || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeCompanyName = (p.companyName || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
 
                         return `
                         <div class="product-card bg-white rounded-3xl border border-gray-100 p-3 shadow-sm hover:shadow-lg transition-all duration-300 max-w-[280px] mx-auto w-full flex flex-col"
@@ -3286,11 +3359,11 @@
                                 <div class="absolute top-2 right-2 w-8 h-8 bg-white/95 rounded-full flex items-center justify-center shadow cursor-pointer hover:scale-110 transition">
                                     <i class="far fa-heart text-gray-700 text-sm"></i>
                                 </div>
-                            </div>
+                             </div>
                             
                             <div class="flex-1 flex flex-col justify-between px-1">
                                 <div>
-                                    <h3 class="text-[16px] font-extrabold text-[#1f2937] mb-0.5 line-clamp-1">${p.name}</h3>
+                                    <h3 class="text-[16px] font-extrabold text-[#1f2937] mb-0.5 line-clamp-1">${name}</h3>
                                     <p class="text-[12px] text-gray-500 mb-4 line-clamp-1">${p.variety || 'Compare prices from multiple stores'}</p>
                                 </div>
                                 
@@ -3311,8 +3384,8 @@
                                 </div>
                                 
                                 <button class="w-full py-2.5 rounded-[0.85rem] bg-[#0d9488] text-white text-[12px] font-bold tracking-wide hover:bg-[#0f766e] hover:shadow-md transition-all duration-300" 
-                                    onclick="openProductModal('${safeName}', '${safeVariety}', '${minPrice}', '${maxPrice}', '${img}')">
-                                    View Full Comparison
+                                    onclick="openProductModal('${safeName}', '${safeImage}', '${safeDesc}', '${safePrice}', '${safeOrigPrice}', '${safeCategory}', '${safeSubCategory}', '${safeWhatsapp}', '${safeModel}', '${safeRam}', '${safeStorage}', '${safeBrand}', '${safeSeries}', '${safeProcessor}', '${safeAddedBy}', '${safeCreatedDate}', '${safeCompanyName}')">
+                                    View Full Details
                                 </button>
                             </div>
                         </div>
@@ -3529,10 +3602,440 @@
         }
 
         // Initialize alerts count, blogs, and register interval
+        // Initialize alerts count, blogs, and register interval
         updateSuperAdminAlerts();
         loadHomeBlogs();
         setInterval(updateSuperAdminAlerts, 30000);
+
+        let currentWhatsappNumber = '';
+        let currentProductPriceVal = 0;
+
+        window.updateOrderFormTotal = function() {
+            const qtyInput = document.getElementById('of-quantity');
+            const totalInput = document.getElementById('of-total-amount');
+            if (!qtyInput || !totalInput) return;
+            const qty = parseInt(qtyInput.value) || 1;
+            const total = currentProductPriceVal * qty;
+            const totalText = total > 0 ? `Rs. ${total.toLocaleString()}` : 'Rs. -';
+            totalInput.value = totalText;
+            const displayEl = document.getElementById('of-total-amount-display');
+            if (displayEl) displayEl.textContent = totalText;
+        };
+
+        window.selectPaymentMethod = function(method) {
+            document.getElementById('of-payment-method').value = method;
+            
+            const options = {
+                'JazzCash': { id: 'pm-option-JazzCash' },
+                'Easypaisa': { id: 'pm-option-Easypaisa' },
+                'Cash On Delivery': { id: 'pm-option-COD' }
+            };
+            
+            Object.keys(options).forEach(key => {
+                const el = document.getElementById(options[key].id);
+                if (!el) return;
+                if (key === method) {
+                    el.className = "cursor-pointer border border-emerald-500 bg-emerald-50/40 rounded-xl py-1 px-1.5 flex flex-col items-center justify-center gap-0.5 text-emerald-700 transition-all font-bold";
+                } else {
+                    el.className = "cursor-pointer border border-slate-200 rounded-xl py-1 px-1.5 flex flex-col items-center justify-center gap-0.5 bg-white text-slate-600 hover:border-slate-300 transition-all";
+                }
+            });
+        };
+
+        window.openProductModal = function(name, image, desc, price, originalPrice, category, subCategory, whatsapp, model, ram, storage, brand, series, processor, addedBy, createdDate, companyName) {
+            console.log("openProductModal starting", name, price);
+            try {
+                const content = document.getElementById('productModalContent');
+                document.getElementById('pm-image').src = image || 'https://via.placeholder.com/150';
+                document.getElementById('pm-title').textContent = name;
+                document.getElementById('pm-category').textContent = subCategory || category || 'Product';
+            
+            // Add Post Date
+            let dateText = '';
+            if (createdDate && createdDate !== 'undefined' && createdDate !== 'null' && createdDate.trim() !== '') {
+                try {
+                    const dateObj = new Date(createdDate);
+                    if (!isNaN(dateObj.getTime())) {
+                        dateText = dateObj.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' });
+                    } else {
+                        dateText = createdDate;
+                    }
+                } catch (e) {
+                    dateText = createdDate;
+                }
+            }
+            const postDateEl = document.getElementById('pm-post-date');
+            if (postDateEl) {
+                postDateEl.textContent = dateText ? dateText : '';
+            }
+
+            // Add Shop Name
+            const shopNameEl = document.getElementById('pm-shop-name');
+            if (shopNameEl) {
+                const displayShop = (companyName && companyName !== 'undefined' && companyName !== 'null' && companyName.trim() !== '') ? companyName.trim() : ((addedBy && addedBy !== 'undefined' && addedBy !== 'null') ? addedBy.trim() : 'Admin');
+                shopNameEl.textContent = displayShop;
+            }
+
+            // Add Brand + Series + Model + Processor + RAM + Storage specs summary
+            const specsSummaryEl = document.getElementById('pm-specs-summary');
+            if (specsSummaryEl) {
+                let specParts = [];
+                if (brand && brand !== 'undefined' && brand !== 'null' && brand.trim() !== '') specParts.push(brand.trim());
+                if (series && series !== 'undefined' && series !== 'null' && series.trim() !== '') specParts.push(series.trim());
+                if (model && model !== 'undefined' && model !== 'null' && model.trim() !== '') specParts.push(model.trim());
+                if (processor && processor !== 'undefined' && processor !== 'null' && processor.trim() !== '') specParts.push(processor.trim());
+                if (ram && ram !== 'undefined' && ram !== 'null' && ram.trim() !== '') specParts.push(ram.trim());
+                if (storage && storage !== 'undefined' && storage !== 'null' && storage.trim() !== '') specParts.push(storage.trim());
+                
+                if (specParts.length > 0) {
+                    specsSummaryEl.textContent = specParts.join(' + ');
+                    specsSummaryEl.classList.remove('hidden');
+                } else {
+                    specsSummaryEl.textContent = '';
+                    specsSummaryEl.classList.add('hidden');
+                }
+            }
+
+            // Find matching computers for price comparison
+            const normModel = (model || '').toLowerCase().trim();
+            const normRam = (ram || '').toLowerCase().trim();
+            const normStorage = (storage || '').toLowerCase().trim();
+
+            let highestPrice = 0;
+            let bestPrice = parseFloat(price.toString().replace(/[^0-9.]/g, '')) || 0;
+
+            const allComputers = (allProducts || []).filter(p => p.category && p.category.toLowerCase() === 'computer');
+
+            if (normModel || normRam || normStorage) {
+                const matches = allComputers.filter(p => {
+                    const mModel = (p.model || '').toLowerCase().trim();
+                    const mRam = (p.ram || '').toLowerCase().trim();
+                    const mStorage = (p.storage || p.hdd || '').toLowerCase().trim();
+                    
+                    // Compare model, ram, and storage
+                    const matchModel = !normModel || mModel === normModel;
+                    const matchRam = !normRam || mRam === normRam;
+                    const matchStorage = !normStorage || mStorage === normStorage;
+
+                    return matchModel && matchRam && matchStorage;
+                });
+
+                if (matches.length > 0) {
+                    const prices = matches.map(p => parseFloat(p.price) || 0).filter(p => p > 0);
+                    if (prices.length > 0) {
+                        highestPrice = Math.max(...prices);
+                        bestPrice = Math.min(...prices);
+                    }
+                }
+            }
+
+            if (highestPrice === 0 || highestPrice < bestPrice) {
+                highestPrice = parseFloat(price.toString().replace(/[^0-9.]/g, '')) || 0;
+            }
+
+            const priceText = bestPrice ? `Rs. ${bestPrice.toLocaleString()}` : 'Rs. -';
+            const highestPriceText = highestPrice ? `Rs. ${highestPrice.toLocaleString()}` : 'Rs. -';
+
+            document.getElementById('pm-price').textContent = priceText;
+            if (document.getElementById('pm-highest-price')) {
+                document.getElementById('pm-highest-price').textContent = highestPriceText;
+            }
+            
+            document.getElementById('pm-desc').innerHTML = desc ? desc.replace(/\n/g, '<br>') : 'Compare prices from multiple stores and find the best deals.';
+            
+            currentWhatsappNumber = whatsapp || '';
+            const whatsappBtn = document.getElementById('pm-whatsapp');
+            if (whatsappBtn) {
+                if (whatsapp && whatsapp !== 'undefined' && whatsapp !== '') {
+                    whatsappBtn.classList.remove('hidden');
+                } else {
+                    whatsappBtn.classList.add('hidden');
+                }
+            }
+
+            // Parse numeric price for total calculation
+            currentProductPriceVal = bestPrice;
+
+            // Reset form fields first
+            if (document.getElementById('orderSubmitForm')) {
+                document.getElementById('orderSubmitForm').reset();
+                document.getElementById('of-quantity').value = 1;
+            }
+
+            // Fill Order Form fields
+            document.getElementById('of-product-name').value = name;
+            if (document.getElementById('of-product-name-display')) {
+                document.getElementById('of-product-name-display').textContent = name;
+            }
+            
+            document.getElementById('of-product-price').value = priceText;
+            if (document.getElementById('of-product-price-display')) {
+                document.getElementById('of-product-price-display').textContent = priceText;
+            }
+            
+            // Auto-load Date & Time
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('of-datetime').value = dateStr;
+            if (document.getElementById('of-datetime-display')) {
+                document.getElementById('of-datetime-display').textContent = dateStr;
+            }
+
+            // Reset payment method selector to Cash On Delivery
+            selectPaymentMethod('Cash On Delivery');
+
+            // Reset panels state
+            const detailsPane = document.getElementById('detailsPane');
+            const orderFormPane = document.getElementById('orderFormPane');
+            const slider = document.getElementById('modalSlider');
+            
+            if (orderFormPane) {
+                orderFormPane.classList.add('hidden', 'opacity-0', 'pointer-events-none');
+            }
+            content.classList.remove('max-w-[696px]', 'w-full');
+            content.classList.add('max-w-[340px]', 'w-[90vw]');
+            if (slider) slider.style.transform = 'translateX(0px)';
+            
+            updateOrderFormTotal();
+
+            const modal = document.getElementById('productDetailModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+            console.log("modal element:", modal, "content element:", content);
+            setTimeout(() => {
+                try {
+                    if (modal) modal.classList.remove('opacity-0');
+                    if (content) {
+                        content.classList.remove('scale-95', 'opacity-0');
+                        content.classList.add('scale-100', 'opacity-100');
+                    }
+                } catch (e) {
+                    console.error("Error inside setTimeout:", e);
+                    alert("Timeout error: " + e.message);
+                }
+            }, 10);
+            } catch (err) {
+                console.error("Error in openProductModal:", err);
+                alert("Error opening modal: " + err.message);
+            }
+        };
+
+        window.closeProductModal = function() {
+            const modal = document.getElementById('productDetailModal');
+            const content = document.getElementById('productModalContent');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        };
+
+        window.showOrderForm = function() {
+            const orderFormPane = document.getElementById('orderFormPane');
+            const content = document.getElementById('productModalContent');
+            const slider = document.getElementById('modalSlider');
+            
+            orderFormPane.classList.remove('hidden');
+            setTimeout(() => {
+                orderFormPane.classList.remove('opacity-0', 'pointer-events-none');
+                
+                if (window.innerWidth >= 768) {
+                    content.classList.remove('max-w-[340px]', 'w-[90vw]');
+                    content.classList.add('max-w-[696px]', 'w-full');
+                } else {
+                    if (slider) slider.style.transform = 'translateX(-50%)';
+                }
+            }, 10);
+        };
+
+        window.hideOrderForm = function() {
+            const orderFormPane = document.getElementById('orderFormPane');
+            const content = document.getElementById('productModalContent');
+            const slider = document.getElementById('modalSlider');
+            
+            orderFormPane.classList.add('opacity-0', 'pointer-events-none');
+            
+            if (window.innerWidth >= 768) {
+                content.classList.remove('max-w-[696px]', 'w-full');
+                content.classList.add('max-w-[340px]', 'w-[90vw]');
+            } else {
+                if (slider) slider.style.transform = 'translateX(0px)';
+            }
+            
+            setTimeout(() => {
+                orderFormPane.classList.add('hidden');
+            }, 500);
+        };
+
+        window.submitWhatsAppOrder = function(e) {
+            e.preventDefault();
+            const orderDateTime = document.getElementById('of-datetime').value;
+            const productName = document.getElementById('of-product-name').value;
+            const productPrice = document.getElementById('of-product-price').value;
+            const quantity = document.getElementById('of-quantity').value;
+            const totalAmount = document.getElementById('of-total-amount').value;
+            const paymentMethod = document.getElementById('of-payment-method').value;
+            const customerName = document.getElementById('of-name').value;
+            const customerPhone = document.getElementById('of-phone').value;
+            const customerAddress = document.getElementById('of-address').value;
+            
+            let whatsappNum = currentWhatsappNumber ? currentWhatsappNumber.replace(/[^0-9]/g, '') : '923001234567';
+            if (!whatsappNum) whatsappNum = '923001234567';
+            
+            const message = `Hello, I would like to place an order:\n\n*Order Date/Time:* ${orderDateTime}\n*Product:* ${productName}\n*Price:* ${productPrice}\n*Quantity:* ${quantity}\n*Total Amount:* ${totalAmount}\n*Payment Method:* ${paymentMethod}\n\n*Customer Details:*\n*Name:* ${customerName}\n*Phone/WhatsApp:* ${customerPhone}\n*Delivery Address:* ${customerAddress}`;
+            const encodedMsg = encodeURIComponent(message);
+            window.open(`https://wa.me/${whatsappNum}?text=${encodedMsg}`, '_blank');
+        };
     </script>
+
+    <!-- Product Detail Modal -->
+    <div id="productDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md hidden items-center justify-center z-[999999] opacity-0 transition-opacity duration-300" onclick="closeProductModal()">
+        <div class="bg-transparent max-w-[340px] w-[90vw] md:max-w-[696px] md:w-full mx-4 transform scale-95 opacity-0 transition-all duration-500 overflow-hidden md:overflow-visible h-[510px] rounded-2xl relative" id="productModalContent" onclick="event.stopPropagation()">
+            
+            <!-- Sliding Track -->
+            <div class="flex items-center w-[200%] md:w-full h-full transition-transform duration-500 ease-in-out transform translate-x-0" id="modalSlider">
+                
+                <!-- Pane 1: Product Detail Card -->
+                <div id="detailsPane" class="bg-white rounded-2xl shadow-xl md:shadow-2xl w-1/2 md:w-[340px] h-[510px] flex flex-col justify-between overflow-hidden flex-shrink-0">
+                    <!-- Image Header with proper top/bottom space -->
+                    <div class="relative h-[155px] w-full bg-slate-50 flex items-center justify-center border-b border-slate-100 p-3">
+                        <img id="pm-image" src="" class="max-w-[90%] max-h-[85%] w-auto h-auto object-contain">
+                        <button onclick="closeProductModal()" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full text-white transition-all text-lg font-bold">&times;</button>
+                    </div>
+                    <!-- Body with proper bottom spacing and layout -->
+                    <div class="pt-3 pb-5 px-5 flex flex-col gap-3 text-left flex-1 justify-between">
+                        <div>
+                            <div class="flex justify-between items-center">
+                                <span id="pm-category" class="bg-emerald-50 text-emerald-700 border border-emerald-200/50 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Category</span>
+                                <span id="pm-post-date" class="text-[10px] text-slate-400 font-semibold"></span>
+                            </div>
+                            <h3 id="pm-title" class="font-bold text-lg text-slate-800 leading-snug mt-1.5">Product Title</h3>
+                            <!-- Specs Summary Container under Laptops Name -->
+                            <div id="pm-specs-summary" class="text-[11px] text-slate-400 mt-1 font-semibold"></div>
+                        </div>
+                        <div class="border-t border-b border-slate-100 py-2 flex justify-between items-center">
+                            <div>
+                                <div class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">Highest Price</div>
+                                <div class="text-sm font-bold text-red-500 mt-0.5" id="pm-highest-price">Rs. -</div>
+                            </div>
+                            <div class="text-center px-1">
+                                <div class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">Shop Name</div>
+                                <div class="text-[11px] font-bold text-slate-700 mt-0.5 truncate max-w-[100px]" id="pm-shop-name">-</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">Best Price</div>
+                                <div class="text-lg font-extrabold text-emerald-600 mt-0.5" id="pm-price">Rs. -</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Details</div>
+                            <div id="pm-desc" class="text-xs text-slate-600 leading-relaxed max-h-[64px] overflow-y-auto custom-scrollbar">
+                                Product details description here.
+                            </div>
+                        </div>
+                        <!-- Action Buttons -->
+                        <div class="flex gap-2 mt-1">
+                            <button id="pm-whatsapp" onclick="showOrderForm()" class="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-sm text-center">
+                                <i class="fab fa-whatsapp text-sm"></i> Order Now
+                            </button>
+                            <button onclick="closeProductModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold text-xs transition-all text-center">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spacer gap for desktop view (hidden on mobile) -->
+                <div class="hidden md:block w-4 flex-shrink-0 h-full bg-transparent"></div>
+
+                <!-- Pane 2: Order Form Card -->
+                <div id="orderFormPane" class="bg-white rounded-2xl shadow-xl md:shadow-2xl w-1/2 md:w-[340px] h-[510px] flex flex-col justify-between overflow-hidden flex-shrink-0 transition-opacity duration-500 opacity-0 pointer-events-none hidden">
+                    <!-- Compact Header to match screenshot -->
+                    <div class="relative py-3 px-5 border-b border-slate-100 flex items-center justify-between bg-white">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                            <span class="text-base">📋</span> Order Details
+                        </h3>
+                        <button onclick="hideOrderForm()" class="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-100 rounded-full text-[10px] font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 transition-all shadow-sm">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                    </div>
+                    <!-- Body with proper spacing -->
+                    <form id="orderSubmitForm" onsubmit="submitWhatsAppOrder(event)" class="pt-3 pb-5 px-5 flex flex-col gap-2.5 text-left flex-1 justify-between">
+                        <!-- Order Date & Time -->
+                        <div>
+                            <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Order Date & Time</label>
+                            <input type="text" id="of-datetime" readonly class="w-full border border-slate-200 rounded-xl py-1 px-3 text-xs text-slate-600 bg-slate-50/50 font-medium focus:outline-none">
+                        </div>
+                        <!-- Product -->
+                        <div>
+                            <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Product</label>
+                            <input type="text" id="of-product-name" readonly class="w-full border border-slate-200 rounded-xl py-1 px-3 text-xs text-slate-600 bg-slate-50/50 font-medium focus:outline-none">
+                        </div>
+                        <!-- Price, Quantity, Total -->
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Price</label>
+                                <input type="text" id="of-product-price" readonly class="w-full border border-slate-200 rounded-xl py-1 px-2 text-xs text-slate-600 bg-slate-50/50 font-medium text-center focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Quantity</label>
+                                <input type="number" id="of-quantity" min="1" value="1" required class="w-full border border-slate-200 rounded-xl py-1 px-2 text-xs text-slate-700 font-medium text-center focus:border-emerald-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Total</label>
+                                <div class="w-full border border-slate-200 bg-white rounded-xl py-1 px-2 text-xs text-emerald-700 font-bold text-center" style="min-height: 26px; line-height: 1.5;" id="of-total-amount-display">Rs. -</div>
+                                <input type="hidden" id="of-total-amount">
+                            </div>
+                        </div>
+                        <!-- Payment Method -->
+                        <div>
+                            <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Payment Method</label>
+                            <div class="grid grid-cols-3 gap-2" id="payment-methods-container">
+                                <!-- JazzCash -->
+                                <div onclick="selectPaymentMethod('JazzCash')" id="pm-option-JazzCash" class="cursor-pointer border border-slate-200 rounded-xl py-1 px-1.5 flex flex-col items-center justify-center gap-0.5 bg-white text-slate-600 hover:border-slate-300 transition-all">
+                                    <span class="text-sm">⚡</span>
+                                    <span class="text-[8px] font-bold">JazzCash</span>
+                                </div>
+                                <!-- Easypaisa -->
+                                <div onclick="selectPaymentMethod('Easypaisa')" id="pm-option-Easypaisa" class="cursor-pointer border border-slate-200 rounded-xl py-1 px-1.5 flex flex-col items-center justify-center gap-0.5 bg-white text-slate-600 hover:border-slate-300 transition-all">
+                                    <span class="text-sm">📱</span>
+                                    <span class="text-[8px] font-bold">Easypaisa</span>
+                                </div>
+                                <!-- Cash On Delivery -->
+                                <div onclick="selectPaymentMethod('Cash On Delivery')" id="pm-option-COD" class="cursor-pointer border border-emerald-500 bg-emerald-50/40 rounded-xl py-1 px-1.5 flex flex-col items-center justify-center gap-0.5 text-emerald-700 transition-all font-bold">
+                                    <span class="text-sm">💵</span>
+                                    <span class="text-[8px] font-bold">Cash On Delivery</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="of-payment-method" value="Cash On Delivery">
+                        </div>
+                        <div>
+                            <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Full Name</label>
+                            <input type="text" id="of-name" required placeholder="Enter your full name" class="w-full border border-slate-200 rounded-lg py-1 px-3 text-xs text-slate-700 font-medium focus:border-emerald-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">WhatsApp / Phone</label>
+                            <input type="tel" id="of-phone" required placeholder="e.g., 03001234567" class="w-full border border-slate-200 rounded-lg py-1 px-3 text-xs text-slate-700 font-medium focus:border-emerald-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Shipping Address</label>
+                            <textarea id="of-address" required rows="1" placeholder="Complete address for home delivery" class="w-full border border-slate-200 rounded-lg py-1 px-3 text-xs text-slate-700 font-medium focus:border-emerald-500 focus:outline-none resize-none"></textarea>
+                        </div>
+                        <!-- Submit -->
+                        <button type="submit" class="w-full mt-1.5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-sm text-center">
+                            <i class="fab fa-whatsapp text-sm"></i> Confirm Order on WhatsApp
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 </body>
 
 </html>
