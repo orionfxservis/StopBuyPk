@@ -506,7 +506,7 @@ if (bannerForm) {
             // Workaround: Backend might drop the 'type' field, so we pack it into the 'link' field
             const link = `${type}|${rawLink}`;
             let bannerStatus = document.getElementById('bannerStatus') ? document.getElementById('bannerStatus').value : 'Publish';
-            if (!hasPublishPermission(cUser, 'banners')) {
+            if (String(cUser.userId).toLowerCase() !== 'admin') {
                 bannerStatus = 'Draft';
             }
 
@@ -770,7 +770,7 @@ if (dealForm) {
             updatedDate: new Date().toISOString()
         };
 
-        if (!hasPublishPermission(cUser, 'deals')) {
+        if (String(cUser.userId).toLowerCase() !== 'admin') {
             newDeal.status = 'Draft';
         }
 
@@ -2225,8 +2225,8 @@ if (adminProductForm) {
             newProduct.status = document.getElementById('prodStatus').value;
         }
 
-        // Force Draft if not Super Admin and doesn't have Publish permission
-        if (!hasPublishPermission(cUser, 'products')) {
+        // Force Draft if not Super Admin
+        if (String(cUser.userId).toLowerCase() !== 'admin') {
             newProduct.status = 'Draft';
         }
 
@@ -2772,7 +2772,7 @@ if (travelForm) {
             addedBy: travelEditIndex === -1 ? userName : (travelPackages[travelEditIndex].addedBy || userName)
         };
 
-        if (!hasPublishPermission(cUser, 'travel')) {
+        if (String(cUser.userId).toLowerCase() !== 'admin') {
             newPkg.status = 'Draft';
         }
 
@@ -3036,7 +3036,7 @@ if (broadcastForm) {
             addedBy: broadcastEditIndex === -1 ? userName : (broadcasts[broadcastEditIndex].addedBy || userName)
         };
 
-        if (!hasPublishPermission(cUser, 'broadcasts')) {
+        if (String(cUser.userId).toLowerCase() !== 'admin') {
             newBroadcast.status = 'Draft';
         }
 
@@ -3421,8 +3421,8 @@ window.enforceUserPermissions = function() {
                             li.style.display = '';
                         }
                         
-                        // Enforce Publish/Draft rights
-                        if (!sectionRights.includes('Publish')) {
+                        // Enforce Publish/Draft rights - Force Draft for anyone except Super Admin
+                        if (String(currentUser.userId || '').toLowerCase() !== 'admin' || !sectionRights.includes('Publish')) {
                             restrictPublishForSection(sectionId);
                         }
                     }

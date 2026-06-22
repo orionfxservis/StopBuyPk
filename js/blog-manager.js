@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     categoryEn: document.getElementById("blogCategoryDropdown").value,
                     categoryUr: document.getElementById("blogCategoryUr").value,
                     image: document.getElementById("blogImage").value,
-                    status: document.getElementById("blogStatus").value,
+                    status: (String(cUser.userId).toLowerCase() === 'admin') ? document.getElementById("blogStatus").value : 'Draft',
                     seoTitle: document.getElementById("blogSeoTitle") ? document.getElementById("blogSeoTitle").value : "",
                     metaDesc: document.getElementById("blogMetaDesc") ? document.getElementById("blogMetaDesc").value : "",
                     descEn: document.getElementById("blogDescEn").value,
