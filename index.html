@@ -968,7 +968,7 @@
         </section>
 
         <!-- Price Comparison - OUTER WRAPPER -->
-        <div class="max-w-screen-2xl mx-auto px-4 pt-6">
+        <div id="price-comparison" class="max-w-screen-2xl mx-auto px-4 pt-6">
 
             <!-- MAIN OUTER BOX -->
             <div
@@ -2960,6 +2960,7 @@
                     <!-- Deals injected here via JS -->
                 </div>
             </div>
+        </div>
     </div>
 
     <!-- Single Deal Detail Modal -->
@@ -3350,13 +3351,26 @@
                         const safeCreatedDate = (p.createdDate || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
                         const safeCompanyName = (p.companyName || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
 
+                        const pCat = (p.category || '').toLowerCase().trim();
+                        let catPage = 'categories.html';
+                        if (pCat === 'food') catPage = 'food.html';
+                        else if (pCat === 'grocery') catPage = 'grocery.html';
+                        else if (pCat === 'electronics') catPage = 'electronics.html';
+                        else if (pCat === 'mobiles') catPage = 'mobiles.html';
+                        else if (pCat === 'computer') catPage = 'computers.html';
+                        else if (pCat === 'property') catPage = 'property.html';
+                        else if (pCat === 'fashion') catPage = 'fashion.html';
+                        else if (pCat === 'personal care') catPage = 'personal-care.html';
+                        else if (pCat === 'kids') catPage = 'kids.html';
+                        const catUrl = `pages/${catPage}`;
+
                         return `
                         <div class="product-card bg-white rounded-3xl border border-gray-100 p-3 shadow-sm hover:shadow-lg transition-all duration-300 max-w-[280px] mx-auto w-full flex flex-col"
                             data-category="${p.category}" data-price="${minPrice}">
                             
-                            <div class="w-full h-44 rounded-[1.25rem] overflow-hidden mb-3 bg-gray-100 relative">
+                            <div class="w-full h-44 rounded-[1.25rem] overflow-hidden mb-3 bg-gray-100 relative cursor-pointer" onclick="window.location.href='${catUrl}'">
                                 <img src="${img}" class="w-full h-full object-cover">
-                                <div class="absolute top-2 right-2 w-8 h-8 bg-white/95 rounded-full flex items-center justify-center shadow cursor-pointer hover:scale-110 transition">
+                                <div class="absolute top-2 right-2 w-8 h-8 bg-white/95 rounded-full flex items-center justify-center shadow cursor-pointer hover:scale-110 transition" onclick="event.stopPropagation()">
                                     <i class="far fa-heart text-gray-700 text-sm"></i>
                                 </div>
                              </div>
@@ -3392,8 +3406,11 @@
                     `;
                     }).join('');
 
-                    // Automatically scroll the user down so they can clearly see the results!
-                    productGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Automatically scroll to Price Comparison section start so that search row and grid cards are visible without jumping too far down
+                    const comparisonSection = document.getElementById('price-comparison');
+                    if (comparisonSection) {
+                        comparisonSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
                 });
             }
         });
