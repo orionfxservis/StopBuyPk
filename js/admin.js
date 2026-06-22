@@ -2111,6 +2111,15 @@ function renderDynamicAdminFields() {
             staticStatus.style.display = 'block';
         }
     }
+
+    // Re-enforce permissions on dynamic fields
+    const currentUserStr = localStorage.getItem('currentUser');
+    if (currentUserStr) {
+        const currentUser = JSON.parse(currentUserStr);
+        if (String(currentUser.userId || '').toLowerCase() !== 'admin') {
+            restrictPublishForSection('products');
+        }
+    }
 }
 
 window.toggleLaptopShopField = function() {
@@ -2221,8 +2230,9 @@ if (adminProductForm) {
         if (document.getElementById('prodVideoLink')) {
             newProduct.videoLink = document.getElementById('prodVideoLink').value;
         }
-        if (document.getElementById('prodStatus')) {
-            newProduct.status = document.getElementById('prodStatus').value;
+        const statusEl = document.querySelector('#dynamicProductFields #prodStatus') || document.getElementById('prodStatus');
+        if (statusEl) {
+            newProduct.status = statusEl.value;
         }
 
         // Force Draft if not Super Admin
