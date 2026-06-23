@@ -608,6 +608,66 @@ async function saveDeals() {
     if (typeof updatePendingApprovalsBadge === 'function') updatePendingApprovalsBadge();
 }
 
+let dealSearchQuery = "";
+let dealFilterCategory = "";
+let dealFilterSubCategory = "";
+let dealFilterPostBy = "";
+
+function populateDealFilterOptions() {
+    const catSelect = document.getElementById('dealFilterCategory');
+    const subSelect = document.getElementById('dealFilterSubCategory');
+    const postSelect = document.getElementById('dealFilterPostBy');
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    
+    if (catSelect) {
+        const uniqueCats = [...new Set(deals.map(d => d.category).filter(Boolean))];
+        const currentVal = catSelect.value;
+        catSelect.innerHTML = '<option value="">All Categories</option>' + 
+            uniqueCats.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+        catSelect.value = uniqueCats.includes(currentVal) ? currentVal : '';
+    }
+    if (subSelect) {
+        const uniqueSubs = [...new Set(deals.map(d => d.subCategory).filter(Boolean))];
+        const currentVal = subSelect.value;
+        subSelect.innerHTML = '<option value="">All Sub Categories</option>' + 
+            uniqueSubs.map(sub => `<option value="${sub}">${sub}</option>`).join('');
+        subSelect.value = uniqueSubs.includes(currentVal) ? currentVal : '';
+    }
+    if (postSelect) {
+        if (!isSuperAdmin) {
+            postSelect.style.display = 'none';
+        } else {
+            postSelect.style.display = '';
+            const uniquePosts = [...new Set(deals.map(d => d.addedBy || 'Admin').filter(Boolean))];
+            const currentVal = postSelect.value;
+            postSelect.innerHTML = '<option value="">All Authors</option>' + 
+                uniquePosts.map(post => `<option value="${post}">${post}</option>`).join('');
+            postSelect.value = uniquePosts.includes(currentVal) ? currentVal : '';
+        }
+    }
+}
+
+window.resetDealFilters = function() {
+    dealSearchQuery = "";
+    dealFilterCategory = "";
+    dealFilterSubCategory = "";
+    dealFilterPostBy = "";
+    
+    const searchInput = document.getElementById('dealSearchInput');
+    const catSelect = document.getElementById('dealFilterCategory');
+    const subSelect = document.getElementById('dealFilterSubCategory');
+    const postSelect = document.getElementById('dealFilterPostBy');
+    
+    if (searchInput) searchInput.value = "";
+    if (catSelect) catSelect.value = "";
+    if (subSelect) subSelect.value = "";
+    if (postSelect) postSelect.value = "";
+    
+    renderDeals();
+};
+
 function renderDeals() {
     if (!dealList) return;
     const cUserStr = localStorage.getItem('currentUser');
@@ -615,8 +675,50 @@ function renderDeals() {
     const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
     const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
 
+    // Update dynamic options in dropdowns first
+    populateDealFilterOptions();
+
+    // Map deals to keep their original index
     const mappedDeals = deals.map((deal, index) => ({ deal, index }));
-    const filteredDeals = isSuperAdmin ? mappedDeals : mappedDeals.filter(x => x.deal.addedBy === userName);
+
+    // Apply filters
+    const filteredDeals = mappedDeals.filter(item => {
+        const { deal } = item;
+        
+        // Only show own deals if not super admin
+        if (!isSuperAdmin && deal.addedBy !== userName) {
+            return false;
+        }
+        
+        // Search filter
+        if (dealSearchQuery) {
+            const nameMatch = String(deal.name || '').toLowerCase().includes(dealSearchQuery);
+            const brandMatch = String(deal.brand || '').toLowerCase().includes(dealSearchQuery);
+            const descMatch = String(deal.desc || '').toLowerCase().includes(dealSearchQuery);
+            const catMatch = String(deal.category || '').toLowerCase().includes(dealSearchQuery);
+            const subCatMatch = String(deal.subCategory || '').toLowerCase().includes(dealSearchQuery);
+            if (!nameMatch && !brandMatch && !descMatch && !catMatch && !subCatMatch) {
+                return false;
+            }
+        }
+        
+        // Category filter
+        if (dealFilterCategory && deal.category !== dealFilterCategory) {
+            return false;
+        }
+        
+        // Subcategory filter
+        if (dealFilterSubCategory && deal.subCategory !== dealFilterSubCategory) {
+            return false;
+        }
+        
+        // Author filter
+        if (dealFilterPostBy && (deal.addedBy || 'Admin') !== dealFilterPostBy) {
+            return false;
+        }
+        
+        return true;
+    });
 
     dealList.innerHTML = filteredDeals.map(item => {
         const { deal, index } = item;
@@ -640,23 +742,12 @@ function renderDeals() {
         }
 
         return `
-        <div class="product-row" style="grid-template-columns: 100px 110px 180px 80px 100px 150px 200px 130px 100px 110px 110px 110px 180px 120px 100px 80px 130px 120px; align-items: center;">
+        <div class="product-row" style="grid-template-columns: 80px 1.2fr 1.2fr 2fr 1.2fr 150px 1.2fr; align-items: center; gap: 10px;">
+            <img src="${deal.image}" alt="${deal.name}">
             <div>${deal.category || '-'}</div>
             <div>${deal.subCategory || '-'}</div>
             <div>${deal.name || '-'}</div>
-            <img src="${deal.image}" alt="${deal.name}">
             <div style="color: var(--primary-color)">Rs. ${deal.price || '-'}</div>
-            <div>${deal.desc || '-'}</div>
-            <div style="font-size: 0.85rem; max-height: 60px; overflow-y: auto;">${deal.productDetail || '-'}</div>
-            <div>${deal.video ? `<a href="${deal.video}" target="_blank" style="color: var(--primary-color)">Link</a>` : '-'}</div>
-            <div>${deal.brand || '-'}</div>
-            <div>${deal.contactNo || '-'}</div>
-            <div>${deal.whatsapp || '-'}</div>
-            <div>${deal.deliveryNo || '-'}</div>
-            <div>${deal.address || '-'}</div>
-            <div>${deal.areaBlock || '-'}</div>
-            <div>${deal.location || '-'}</div>
-            <div>${deal.status || '-'}</div>
             <div style="display: flex; gap: 5px; align-items: center; white-space: nowrap;">
                 ${actionButtons}
             </div>
@@ -2274,6 +2365,37 @@ document.addEventListener('DOMContentLoaded', () => {
             prodFilterPostBy = e.target.value;
             prodCurrentPage = 1;
             renderAdminProducts();
+        });
+    }
+
+    // Deal filter controls event listeners
+    const dealSearchInput = document.getElementById('dealSearchInput');
+    const dealFilterCat = document.getElementById('dealFilterCategory');
+    const dealFilterSub = document.getElementById('dealFilterSubCategory');
+    const dealFilterPost = document.getElementById('dealFilterPostBy');
+
+    if (dealSearchInput) {
+        dealSearchInput.addEventListener('input', (e) => {
+            dealSearchQuery = e.target.value.toLowerCase().trim();
+            renderDeals();
+        });
+    }
+    if (dealFilterCat) {
+        dealFilterCat.addEventListener('change', (e) => {
+            dealFilterCategory = e.target.value;
+            renderDeals();
+        });
+    }
+    if (dealFilterSub) {
+        dealFilterSub.addEventListener('change', (e) => {
+            dealFilterSubCategory = e.target.value;
+            renderDeals();
+        });
+    }
+    if (dealFilterPost) {
+        dealFilterPost.addEventListener('change', (e) => {
+            dealFilterPostBy = e.target.value;
+            renderDeals();
         });
     }
 });
