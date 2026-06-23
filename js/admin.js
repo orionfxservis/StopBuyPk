@@ -187,6 +187,11 @@ async function saveCategories() {
 }
 
 function updateUI() {
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+
     // Update Stats
     if (totalCategoriesEl) totalCategoriesEl.textContent = categories.length;
     if (totalProductsEl) totalProductsEl.textContent = products.length;
@@ -196,7 +201,11 @@ function updateUI() {
 
     // Render Categories
     if (categoryList) {
-        categoryList.innerHTML = categories.map((cat, index) => {
+        const mappedCategories = categories.map((cat, index) => ({ cat, index }));
+        const filteredCategories = isSuperAdmin ? mappedCategories : mappedCategories.filter(x => x.cat.addedBy === userName);
+
+        categoryList.innerHTML = filteredCategories.map(item => {
+            const { cat, index } = item;
             const fields = cat.fields || [];
             const fieldBadges = fields.map(f => `<span class="badge">${f.name} <small>(${f.type})</small></span>`).join(' ');
             const isChecked = cat.showOnMainPage !== false ? 'checked' : '';
@@ -222,6 +231,14 @@ function updateUI() {
 }
 
 async function deleteCategory(index) {
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+    if (!isSuperAdmin && categories[index] && categories[index].addedBy !== userName) {
+        alert("You are not authorized to delete this category.");
+        return;
+    }
     if (confirm('Are you sure you want to delete this category?')) {
         categories.splice(index, 1);
         await saveCategories();
@@ -234,6 +251,14 @@ window.toggleCategoryVisibility = async (index, isVisible) => {
 };
 
 window.editCategory = (index) => {
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+    if (!isSuperAdmin && categories[index] && categories[index].addedBy !== userName) {
+        alert("You are not authorized to edit this category.");
+        return;
+    }
     editIndex = index;
     const cat = categories[index];
 
@@ -348,7 +373,11 @@ function renderBanners() {
     const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
     const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
 
-    bannerList.innerHTML = banners.map((banner, index) => {
+    const mappedBanners = banners.map((banner, index) => ({ banner, index }));
+    const filteredBanners = isSuperAdmin ? mappedBanners : mappedBanners.filter(x => x.banner.addedBy === userName);
+
+    bannerList.innerHTML = filteredBanners.map(item => {
+        const { banner, index } = item;
         let displayType = banner.type;
         let displayLink = banner.link;
 
@@ -396,6 +425,14 @@ function renderBanners() {
 }
 
 async function deleteBanner(index) {
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+    if (!isSuperAdmin && banners[index] && banners[index].addedBy !== userName) {
+        alert("You are not authorized to delete this banner.");
+        return;
+    }
     if (confirm('Delete this banner?')) {
         banners.splice(index, 1);
         await saveBanners();
@@ -403,6 +440,14 @@ async function deleteBanner(index) {
 }
 
 window.editBanner = (index) => {
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+    if (!isSuperAdmin && banners[index] && banners[index].addedBy !== userName) {
+        alert("You are not authorized to edit this banner.");
+        return;
+    }
     bannerEditIndex = index;
     const banner = banners[index];
 
@@ -570,7 +615,11 @@ function renderDeals() {
     const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
     const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
 
-    dealList.innerHTML = deals.map((deal, index) => {
+    const mappedDeals = deals.map((deal, index) => ({ deal, index }));
+    const filteredDeals = isSuperAdmin ? mappedDeals : mappedDeals.filter(x => x.deal.addedBy === userName);
+
+    dealList.innerHTML = filteredDeals.map(item => {
+        const { deal, index } = item;
         const canEdit = isSuperAdmin || deal.addedBy === userName;
         let actionButtons = '';
         if (canEdit) {
@@ -606,6 +655,14 @@ function renderDeals() {
 }
 
 async function deleteDeal(index) {
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+    if (!isSuperAdmin && deals[index] && deals[index].addedBy !== userName) {
+        alert("You are not authorized to delete this deal.");
+        return;
+    }
     if (confirm('Delete this deal?')) {
         deals.splice(index, 1);
         await saveDeals();
@@ -613,6 +670,14 @@ async function deleteDeal(index) {
 }
 
 window.editDeal = (index) => {
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+    if (!isSuperAdmin && deals[index] && deals[index].addedBy !== userName) {
+        alert("You are not authorized to edit this deal.");
+        return;
+    }
     dealEditIndex = index;
     const deal = deals[index];
 
@@ -2280,6 +2345,9 @@ if (adminProductForm) {
 function populateProductFilterOptions() {
     const catSelect = document.getElementById('prodFilterCategory');
     const postSelect = document.getElementById('prodFilterPostBy');
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
     
     if (catSelect) {
         const uniqueCats = [...new Set(products.map(p => p.category).filter(Boolean))];
@@ -2289,11 +2357,16 @@ function populateProductFilterOptions() {
         catSelect.value = uniqueCats.includes(currentVal) ? currentVal : '';
     }
     if (postSelect) {
-        const uniquePosts = [...new Set(products.map(p => p.addedBy || 'Admin').filter(Boolean))];
-        const currentVal = postSelect.value;
-        postSelect.innerHTML = '<option value="">All Authors</option>' + 
-            uniquePosts.map(post => `<option value="${post}">${post}</option>`).join('');
-        postSelect.value = uniquePosts.includes(currentVal) ? currentVal : '';
+        if (!isSuperAdmin) {
+            postSelect.style.display = 'none';
+        } else {
+            postSelect.style.display = '';
+            const uniquePosts = [...new Set(products.map(p => p.addedBy || 'Admin').filter(Boolean))];
+            const currentVal = postSelect.value;
+            postSelect.innerHTML = '<option value="">All Authors</option>' + 
+                uniquePosts.map(post => `<option value="${post}">${post}</option>`).join('');
+            postSelect.value = uniquePosts.includes(currentVal) ? currentVal : '';
+        }
     }
 }
 
@@ -2332,6 +2405,11 @@ function renderAdminProducts() {
         // Apply filters
         const filteredProducts = mappedProducts.filter(item => {
             const { prod } = item;
+            
+            // Only show own products if not super admin
+            if (!isSuperAdmin && prod.addedBy !== userName) {
+                return false;
+            }
             
             // Search filter
             if (prodSearchQuery) {
@@ -2636,7 +2714,11 @@ function renderTravelPackages() {
     const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
     const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
 
-    travelList.innerHTML = travelPackages.map((pkg, index) => {
+    const mappedTravel = travelPackages.map((pkg, index) => ({ pkg, index }));
+    const filteredTravel = isSuperAdmin ? mappedTravel : mappedTravel.filter(x => x.pkg.addedBy === userName);
+
+    travelList.innerHTML = filteredTravel.map(item => {
+        const { pkg, index } = item;
         let displayStatus = pkg.status || 'Publish';
         let displayType = pkg.listingType || 'Basic';
         let isFeatured = displayType === 'Featured';
@@ -2688,6 +2770,14 @@ function renderTravelPackages() {
 }
 
 window.deleteTravel = async (index) => {
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+    if (!isSuperAdmin && travelPackages[index] && travelPackages[index].addedBy !== userName) {
+        alert("You are not authorized to delete this travel package.");
+        return;
+    }
     if (confirm('Delete this travel package?')) {
         travelPackages.splice(index, 1);
         await saveTravelPackages();
@@ -2695,6 +2785,14 @@ window.deleteTravel = async (index) => {
 };
 
 window.editTravel = (index) => {
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+    if (!isSuperAdmin && travelPackages[index] && travelPackages[index].addedBy !== userName) {
+        alert("You are not authorized to edit this travel package.");
+        return;
+    }
     travelEditIndex = index;
     const pkg = travelPackages[index];
 
@@ -2929,7 +3027,11 @@ function renderBroadcasts() {
         const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
         const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
 
-        broadcastList.innerHTML = broadcasts.map((b, index) => {
+        const mappedBroadcasts = broadcasts.map((b, index) => ({ b, index }));
+        const filteredBroadcasts = isSuperAdmin ? mappedBroadcasts : mappedBroadcasts.filter(x => x.b.addedBy === userName);
+
+        broadcastList.innerHTML = filteredBroadcasts.map(item => {
+            const { b, index } = item;
             const canEdit = isSuperAdmin || b["Post By"] || b.postBy === userName || (!b["Post By"] || b.postBy && isSuperAdmin);
             let actionButtons = '';
             if (canEdit) {
@@ -2975,6 +3077,14 @@ function renderBroadcasts() {
 }
 
 async function deleteBroadcast(index) {
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+    if (!isSuperAdmin && broadcasts[index] && broadcasts[index].addedBy !== userName) {
+        alert("You are not authorized to delete this broadcast.");
+        return;
+    }
     if (confirm('Delete this broadcast?')) {
         broadcasts.splice(index, 1);
         await saveBroadcasts();
@@ -2982,6 +3092,14 @@ async function deleteBroadcast(index) {
 }
 
 window.editBroadcast = (index) => {
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+    if (!isSuperAdmin && broadcasts[index] && broadcasts[index].addedBy !== userName) {
+        alert("You are not authorized to edit this broadcast.");
+        return;
+    }
     broadcastEditIndex = index;
     const b = broadcasts[index];
 

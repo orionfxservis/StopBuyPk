@@ -124,6 +124,16 @@ async function renderBlogs() {
     try {
         localBlogs = await getBlogs();
         let blogs = [...localBlogs];
+
+        const cUserStr = localStorage.getItem('currentUser');
+        const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+        const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+        const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+
+        // Filter blogs so only owner can see their own if not super admin
+        if (!isSuperAdmin) {
+            blogs = blogs.filter(b => b.addedBy === userName);
+        }
         
         const searchInput = document.getElementById('blogSearchInput');
         const categoryFilter = document.getElementById('blogCategoryFilter');
@@ -195,9 +205,19 @@ async function renderBlogs() {
 // Edit Blog
 window.editBlog = async function(id) {
     const blogs = localBlogs.length > 0 ? localBlogs : await getBlogs();
-                localBlogs = blogs;
+    localBlogs = blogs;
     const blog = blogs.find(b => String(b.id) === String(id));
     if (!blog) return;
+
+    // Check permissions
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+    if (!isSuperAdmin && blog.addedBy !== userName) {
+        alert("You are not authorized to edit this blog.");
+        return;
+    }
 
     // Populate form
     document.getElementById("blogTitleEn").value = blog.titleEn || "";
@@ -237,11 +257,24 @@ window.cancelBlogEdit = function() {
 
 // Delete Blog
 window.deleteBlog = async function(id) {
+    let blogs = localBlogs.length > 0 ? localBlogs : await getBlogs();
+    localBlogs = blogs;
+    const blog = blogs.find(b => String(b.id) === String(id));
+    if (!blog) return;
+
+    // Check permissions
+    const cUserStr = localStorage.getItem('currentUser');
+    const cUser = cUserStr ? JSON.parse(cUserStr) : {};
+    const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
+    const userName = cUser.fullName || cUser.username || cUser.userId || 'Admin';
+    if (!isSuperAdmin && blog.addedBy !== userName) {
+        alert("You are not authorized to delete this blog.");
+        return;
+    }
+
     if(!confirm("Are you sure you want to delete this blog?")) return;
     
     try {
-        let blogs = localBlogs.length > 0 ? localBlogs : await getBlogs();
-                localBlogs = blogs;
         blogs = blogs.filter(blog => String(blog.id) !== String(id));
         await saveBlogs(blogs);
         renderBlogs();
