@@ -748,25 +748,53 @@
                                 <label>Short Description</label>
                                 <input type="text" id="dealDesc" placeholder="Max 2 lines description" required>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="input-group">
+                            <div class="input-group" style="max-width: 180px;">
                                 <label>Price</label>
                                 <input type="text" id="dealPrice" placeholder="e.g., Rs 4,500" required>
                             </div>
-                            <div class="input-group">
-                                <label>Location</label>
-                                <input type="text" id="dealLocation" placeholder="e.g., Lahore" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Product Detail</label>
+                                <textarea id="dealProductDetail" placeholder="Detailed product specifications, features, etc." style="width: 100%; height: 80px; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.1); color: white; resize: vertical;"></textarea>
                             </div>
                         </div>
                         <div class="form-row">
+                            <div class="input-group">
+                                <label>Brand</label>
+                                <input type="text" id="dealBrand" placeholder="e.g., Nike">
+                            </div>
+                            <div class="input-group">
+                                <label>Video Link (TikTok/FB) (Optional)</label>
+                                <input type="url" id="dealVideo" placeholder="https://tiktok.com/...">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Contact No</label>
+                                <input type="text" id="dealContactNo" placeholder="e.g., +923001234567">
+                            </div>
                             <div class="input-group">
                                 <label>WhatsApp Number</label>
                                 <input type="text" id="dealWhatsapp" placeholder="e.g., +923001234567" required>
                             </div>
                             <div class="input-group">
-                                <label>Video Link (TikTok/FB)</label>
-                                <input type="url" id="dealVideo" placeholder="https://tiktok.com/...">
+                                <label>Delivery No</label>
+                                <input type="text" id="dealDeliveryNo" placeholder="e.g., +923001234567">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Address</label>
+                                <input type="text" id="dealAddress" placeholder="e.g., 123 Street Block Y">
+                            </div>
+                            <div class="input-group" style="max-width: 200px;">
+                                <label>Area / Block No.</label>
+                                <input type="text" id="dealAreaBlock" placeholder="e.g., Block 5">
+                            </div>
+                            <div class="input-group" style="max-width: 200px;">
+                                <label>City</label>
+                                <input type="text" id="dealLocation" placeholder="e.g., Lahore" required>
                             </div>
                         </div>
                         <div class="form-row">
@@ -786,17 +814,33 @@
                     </form>
                 </div>
 
-                    <div class="grid-table-header" style="grid-template-columns: 80px 1.2fr 100px 1fr 140px 120px; display: grid; gap: 10px; padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; font-weight: bold; margin-bottom: 15px;">
-                        <div>Image</div>
-                        <div>Deal Name</div>
-                        <div>Price</div>
-                        <div>Location</div>
-                        <div>Actions</div>
-                        <div>Post By</div>
+                <div style="overflow-x: auto; width: 100%; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; background: rgba(0,0,0,0.15); margin-top: 20px;">
+                    <div style="min-width: 2100px;">
+                        <div class="grid-table-header" style="grid-template-columns: 100px 110px 180px 80px 100px 150px 200px 130px 100px 110px 110px 110px 180px 120px 100px 80px 130px 120px; display: grid; gap: 10px; padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; font-weight: bold; margin-bottom: 15px;">
+                            <div>Category</div>
+                            <div>Sub Category</div>
+                            <div>Deal Name</div>
+                            <div>Image</div>
+                            <div>Price</div>
+                            <div>Short Desc</div>
+                            <div>Product Detail</div>
+                            <div>Video Link</div>
+                            <div>Brand</div>
+                            <div>Contact No</div>
+                            <div>Whatsapp</div>
+                            <div>Delivery No</div>
+                            <div>Address</div>
+                            <div>Area/Block</div>
+                            <div>City</div>
+                            <div>Status</div>
+                            <div>Actions</div>
+                            <div>Post By</div>
+                        </div>
+                        <div id="dealList">
+                            <!-- Deals injected here via JS -->
+                        </div>
                     </div>
-                    <div id="dealList">
-                        <!-- Deals injected here via JS -->
-                    </div>
+                </div>
             </section>
 
             <!-- User Management Section -->
