@@ -814,31 +814,40 @@
                     </form>
                 </div>
 
-                <div style="overflow-x: auto; width: 100%; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; background: rgba(0,0,0,0.15); margin-top: 20px;">
-                    <div style="min-width: 2100px;">
-                        <div class="grid-table-header" style="grid-template-columns: 100px 110px 180px 80px 100px 150px 200px 130px 100px 110px 110px 110px 180px 120px 100px 80px 130px 120px; display: grid; gap: 10px; padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; font-weight: bold; margin-bottom: 15px;">
-                            <div>Category</div>
-                            <div>Sub Category</div>
-                            <div>Deal Name</div>
-                            <div>Image</div>
-                            <div>Price</div>
-                            <div>Short Desc</div>
-                            <div>Product Detail</div>
-                            <div>Video Link</div>
-                            <div>Brand</div>
-                            <div>Contact No</div>
-                            <div>Whatsapp</div>
-                            <div>Delivery No</div>
-                            <div>Address</div>
-                            <div>Area/Block</div>
-                            <div>City</div>
-                            <div>Status</div>
-                            <div>Actions</div>
-                            <div>Post By</div>
+                <!-- Search & Filters Toolbar for Deals -->
+                <div class="form-container" style="padding: 15px; margin-bottom: 15px; border-top: 4px solid var(--primary-color);">
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-weight: 700; color: #1e293b;"><i class="fa-solid fa-filter"></i> Filters & Search</span>
                         </div>
-                        <div id="dealList">
-                            <!-- Deals injected here via JS -->
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; flex: 1; justify-content: flex-end; align-items: center;">
+                            <input type="text" id="dealSearchInput" placeholder="Search by name/brand..." class="admin-input" style="max-width: 250px; margin-bottom: 0;">
+                            <select id="dealFilterCategory" class="admin-input" style="max-width: 180px; margin-bottom: 0;">
+                                <option value="">All Categories</option>
+                            </select>
+                            <select id="dealFilterSubCategory" class="admin-input" style="max-width: 180px; margin-bottom: 0;">
+                                <option value="">All Sub Categories</option>
+                            </select>
+                            <select id="dealFilterPostBy" class="admin-input" style="max-width: 180px; margin-bottom: 0;">
+                                <option value="">All Authors</option>
+                            </select>
+                            <button type="button" class="btn btn-secondary" onclick="resetDealFilters()" style="padding: 0 15px; height: 30px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; border-radius: 10px; margin-bottom: 8px;">Reset</button>
                         </div>
+                    </div>
+                </div>
+
+                <div style="width: 100%; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; background: rgba(0,0,0,0.15); margin-top: 20px;">
+                    <div class="grid-table-header" style="grid-template-columns: 80px 1.2fr 1.2fr 2fr 1.2fr 150px 1.2fr; display: grid; gap: 10px; padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; font-weight: bold; margin-bottom: 15px;">
+                        <div>Image</div>
+                        <div>Category</div>
+                        <div>Sub Category</div>
+                        <div>Deal Name</div>
+                        <div>Price</div>
+                        <div>Action</div>
+                        <div>Post</div>
+                    </div>
+                    <div id="dealList">
+                        <!-- Deals injected here via JS -->
                     </div>
                 </div>
             </section>
