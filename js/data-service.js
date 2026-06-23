@@ -169,13 +169,26 @@ const DataService = {
             if (error) throw error;
             const deals = data.map(d => {
                 let desc = d.description || '';
-                let cat = '', sub = '';
+                let cat = d.category || '', sub = d.sub_category || '';
+                let productDetail = d.product_detail || '';
+                let brand = d.brand || '';
+                let contactNo = d.contact_no || '';
+                let deliveryNo = d.delivery_no || '';
+                let address = d.address || '';
+                let areaBlock = d.area_block || '';
+                
                 let match = desc.match(/<!--META:(.*?)-->/);
                 if (match) {
                     try {
                         let meta = JSON.parse(match[1]);
-                        cat = meta.c || '';
-                        sub = meta.s || '';
+                        if (!cat) cat = meta.c || '';
+                        if (!sub) sub = meta.s || '';
+                        if (!productDetail) productDetail = meta.pd || '';
+                        if (!brand) brand = meta.b || '';
+                        if (!contactNo) contactNo = meta.cn || '';
+                        if (!deliveryNo) deliveryNo = meta.dn || '';
+                        if (!address) address = meta.addr || '';
+                        if (!areaBlock) areaBlock = meta.ab || '';
                     } catch(e) {}
                     desc = desc.replace(/<!--META:.*?-->/g, '').trim();
                 }
@@ -191,6 +204,12 @@ const DataService = {
                 status: d.status,
                 category: cat,
                 subCategory: sub,
+                productDetail: productDetail,
+                brand: brand,
+                contactNo: contactNo,
+                deliveryNo: deliveryNo,
+                address: address,
+                areaBlock: areaBlock,
                 addedBy: d.added_by,
                 createdDate: d.created_date,
                 updatedDate: d.updated_date
@@ -472,7 +491,16 @@ const DataService = {
             }
             
             const rows = data.map(d => {
-                let catData = JSON.stringify({c: d.category || '', s: d.subCategory || ''});
+                let catData = JSON.stringify({
+                    c: d.category || '',
+                    s: d.subCategory || '',
+                    pd: d.productDetail || '',
+                    b: d.brand || '',
+                    cn: d.contactNo || '',
+                    dn: d.deliveryNo || '',
+                    addr: d.address || '',
+                    ab: d.areaBlock || ''
+                });
                 let descWithMeta = (d.desc || '') + ' <!--META:' + catData + '-->';
                 return {
                 id: d.id,
@@ -486,7 +514,15 @@ const DataService = {
                 status: d.status || 'Draft',
                 added_by: d.addedBy || '',
                 created_date: d.createdDate || new Date().toISOString(),
-                updated_date: new Date().toISOString()
+                updated_date: new Date().toISOString(),
+                category: d.category || '',
+                sub_category: d.subCategory || '',
+                product_detail: d.productDetail || '',
+                brand: d.brand || '',
+                contact_no: d.contactNo || '',
+                delivery_no: d.deliveryNo || '',
+                address: d.address || '',
+                area_block: d.areaBlock || ''
                 };
             });
             const { error } = await client.from('deals').upsert(rows);

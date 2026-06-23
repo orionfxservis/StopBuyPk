@@ -640,11 +640,23 @@ function renderDeals() {
         }
 
         return `
-        <div class="product-row" style="grid-template-columns: 80px 1.2fr 100px 1fr 140px 120px; align-items: center;">
+        <div class="product-row" style="grid-template-columns: 100px 110px 180px 80px 100px 150px 200px 130px 100px 110px 110px 110px 180px 120px 100px 80px 130px 120px; align-items: center;">
+            <div>${deal.category || '-'}</div>
+            <div>${deal.subCategory || '-'}</div>
+            <div>${deal.name || '-'}</div>
             <img src="${deal.image}" alt="${deal.name}">
-            <div>${deal.name}</div>
-            <div style="color: var(--primary-color)">Rs. ${deal.price}</div>
-            <div><small><i class="fa-solid fa-location-dot"></i> ${deal.location}</small></div>
+            <div style="color: var(--primary-color)">Rs. ${deal.price || '-'}</div>
+            <div>${deal.desc || '-'}</div>
+            <div style="font-size: 0.85rem; max-height: 60px; overflow-y: auto;">${deal.productDetail || '-'}</div>
+            <div>${deal.video ? `<a href="${deal.video}" target="_blank" style="color: var(--primary-color)">Link</a>` : '-'}</div>
+            <div>${deal.brand || '-'}</div>
+            <div>${deal.contactNo || '-'}</div>
+            <div>${deal.whatsapp || '-'}</div>
+            <div>${deal.deliveryNo || '-'}</div>
+            <div>${deal.address || '-'}</div>
+            <div>${deal.areaBlock || '-'}</div>
+            <div>${deal.location || '-'}</div>
+            <div>${deal.status || '-'}</div>
             <div style="display: flex; gap: 5px; align-items: center; white-space: nowrap;">
                 ${actionButtons}
             </div>
@@ -698,6 +710,14 @@ window.editDeal = (index) => {
     document.getElementById('dealLocation').value = deal.location || '';
     document.getElementById('dealWhatsapp').value = deal.whatsapp || '';
     document.getElementById('dealVideo').value = deal.video || '';
+    
+    // Populate new fields safely
+    if (document.getElementById('dealProductDetail')) document.getElementById('dealProductDetail').value = deal.productDetail || '';
+    if (document.getElementById('dealBrand')) document.getElementById('dealBrand').value = deal.brand || '';
+    if (document.getElementById('dealContactNo')) document.getElementById('dealContactNo').value = deal.contactNo || '';
+    if (document.getElementById('dealDeliveryNo')) document.getElementById('dealDeliveryNo').value = deal.deliveryNo || '';
+    if (document.getElementById('dealAddress')) document.getElementById('dealAddress').value = deal.address || '';
+    if (document.getElementById('dealAreaBlock')) document.getElementById('dealAreaBlock').value = deal.areaBlock || '';
 
     if (dealFormTitle) dealFormTitle.textContent = "Edit Deal";
     if (btnSaveDeal) btnSaveDeal.textContent = "Update Deal";
@@ -709,6 +729,15 @@ window.editDeal = (index) => {
 window.cancelDealEdit = () => {
     dealEditIndex = -1;
     dealForm.reset();
+    
+    // Clear new inputs explicitly just in case
+    if (document.getElementById('dealProductDetail')) document.getElementById('dealProductDetail').value = '';
+    if (document.getElementById('dealBrand')) document.getElementById('dealBrand').value = '';
+    if (document.getElementById('dealContactNo')) document.getElementById('dealContactNo').value = '';
+    if (document.getElementById('dealDeliveryNo')) document.getElementById('dealDeliveryNo').value = '';
+    if (document.getElementById('dealAddress')) document.getElementById('dealAddress').value = '';
+    if (document.getElementById('dealAreaBlock')) document.getElementById('dealAreaBlock').value = '';
+
     if (dealFormTitle) dealFormTitle.textContent = "Add New Deal";
     if (btnSaveDeal) btnSaveDeal.textContent = "Add Deal";
     if (btnCancelDeal) btnCancelDeal.style.display = 'none';
@@ -830,6 +859,13 @@ if (dealForm) {
             whatsapp: document.getElementById('dealWhatsapp').value,
             video: document.getElementById('dealVideo').value,
             status: document.getElementById('dealStatus').value,
+            // Gather new fields
+            productDetail: document.getElementById('dealProductDetail') ? document.getElementById('dealProductDetail').value : (existingDeal.productDetail || ''),
+            brand: document.getElementById('dealBrand') ? document.getElementById('dealBrand').value : (existingDeal.brand || ''),
+            contactNo: document.getElementById('dealContactNo') ? document.getElementById('dealContactNo').value : (existingDeal.contactNo || ''),
+            deliveryNo: document.getElementById('dealDeliveryNo') ? document.getElementById('dealDeliveryNo').value : (existingDeal.deliveryNo || ''),
+            address: document.getElementById('dealAddress') ? document.getElementById('dealAddress').value : (existingDeal.address || ''),
+            areaBlock: document.getElementById('dealAreaBlock') ? document.getElementById('dealAreaBlock').value : (existingDeal.areaBlock || ''),
             addedBy: dealEditIndex === -1 ? userName : (existingDeal.addedBy || userName),
             createdDate: dealEditIndex === -1 ? new Date().toISOString() : (existingDeal.createdDate || new Date().toISOString()),
             updatedDate: new Date().toISOString()
