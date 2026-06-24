@@ -32,10 +32,10 @@ let selectedFoodId = null;
 
 function estimateCoordinates(address, area, city) {
   const text = `${address} ${area} ${city}`.toLowerCase();
-  
+
   let lat = 24.8607; // Default (Karachi center)
   let lon = 67.0011;
-  
+
   if (text.includes("gulshan-e-iqbal") || text.includes("gulshan e iqbal")) {
     lat = 24.9180; lon = 67.0971;
   } else if (text.includes("bahadurabad")) {
@@ -87,7 +87,7 @@ function estimateCoordinates(address, area, city) {
   } else if (text.includes("peshawar")) {
     lat = 34.0151; lon = 71.5249;
   }
-  
+
   return { lat, lon };
 }
 
@@ -115,7 +115,7 @@ function renderFoodList() {
     const pCoords = estimateCoordinates(f.address, f.area, f.city);
     f.distanceKm = calculateDistance(viewerLat, viewerLon, pCoords.lat, pCoords.lon);
   });
-  
+
   const q = foodSearchInput ? foodSearchInput.value.trim().toLowerCase() : '';
   const filterCat = document.getElementById('filterCategory')?.value || '';
   const filterSubCat = document.getElementById('filterSubCategory')?.value || '';
@@ -126,7 +126,7 @@ function renderFoodList() {
   const maxPrice = parseFloat(document.getElementById('maxPrice')?.value) || Infinity;
 
   const activeQuicks = Array.from(document.querySelectorAll('.quickFilterBtn.active-filter'))
-                            .map(btn => btn.querySelector('.lang-en').textContent.trim());
+    .map(btn => btn.querySelector('.lang-en').textContent.trim());
 
   const markets = Array.from(document.querySelectorAll('.marketFilter:checked')).map(el => el.value);
   const units = Array.from(document.querySelectorAll('.unitFilter:checked')).map(el => el.value);
@@ -138,9 +138,9 @@ function renderFoodList() {
     if (filterProd && f.name !== filterProd) return false;
     if (filterVariety && f.variety !== filterVariety) return false;
     if (filterBrand && f.brand !== filterBrand) return false;
-    
+
     if (f.price < minPrice || f.price > maxPrice) return false;
-    
+
     if (markets.length > 0 && f.market && !markets.includes(f.market)) return false;
     if (units.length > 0 && f.unit && !units.includes(f.unit)) return false;
 
@@ -167,7 +167,7 @@ function renderFoodList() {
   foodListingsEl.innerHTML = filtered.map(f => {
     const isSelected = f.id === selectedFoodId;
     const activeClass = isSelected ? 'border-[#f97316] shadow-[0_10px_35px_rgba(249,115,22,0.18)] bg-slate-800/90 ring-1 ring-[#f97316]' : 'border-slate-700 hover:border-slate-500 hover:bg-slate-800/80 bg-slate-900/60 shadow-sm';
-    
+
     return `
       <article data-id="${f.id}" class="food-item rounded-2xl p-3 sm:p-4 cursor-pointer transition-colors duration-300 flex flex-row gap-3 border backdrop-blur-md ${activeClass}">
         <div class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 rounded-xl overflow-hidden bg-slate-800 shadow-inner">
@@ -192,7 +192,7 @@ function renderFoodList() {
 
   // Add event listeners to newly rendered items
   document.querySelectorAll('.food-item').forEach(el => {
-    el.addEventListener('click', function() {
+    el.addEventListener('click', function () {
       const id = this.getAttribute('data-id');
       selectFoodItem(id);
     });
@@ -202,12 +202,12 @@ function renderFoodList() {
 function selectFoodItem(id, preventScroll = false) {
   selectedFoodId = id;
   const item = foodDeals.find(f => f.id === id);
-  
+
   if (item) {
     // Hide placeholder, show content
     if (featuredPlaceholder) featuredPlaceholder.classList.add('hidden');
     if (featuredContent) featuredContent.classList.remove('hidden');
- 
+
     // Populate Details
     if (fImg) fImg.src = item.image;
     if (fDistance) fDistance.textContent = `${item.distanceKm.toFixed(1)} km away`;
@@ -218,9 +218,95 @@ function selectFoodItem(id, preventScroll = false) {
     if (fBrand) fBrand.textContent = item.brand || item.subCategory || 'No Brand Specified';
     if (fPrice) fPrice.innerHTML = `Rs. ${item.price} ${item.originalPrice ? `<span class="text-sm line-through text-slate-500 ml-1">Rs. ${item.originalPrice}</span>` : ''}`;
     if (fLocation) document.getElementById('fLocation').textContent =
-    item.fullLocation || item.address;
+      item.fullLocation || item.address;
     if (fDesc) fDesc.textContent = item.description;
- 
+
+    // Price Comparison Box Logic
+    const compBox = document.getElementById('priceComparisonBox');
+    const compStandardType = document.getElementById('comparisonStandardType');
+    const compResults = document.getElementById('comparisonResults');
+
+    if (compBox && compResults) {
+      if (item.standardProductType) {
+        compBox.classList.remove('hidden');
+        if (compStandardType) compStandardType.textContent = item.standardProductType;
+
+        const comparisons = foodDeals.filter(p => p.standardProductType && p.standardProductType.toLowerCase() === item.standardProductType.toLowerCase());
+        
+        if (comparisons.length > 0) {
+          // Sort by price
+          comparisons.sort((a, b) => a.price - b.price);
+          
+          const lowest = comparisons[0];
+          const top5 = comparisons.slice(0, 5);
+          const saving = item.price - lowest.price;
+
+          let html = '';
+          
+          // Lowest Price Section
+          html += `
+            <div class="mb-3">
+              <div class="text-[11px] font-bold text-yellow-400 mb-1">🏆 Lowest Price</div>
+              <div class="flex justify-between items-center bg-yellow-500/10 border border-yellow-500/20 p-2 rounded-lg">
+                <span class="font-bold text-slate-100">${lowest.brand || lowest.variety || 'Unknown'}</span>
+                <div class="flex items-center gap-2">
+                  <span class="font-extrabold text-yellow-400">Rs. ${lowest.price}</span>
+                  <span class="text-[10px] text-slate-400">(${lowest.distanceKm.toFixed(1)} km)</span>
+                </div>
+              </div>
+            </div>
+          `;
+
+          // Nearby Options Section
+          html += `
+            <div class="mb-3">
+              <div class="text-[11px] font-bold text-emerald-400 mb-1">📍 Nearby Options</div>
+              <div class="space-y-1.5 max-h-[150px] overflow-y-auto pr-1">
+          `;
+          
+          top5.forEach(comp => {
+            const isCurrent = comp.id === item.id;
+            html += `
+              <div class="flex justify-between items-center py-1 border-b border-slate-700/30 ${isCurrent ? 'bg-emerald-500/10 px-1 rounded' : ''}">
+                <span class="text-slate-300 font-medium">${comp.brand || comp.variety || 'Unknown'} ${isCurrent ? '<span class="text-[9px] text-emerald-400 font-bold">(Current)</span>' : ''}</span>
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-slate-100">Rs. ${comp.price}</span>
+                  <span class="text-[10px] text-slate-400">(${comp.distanceKm.toFixed(1)} km)</span>
+                </div>
+              </div>
+            `;
+          });
+
+          html += `
+              </div>
+            </div>
+          `;
+
+          // Savings Section
+          if (saving > 0) {
+            html += `
+              <div class="mt-2 bg-emerald-500/15 border border-emerald-500/30 p-2 rounded-lg flex items-center justify-between text-emerald-400 font-extrabold text-[13px]">
+                <span>💰 You Save Up To</span>
+                <span>Rs. ${saving}</span>
+              </div>
+            `;
+          } else {
+            html += `
+              <div class="mt-2 bg-slate-700/30 border border-slate-700/50 p-2 rounded-lg flex items-center justify-between text-slate-300 font-bold text-[11px]">
+                <span>✨ You are viewing the lowest price listing!</span>
+              </div>
+            `;
+          }
+
+          compResults.innerHTML = html;
+        } else {
+          compResults.innerHTML = `<div class="text-slate-400 text-[11px] italic">No comparison data available.</div>`;
+        }
+      } else {
+        compBox.classList.add('hidden');
+      }
+    }
+
     // Handle Video Display
     const fVideoContainer = document.getElementById('fVideoContainer');
     const fVideoFrame = document.getElementById('fVideoFrame');
@@ -232,25 +318,25 @@ function selectFoodItem(id, preventScroll = false) {
         // Basic YouTube URL parsing
         let ytMatch = item.videoLink.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
         if (ytMatch) {
-            embedUrl = `https://www.youtube.com/embed/${ytMatch[1]}`;
-            if (fVideoFrame) {
-                fVideoFrame.src = embedUrl;
-                fVideoFrame.classList.remove('hidden');
-            }
-            if (fVideoLink) fVideoLink.classList.add('hidden');
+          embedUrl = `https://www.youtube.com/embed/${ytMatch[1]}`;
+          if (fVideoFrame) {
+            fVideoFrame.src = embedUrl;
+            fVideoFrame.classList.remove('hidden');
+          }
+          if (fVideoLink) fVideoLink.classList.add('hidden');
         } else {
-            if (fVideoFrame) fVideoFrame.classList.add('hidden');
-            if (fVideoLink) {
-                fVideoLink.href = item.videoLink;
-                fVideoLink.classList.remove('hidden');
-            }
+          if (fVideoFrame) fVideoFrame.classList.add('hidden');
+          if (fVideoLink) {
+            fVideoLink.href = item.videoLink;
+            fVideoLink.classList.remove('hidden');
+          }
         }
       } else {
         fVideoContainer.classList.add('hidden');
         if (fVideoFrame) fVideoFrame.src = '';
       }
     }
- 
+
     // Contact Buttons Setup
     if (item.phone) {
       if (fCallBtn) {
@@ -260,7 +346,7 @@ function selectFoodItem(id, preventScroll = false) {
     } else {
       if (fCallBtn) fCallBtn.classList.add('hidden');
     }
- 
+
     if (fOrderBtn) {
       fOrderBtn.classList.remove('hidden');
       fOrderBtn.onclick = () => {
@@ -273,22 +359,22 @@ function selectFoodItem(id, preventScroll = false) {
         if (modalPhone) modalPhone.textContent = item.phone || '';
         if (modalRate) modalRate.textContent = item.price;
         if (modalQuantity) modalQuantity.value = 1;
- 
+
         const calcTotal = () => {
           let q = parseInt(modalQuantity.value) || 1;
           if (modalTotalAmount) modalTotalAmount.textContent = `Rs. ${item.price * q}`;
         };
         calcTotal(); // Initialize default amount
-        
+
         if (modalQuantity) modalQuantity.oninput = calcTotal;
         if (orderModal) orderModal.classList.remove('hidden');
       };
     }
   }
-  
+
   // Re-render list to show active state
   renderFoodList();
-  
+
   // On mobile, scroll to the detail section automatically
   if (!preventScroll && window.innerWidth < 1024) {
     setTimeout(() => {
@@ -299,106 +385,107 @@ function selectFoodItem(id, preventScroll = false) {
     }, 100);
   }
 }
- 
+
 // Initial Setup
 async function initFoodDeals() {
   if (typeof DataService !== 'undefined') {
     const allProducts = await DataService.getProducts();
     // Filter for Food Category and Published Status
     const foodProducts = allProducts.filter(p => p.category && p.category.toLowerCase() === 'food' && (p.status === 'Publish' || p.prodStatus === 'Publish' || (!p.status && !p.prodStatus && (!p.addedBy || p.addedBy.toLowerCase() === 'admin'))));
-        // Map to the format food.js expects
-      foodDeals = foodProducts.map(p => {
-        let variety = p.variety || p.brand || p.subCategory || 'No Variety Specified';
-        const parts = [];
-        if (p.qty) parts.push(p.qty);
-        if (p.gram) parts.push(p.gram);
-        if (parts.length > 0) {
-          variety = `${variety} (${parts.join(' - ')})`;
-        }
-        const address = p.address || '';
-const area = p.area || p.block || p.blockNo || p.areaBlock || '';
-const city = p.city || '';
- 
-const fullLocation = [address, area, city]
-    .filter(Boolean)
-    .join(', ');
-        const distanceKm = parseFloat(p.distance || p.distanceKm) || 2.5;
-        const phone = p.phone || p.contact || '';
-        const whatsapp = p.whatsapp || phone;
-        
-        // Handle tags
-        let tags = [];
-        if (Array.isArray(p.tags)) {
-          tags = p.tags;
-        } else if (typeof p.tags === 'string') {
-          tags = p.tags.split(',').map(t => t.trim()).filter(t => t);
-        } else if (p.subCategory) {
-          tags = [p.subCategory];
-        }
-  
-        return {
-          id: p.id,
-          name: p.name || 'Unnamed Item',
-          variety: variety,
-          brand: p.brand || p.subCategory || '',
-          category: p.category || '',
-          subCategory: p.subCategory || '',
-          market: p.market || '',
-          unit: p.unit || '',
-          address: address,
-area: area,
-city: city,
-fullLocation: fullLocation,
-          distanceKm: distanceKm,
-          price: parseFloat(p.price || 0),
-          originalPrice: p.originalPrice ? parseFloat(p.originalPrice) : null,
-          image: p.image || 'https://via.placeholder.com/600x400?text=No+Image',
-          description: p.description || p.details || variety,
-          phone: phone,
-          whatsapp: whatsapp,
-          videoLink: p.videoLink || null,
-          tags: tags
-        };
-      });
+    // Map to the format food.js expects
+    foodDeals = foodProducts.map(p => {
+      let variety = p.variety || p.brand || p.subCategory || 'No Variety Specified';
+      const parts = [];
+      if (p.qty) parts.push(p.qty);
+      if (p.gram) parts.push(p.gram);
+      if (parts.length > 0) {
+        variety = `${variety} (${parts.join(' - ')})`;
+      }
+      const address = p.address || '';
+      const area = p.area || p.block || p.blockNo || p.areaBlock || '';
+      const city = p.city || '';
 
-      // Populate Filters
-      const populateSelect = (id, property) => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        const uniqueVals = [...new Set(foodDeals.map(f => f[property]).filter(Boolean))].sort();
-        uniqueVals.forEach(val => {
-          const opt = document.createElement('option');
-          opt.value = val;
-          opt.textContent = val;
-          el.appendChild(opt);
-        });
-        el.addEventListener('change', renderFoodList);
+      const fullLocation = [address, area, city]
+        .filter(Boolean)
+        .join(', ');
+      const distanceKm = parseFloat(p.distance || p.distanceKm) || 2.5;
+      const phone = p.phone || p.contact || '';
+      const whatsapp = p.whatsapp || phone;
+
+      // Handle tags
+      let tags = [];
+      if (Array.isArray(p.tags)) {
+        tags = p.tags;
+      } else if (typeof p.tags === 'string') {
+        tags = p.tags.split(',').map(t => t.trim()).filter(t => t);
+      } else if (p.subCategory) {
+        tags = [p.subCategory];
+      }
+
+      return {
+        id: p.id,
+        name: p.name || 'Unnamed Item',
+        variety: variety,
+        brand: p.brand || p.subCategory || '',
+        category: p.category || '',
+        subCategory: p.subCategory || '',
+        market: p.market || '',
+        unit: p.unit || '',
+        address: address,
+        area: area,
+        city: city,
+        fullLocation: fullLocation,
+        distanceKm: distanceKm,
+        price: parseFloat(p.price || 0),
+        originalPrice: p.originalPrice ? parseFloat(p.originalPrice) : null,
+        image: p.image || 'https://via.placeholder.com/600x400?text=No+Image',
+        description: p.description || p.details || variety,
+        phone: phone,
+        whatsapp: whatsapp,
+        videoLink: p.videoLink || null,
+        tags: tags,
+        standardProductType: p.standardProductType || ''
       };
-      
-      populateSelect('filterCategory', 'category');
-      populateSelect('filterSubCategory', 'subCategory');
-      populateSelect('filterProduct', 'name');
-      populateSelect('filterVariety', 'variety');
-      populateSelect('filterBrand', 'brand');
-      
-      document.getElementById('minPrice')?.addEventListener('input', renderFoodList);
-      document.getElementById('maxPrice')?.addEventListener('input', renderFoodList);
-      
-      document.querySelectorAll('.marketFilter, .unitFilter').forEach(el => el.addEventListener('change', renderFoodList));
-      
-      document.querySelectorAll('.quickFilterBtn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          btn.classList.toggle('active-filter');
-          btn.classList.toggle('border-emerald-500');
-          btn.classList.toggle('text-emerald-400');
-          renderFoodList();
-        });
+    });
+
+    // Populate Filters
+    const populateSelect = (id, property) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const uniqueVals = [...new Set(foodDeals.map(f => f[property]).filter(Boolean))].sort();
+      uniqueVals.forEach(val => {
+        const opt = document.createElement('option');
+        opt.value = val;
+        opt.textContent = val;
+        el.appendChild(opt);
       });
+      el.addEventListener('change', renderFoodList);
+    };
+
+    populateSelect('filterCategory', 'category');
+    populateSelect('filterSubCategory', 'subCategory');
+    populateSelect('filterProduct', 'name');
+    populateSelect('filterVariety', 'variety');
+    populateSelect('filterBrand', 'brand');
+
+    document.getElementById('minPrice')?.addEventListener('input', renderFoodList);
+    document.getElementById('maxPrice')?.addEventListener('input', renderFoodList);
+
+    document.querySelectorAll('.marketFilter, .unitFilter').forEach(el => el.addEventListener('change', renderFoodList));
+
+    document.querySelectorAll('.quickFilterBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('active-filter');
+        btn.classList.toggle('border-emerald-500');
+        btn.classList.toggle('text-emerald-400');
+        renderFoodList();
+      });
+    });
   }
 
   if (foodListingsEl) {
     renderFoodList();
-    
+
     // Select first item by default if data exists
     if (foodDeals.length > 0) {
       selectFoodItem(foodDeals[0].id, true);
@@ -421,7 +508,7 @@ fullLocation: fullLocation,
         if (foodSearchInput) {
           foodSearchInput.value = searchVal;
           renderFoodList();
-          
+
           if (window.innerWidth < 1024) {
             setTimeout(() => {
               const listingsContainer = document.getElementById('foodListings');
@@ -457,8 +544,8 @@ if (paymentBtns) {
     btn.addEventListener('click', () => {
       // reset all
       paymentBtns.forEach(b => {
-         b.classList.remove('border-emerald-500', 'bg-emerald-50/50');
-         b.classList.add('border-slate-200', 'bg-slate-50');
+        b.classList.remove('border-emerald-500', 'bg-emerald-50/50');
+        b.classList.add('border-slate-200', 'bg-slate-50');
       });
       // set active
       btn.classList.add('border-emerald-500', 'bg-emerald-50/50');
