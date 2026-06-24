@@ -1380,15 +1380,20 @@ function populateCategoryDropdown() {
             const selectedCat = prodCategorySelect.value;
             const prodSubCategorySelect = document.getElementById('prodSubCategory');
             if (prodSubCategorySelect) {
-                // Filter sub-categories for this category name
-                const relevantCats = categories.filter(c => c.name === selectedCat);
-                let subCats = [];
-                relevantCats.forEach(cat => {
-                    if (cat.subCategory) {
-                        subCats.push(...cat.subCategory.split(',').map(s => s.trim()).filter(s => s));
-                    }
-                });
-                const uniqueSubCats = [...new Set(subCats)];
+                let uniqueSubCats = [];
+                if (selectedCat === 'Food Stuffs' || selectedCat === 'Food') {
+                    uniqueSubCats = ['Fast Food', 'Desi Cuisine', 'Bar BQ', 'Chinese', 'Sea Food', 'Dessert'];
+                } else {
+                    // Filter sub-categories for this category name
+                    const relevantCats = categories.filter(c => c.name === selectedCat);
+                    let subCats = [];
+                    relevantCats.forEach(cat => {
+                        if (cat.subCategory) {
+                            subCats.push(...cat.subCategory.split(',').map(s => s.trim()).filter(s => s));
+                        }
+                    });
+                    uniqueSubCats = [...new Set(subCats)];
+                }
 
                 prodSubCategorySelect.innerHTML = '<option value="">Select Sub Category</option>' +
                     uniqueSubCats.map(sub => `<option value="${sub}">${sub}</option>`).join('');
@@ -1418,14 +1423,19 @@ function populateCategoryDropdown() {
             const selectedCat = dealCategorySelect.value;
             const dealSubCategorySelect = document.getElementById('dealSubCategory');
             if (dealSubCategorySelect) {
-                const relevantCats = categories.filter(c => c.name === selectedCat);
-                let subCats = [];
-                relevantCats.forEach(cat => {
-                    if (cat.subCategory) {
-                        subCats.push(...cat.subCategory.split(',').map(s => s.trim()).filter(s => s));
-                    }
-                });
-                const uniqueSubCats = [...new Set(subCats)];
+                let uniqueSubCats = [];
+                if (selectedCat === 'Food Stuffs' || selectedCat === 'Food') {
+                    uniqueSubCats = ['Platter', 'Deals'];
+                } else {
+                    const relevantCats = categories.filter(c => c.name === selectedCat);
+                    let subCats = [];
+                    relevantCats.forEach(cat => {
+                        if (cat.subCategory) {
+                            subCats.push(...cat.subCategory.split(',').map(s => s.trim()).filter(s => s));
+                        }
+                    });
+                    uniqueSubCats = [...new Set(subCats)];
+                }
 
                 dealSubCategorySelect.innerHTML = '<option value="">Select Sub Category</option>' +
                     uniqueSubCats.map(sub => `<option value="${sub}">${sub}</option>`).join('');
