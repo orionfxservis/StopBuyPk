@@ -24,11 +24,11 @@ let broadcastEditIndex = -1;
 function hasPublishPermission(cUser, section) {
     if (!cUser || !cUser.userId) return false;
     if (String(cUser.userId).toLowerCase() === 'admin') return true;
-    
+
     let perms = cUser.permissions;
     let loopCount = 0;
     while (typeof perms === 'string' && loopCount < 3) {
-        try { perms = JSON.parse(perms); } catch(e) { break; }
+        try { perms = JSON.parse(perms); } catch (e) { break; }
         loopCount++;
     }
     if (perms && typeof perms === 'object' && !Array.isArray(perms)) {
@@ -88,12 +88,12 @@ async function initAdmin() {
                 if (userIndex !== -1) {
                     const todayStr = new Date().toISOString().split('T')[0];
                     const liveUser = users[userIndex];
-                    
+
                     liveUser.lastLogin = new Date().toISOString();
-                    
+
                     let daysList = liveUser.activeDaysList || [];
                     if (typeof daysList === 'string') {
-                        try { daysList = JSON.parse(daysList); } catch(e) { daysList = []; }
+                        try { daysList = JSON.parse(daysList); } catch (e) { daysList = []; }
                     }
                     if (!Array.isArray(daysList)) {
                         daysList = [];
@@ -103,12 +103,12 @@ async function initAdmin() {
                     }
                     liveUser.activeDaysList = daysList;
                     liveUser.activeDays = daysList.length;
-                    
+
                     currentUser.lastLogin = liveUser.lastLogin;
                     currentUser.activeDays = liveUser.activeDays;
                     currentUser.activeDaysList = liveUser.activeDaysList;
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    
+
                     // Call saveUsers asynchronously so it doesn't block the UI rendering
                     DataService.saveUsers(users).catch(err => console.error("Failed to async save users:", err));
                 }
@@ -127,7 +127,7 @@ async function initAdmin() {
         renderAdminProducts(); // New function for products
         populateCategoryDropdown(); // New function for form
         populateCategoryAssignGrid(); // Populate categories assign grid
-        
+
         enforceUserPermissions(); // Apply user rights to sidebar
         updatePendingApprovalsBadge(); // Update badges
         if (typeof populateAdminHeader === 'function') populateAdminHeader();
@@ -147,7 +147,7 @@ async function initAdmin() {
 }
 
 // Handler for background loaded cache data
-window.onBackgroundDataLoaded = function(type, data) {
+window.onBackgroundDataLoaded = function (type, data) {
     console.log(`Background data loaded: ${type}`, data);
     if (type === 'users') {
         users = data || [];
@@ -556,23 +556,23 @@ if (bannerForm) {
             }
 
             if (bannerEditIndex === -1) {
-                banners.push({ 
+                banners.push({
                     id: Date.now(),
-                    image, 
-                    link, 
-                    type, 
-                    addedBy: userName, 
+                    image,
+                    link,
+                    type,
+                    addedBy: userName,
                     status: bannerStatus,
                     createdDate: new Date().toISOString(),
                     updatedDate: new Date().toISOString()
                 });
             } else {
-                banners[bannerEditIndex] = { 
+                banners[bannerEditIndex] = {
                     id: banners[bannerEditIndex].id || Date.now(),
-                    image, 
-                    link, 
-                    type, 
-                    addedBy: banners[bannerEditIndex].addedBy || userName, 
+                    image,
+                    link,
+                    type,
+                    addedBy: banners[bannerEditIndex].addedBy || userName,
                     status: bannerStatus,
                     createdDate: banners[bannerEditIndex].createdDate || new Date().toISOString(),
                     updatedDate: new Date().toISOString()
@@ -620,18 +620,18 @@ function populateDealFilterOptions() {
     const cUserStr = localStorage.getItem('currentUser');
     const cUser = cUserStr ? JSON.parse(cUserStr) : {};
     const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
-    
+
     if (catSelect) {
         const uniqueCats = [...new Set(deals.map(d => d.category).filter(Boolean))];
         const currentVal = catSelect.value;
-        catSelect.innerHTML = '<option value="">All Categories</option>' + 
+        catSelect.innerHTML = '<option value="">All Categories</option>' +
             uniqueCats.map(cat => `<option value="${cat}">${cat}</option>`).join('');
         catSelect.value = uniqueCats.includes(currentVal) ? currentVal : '';
     }
     if (subSelect) {
         const uniqueSubs = [...new Set(deals.map(d => d.subCategory).filter(Boolean))];
         const currentVal = subSelect.value;
-        subSelect.innerHTML = '<option value="">All Sub Categories</option>' + 
+        subSelect.innerHTML = '<option value="">All Sub Categories</option>' +
             uniqueSubs.map(sub => `<option value="${sub}">${sub}</option>`).join('');
         subSelect.value = uniqueSubs.includes(currentVal) ? currentVal : '';
     }
@@ -642,29 +642,29 @@ function populateDealFilterOptions() {
             postSelect.style.display = '';
             const uniquePosts = [...new Set(deals.map(d => d.addedBy || 'Admin').filter(Boolean))];
             const currentVal = postSelect.value;
-            postSelect.innerHTML = '<option value="">All Authors</option>' + 
+            postSelect.innerHTML = '<option value="">All Authors</option>' +
                 uniquePosts.map(post => `<option value="${post}">${post}</option>`).join('');
             postSelect.value = uniquePosts.includes(currentVal) ? currentVal : '';
         }
     }
 }
 
-window.resetDealFilters = function() {
+window.resetDealFilters = function () {
     dealSearchQuery = "";
     dealFilterCategory = "";
     dealFilterSubCategory = "";
     dealFilterPostBy = "";
-    
+
     const searchInput = document.getElementById('dealSearchInput');
     const catSelect = document.getElementById('dealFilterCategory');
     const subSelect = document.getElementById('dealFilterSubCategory');
     const postSelect = document.getElementById('dealFilterPostBy');
-    
+
     if (searchInput) searchInput.value = "";
     if (catSelect) catSelect.value = "";
     if (subSelect) subSelect.value = "";
     if (postSelect) postSelect.value = "";
-    
+
     renderDeals();
 };
 
@@ -684,12 +684,12 @@ function renderDeals() {
     // Apply filters
     const filteredDeals = mappedDeals.filter(item => {
         const { deal } = item;
-        
+
         // Only show own deals if not super admin
         if (!isSuperAdmin && deal.addedBy !== userName) {
             return false;
         }
-        
+
         // Search filter
         if (dealSearchQuery) {
             const nameMatch = String(deal.name || '').toLowerCase().includes(dealSearchQuery);
@@ -701,22 +701,22 @@ function renderDeals() {
                 return false;
             }
         }
-        
+
         // Category filter
         if (dealFilterCategory && deal.category !== dealFilterCategory) {
             return false;
         }
-        
+
         // Subcategory filter
         if (dealFilterSubCategory && deal.subCategory !== dealFilterSubCategory) {
             return false;
         }
-        
+
         // Author filter
         if (dealFilterPostBy && (deal.addedBy || 'Admin') !== dealFilterPostBy) {
             return false;
         }
-        
+
         return true;
     });
 
@@ -801,7 +801,7 @@ window.editDeal = (index) => {
     document.getElementById('dealLocation').value = deal.location || '';
     document.getElementById('dealWhatsapp').value = deal.whatsapp || '';
     document.getElementById('dealVideo').value = deal.video || '';
-    
+
     // Populate new fields safely
     if (document.getElementById('dealProductDetail')) document.getElementById('dealProductDetail').value = deal.productDetail || '';
     if (document.getElementById('dealBrand')) document.getElementById('dealBrand').value = deal.brand || '';
@@ -820,7 +820,7 @@ window.editDeal = (index) => {
 window.cancelDealEdit = () => {
     dealEditIndex = -1;
     dealForm.reset();
-    
+
     // Clear new inputs explicitly just in case
     if (document.getElementById('dealProductDetail')) document.getElementById('dealProductDetail').value = '';
     if (document.getElementById('dealBrand')) document.getElementById('dealBrand').value = '';
@@ -992,13 +992,13 @@ async function saveUsers() {
         let perms = u.permissions;
         let loopCount = 0;
         while (typeof perms === 'string' && loopCount < 3) {
-            try { perms = JSON.parse(perms); } catch(e) { break; }
+            try { perms = JSON.parse(perms); } catch (e) { break; }
             loopCount++;
         }
         if (!perms || typeof perms !== 'object' || Array.isArray(perms)) {
             perms = {};
         }
-        
+
         // Sync assignedCategories from permissions wrapper if present, otherwise set it
         if (perms.assignedCategories) {
             u.assignedCategories = perms.assignedCategories;
@@ -1008,17 +1008,17 @@ async function saveUsers() {
             u.assignedCategories = [];
             perms.assignedCategories = [];
         }
-        
+
         // Sync charges into permissions object so it gets saved to Google Sheets
         if (u.charges !== undefined) {
             perms.charges = u.charges;
         } else if (perms.charges !== undefined) {
             u.charges = perms.charges;
         }
-        
+
         u.permissions = perms;
     });
-    
+
     // Safety check to prevent wiping the main admin account if it was missing from local storage
     const hasAdmin = users.some(u => String(u.userId).toLowerCase() === 'admin' && u.role === 'admin');
     if (!hasAdmin) {
@@ -1038,7 +1038,7 @@ async function saveUsers() {
     renderUsers();
 }
 
-window.setUserStatus = async function(index, status) {
+window.setUserStatus = async function (index, status) {
     if (users[index]) {
         users[index].status = status;
         await saveUsers();
@@ -1049,14 +1049,14 @@ function renderUsers() {
     const regularList = document.getElementById('regularUserList');
     const systemList = document.getElementById('systemUserList');
     if (!regularList || !systemList) return;
-    
+
     let regularHtml = '';
     let systemHtml = '';
 
     users.forEach((u, index) => {
         const fallbackAvatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(u.fullName || 'User') + '&background=e2e8f0&color=475569';
         const isSuperAdmin = String(u.userId).toLowerCase() === 'admin';
-        
+
         // Calculate total postings for this user across all sections
         const userName = u.username || u.fullName || u.userId || 'N/A';
         const uLower = userName.toLowerCase().trim();
@@ -1069,7 +1069,7 @@ function renderUsers() {
             return creator === uLower || creator === fullNameLower || creator === userIdLower;
         };
 
-        const totalPosts = 
+        const totalPosts =
             (categories || []).filter(userMatches).length +
             (products || []).filter(userMatches).length +
             (deals || []).filter(userMatches).length +
@@ -1077,7 +1077,7 @@ function renderUsers() {
             (blogs || []).filter(userMatches).length +
             (broadcasts || []).filter(userMatches).length +
             (travelPackages || []).filter(userMatches).length;
-        
+
         if (isSuperAdmin) {
             systemHtml += `
             <tr>
@@ -1130,12 +1130,12 @@ function renderUsers() {
                 </td>
                 <td>
                     ${(() => {
-                        const s = String(u.status || u.Status || 'active').toLowerCase();
-                        const isActive = s === 'active' || s === 'approve' || s === 'approved' || s === 'publish';
-                        return `<span class="status-pill ${isActive ? 'active' : 'pending'}">
+                    const s = String(u.status || u.Status || 'active').toLowerCase();
+                    const isActive = s === 'active' || s === 'approve' || s === 'approved' || s === 'publish';
+                    return `<span class="status-pill ${isActive ? 'active' : 'pending'}">
                             ${isActive ? '<i class="fa-solid fa-check-circle"></i> ACTIVE' : '<i class="fa-solid fa-clock"></i> PENDING'}
                         </span>`;
-                    })()}
+                })()}
                 </td>
                 <td>
                     <span class="badge" style="background:#0ea5e9; color:white; font-weight:bold; cursor:pointer; font-size:11px;" onclick="showUserPerformanceStats('${userName}')">${totalPosts} Posts</span>
@@ -1157,17 +1157,17 @@ function renderUsers() {
 
     regularList.innerHTML = regularHtml;
     systemList.innerHTML = systemHtml;
-    
+
     if (typeof populatePermissionDropdown === 'function') populatePermissionDropdown();
     if (typeof populateCategoryAssignDropdown === 'function') populateCategoryAssignDropdown();
 }
 
 
-window.toggleCompanyField = function() {
+window.toggleCompanyField = function () {
     const role = document.getElementById('userRole').value;
     const companyGroup = document.getElementById('companyNameGroup');
     const companyInput = document.getElementById('companyName');
-    
+
     if (role === 'company') {
         companyGroup.style.opacity = '1';
         companyGroup.style.pointerEvents = 'auto';
@@ -1183,14 +1183,14 @@ window.toggleCompanyField = function() {
 if (userForm) {
     userForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const existingUser = userEditIndex === -1 ? {} : users[userEditIndex];
         const newUser = {
             ...existingUser,
             id: userEditIndex === -1 ? Date.now() : existingUser.id,
             pic: document.getElementById('userPic').value,
             fullName: document.getElementById('userName').value, // Also save as userName for backward compatibility
-            userName: document.getElementById('userName').value, 
+            userName: document.getElementById('userName').value,
             username: document.getElementById('userName').value,
             userId: document.getElementById('userId').value,
             password: document.getElementById('userPassword').value,
@@ -1215,12 +1215,12 @@ if (userForm) {
     });
 }
 
-window.editUser = function(index) {
+window.editUser = function (index) {
     userEditIndex = index;
     const u = users[index];
 
     if (userFormTitle) userFormTitle.textContent = "Edit User";
-    
+
     document.getElementById('userPic').value = u.pic || '';
     document.getElementById('userName').value = u.fullName || u.userName || u.name || u.username || '';
     document.getElementById('userId').value = u.userId || u.id || u.username || '';
@@ -1228,15 +1228,15 @@ window.editUser = function(index) {
     document.getElementById('userRole').value = u.role || 'user';
     document.getElementById('companyName').value = u.companyName || '';
     document.getElementById('userStatus').value = u.status || 'active';
-    
+
     toggleCompanyField();
-    
+
     if (btnCancelUser) btnCancelUser.style.display = 'inline-block';
     if (btnSaveUser) btnSaveUser.textContent = 'Update User';
     window.scrollTo({ top: userForm.offsetTop - 100, behavior: 'smooth' });
 }
 
-window.cancelUserEdit = function() {
+window.cancelUserEdit = function () {
     userEditIndex = -1;
     if (userForm) userForm.reset();
     toggleCompanyField();
@@ -1305,19 +1305,19 @@ function populateCategoryDropdown() {
                 const uId = String(u.userId || u.id || '').trim().toLowerCase();
                 const uEmail = String(u.email || '').trim().toLowerCase();
                 const uName = String(u.username || u.userName || '').trim().toLowerCase();
-                return (uId && uId === cUid) || 
-                       (uEmail && uEmail === cUid) || 
-                       (uName && uName === cUname) ||
-                       (uName && uName === cUid);
+                return (uId && uId === cUid) ||
+                    (uEmail && uEmail === cUid) ||
+                    (uName && uName === cUname) ||
+                    (uName && uName === cUid);
             });
-            
+
             // Helper to get assigned categories from permissions or assignedCategories
             const getAssigned = (usr) => {
                 if (!usr) return [];
                 let perms = usr.permissions;
                 let loopCount = 0;
                 while (typeof perms === 'string' && loopCount < 3) {
-                    try { perms = JSON.parse(perms); } catch(e) { break; }
+                    try { perms = JSON.parse(perms); } catch (e) { break; }
                     loopCount++;
                 }
                 if (perms && typeof perms === 'object' && !Array.isArray(perms) && perms.assignedCategories) {
@@ -1334,7 +1334,7 @@ function populateCategoryDropdown() {
             while (typeof assigned === 'string' && loopCount < 3) {
                 try {
                     assigned = JSON.parse(assigned);
-                } catch(e) {
+                } catch (e) {
                     if (assigned.includes(',')) {
                         assigned = assigned.split(',').map(s => s.trim());
                     } else if (assigned) {
@@ -1349,7 +1349,7 @@ function populateCategoryDropdown() {
 
             if (assigned && Array.isArray(assigned) && assigned.length > 0) {
                 const assignedLower = assigned.map(a => String(a).trim().toLowerCase());
-                allowedCategories = uniqueCategories.filter(name => 
+                allowedCategories = uniqueCategories.filter(name =>
                     assignedLower.includes(String(name).trim().toLowerCase())
                 );
             } else {
@@ -1819,15 +1819,15 @@ function renderDynamicAdminFields() {
                 </div>
             </div>
         `;
-        setTimeout(() => { 
-            window.toggleLaptopShopField(); 
+        setTimeout(() => {
+            window.toggleLaptopShopField();
             const brandSelect = document.getElementById('prodBrand');
             if (brandSelect) {
                 const handleBrandChange = () => {
                     const brand = brandSelect.value;
                     const nameContainer = document.getElementById('prodNameContainer');
                     if (!nameContainer) return;
-                    
+
                     const brandNames = {
                         'Dell': [
                             'Dell 45W Laptop Charger',
@@ -1877,7 +1877,7 @@ function renderDynamicAdminFields() {
                             'Acer Predator Charger'
                         ]
                     };
-                    
+
                     if (brandNames[brand]) {
                         nameContainer.innerHTML = `
                             <label>Product Name</label>
@@ -2324,7 +2324,7 @@ function renderDynamicAdminFields() {
     }
 }
 
-window.toggleLaptopShopField = function() {
+window.toggleLaptopShopField = function () {
     const seller = document.getElementById('prodSeller')?.value;
     const shopField = document.getElementById('prodCompanyName');
     const shopGroup = document.getElementById('laptopCompanyGroup');
@@ -2516,11 +2516,11 @@ function populateProductFilterOptions() {
     const cUserStr = localStorage.getItem('currentUser');
     const cUser = cUserStr ? JSON.parse(cUserStr) : {};
     const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
-    
+
     if (catSelect) {
         const uniqueCats = [...new Set(products.map(p => p.category).filter(Boolean))];
         const currentVal = catSelect.value;
-        catSelect.innerHTML = '<option value="">All Categories</option>' + 
+        catSelect.innerHTML = '<option value="">All Categories</option>' +
             uniqueCats.map(cat => `<option value="${cat}">${cat}</option>`).join('');
         catSelect.value = uniqueCats.includes(currentVal) ? currentVal : '';
     }
@@ -2531,27 +2531,27 @@ function populateProductFilterOptions() {
             postSelect.style.display = '';
             const uniquePosts = [...new Set(products.map(p => p.addedBy || 'Admin').filter(Boolean))];
             const currentVal = postSelect.value;
-            postSelect.innerHTML = '<option value="">All Authors</option>' + 
+            postSelect.innerHTML = '<option value="">All Authors</option>' +
                 uniquePosts.map(post => `<option value="${post}">${post}</option>`).join('');
             postSelect.value = uniquePosts.includes(currentVal) ? currentVal : '';
         }
     }
 }
 
-window.resetProductFilters = function() {
+window.resetProductFilters = function () {
     prodSearchQuery = "";
     prodFilterCategory = "";
     prodFilterPostBy = "";
     prodCurrentPage = 1;
-    
+
     const searchInput = document.getElementById('prodSearchInput');
     const catSelect = document.getElementById('prodFilterCategory');
     const postSelect = document.getElementById('prodFilterPostBy');
-    
+
     if (searchInput) searchInput.value = "";
     if (catSelect) catSelect.value = "";
     if (postSelect) postSelect.value = "";
-    
+
     renderAdminProducts();
 };
 
@@ -2573,12 +2573,12 @@ function renderAdminProducts() {
         // Apply filters
         const filteredProducts = mappedProducts.filter(item => {
             const { prod } = item;
-            
+
             // Only show own products if not super admin
             if (!isSuperAdmin && prod.addedBy !== userName) {
                 return false;
             }
-            
+
             // Search filter
             if (prodSearchQuery) {
                 const nameMatch = String(prod.name || '').toLowerCase().includes(prodSearchQuery);
@@ -2690,14 +2690,14 @@ function renderAdminProducts() {
                 paginationContainer.style.display = 'flex';
                 const showFrom = totalItems === 0 ? 0 : startIndex + 1;
                 const showTo = Math.min(endIndex, totalItems);
-                
+
                 let pagesHtml = '';
                 // Prev Button
                 pagesHtml += `<button onclick="changeProdPage(${prodCurrentPage - 1})" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" ${prodCurrentPage === 1 ? 'disabled style="opacity: 0.5; pointer-events: none;"' : ''}><i class="fa-solid fa-chevron-left"></i> Prev</button>`;
-                
+
                 // Page numbers
                 pagesHtml += `<span style="font-weight: 600; color: #334155; font-size: 0.8rem; margin: 0 10px;">Page ${prodCurrentPage} of ${totalPages}</span>`;
-                
+
                 // Next Button
                 pagesHtml += `<button onclick="changeProdPage(${prodCurrentPage + 1})" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" ${prodCurrentPage === totalPages ? 'disabled style="opacity: 0.5; pointer-events: none;"' : ''}>Next <i class="fa-solid fa-chevron-right"></i></button>`;
 
@@ -2715,7 +2715,7 @@ function renderAdminProducts() {
 }
 
 // Page change handler
-window.changeProdPage = function(page) {
+window.changeProdPage = function (page) {
     prodCurrentPage = page;
     renderAdminProducts();
     const productListEl = document.querySelector('.grid-table-header');
@@ -3367,30 +3367,30 @@ if (typeof renderDailyPrices !== 'function') {
 // ==========================================
 // USER RIGHTS MANAGEMENT
 // ==========================================
-window.populatePermissionDropdown = function() {
+window.populatePermissionDropdown = function () {
     const select = document.getElementById('rightsUserSelect');
     if (!select) return;
-    
+
     const currentSelection = select.value;
     select.innerHTML = '<option value="">Select a user...</option>';
-    
+
     users.forEach(u => {
         const option = document.createElement('option');
         option.value = u.userId;
         option.textContent = `${u.fullName || u.userId} (${u.role})`;
         select.appendChild(option);
     });
-    
+
     if (currentSelection && users.some(u => u.userId === currentSelection)) {
         select.value = currentSelection;
     }
 };
 
-window.onUserSelectChange = function() {
+window.onUserSelectChange = function () {
     const userSelect = document.getElementById('rightsUserSelect');
     const sectionCheckboxes = document.querySelectorAll('.section-checkbox');
     const chargesInput = document.getElementById('rightsUserCharges');
-    
+
     // Reset sections
     sectionCheckboxes.forEach(cb => cb.checked = false);
 
@@ -3399,7 +3399,7 @@ window.onUserSelectChange = function() {
         loadUserPermissions();
         return;
     }
-    
+
     const user = users.find(u => u.userId === userSelect.value);
     if (!user) {
         if (chargesInput) chargesInput.value = '';
@@ -3410,7 +3410,7 @@ window.onUserSelectChange = function() {
     // Normalize permissions string/object safely first
     let perms = user.permissions;
     if (typeof perms === 'string') {
-        try { perms = JSON.parse(perms); } catch(e) { perms = {}; }
+        try { perms = JSON.parse(perms); } catch (e) { perms = {}; }
     }
     if (!perms || typeof perms !== 'object' || Array.isArray(perms)) {
         perms = {};
@@ -3440,37 +3440,37 @@ window.onUserSelectChange = function() {
     loadUserPermissions();
 };
 
-window.loadUserPermissions = function() {
+window.loadUserPermissions = function () {
     const userSelect = document.getElementById('rightsUserSelect');
     const sectionCheckboxes = document.querySelectorAll('.section-checkbox');
     const permCheckboxes = document.querySelectorAll('.perm-checkbox');
-    
+
     permCheckboxes.forEach(cb => cb.checked = false);
-    
+
     if (!userSelect || !userSelect.value) return;
-    
+
     // Check which sections are selected
     const selectedSections = Array.from(sectionCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
-    
+
     const user = users.find(u => u.userId === userSelect.value);
     if (!user) return;
-    
+
     // Normalize permissions string/object safely
     let perms = user.permissions;
     if (typeof perms === 'string') {
-        try { perms = JSON.parse(perms); } catch(e) { perms = {}; }
+        try { perms = JSON.parse(perms); } catch (e) { perms = {}; }
     }
     if (!perms || typeof perms !== 'object' || Array.isArray(perms)) {
         perms = {};
     }
     user.permissions = perms;
-    
+
     if (user.role === 'admin' && user.userId === 'admin') {
         permCheckboxes.forEach(cb => cb.checked = true);
     } else {
         if (selectedSections.length > 0) {
             const firstSectionPerms = perms[selectedSections[0]] || [];
-            
+
             // To be accurate, we'll just show the rights of the first checked section to populate the UI.
             firstSectionPerms.forEach(action => {
                 const cb = document.querySelector(`.perm-checkbox[value="${action}"]`);
@@ -3486,9 +3486,9 @@ if (rightsForm) {
         e.preventDefault();
         const userSelect = document.getElementById('rightsUserSelect');
         const sectionCheckboxes = document.querySelectorAll('.section-checkbox');
-        
+
         const selectedSections = Array.from(sectionCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
-        
+
         if (!userSelect || !userSelect.value) {
             alert('Please select a user first.');
             return;
@@ -3497,35 +3497,35 @@ if (rightsForm) {
             alert('Please select at least one section.');
             return;
         }
-        
+
         const userIndex = users.findIndex(u => u.userId === userSelect.value);
         if (userIndex === -1) return;
-        
+
         const permCheckboxes = document.querySelectorAll('.perm-checkbox');
         const selectedActions = [];
         permCheckboxes.forEach(cb => {
             if (cb.checked) selectedActions.push(cb.value);
         });
-        
+
         let currentPerms = users[userIndex].permissions;
         // Normalize if it was previously an array or undefined
         if (!currentPerms || Array.isArray(currentPerms) || typeof currentPerms !== 'object') {
             currentPerms = {};
         }
-        
+
         // Apply rights to all selected sections
         selectedSections.forEach(sec => {
             currentPerms[sec] = selectedActions;
         });
-        
+
         users[userIndex].permissions = currentPerms;
-        
+
         // Save charges rate
         const chargesInput = document.getElementById('rightsUserCharges');
         if (chargesInput) {
             users[userIndex].charges = parseFloat(chargesInput.value) || 0;
         }
-        
+
         await saveUsers();
         alert('User rights updated successfully!');
     });
@@ -3534,13 +3534,13 @@ if (rightsForm) {
 // ==========================================
 // USER CATEGORIES ASSIGNMENT
 // ==========================================
-window.populateCategoryAssignDropdown = function() {
+window.populateCategoryAssignDropdown = function () {
     const select = document.getElementById('categoryAssignUserSelect');
     if (!select) return;
-    
+
     const currentSelection = select.value;
     select.innerHTML = '<option value="">Select a user...</option>';
-    
+
     users.forEach(u => {
         const isSuperAdmin = String(u.userId).toLowerCase() === 'admin';
         if (!isSuperAdmin) {
@@ -3550,18 +3550,18 @@ window.populateCategoryAssignDropdown = function() {
             select.appendChild(option);
         }
     });
-    
+
     if (currentSelection && users.some(u => u.userId === currentSelection)) {
         select.value = currentSelection;
     }
 };
 
-window.populateCategoryAssignGrid = function() {
+window.populateCategoryAssignGrid = function () {
     const grid = document.getElementById('categoriesAssignGrid');
     if (!grid) return;
-    
+
     const uniqueCategories = [...new Set(categories.map(c => c.name))];
-    
+
     grid.innerHTML = uniqueCategories.map(catName => {
         return `
             <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
@@ -3571,17 +3571,17 @@ window.populateCategoryAssignGrid = function() {
     }).join('');
 };
 
-window.onCategoryAssignUserChange = function() {
+window.onCategoryAssignUserChange = function () {
     const userSelect = document.getElementById('categoryAssignUserSelect');
     const checkboxes = document.querySelectorAll('.cat-assign-checkbox');
-    
+
     checkboxes.forEach(cb => cb.checked = false);
-    
+
     if (!userSelect || !userSelect.value) return;
-    
+
     const user = users.find(u => u.userId === userSelect.value);
     if (!user) return;
-    
+
     let assigned = (user.permissions && user.permissions.assignedCategories)
         ? user.permissions.assignedCategories
         : (user.assignedCategories || []);
@@ -3590,7 +3590,7 @@ window.onCategoryAssignUserChange = function() {
     while (typeof assigned === 'string' && loopCount < 3) {
         try {
             assigned = JSON.parse(assigned);
-        } catch(e) {
+        } catch (e) {
             if (assigned.includes(',')) {
                 assigned = assigned.split(',').map(s => s.trim());
             } else if (assigned) {
@@ -3605,7 +3605,7 @@ window.onCategoryAssignUserChange = function() {
     if (!Array.isArray(assigned)) {
         assigned = [];
     }
-    
+
     checkboxes.forEach(cb => {
         if (assigned.includes(cb.value)) {
             cb.checked = true;
@@ -3622,41 +3622,41 @@ if (categoryAssignForm) {
             alert('Please select a user first.');
             return;
         }
-        
+
         const userIndex = users.findIndex(u => u.userId === userSelect.value);
         if (userIndex === -1) return;
-        
+
         const checkboxes = document.querySelectorAll('.cat-assign-checkbox');
         const selectedCategories = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
-        
+
         // Ensure permissions object exists and is parsed
         let perms = users[userIndex].permissions;
         let loopCount = 0;
         while (typeof perms === 'string' && loopCount < 3) {
-            try { perms = JSON.parse(perms); } catch(e) { break; }
+            try { perms = JSON.parse(perms); } catch (e) { break; }
             loopCount++;
         }
         if (!perms || typeof perms !== 'object' || Array.isArray(perms)) {
             perms = {};
         }
-        
+
         perms.assignedCategories = selectedCategories;
         users[userIndex].permissions = perms;
         users[userIndex].assignedCategories = selectedCategories;
-        
+
         await saveUsers();
         alert('Category assignment updated successfully!');
     });
 }
 
-window.enforceUserPermissions = function() {
+window.enforceUserPermissions = function () {
     try {
         const currentUserStr = localStorage.getItem('currentUser');
         if (!currentUserStr) return;
-        
+
         let currentUser = JSON.parse(currentUserStr);
         if (String(currentUser.userId || currentUser.username || '').toLowerCase() === 'admin') return; // Super admin exception
-        
+
         // ALWAYS use the freshest data from the fetched 'users' array if available
         const cUid = String(currentUser.userId || '').trim().toLowerCase();
         const cUname = String(currentUser.username || '').trim().toLowerCase();
@@ -3664,10 +3664,10 @@ window.enforceUserPermissions = function() {
             const uId = String(u.userId || u.id || '').trim().toLowerCase();
             const uEmail = String(u.email || '').trim().toLowerCase();
             const uName = String(u.username || u.userName || '').trim().toLowerCase();
-            return (uId && uId === cUid) || 
-                   (uEmail && uEmail === cUid) || 
-                   (uName && uName === cUname) ||
-                   (uName && uName === cUid);
+            return (uId && uId === cUid) ||
+                (uEmail && uEmail === cUid) ||
+                (uName && uName === cUname) ||
+                (uName && uName === cUid);
         });
         if (liveUser) {
             currentUser.role = liveUser.role || currentUser.role;
@@ -3679,26 +3679,26 @@ window.enforceUserPermissions = function() {
 
         // Apply permissions to ALL non-super-admin users (admin, company, user)
         let perms = currentUser.permissions;
-        
+
         // Aggressively parse stringified JSON (handles double-stringification)
         let loopCount = 0;
         while (typeof perms === 'string' && loopCount < 3) {
-            try { 
-                perms = JSON.parse(perms); 
-            } catch(e) { 
-                break; 
+            try {
+                perms = JSON.parse(perms);
+            } catch (e) {
+                break;
             }
             loopCount++;
         }
-        
+
         if (!perms || Array.isArray(perms) || typeof perms !== 'object') {
             perms = {}; // Legacy or no perms
         }
-        
+
         console.log("Enforcing permissions for user:", currentUser.userId, "Parsed Perms:", perms);
-        
+
         const menuItems = document.querySelectorAll('.menu li[onclick^="showSection"]');
-        
+
         menuItems.forEach(li => {
             const sectionMatch = li.getAttribute('onclick').match(/showSection\('([^']+)'\)/);
             if (sectionMatch && sectionMatch[1]) {
@@ -3716,7 +3716,7 @@ window.enforceUserPermissions = function() {
                             // Ensure it's visible if it has rights (in case it was hidden)
                             li.style.display = '';
                         }
-                        
+
                         // Enforce Publish/Draft rights - Force Draft for anyone except Super Admin
                         if (String(currentUser.userId || '').toLowerCase() !== 'admin' || !sectionRights.includes('Publish')) {
                             restrictPublishForSection(sectionId);
@@ -3725,15 +3725,15 @@ window.enforceUserPermissions = function() {
                 }
             }
         });
-    } catch(e) {
+    } catch (e) {
         console.error("Error enforcing permissions", e);
     }
 };
 
-window.restrictPublishForSection = function(sectionId) {
+window.restrictPublishForSection = function (sectionId) {
     const sectionEl = document.getElementById(sectionId);
     if (!sectionEl) return;
-    
+
     const statusSelects = sectionEl.querySelectorAll('select');
     statusSelects.forEach(select => {
         let hasPublish = false;
@@ -3744,7 +3744,7 @@ window.restrictPublishForSection = function(sectionId) {
                 hasPublish = true;
             }
         });
-        
+
         if (hasPublish) {
             select.value = 'Draft';
             select.addEventListener('change', (e) => {
@@ -3756,7 +3756,7 @@ window.restrictPublishForSection = function(sectionId) {
     });
 };
 
-window.toggleApproval = async function(type, index) {
+window.toggleApproval = async function (type, index) {
     let arr = [];
     let saveFunc = null;
     let renderFunc = null;
@@ -3774,34 +3774,34 @@ window.toggleApproval = async function(type, index) {
     } else if (type === 'banners') {
         arr = banners; saveFunc = DataService.saveBanners; renderFunc = renderBanners;
     }
-    
+
     if (!arr || !arr[index]) return;
     const item = arr[index];
     const isDraft = item.status === 'Draft' || item.dealStatus === 'Draft' || item.prodStatus === 'Draft';
-    
+
     const newStatus = isDraft ? 'Publish' : 'Draft';
     if (item.status !== undefined) item.status = newStatus;
     if (item.dealStatus !== undefined) item.dealStatus = newStatus;
     if (item.prodStatus !== undefined) item.prodStatus = newStatus;
-    
+
     if (saveFunc) await saveFunc(arr);
     if (renderFunc) renderFunc();
     if (typeof updatePendingApprovalsBadge === 'function') updatePendingApprovalsBadge();
 };
 
-window.updatePendingApprovalsBadge = function() {
+window.updatePendingApprovalsBadge = function () {
     try {
         const currentUserStr = localStorage.getItem('currentUser');
         if (!currentUserStr) return;
         const currentUser = JSON.parse(currentUserStr);
         const isSuperAdmin = String(currentUser.userId || '').toLowerCase() === 'admin';
-        
+
         if (!isSuperAdmin) {
             // For regular users, we can just show them how many of THEIR posts are pending
             const userName = currentUser.fullName || currentUser.username || currentUser.userId || 'Admin';
             let userPendingCount = 0;
             let userNotifsHtml = '';
-            
+
             const checkUserPending = (arr, name) => {
                 const count = arr.filter(item => item.addedBy === userName && (item.status === 'Draft' || item.prodStatus === 'Draft')).length;
                 if (count > 0) {
@@ -3832,7 +3832,7 @@ window.updatePendingApprovalsBadge = function() {
             });
             return;
         }
-        
+
         const counts = {
             products: products.filter(p => p.status === 'Draft' || p.prodStatus === 'Draft').length,
             deals: deals.filter(d => d.status === 'Draft' || d.dealStatus === 'Draft').length,
@@ -3841,7 +3841,7 @@ window.updatePendingApprovalsBadge = function() {
             broadcasts: broadcasts.filter(b => b.status === 'Draft').length,
             travel: travelPackages.filter(p => p.status === 'Draft').length
         };
-        
+
         let totalAdminPending = 0;
         let adminNotifsHtml = '';
 
@@ -3869,12 +3869,12 @@ window.updatePendingApprovalsBadge = function() {
         if (notifList) {
             notifList.innerHTML = totalAdminPending > 0 ? adminNotifsHtml : `<div style="padding: 15px; text-align: center; color: #cbd5e1; font-size: 0.9rem;">No new notifications</div>`;
         }
-    } catch(e) {
+    } catch (e) {
         console.error("Error updating badges", e);
     }
 };
 
-window.populateAdminHeader = function() {
+window.populateAdminHeader = function () {
     const cUserStr = localStorage.getItem('currentUser');
     if (!cUserStr) return;
     const cUser = JSON.parse(cUserStr);
@@ -3913,13 +3913,13 @@ if (liveRatesForm) {
             if (parsedRates.gold) document.getElementById("adminGoldPrice").value = parsedRates.gold;
             if (parsedRates.updated) document.getElementById("ratesUpdatedTime").value = parsedRates.updated;
         }
-    } catch(e) {}
+    } catch (e) { }
 
-    liveRatesForm.addEventListener("submit", async function(e) {
+    liveRatesForm.addEventListener("submit", async function (e) {
         e.preventDefault();
 
         const currentTime = new Date().toLocaleString();
-        
+
         const previousRatesStr = localStorage.getItem("stopbuyLiveRates");
         const previousRates = previousRatesStr ? JSON.parse(previousRatesStr) : {};
 
@@ -3941,9 +3941,9 @@ if (liveRatesForm) {
         if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Updating...';
 
         await DataService.saveLiveRates(ratesData);
-        
+
         if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-save"></i> Update Rates';
-        
+
         const timeField = document.getElementById("ratesUpdatedTime");
         if (timeField) timeField.value = currentTime;
 
@@ -3954,7 +3954,7 @@ if (liveRatesForm) {
 // Auto show current time on load if not set
 const timeField = document.getElementById("ratesUpdatedTime");
 if (timeField && !timeField.value) {
-   timeField.value = new Date().toLocaleString();
+    timeField.value = new Date().toLocaleString();
 }
 
 // ==========================================
@@ -3966,9 +3966,9 @@ let performanceTargetUser = null; // For filtering by specific user from Manage 
 
 
 
-window.showPage = function(pageId) {
+window.showPage = function (pageId) {
     window.showSection(pageId);
-    const targetLi = Array.from(document.querySelectorAll('.menu li')).find(li => 
+    const targetLi = Array.from(document.querySelectorAll('.menu li')).find(li =>
         li.getAttribute('onclick') && li.getAttribute('onclick').includes(pageId)
     );
     if (targetLi) {
@@ -3978,14 +3978,14 @@ window.showPage = function(pageId) {
 };
 
 // Redirect user stats button to performance tab
-window.showUserPerformanceStats = function(username) {
+window.showUserPerformanceStats = function (username) {
     performanceTargetUser = username;
     window.showPage('performance');
 };
 
 
 
-window.setPerformanceFilter = function(filterType, btn) {
+window.setPerformanceFilter = function (filterType, btn) {
     performanceFilter = filterType;
     performanceTargetUser = null; // reset specific user filter
 
@@ -4004,10 +4004,10 @@ window.setPerformanceFilter = function(filterType, btn) {
         b.classList.remove('bg-slate-700', 'text-white');
         b.classList.add('text-slate-300');
     });
-    
+
     let targetBtn = btn;
     if (!targetBtn) {
-        targetBtn = Array.from(document.querySelectorAll('.perf-filter-btn')).find(b => 
+        targetBtn = Array.from(document.querySelectorAll('.perf-filter-btn')).find(b =>
             b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${filterType}'`)
         );
     }
@@ -4025,7 +4025,7 @@ window.setPerformanceFilter = function(filterType, btn) {
     compilePerformanceMetrics();
 };
 
-window.applyCustomDateFilter = function() {
+window.applyCustomDateFilter = function () {
     const start = document.getElementById('perfStartDate').value;
     const end = document.getElementById('perfEndDate').value;
     if (!start || !end) {
@@ -4065,7 +4065,7 @@ function isDateInFilterRange(date, filterType, customStart, customEnd) {
     const dTime = date.getTime();
     const now = new Date();
     const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-    
+
     if (filterType === 'today') {
         return dTime >= startOfToday;
     } else if (filterType === 'week') {
@@ -4077,18 +4077,18 @@ function isDateInFilterRange(date, filterType, customStart, customEnd) {
     } else if (filterType === '3months') {
         const threeMonthsAgo = new Date();
         threeMonthsAgo.setMonth(now.getMonth() - 3);
-        threeMonthsAgo.setHours(0,0,0,0);
+        threeMonthsAgo.setHours(0, 0, 0, 0);
         return dTime >= threeMonthsAgo.getTime();
     } else if (filterType === 'custom') {
         if (!customStart || !customEnd) return true;
-        const sTime = new Date(customStart).setHours(0,0,0,0);
-        const eTime = new Date(customEnd).setHours(23,59,59,999);
+        const sTime = new Date(customStart).setHours(0, 0, 0, 0);
+        const eTime = new Date(customEnd).setHours(23, 59, 59, 999);
         return dTime >= sTime && dTime <= eTime;
     }
     return true;
 }
 
-window.compilePerformanceMetrics = function() {
+window.compilePerformanceMetrics = function () {
     // Inputs
     const customStart = document.getElementById('perfStartDate') ? document.getElementById('perfStartDate').value : '';
     const customEnd = document.getElementById('perfEndDate') ? document.getElementById('perfEndDate').value : '';
@@ -4127,7 +4127,7 @@ window.compilePerformanceMetrics = function() {
     let displayUsers = [...userList];
     if (performanceTargetUser) {
         const targetLower = performanceTargetUser.toLowerCase().trim();
-        displayUsers = displayUsers.filter(u => 
+        displayUsers = displayUsers.filter(u =>
             u.username.toLowerCase().trim() === targetLower ||
             u.fullName.toLowerCase().trim() === targetLower ||
             u.userId.toLowerCase().trim() === targetLower
@@ -4138,9 +4138,9 @@ window.compilePerformanceMetrics = function() {
     const userMatches = (item, user) => {
         const creator = String(item["Post By"] || item.postBy || item.addedBy || '').toLowerCase().trim();
         if (!creator) return false;
-        return creator === user.fullName.toLowerCase().trim() || 
-               creator === user.username.toLowerCase().trim() || 
-               creator === (user.userId || '').toLowerCase().trim();
+        return creator === user.fullName.toLowerCase().trim() ||
+            creator === user.username.toLowerCase().trim() ||
+            creator === (user.userId || '').toLowerCase().trim();
     };
 
     // Filter items based on active range
@@ -4199,7 +4199,7 @@ window.compilePerformanceMetrics = function() {
         const uBlogs = filteredBlogs.filter(item => userMatches(item, user)).length;
         const uBroadcasts = filteredBroadcasts.filter(item => userMatches(item, user)).length;
         const uTravel = filteredTravel.filter(item => userMatches(item, user)).length;
-        
+
         return {
             ...user,
             categories: uCategories,
@@ -4221,7 +4221,7 @@ window.compilePerformanceMetrics = function() {
     if (document.getElementById('perfStatBanners')) document.getElementById('perfStatBanners').textContent = totalBannersCount;
     if (document.getElementById('perfStatTravel')) document.getElementById('perfStatTravel').textContent = totalTravelCount;
     if (document.getElementById('perfStatTotal')) {
-        document.getElementById('perfStatTotal').textContent = 
+        document.getElementById('perfStatTotal').textContent =
             totalCategoriesCount + totalProductsCount + totalDealsCount + totalAdsCount + totalBannersCount + totalBlogsCount + totalBroadcastsCount + totalTravelCount;
     }
 
@@ -4261,7 +4261,7 @@ window.compilePerformanceMetrics = function() {
             const wBlogs = allBlogs.filter(b => userMatches(b, user) && parseItemDate(b) >= weeklyStart).length;
             const wBroadcasts = allBroadcasts.filter(b => userMatches(b, user) && parseItemDate(b) >= weeklyStart).length;
             const wTravel = allTravel.filter(b => userMatches(b, user) && parseItemDate(b) >= weeklyStart).length;
-            
+
             return {
                 ...user,
                 totalThisWeek: wCategories + wProducts + wDeals + wAds + wBanners + wBlogs + wBroadcasts + wTravel
@@ -4294,7 +4294,7 @@ window.compilePerformanceMetrics = function() {
             const mBlogs = allBlogs.filter(b => userMatches(b, user) && parseItemDate(b) >= monthlyStart).length;
             const mBroadcasts = allBroadcasts.filter(b => userMatches(b, user) && parseItemDate(b) >= monthlyStart).length;
             const mTravel = allTravel.filter(b => userMatches(b, user) && parseItemDate(b) >= monthlyStart).length;
-            
+
             return {
                 ...user,
                 totalThisMonth: mCategories + mProducts + mDeals + mAds + mBanners + mBlogs + mBroadcasts + mTravel
@@ -4330,7 +4330,7 @@ function getWeekDaysData(filteredItems) {
     return daysData;
 }
 
-window.renderPerformanceCharts = function(userStats, filteredCategories, filteredProducts, filteredDeals, filteredAds, filteredBanners, filteredBlogs, filteredBroadcasts, filteredTravel) {
+window.renderPerformanceCharts = function (userStats, filteredCategories, filteredProducts, filteredDeals, filteredAds, filteredBanners, filteredBlogs, filteredBroadcasts, filteredTravel) {
     if (typeof Chart === 'undefined') {
         console.warn("Chart.js is not loaded. Skipping rendering of performance charts.");
         return;
@@ -4341,7 +4341,7 @@ window.renderPerformanceCharts = function(userStats, filteredCategories, filtere
         const weeklyCtx = document.getElementById('weeklyActivityChart');
         if (weeklyCtx) {
             if (perfCharts.weekly) perfCharts.weekly.destroy();
-            
+
             const catWeek = getWeekDaysData(filteredCategories);
             const prodWeek = getWeekDaysData(filteredProducts);
             const dealWeek = getWeekDaysData(filteredDeals);
@@ -4510,30 +4510,30 @@ window.renderPerformanceCharts = function(userStats, filteredCategories, filtere
 // --- USER POSTING DETAILS INVOICE MODAL LOGIC ---
 let currentInvoiceUser = null;
 
-window.openUserPostingInvoice = function(username) {
+window.openUserPostingInvoice = function (username) {
     currentInvoiceUser = username;
     const modal = document.getElementById('userInvoiceModal');
     if (!modal) return;
     modal.classList.remove('hidden');
-    
+
     // Set default select to This Month
     const filterSelect = document.getElementById('invoiceFilterSelect');
     if (filterSelect) {
         filterSelect.value = 'month';
         document.getElementById('invoiceCustomDateRange').classList.add('hidden');
     }
-    
+
     document.getElementById('invoiceGenerationDate').textContent = new Date().toLocaleString();
-    
+
     recalculateInvoice();
 };
 
-window.closeUserInvoiceModal = function() {
+window.closeUserInvoiceModal = function () {
     const modal = document.getElementById('userInvoiceModal');
     if (modal) modal.classList.add('hidden');
 };
 
-window.onInvoiceFilterChange = function() {
+window.onInvoiceFilterChange = function () {
     const val = document.getElementById('invoiceFilterSelect').value;
     const customContainer = document.getElementById('invoiceCustomDateRange');
     if (val === 'custom') {
@@ -4544,13 +4544,13 @@ window.onInvoiceFilterChange = function() {
     }
 };
 
-window.onInvoiceCustomDateChange = function() {
+window.onInvoiceCustomDateChange = function () {
     recalculateInvoice();
 };
 
-window.recalculateInvoice = function() {
+window.recalculateInvoice = function () {
     if (!currentInvoiceUser) return;
-    
+
     // Construct userList from global users array so it is in scope
     const userList = users.map(u => ({
         ...u,
@@ -4571,15 +4571,15 @@ window.recalculateInvoice = function() {
         permissions: {},
         charges: 0
     };
-    
+
     document.getElementById('invoiceUserFullName').textContent = `User: ${user.fullName}`;
     document.getElementById('invoiceUserName').textContent = user.username;
     document.getElementById('invoiceUserRole').textContent = user.role.toUpperCase();
-    
+
     // Normalize permissions string/object safely
     let perms = user.permissions;
     if (typeof perms === 'string') {
-        try { perms = JSON.parse(perms); } catch(e) { perms = {}; }
+        try { perms = JSON.parse(perms); } catch (e) { perms = {}; }
     }
     if (!perms || typeof perms !== 'object' || Array.isArray(perms)) {
         perms = {};
@@ -4592,25 +4592,25 @@ window.recalculateInvoice = function() {
     if (rateEl) rateEl.textContent = `Rs. ${userRate}`;
     const rateFooterEl = document.getElementById('invoiceRatePerPostFooter');
     if (rateFooterEl) rateFooterEl.textContent = userRate;
-    
+
     // Get invoice filter settings
     const filterType = document.getElementById('invoiceFilterSelect').value;
     const customStart = document.getElementById('invoiceStartDate').value;
     const customEnd = document.getElementById('invoiceEndDate').value;
-    
+
     // Get all items in selected range matching this user
     const userMatches = (item) => {
         const creator = String(item["Post By"] || item.postBy || item.addedBy || '').toLowerCase().trim();
         if (!creator) return false;
-        return creator === user.fullName.toLowerCase().trim() || 
-               creator === user.username.toLowerCase().trim() || 
-               creator === (user.userId || '').toLowerCase().trim();
+        return creator === user.fullName.toLowerCase().trim() ||
+            creator === user.username.toLowerCase().trim() ||
+            creator === (user.userId || '').toLowerCase().trim();
     };
-    
+
     const filterByDate = (items) => {
         return items.filter(item => isDateInFilterRange(parseItemDate(item), filterType, customStart, customEnd));
     };
-    
+
     const userCategories = filterByDate(categories || []).filter(userMatches);
     const userProducts = filterByDate(products || []).filter(userMatches);
     const userDeals = filterByDate(deals || []).filter(userMatches);
@@ -4619,7 +4619,7 @@ window.recalculateInvoice = function() {
     const userBlogs = filterByDate(blogs || []).filter(userMatches);
     const userBroadcasts = filterByDate(broadcasts || []).filter(userMatches);
     const userTravel = filterByDate(travelPackages || []).filter(userMatches);
-    
+
     const getNamesList = (items) => {
         if (items.length === 0) return `<span class="text-slate-500 italic">No posts</span>`;
         return items.map(item => {
@@ -4629,7 +4629,7 @@ window.recalculateInvoice = function() {
             return `<span class="inline-block bg-slate-800 text-slate-300 text-xs px-2 py-0.5 rounded border border-slate-700/50 mr-1.5 mb-1.5">${name} (${dateStr})</span>`;
         }).join('');
     };
-    
+
     const sections = [
         { name: 'Categories', count: userCategories.length, details: getNamesList(userCategories) },
         { name: 'Products', count: userProducts.length, details: getNamesList(userProducts) },
@@ -4640,7 +4640,7 @@ window.recalculateInvoice = function() {
         { name: 'Broadcast', count: userBroadcasts.length, details: getNamesList(userBroadcasts) },
         { name: 'Travel', count: userTravel.length, details: getNamesList(userTravel) }
     ];
-    
+
     let total = 0;
     const body = document.getElementById('invoiceTableBody');
     body.innerHTML = sections.map(sec => {
@@ -4653,13 +4653,13 @@ window.recalculateInvoice = function() {
             </tr>
         `;
     }).join('');
-    
+
     document.getElementById('invoiceTotalCount').textContent = total;
     const paymentEl = document.getElementById('invoiceTotalPayment');
     if (paymentEl) paymentEl.textContent = `Rs. ${(total * userRate).toFixed(2)}`;
 };
 
-window.printUserInvoice = function() {
+window.printUserInvoice = function () {
     window.print();
 };
 
