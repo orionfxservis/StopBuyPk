@@ -2197,6 +2197,10 @@ function renderDynamicAdminFields() {
                     <label>Product Variety</label>
                     <input type="text" id="prodVariety" class="dynamic-admin-field" placeholder="e.g., Spicy, Large">
                 </div>
+                <div class="input-group">
+                    <label>Standard Product Type</label>
+                    <input type="text" id="prodStandardProductType" class="dynamic-admin-field" placeholder="Standard Product Type">
+                </div>
             </div>
 
             <div class="form-row">
