@@ -402,10 +402,12 @@ async function initFoodDeals() {
         variety = `${variety} (${parts.join(' - ')})`;
       }
       const address = p.address || '';
-      const area = p.area || p.block || p.blockNo || p.areaBlock || '';
+      const areaVal = p.area || p.areaBlock || '';
+      const blockVal = p.blockNo || p.block || '';
+      const areaCombined = (areaVal && blockVal) ? `${areaVal} - ${blockVal}` : (areaVal || blockVal || '');
       const city = p.city || '';
 
-      const fullLocation = [address, area, city]
+      const fullLocation = [address, areaCombined, city]
         .filter(Boolean)
         .join(', ');
       const distanceKm = parseFloat(p.distance || p.distanceKm) || 2.5;
