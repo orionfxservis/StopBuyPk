@@ -20,6 +20,8 @@ let userEditIndex = -1; // State to track user editing
 let dealEditIndex = -1; // State to track deal editing
 let broadcasts = [];
 let broadcastEditIndex = -1;
+let sellers = [];
+let sellerEditIndex = -1;
 
 function hasPublishPermission(cUser, section) {
     if (!cUser || !cUser.userId) return false;
@@ -59,7 +61,7 @@ const bannerPreview = document.getElementById('bannerPreview');
 
 async function initAdmin() {
     try {
-        const [categoriesRes, productsRes, bannersRes, dealsRes, usersRes, blogsRes, travelRes, broadcastsRes] = await Promise.all([
+        const [categoriesRes, productsRes, bannersRes, dealsRes, usersRes, blogsRes, travelRes, broadcastsRes, sellersRes] = await Promise.all([
             DataService.getCategories(),
             DataService.getProducts(),
             DataService.getBanners(),
@@ -67,7 +69,8 @@ async function initAdmin() {
             DataService.getUsers(),
             DataService.getBlogs(),
             DataService.getTravelPackages(),
-            DataService.getBroadcasts()
+            DataService.getBroadcasts(),
+            DataService.getSellers()
         ]);
 
         categories = categoriesRes || [];
@@ -78,6 +81,7 @@ async function initAdmin() {
         blogs = blogsRes || [];
         travelPackages = travelRes || [];
         broadcasts = broadcastsRes || [];
+        sellers = sellersRes || [];
 
         // Track Login and Active Days for currently logged-in user
         try {
@@ -121,6 +125,8 @@ async function initAdmin() {
         renderBanners();
         renderDeals();
         renderUsers();
+        renderSellers();
+        generateSellerId();
         if (typeof renderBlogs === "function") renderBlogs(); else window.renderBlogs();
         renderTravelPackages(); // New function for travel
         renderBroadcasts();
@@ -808,7 +814,8 @@ window.editDeal = (index) => {
     if (document.getElementById('dealContactNo')) document.getElementById('dealContactNo').value = deal.contactNo || '';
     if (document.getElementById('dealDeliveryNo')) document.getElementById('dealDeliveryNo').value = deal.deliveryNo || '';
     if (document.getElementById('dealAddress')) document.getElementById('dealAddress').value = deal.address || '';
-    if (document.getElementById('dealAreaBlock')) document.getElementById('dealAreaBlock').value = deal.areaBlock || '';
+    if (document.getElementById('dealArea')) document.getElementById('dealArea').value = deal.area || '';
+    if (document.getElementById('dealBlockNo')) document.getElementById('dealBlockNo').value = deal.blockNo || '';
 
     if (dealFormTitle) dealFormTitle.textContent = "Edit Deal";
     if (btnSaveDeal) btnSaveDeal.textContent = "Update Deal";
@@ -827,7 +834,8 @@ window.cancelDealEdit = () => {
     if (document.getElementById('dealContactNo')) document.getElementById('dealContactNo').value = '';
     if (document.getElementById('dealDeliveryNo')) document.getElementById('dealDeliveryNo').value = '';
     if (document.getElementById('dealAddress')) document.getElementById('dealAddress').value = '';
-    if (document.getElementById('dealAreaBlock')) document.getElementById('dealAreaBlock').value = '';
+    if (document.getElementById('dealArea')) document.getElementById('dealArea').value = '';
+    if (document.getElementById('dealBlockNo')) document.getElementById('dealBlockNo').value = '';
 
     if (dealFormTitle) dealFormTitle.textContent = "Add New Deal";
     if (btnSaveDeal) btnSaveDeal.textContent = "Add Deal";
@@ -956,7 +964,13 @@ if (dealForm) {
             contactNo: document.getElementById('dealContactNo') ? document.getElementById('dealContactNo').value : (existingDeal.contactNo || ''),
             deliveryNo: document.getElementById('dealDeliveryNo') ? document.getElementById('dealDeliveryNo').value : (existingDeal.deliveryNo || ''),
             address: document.getElementById('dealAddress') ? document.getElementById('dealAddress').value : (existingDeal.address || ''),
-            areaBlock: document.getElementById('dealAreaBlock') ? document.getElementById('dealAreaBlock').value : (existingDeal.areaBlock || ''),
+            area: document.getElementById('dealArea') ? document.getElementById('dealArea').value : (existingDeal.area || ''),
+            blockNo: document.getElementById('dealBlockNo') ? document.getElementById('dealBlockNo').value : (existingDeal.blockNo || ''),
+            areaBlock: (document.getElementById('dealArea') && document.getElementById('dealBlockNo')) 
+                ? (document.getElementById('dealArea').value && document.getElementById('dealBlockNo').value 
+                    ? `${document.getElementById('dealArea').value} - ${document.getElementById('dealBlockNo').value}` 
+                    : (document.getElementById('dealArea').value || document.getElementById('dealBlockNo').value || ''))
+                : (existingDeal.areaBlock || ''),
             addedBy: dealEditIndex === -1 ? userName : (existingDeal.addedBy || userName),
             createdDate: dealEditIndex === -1 ? new Date().toISOString() : (existingDeal.createdDate || new Date().toISOString()),
             updatedDate: new Date().toISOString()
@@ -1772,13 +1786,43 @@ function renderDynamicAdminFields() {
                 </div>
             </div>
             <div class="form-row">
-                <div class="input-group">
+                <div class="input-group" style="flex: 2;">
                     <label>Address</label>
                     <input type="text" id="prodAddress" class="dynamic-admin-field" placeholder="Address" required>
                 </div>
                 <div class="input-group">
-                    <label>Area / Block No.</label>
-                    <input type="text" id="prodArea" class="dynamic-admin-field" placeholder="Area / Block No." required>
+                    <label>Area</label>
+                    <select id="prodArea" class="dynamic-admin-field" required>
+                        <option value="">Select Area</option>
+                        <option value="F.B. Area">F.B. Area</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Block No.</label>
+                    <select id="prodBlockNo" class="dynamic-admin-field" required>
+                        <option value="">Select Block No.</option>
+                        <option value="1 Sharifabad">1 Sharifabad</option>
+                        <option value="2 Sharifabad">2 Sharifabad</option>
+                        <option value="3 Hussainabad">3 Hussainabad</option>
+                        <option value="4 Tayyababad">4 Tayyababad</option>
+                        <option value="6 Tayyababad">6 Tayyababad</option>
+                        <option value="7 Azizabad">7 Azizabad</option>
+                        <option value="8 Azizabad">8 Azizabad</option>
+                        <option value="9 Dastagir">9 Dastagir</option>
+                        <option value="10 Dastagir">10 Dastagir</option>
+                        <option value="11 Sharifabad">11 Sharifabad</option>
+                        <option value="12 Sharifabad">12 Sharifabad</option>
+                        <option value="13 Gulberg Town">13 Gulberg Town</option>
+                        <option value="14 Naseerabad">14 Naseerabad</option>
+                        <option value="15 Naseerabad">15 Naseerabad</option>
+                        <option value="16 Water Pump">16 Water Pump</option>
+                        <option value="17 Samanabad">17 Samanabad</option>
+                        <option value="18 Samanabad">18 Samanabad</option>
+                        <option value="19 Al-Noor Society">19 Al-Noor Society</option>
+                        <option value="20 Ancholi">20 Ancholi</option>
+                        <option value="21 Industrial Area">21 Industrial Area</option>
+                        <option value="22 Industrial Area">22 Industrial Area</option>
+                    </select>
                 </div>
             </div>
             <div class="form-row">
@@ -2050,13 +2094,43 @@ function renderDynamicAdminFields() {
                 </div>
             </div>
             <div class="form-row">
-                <div class="input-group">
+                <div class="input-group" style="flex: 2;">
                     <label>Address</label>
                     <input type="text" id="prodAddress" class="dynamic-admin-field" placeholder="Address" required>
                 </div>
                 <div class="input-group">
-                    <label>Area / Block No.</label>
-                    <input type="text" id="prodArea" class="dynamic-admin-field" placeholder="Area / Block No." required>
+                    <label>Area</label>
+                    <select id="prodArea" class="dynamic-admin-field" required>
+                        <option value="">Select Area</option>
+                        <option value="F.B. Area">F.B. Area</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Block No.</label>
+                    <select id="prodBlockNo" class="dynamic-admin-field" required>
+                        <option value="">Select Block No.</option>
+                        <option value="1 Sharifabad">1 Sharifabad</option>
+                        <option value="2 Sharifabad">2 Sharifabad</option>
+                        <option value="3 Hussainabad">3 Hussainabad</option>
+                        <option value="4 Tayyababad">4 Tayyababad</option>
+                        <option value="6 Tayyababad">6 Tayyababad</option>
+                        <option value="7 Azizabad">7 Azizabad</option>
+                        <option value="8 Azizabad">8 Azizabad</option>
+                        <option value="9 Dastagir">9 Dastagir</option>
+                        <option value="10 Dastagir">10 Dastagir</option>
+                        <option value="11 Sharifabad">11 Sharifabad</option>
+                        <option value="12 Sharifabad">12 Sharifabad</option>
+                        <option value="13 Gulberg Town">13 Gulberg Town</option>
+                        <option value="14 Naseerabad">14 Naseerabad</option>
+                        <option value="15 Naseerabad">15 Naseerabad</option>
+                        <option value="16 Water Pump">16 Water Pump</option>
+                        <option value="17 Samanabad">17 Samanabad</option>
+                        <option value="18 Samanabad">18 Samanabad</option>
+                        <option value="19 Al-Noor Society">19 Al-Noor Society</option>
+                        <option value="20 Ancholi">20 Ancholi</option>
+                        <option value="21 Industrial Area">21 Industrial Area</option>
+                        <option value="22 Industrial Area">22 Industrial Area</option>
+                    </select>
                 </div>
             </div>
             <div class="form-row">
@@ -2199,7 +2273,32 @@ function renderDynamicAdminFields() {
                 </div>
                 <div class="input-group">
                     <label>Standard Product Type</label>
-                    <input type="text" id="prodStandardProductType" class="dynamic-admin-field" placeholder="Standard Product Type">
+                    <select id="prodStandardProductType" class="dynamic-admin-field">
+                        <option value="">Select Standard Product Type</option>
+                        <option value="Zinger Burger">Zinger Burger</option>
+                        <option value="Chicken Burger">Chicken Burger</option>
+                        <option value="Beef Burger">Beef Burger</option>
+                        <option value="Shami Kabab Burger">Shami Kabab Burger</option>
+                        <option value="Chicken Tikka Burger">Chicken Tikka Burger</option>
+                        <option value="Fish Burger">Fish Burger</option>
+                        <option value="Fries">Fries</option>
+                        <option value="Pizza Medium">Pizza Medium</option>
+                        <option value="Pizza Large">Pizza Large</option>
+                        <option value="Pizza Small">Pizza Small</option>
+                        <option value="Shawarma">Shawarma</option>
+                        <option value="Sandwich Shawarma">Sandwich Shawarma</option>
+                        <option value="Quarter Broast Leg">Quarter Broast Leg</option>
+                        <option value="Quarter Broast Chest">Quarter Broast Chest</option>
+                        <option value="Half Broast">Half Broast</option>
+                        <option value="Chicken Chili">Chicken Chili</option>
+                        <option value="Chicken Shashlik">Chicken Shashlik</option>
+                        <option value="Fried Rice">Fried Rice</option>
+                        <option value="Chicken Jalfrezi">Chicken Jalfrezi</option>
+                        <option value="Chicken Manchurian">Chicken Manchurian</option>
+                        <option value="Chicken Biryani">Chicken Biryani</option>
+                        <option value="Beef Biryani">Beef Biryani</option>
+                        <option value="Karahi">Karahi</option>
+                    </select>
                 </div>
             </div>
 
@@ -2297,10 +2396,40 @@ function renderDynamicAdminFields() {
                 <input type="text" id="prodAddress" class="dynamic-admin-field" placeholder="Full Address">
             </div>
 
-                <div class="form-row">
+            <div class="form-row">
                 <div class="input-group">
-                    <label>Area / Block No.</label>
-                    <input type="text" id="prodBlockNo" class="dynamic-admin-field" placeholder="e.g. Block A">
+                    <label>Area</label>
+                    <select id="prodArea" class="dynamic-admin-field">
+                        <option value="">Select Area</option>
+                        <option value="F.B. Area">F.B. Area</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Block No.</label>
+                    <select id="prodBlockNo" class="dynamic-admin-field">
+                        <option value="">Select Block No.</option>
+                        <option value="1 Sharifabad">1 Sharifabad</option>
+                        <option value="2 Sharifabad">2 Sharifabad</option>
+                        <option value="3 Hussainabad">3 Hussainabad</option>
+                        <option value="4 Tayyababad">4 Tayyababad</option>
+                        <option value="6 Tayyababad">6 Tayyababad</option>
+                        <option value="7 Azizabad">7 Azizabad</option>
+                        <option value="8 Azizabad">8 Azizabad</option>
+                        <option value="9 Dastagir">9 Dastagir</option>
+                        <option value="10 Dastagir">10 Dastagir</option>
+                        <option value="11 Sharifabad">11 Sharifabad</option>
+                        <option value="12 Sharifabad">12 Sharifabad</option>
+                        <option value="13 Gulberg Town">13 Gulberg Town</option>
+                        <option value="14 Naseerabad">14 Naseerabad</option>
+                        <option value="15 Naseerabad">15 Naseerabad</option>
+                        <option value="16 Water Pump">16 Water Pump</option>
+                        <option value="17 Samanabad">17 Samanabad</option>
+                        <option value="18 Samanabad">18 Samanabad</option>
+                        <option value="19 Al-Noor Society">19 Al-Noor Society</option>
+                        <option value="20 Ancholi">20 Ancholi</option>
+                        <option value="21 Industrial Area">21 Industrial Area</option>
+                        <option value="22 Industrial Area">22 Industrial Area</option>
+                    </select>
                 </div>
                 <div class="input-group">
                     <label>City</label>
@@ -3709,8 +3838,8 @@ window.enforceUserPermissions = function () {
                 const sectionId = sectionMatch[1];
                 // Always show dashboard
                 if (sectionId !== 'dashboard') {
-                    // Force hide 'Manage Users' for anyone except Super Admin
-                    if (sectionId === 'users' && String(currentUser.userId || '').toLowerCase() !== 'admin') {
+                    // Force hide 'Manage Users' and 'Manage Sellers' for anyone except Super Admin
+                    if ((sectionId === 'users' || sectionId === 'sellers') && String(currentUser.userId || '').toLowerCase() !== 'admin') {
                         li.style.display = 'none';
                     } else {
                         const sectionRights = perms[sectionId] || [];
@@ -4666,4 +4795,375 @@ window.recalculateInvoice = function () {
 window.printUserInvoice = function () {
     window.print();
 };
+
+// --- Seller Management Functions ---
+
+window.generateSellerId = function() {
+    const idField = document.getElementById('sellerId');
+    if (idField && sellerEditIndex === -1) {
+        const num = Math.floor(100000 + Math.random() * 900000);
+        idField.value = 'SEL-' + num;
+    }
+};
+
+window.toggleSellerBranchFields = function() {
+    const branches = document.getElementById('sellerBranches')?.value || 'No';
+    const branchFields = document.getElementById('sellerBranchFields');
+    const nonBranchFields = document.getElementById('sellerNonBranchFields');
+    if (branchFields && nonBranchFields) {
+        if (branches === 'Yes') {
+            branchFields.style.display = 'block';
+            nonBranchFields.style.display = 'none';
+            document.getElementById('sellerBranchAddress').required = true;
+        } else {
+            branchFields.style.display = 'none';
+            nonBranchFields.style.display = 'block';
+            document.getElementById('sellerBranchAddress').required = false;
+        }
+    }
+};
+
+window.toggleSellerStatusCheckbox = function(status) {
+    const active = document.getElementById('sellerStatusActive');
+    const inactive = document.getElementById('sellerStatusInactive');
+    const suspended = document.getElementById('sellerStatusSuspended');
+    if (status === 'Active') {
+        if (active.checked) {
+            inactive.checked = false;
+            suspended.checked = false;
+        }
+    } else if (status === 'Inactive') {
+        if (inactive.checked) {
+            active.checked = false;
+            suspended.checked = false;
+        }
+    } else if (status === 'Suspended') {
+        if (suspended.checked) {
+            active.checked = false;
+            inactive.checked = false;
+        }
+    }
+};
+
+window.cancelSellerEdit = function() {
+    sellerEditIndex = -1;
+    document.getElementById('sellerForm').reset();
+    document.getElementById('sellerFormTitle').textContent = 'Add New Seller';
+    document.getElementById('btnCancelSeller').style.display = 'none';
+    window.generateSellerId();
+    window.toggleSellerBranchFields();
+};
+
+window.renderSellers = function() {
+    const list = document.getElementById('sellerList');
+    if (!list) return;
+
+    let html = '';
+    sellers.forEach((s, index) => {
+        const prodCount = (products || []).filter(p => {
+            const addedBy = String(p.addedBy || '').toLowerCase().trim();
+            const busName = String(s.businessName || '').toLowerCase().trim();
+            const ownName = String(s.ownerName || '').toLowerCase().trim();
+            const selId = String(s.sellerId || '').toLowerCase().trim();
+            return addedBy === busName || addedBy === ownName || addedBy === selId || String(p.companyName || '').toLowerCase().trim() === busName;
+        }).length;
+
+        const dealCount = (deals || []).filter(d => {
+            const addedBy = String(d.addedBy || '').toLowerCase().trim();
+            const busName = String(s.businessName || '').toLowerCase().trim();
+            const ownName = String(s.ownerName || '').toLowerCase().trim();
+            const selId = String(s.sellerId || '').toLowerCase().trim();
+            return addedBy === busName || addedBy === ownName || addedBy === selId || String(d.companyName || '').toLowerCase().trim() === busName;
+        }).length;
+
+        const orderCount = 0;
+
+        const verifiedBadge = s.verifiedSeller 
+            ? `<span class="status-pill active" style="background:rgba(16,185,129,0.1); border:none; padding:4px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:4px; font-weight:bold; color:#10b981;"><i class="fa-solid fa-circle-check"></i> Yes</span>` 
+            : `<span class="status-pill pending" style="background:rgba(148,163,184,0.1); border:none; padding:4px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:4px; font-weight:bold; color:#94a3b8;"><i class="fa-solid fa-circle-xmark"></i> No</span>`;
+
+        let statusClass = 'active';
+        if (s.status === 'Inactive') statusClass = 'pending';
+        if (s.status === 'Suspended') statusClass = 'suspended';
+        
+        let statusStyle = '';
+        if (s.status === 'Suspended') statusStyle = 'background:rgba(239,68,68,0.1); color:#ef4444; border:none; padding:4px 8px; border-radius:12px; font-weight:bold;';
+        else if (s.status === 'Inactive') statusStyle = 'background:rgba(245,158,11,0.1); color:#f59e0b; border:none; padding:4px 8px; border-radius:12px; font-weight:bold;';
+        else statusStyle = 'background:rgba(16,185,129,0.1); color:#10b981; border:none; padding:4px 8px; border-radius:12px; font-weight:bold;';
+
+        const statusLabel = s.status || 'Active';
+
+        html += `
+            <tr>
+                <td>
+                    <span style="font-weight:700; color:#38bdf8;">${s.sellerId || 'SEL-000000'}</span>
+                </td>
+                <td>
+                    <span style="font-weight:600; color:#fff;">${s.businessName || 'N/A'}</span>
+                </td>
+                <td>
+                    <span style="color: #cbd5e1; font-size: 13px;">${s.businessType || 'Retailer'}</span>
+                </td>
+                <td>
+                    <span style="color: #cbd5e1;">${s.city || 'N/A'}</span>
+                </td>
+                <td>
+                    <span class="badge" style="background:#0ea5e9; color:white; font-weight:bold; font-size:11px; padding:2px 8px; border-radius:6px;">${prodCount}</span>
+                </td>
+                <td>
+                    <span class="badge" style="background:#f59e0b; color:white; font-weight:bold; font-size:11px; padding:2px 8px; border-radius:6px;">${dealCount}</span>
+                </td>
+                <td>
+                    <span class="badge" style="background:#10b981; color:white; font-weight:bold; font-size:11px; padding:2px 8px; border-radius:6px;">${orderCount}</span>
+                </td>
+                <td>
+                    ${verifiedBadge}
+                </td>
+                <td>
+                    <span class="status-pill ${statusClass}" style="${statusStyle}">${statusLabel.toUpperCase()}</span>
+                </td>
+                <td>
+                    <div class="action-buttons-group">
+                        <button class="action-btn purple" onclick="window.editSeller(${index})" title="Edit Seller"><i class="fa-solid fa-pen"></i></button>
+                        <button class="action-btn blue" onclick="window.viewSellerProfile(${index})" title="View Profile"><i class="fa-solid fa-eye"></i></button>
+                        <button class="action-btn red" onclick="window.deleteSeller(${index})" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+    list.innerHTML = html;
+};
+
+window.editSeller = function(index) {
+    const s = sellers[index];
+    if (!s) return;
+
+    sellerEditIndex = index;
+    document.getElementById('sellerFormTitle').textContent = 'Edit Seller: ' + s.businessName;
+    document.getElementById('btnCancelSeller').style.display = 'inline-block';
+
+    document.getElementById('sellerId').value = s.sellerId || '';
+    document.getElementById('sellerBusinessName').value = s.businessName || '';
+    document.getElementById('sellerOwnerName').value = s.ownerName || '';
+    document.getElementById('sellerBusinessType').value = s.businessType || '';
+    document.getElementById('sellerMobile').value = s.mobileNumber || '';
+    document.getElementById('sellerWhatsapp').value = s.whatsappNumber || '';
+    document.getElementById('sellerEmail').value = s.email || '';
+    document.getElementById('sellerWebsite').value = s.website || '';
+    document.getElementById('sellerFacebook').value = s.facebookPage || '';
+    document.getElementById('sellerInstagram').value = s.instagramPage || '';
+    document.getElementById('sellerAddress').value = s.address || '';
+    if (document.getElementById('sellerArea')) document.getElementById('sellerArea').value = s.area || '';
+    if (document.getElementById('sellerBlockNo')) document.getElementById('sellerBlockNo').value = s.blockNo || '';
+    document.getElementById('sellerCity').value = s.city || '';
+    document.getElementById('sellerBranches').value = s.branches || 'No';
+    document.getElementById('sellerBranchAddress').value = s.branchAddress || '';
+    document.getElementById('sellerBranchPhone').value = s.branchPhone || '';
+    document.getElementById('sellerBranchWhatsapp').value = s.branchWhatsapp || '';
+    document.getElementById('sellerProvince').value = s.province || '';
+    document.getElementById('sellerMapsLink').value = s.googleMapsLink || '';
+    document.getElementById('sellerCategory').value = s.category || '';
+    document.getElementById('sellerSubCategories').value = s.subCategories || '';
+    document.getElementById('sellerDescription').value = s.businessDescription || '';
+    document.getElementById('sellerHours').value = s.operatingHours || '';
+    
+    document.getElementById('sellerVerified').checked = !!s.verifiedSeller;
+    document.getElementById('sellerFeatured').checked = !!s.featuredSeller;
+    document.getElementById('sellerPremium').checked = !!s.premiumSeller;
+    
+    document.getElementById('sellerStatusActive').checked = !!s.statusActive;
+    document.getElementById('sellerStatusInactive').checked = !!s.statusInactive;
+    document.getElementById('sellerStatusSuspended').checked = !!s.statusSuspended;
+
+    window.toggleSellerBranchFields();
+    
+    document.getElementById('sellerFormTitle').scrollIntoView({ behavior: 'smooth' });
+};
+
+window.deleteSeller = async function(index) {
+    if (confirm('Are you sure you want to delete this seller?')) {
+        sellers.splice(index, 1);
+        try {
+            await DataService.saveSellers(sellers);
+            window.renderSellers();
+            alert('Seller deleted successfully!');
+        } catch (err) {
+            alert('Error deleting seller: ' + err.message);
+        }
+    }
+};
+
+window.viewSellerProfile = function(index) {
+    const s = sellers[index];
+    if (!s) return;
+
+    const prodCount = (products || []).filter(p => {
+        const addedBy = String(p.addedBy || '').toLowerCase().trim();
+        const busName = String(s.businessName || '').toLowerCase().trim();
+        const ownName = String(s.ownerName || '').toLowerCase().trim();
+        const selId = String(s.sellerId || '').toLowerCase().trim();
+        return addedBy === busName || addedBy === ownName || addedBy === selId || String(p.companyName || '').toLowerCase().trim() === busName;
+    }).length;
+
+    const dealCount = (deals || []).filter(d => {
+        const addedBy = String(d.addedBy || '').toLowerCase().trim();
+        const busName = String(s.businessName || '').toLowerCase().trim();
+        const ownName = String(s.ownerName || '').toLowerCase().trim();
+        const selId = String(s.sellerId || '').toLowerCase().trim();
+        return addedBy === busName || addedBy === ownName || addedBy === selId || String(d.companyName || '').toLowerCase().trim() === busName;
+    }).length;
+
+    const orderCount = 0;
+
+    document.getElementById('profileBusinessName').textContent = s.businessName || 'Business Name';
+    document.getElementById('profileOwnerName').textContent = 'Owner: ' + (s.ownerName || 'Owner Name');
+    document.getElementById('profileCategory').textContent = s.category || 'Category';
+    document.getElementById('profileCity').textContent = s.city || 'City';
+    document.getElementById('profilePhone').textContent = s.mobileNumber || 'Phone';
+    document.getElementById('profileWhatsApp').textContent = s.whatsappNumber || 'WhatsApp';
+    
+    document.getElementById('profileProductsCount').textContent = prodCount;
+    document.getElementById('profileDealsCount').textContent = dealCount;
+    document.getElementById('profileOrdersCount').textContent = orderCount;
+    
+    document.getElementById('profileHours').textContent = s.operatingHours || 'Not specified';
+    document.getElementById('profileDescription').textContent = s.businessDescription || 'No description provided.';
+    
+    const verifiedBadge = document.getElementById('profileVerifiedBadge');
+    if (s.verifiedSeller) {
+        verifiedBadge.className = 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400 rounded-xl p-3 text-center';
+    } else {
+        verifiedBadge.className = 'border-slate-800 bg-slate-800/30 text-slate-500 rounded-xl p-3 text-center opacity-40';
+    }
+
+    const featuredBadge = document.getElementById('profileFeaturedBadge');
+    if (s.featuredSeller) {
+        featuredBadge.className = 'border-amber-500/30 bg-amber-500/10 text-amber-400 rounded-xl p-3 text-center';
+    } else {
+        featuredBadge.className = 'border-slate-800 bg-slate-800/30 text-slate-500 rounded-xl p-3 text-center opacity-40';
+    }
+
+    const premiumBadge = document.getElementById('profilePremiumBadge');
+    if (s.premiumSeller) {
+        premiumBadge.className = 'border-sky-500/30 bg-sky-500/10 text-sky-400 rounded-xl p-3 text-center';
+    } else {
+        premiumBadge.className = 'border-slate-800 bg-slate-800/30 text-slate-500 rounded-xl p-3 text-center opacity-40';
+    }
+
+    const modal = document.getElementById('sellerProfileModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+    }
+};
+
+window.closeSellerProfile = function() {
+    const modal = document.getElementById('sellerProfileModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+    }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const sellerForm = document.getElementById('sellerForm');
+    if (sellerForm) {
+        sellerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const sellerId = document.getElementById('sellerId').value;
+            const businessName = document.getElementById('sellerBusinessName').value;
+            const ownerName = document.getElementById('sellerOwnerName').value;
+            const businessType = document.getElementById('sellerBusinessType').value;
+            const mobileNumber = document.getElementById('sellerMobile').value;
+            const whatsappNumber = document.getElementById('sellerWhatsapp').value;
+            const email = document.getElementById('sellerEmail').value;
+            const website = document.getElementById('sellerWebsite').value;
+            const facebookPage = document.getElementById('sellerFacebook').value;
+            const instagramPage = document.getElementById('sellerInstagram').value;
+            const address = document.getElementById('sellerAddress').value;
+            const area = document.getElementById('sellerArea') ? document.getElementById('sellerArea').value : '';
+            const blockNo = document.getElementById('sellerBlockNo') ? document.getElementById('sellerBlockNo').value : '';
+            const areaBlock = (area && blockNo) ? `${area} - ${blockNo}` : (area || blockNo || '');
+            const city = document.getElementById('sellerCity').value;
+            const branches = document.getElementById('sellerBranches').value;
+            const branchAddress = document.getElementById('sellerBranchAddress').value;
+            const branchPhone = document.getElementById('sellerBranchPhone').value;
+            const branchWhatsapp = document.getElementById('sellerBranchWhatsapp').value;
+            const province = document.getElementById('sellerProvince').value;
+            const googleMapsLink = document.getElementById('sellerMapsLink').value;
+            const category = document.getElementById('sellerCategory').value;
+            const subCategories = document.getElementById('sellerSubCategories').value;
+            const businessDescription = document.getElementById('sellerDescription').value;
+            const operatingHours = document.getElementById('sellerHours').value;
+            
+            const verifiedSeller = document.getElementById('sellerVerified').checked;
+            const featuredSeller = document.getElementById('sellerFeatured').checked;
+            const premiumSeller = document.getElementById('sellerPremium').checked;
+            
+            const statusActive = document.getElementById('sellerStatusActive').checked;
+            const statusInactive = document.getElementById('sellerStatusInactive').checked;
+            const statusSuspended = document.getElementById('sellerStatusSuspended').checked;
+            
+            let status = 'Active';
+            if (statusInactive) status = 'Inactive';
+            if (statusSuspended) status = 'Suspended';
+
+            const newSeller = {
+                id: sellerEditIndex === -1 ? DataService.generateUUID() : sellers[sellerEditIndex].id,
+                sellerId,
+                businessName,
+                ownerName,
+                businessType,
+                mobileNumber,
+                whatsappNumber,
+                email,
+                website,
+                facebookPage,
+                instagramPage,
+                address,
+                area,
+                blockNo,
+                areaBlock,
+                city,
+                branches,
+                branchAddress,
+                branchPhone,
+                branchWhatsapp,
+                province,
+                googleMapsLink,
+                category,
+                subCategories,
+                businessDescription,
+                operatingHours,
+                verifiedSeller,
+                featuredSeller,
+                premiumSeller,
+                statusActive,
+                statusInactive,
+                statusSuspended,
+                status
+            };
+
+            if (sellerEditIndex === -1) {
+                if (sellers.some(s => s.sellerId === sellerId)) {
+                    alert('Duplicate Seller ID. Please regenerate.');
+                    return;
+                }
+                sellers.push(newSeller);
+            } else {
+                sellers[sellerEditIndex] = newSeller;
+            }
+
+            try {
+                await DataService.saveSellers(sellers);
+                alert(sellerEditIndex === -1 ? 'Seller Added Successfully!' : 'Seller Updated Successfully!');
+                window.cancelSellerEdit();
+                window.renderSellers();
+            } catch (err) {
+                alert('Error saving seller: ' + err.message);
+            }
+        });
+    }
+});
 

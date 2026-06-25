@@ -24,7 +24,7 @@ const DataService = {
     },
 
     generateUUID: () => {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             const r = Math.random() * 16 | 0;
             const v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
@@ -43,7 +43,7 @@ const DataService = {
                 .select('*')
                 .eq('user_id', data.userId)
                 .eq('password', data.password);
-            
+
             if (error) throw error;
             if (users && users.length > 0) {
                 const user = users[0];
@@ -68,7 +68,7 @@ const DataService = {
             return { success: false, message: "Invalid credentials" };
         } catch (err) {
             console.warn("Backend authentication failed, checking local fallback", err);
-            
+
             // Fallback: Check local storage 'admin_users'
             const users = JSON.parse(localStorage.getItem("admin_users")) || [];
             let foundUser = null;
@@ -176,7 +176,9 @@ const DataService = {
                 let deliveryNo = d.delivery_no || '';
                 let address = d.address || '';
                 let areaBlock = d.area_block || '';
-                
+                let area = d.area || '';
+                let blockNo = d.block_no || '';
+
                 let match = desc.match(/<!--META:(.*?)-->/);
                 if (match) {
                     try {
@@ -189,30 +191,34 @@ const DataService = {
                         if (!deliveryNo) deliveryNo = meta.dn || '';
                         if (!address) address = meta.addr || '';
                         if (!areaBlock) areaBlock = meta.ab || '';
-                    } catch(e) {}
+                        if (!area) area = meta.area || '';
+                        if (!blockNo) blockNo = meta.bn || '';
+                    } catch (e) { }
                     desc = desc.replace(/<!--META:.*?-->/g, '').trim();
                 }
                 return {
-                id: d.id,
-                name: d.name,
-                image: d.image,
-                desc: desc,
-                price: d.price,
-                location: d.location,
-                whatsapp: d.whatsapp,
-                video: d.video,
-                status: d.status,
-                category: cat,
-                subCategory: sub,
-                productDetail: productDetail,
-                brand: brand,
-                contactNo: contactNo,
-                deliveryNo: deliveryNo,
-                address: address,
-                areaBlock: areaBlock,
-                addedBy: d.added_by,
-                createdDate: d.created_date,
-                updatedDate: d.updated_date
+                    id: d.id,
+                    name: d.name,
+                    image: d.image,
+                    desc: desc,
+                    price: d.price,
+                    location: d.location,
+                    whatsapp: d.whatsapp,
+                    video: d.video,
+                    status: d.status,
+                    category: cat,
+                    subCategory: sub,
+                    productDetail: productDetail,
+                    brand: brand,
+                    contactNo: contactNo,
+                    deliveryNo: deliveryNo,
+                    address: address,
+                    area: area || (areaBlock ? areaBlock.split(' - ')[0] : ''),
+                    blockNo: blockNo || (areaBlock ? areaBlock.split(' - ')[1] || '' : ''),
+                    areaBlock: areaBlock || (area && blockNo ? `${area} - ${blockNo}` : (area || blockNo || '')),
+                    addedBy: d.added_by,
+                    createdDate: d.created_date,
+                    updatedDate: d.updated_date
                 };
             });
             localStorage.setItem("admin_deals", JSON.stringify(deals));
@@ -251,6 +257,54 @@ const DataService = {
         } catch (err) {
             console.error(err);
             return JSON.parse(localStorage.getItem("admin_users")) || [];
+        }
+    },
+
+    getSellers: async () => {
+        try {
+            const client = await DataService.ensureSupabase();
+            const { data, error } = await client.from('sellers').select('*');
+            if (error) throw error;
+            const sellers = data.map(s => ({
+                id: s.id,
+                sellerId: s.seller_id,
+                businessName: s.business_name,
+                ownerName: s.owner_name,
+                businessType: s.business_type,
+                mobileNumber: s.mobile_number,
+                whatsappNumber: s.whatsapp_number,
+                email: s.email,
+                website: s.website,
+                facebookPage: s.facebook_page,
+                instagramPage: s.instagram_page,
+                address: s.address,
+                area: s.area || '',
+                blockNo: s.block_no || '',
+                areaBlock: s.area_block || (s.area && s.block_no ? `${s.area} - ${s.block_no}` : (s.area || s.block_no || '')),
+                city: s.city,
+                branches: s.branches,
+                branchAddress: s.branch_address,
+                branchPhone: s.branch_phone,
+                branchWhatsapp: s.branch_whatsapp,
+                province: s.province,
+                googleMapsLink: s.google_maps_link,
+                category: s.category,
+                subCategories: s.sub_categories,
+                businessDescription: s.business_description,
+                operatingHours: s.operating_hours,
+                verifiedSeller: s.verified_seller,
+                featuredSeller: s.featured_seller,
+                premiumSeller: s.premium_seller,
+                statusActive: s.status_active,
+                statusInactive: s.status_inactive,
+                statusSuspended: s.status_suspended,
+                status: s.status
+            }));
+            localStorage.setItem("admin_sellers", JSON.stringify(sellers));
+            return sellers;
+        } catch (err) {
+            console.error(err);
+            return JSON.parse(localStorage.getItem("admin_sellers")) || [];
         }
     },
 
@@ -364,18 +418,18 @@ const DataService = {
             const client = await DataService.ensureSupabase();
             const { data: dbData } = await client.from('categories').select('id');
             const dbIds = (dbData || []).map(r => r.id);
-            
+
             // Assign UUIDs client-side for new items
             data.forEach(c => {
                 if (!DataService.isUUID(c.id)) c.id = DataService.generateUUID();
             });
             const currentIds = data.map(item => item.id);
-            
+
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
                 await client.from('categories').delete().in('id', toDelete);
             }
-            
+
             const rows = data.map(c => ({
                 id: c.id,
                 name: c.name,
@@ -397,17 +451,17 @@ const DataService = {
             const client = await DataService.ensureSupabase();
             const { data: dbData } = await client.from('products').select('id');
             const dbIds = (dbData || []).map(r => r.id);
-            
+
             data.forEach(p => {
                 if (!DataService.isUUID(p.id)) p.id = DataService.generateUUID();
             });
             const currentIds = data.map(item => item.id);
-            
+
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
                 await client.from('products').delete().in('id', toDelete);
             }
-            
+
             const rows = data.map(p => {
                 const baseFields = {
                     id: p.id,
@@ -445,17 +499,17 @@ const DataService = {
             const client = await DataService.ensureSupabase();
             const { data: dbData } = await client.from('banners').select('id');
             const dbIds = (dbData || []).map(r => r.id);
-            
+
             data.forEach(b => {
                 if (!DataService.isUUID(b.id)) b.id = DataService.generateUUID();
             });
             const currentIds = data.map(item => item.id);
-            
+
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
                 await client.from('banners').delete().in('id', toDelete);
             }
-            
+
             const rows = data.map(b => ({
                 id: b.id,
                 image: b.image,
@@ -479,17 +533,17 @@ const DataService = {
             const client = await DataService.ensureSupabase();
             const { data: dbData } = await client.from('deals').select('id');
             const dbIds = (dbData || []).map(r => r.id);
-            
+
             data.forEach(d => {
                 if (!DataService.isUUID(d.id)) d.id = DataService.generateUUID();
             });
             const currentIds = data.map(item => item.id);
-            
+
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
                 await client.from('deals').delete().in('id', toDelete);
             }
-            
+
             const rows = data.map(d => {
                 let catData = JSON.stringify({
                     c: d.category || '',
@@ -499,30 +553,34 @@ const DataService = {
                     cn: d.contactNo || '',
                     dn: d.deliveryNo || '',
                     addr: d.address || '',
-                    ab: d.areaBlock || ''
+                    area: d.area || '',
+                    bn: d.blockNo || '',
+                    ab: d.areaBlock || (d.area && d.blockNo ? `${d.area} - ${d.blockNo}` : (d.area || d.blockNo || ''))
                 });
                 let descWithMeta = (d.desc || '') + ' <!--META:' + catData + '-->';
                 return {
-                id: d.id,
-                name: d.name,
-                image: d.image || '',
-                description: descWithMeta,
-                price: d.price || '',
-                location: d.location || '',
-                whatsapp: d.whatsapp || '',
-                video: d.video || '',
-                status: d.status || 'Draft',
-                added_by: d.addedBy || '',
-                created_date: d.createdDate || new Date().toISOString(),
-                updated_date: new Date().toISOString(),
-                category: d.category || '',
-                sub_category: d.subCategory || '',
-                product_detail: d.productDetail || '',
-                brand: d.brand || '',
-                contact_no: d.contactNo || '',
-                delivery_no: d.deliveryNo || '',
-                address: d.address || '',
-                area_block: d.areaBlock || ''
+                    id: d.id,
+                    name: d.name,
+                    image: d.image || '',
+                    description: descWithMeta,
+                    price: d.price || '',
+                    location: d.location || '',
+                    whatsapp: d.whatsapp || '',
+                    video: d.video || '',
+                    status: d.status || 'Draft',
+                    added_by: d.addedBy || '',
+                    created_date: d.createdDate || new Date().toISOString(),
+                    updated_date: new Date().toISOString(),
+                    category: d.category || '',
+                    sub_category: d.subCategory || '',
+                    product_detail: d.productDetail || '',
+                    brand: d.brand || '',
+                    contact_no: d.contactNo || '',
+                    delivery_no: d.deliveryNo || '',
+                    address: d.address || '',
+                    area: d.area || '',
+                    block_no: d.blockNo || '',
+                    area_block: d.areaBlock || (d.area && d.blockNo ? `${d.area} - ${d.blockNo}` : (d.area || d.blockNo || ''))
                 };
             });
             const { error } = await client.from('deals').upsert(rows);
@@ -539,17 +597,17 @@ const DataService = {
             const client = await DataService.ensureSupabase();
             const { data: dbData } = await client.from('users').select('id');
             const dbIds = (dbData || []).map(r => r.id);
-            
+
             data.forEach(u => {
                 if (!DataService.isUUID(u.id)) u.id = DataService.generateUUID();
             });
             const currentIds = data.map(item => item.id);
-            
+
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
                 await client.from('users').delete().in('id', toDelete);
             }
-            
+
             const rows = data.map(u => ({
                 id: u.id,
                 user_id: u.userId,
@@ -578,22 +636,82 @@ const DataService = {
         return true;
     },
 
+    saveSellers: async (data) => {
+        try {
+            const client = await DataService.ensureSupabase();
+            const { data: dbData } = await client.from('sellers').select('id');
+            const dbIds = (dbData || []).map(r => r.id);
+
+            data.forEach(s => {
+                if (!DataService.isUUID(s.id)) s.id = DataService.generateUUID();
+            });
+            const currentIds = data.map(item => item.id);
+
+            const toDelete = dbIds.filter(id => !currentIds.includes(id));
+            if (toDelete.length > 0) {
+                await client.from('sellers').delete().in('id', toDelete);
+            }
+
+            const rows = data.map(s => ({
+                id: s.id,
+                seller_id: s.sellerId,
+                business_name: s.businessName,
+                owner_name: s.ownerName,
+                business_type: s.businessType,
+                mobile_number: s.mobileNumber,
+                whatsapp_number: s.whatsappNumber,
+                email: s.email || '',
+                website: s.website || '',
+                facebook_page: s.facebookPage || '',
+                instagram_page: s.instagramPage || '',
+                address: s.address,
+                area: s.area || '',
+                block_no: s.blockNo || '',
+                area_block: s.areaBlock || (s.area && s.blockNo ? `${s.area} - ${s.blockNo}` : (s.area || s.blockNo || '')),
+                city: s.city,
+                branches: s.branches || 'No',
+                branch_address: s.branchAddress || '',
+                branch_phone: s.branchPhone || '',
+                branch_whatsapp: s.branchWhatsapp || '',
+                province: s.province || '',
+                google_maps_link: s.googleMapsLink || '',
+                category: s.category,
+                sub_categories: s.subCategories || '',
+                business_description: s.businessDescription || '',
+                operating_hours: s.operatingHours || '',
+                verified_seller: !!s.verifiedSeller,
+                featured_seller: !!s.featuredSeller,
+                premium_seller: !!s.premiumSeller,
+                status_active: !!s.statusActive,
+                status_inactive: !!s.statusInactive,
+                status_suspended: !!s.statusSuspended,
+                status: s.status || 'Active'
+            }));
+            const { error } = await client.from('sellers').upsert(rows, { onConflict: 'seller_id' });
+            if (error) throw error;
+        } catch (err) {
+            console.error("Failed to sync sellers to Supabase", err);
+        }
+        localStorage.setItem("admin_sellers", JSON.stringify(data));
+        return true;
+    },
+
     saveBlogs: async (data) => {
         try {
             const client = await DataService.ensureSupabase();
             const { data: dbData } = await client.from('blogs').select('id');
             const dbIds = (dbData || []).map(r => r.id);
-            
+
             data.forEach(b => {
                 if (!DataService.isUUID(b.id)) b.id = DataService.generateUUID();
             });
             const currentIds = data.map(item => item.id);
-            
+
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
                 await client.from('blogs').delete().in('id', toDelete);
             }
-            
+
             const rows = data.map(b => ({
                 id: b.id,
                 title: b.titleEn || b.title || '',
@@ -629,17 +747,17 @@ const DataService = {
             const client = await DataService.ensureSupabase();
             const { data: dbData } = await client.from('travel_packages').select('id');
             const dbIds = (dbData || []).map(r => r.id);
-            
+
             data.forEach(tp => {
                 if (!DataService.isUUID(tp.id)) tp.id = DataService.generateUUID();
             });
             const currentIds = data.map(item => item.id);
-            
+
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
                 await client.from('travel_packages').delete().in('id', toDelete);
             }
-            
+
             const rows = data.map(tp => ({
                 id: tp.id,
                 title: tp.title,
@@ -664,17 +782,17 @@ const DataService = {
             const client = await DataService.ensureSupabase();
             const { data: dbData } = await client.from('broadcasts').select('id');
             const dbIds = (dbData || []).map(r => r.id);
-            
+
             data.forEach(b => {
                 if (!DataService.isUUID(b.id)) b.id = DataService.generateUUID();
             });
             const currentIds = data.map(item => item.id);
-            
+
             const toDelete = dbIds.filter(id => !currentIds.includes(id));
             if (toDelete.length > 0) {
                 await client.from('broadcasts').delete().in('id', toDelete);
             }
-            
+
             const rows = data.map(b => ({
                 id: b.id,
                 message: b.message,
