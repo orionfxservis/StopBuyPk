@@ -197,7 +197,7 @@
   <!-- HERO -->
   <div class="max-w-screen-2xl mx-auto px-4 py-6 w-full">
     <div class="relative w-full rounded-3xl overflow-hidden shadow-lg border border-emerald-200 bg-[#F4F9F2]">
-      <img src="../images/grafix/browse-computers.png" alt="Category Banner"
+      <img src="../images/grafix/war-computer.png" alt="Category Banner"
         class="w-full h-[150px] sm:h-[200px] md:h-[300px] object-cover md:object-fill">
     </div>
   </div>
@@ -1093,7 +1093,9 @@
       const priceStr = p.price ? `Rs. ${Number(p.price).toLocaleString()}` : 'Rs. -';
       const name = p.name || `${p.brand || ''} ${p.model || ''}`.trim() || 'Computer';
       const condBadge = p.condition ? `<span class="absolute top-2 right-2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm z-10">${p.condition}</span>` : '';
-      const areaVal = p.area || p.block || p.blockNo || p.areaBlock || '';
+      const areaStr = p.area || p.areaBlock || '';
+      const blockStr = p.blockNo || p.block || '';
+      const areaVal = (areaStr && blockStr) ? `${areaStr} - ${blockStr}` : (areaStr || blockStr || '');
       const cityVal = p.city || '';
       const locDisplay = areaVal && cityVal && areaVal.toLowerCase() !== cityVal.toLowerCase() ? `${areaVal}, ${cityVal}` : (cityVal || areaVal || 'Pakistan');
       
