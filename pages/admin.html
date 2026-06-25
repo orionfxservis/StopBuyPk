@@ -40,6 +40,7 @@
                 <li onclick="showSection('deals')"><i class="fa-solid fa-fire"></i> Manage Deals <span id="dealsPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
                 <li onclick="showSection('live-rates')"><i class="fa-solid fa-chart-line"></i> Live Rates</li>
 				<li onclick="showSection('users')"><i class="fa-solid fa-users"></i> Manage Users</li>
+				<li onclick="showSection('sellers')"><i class="fa-solid fa-store"></i> Manage Sellers</li>
                 <li onclick="showSection('performance')"><i class="fa-solid fa-chart-line"></i> User Performance</li>
                 <li onclick="showSection('ads')"><i class="fa-solid fa-bullhorn"></i> Place Ads</li>
                 <li onclick="showSection('banners')"><i class="fa-solid fa-image"></i> Manage Banners <span id="bannersPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
@@ -784,15 +785,45 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="input-group" style="flex: 1;">
+                            <div class="input-group" style="flex: 2;">
                                 <label>Address</label>
                                 <input type="text" id="dealAddress" placeholder="e.g., 123 Street Block Y">
                             </div>
-                            <div class="input-group" style="max-width: 200px;">
-                                <label>Area / Block No.</label>
-                                <input type="text" id="dealAreaBlock" placeholder="e.g., Block 5">
+                            <div class="input-group">
+                                <label>Area</label>
+                                <select id="dealArea">
+                                    <option value="">Select Area</option>
+                                    <option value="F.B. Area">F.B. Area</option>
+                                </select>
                             </div>
-                            <div class="input-group" style="max-width: 200px;">
+                            <div class="input-group">
+                                <label>Block No.</label>
+                                <select id="dealBlockNo">
+                                    <option value="">Select Block No.</option>
+                                    <option value="1 Sharifabad">1 Sharifabad</option>
+                                    <option value="2 Sharifabad">2 Sharifabad</option>
+                                    <option value="3 Hussainabad">3 Hussainabad</option>
+                                    <option value="4 Tayyababad">4 Tayyababad</option>
+                                    <option value="6 Tayyababad">6 Tayyababad</option>
+                                    <option value="7 Azizabad">7 Azizabad</option>
+                                    <option value="8 Azizabad">8 Azizabad</option>
+                                    <option value="9 Dastagir">9 Dastagir</option>
+                                    <option value="10 Dastagir">10 Dastagir</option>
+                                    <option value="11 Sharifabad">11 Sharifabad</option>
+                                    <option value="12 Sharifabad">12 Sharifabad</option>
+                                    <option value="13 Gulberg Town">13 Gulberg Town</option>
+                                    <option value="14 Naseerabad">14 Naseerabad</option>
+                                    <option value="15 Naseerabad">15 Naseerabad</option>
+                                    <option value="16 Water Pump">16 Water Pump</option>
+                                    <option value="17 Samanabad">17 Samanabad</option>
+                                    <option value="18 Samanabad">18 Samanabad</option>
+                                    <option value="19 Al-Noor Society">19 Al-Noor Society</option>
+                                    <option value="20 Ancholi">20 Ancholi</option>
+                                    <option value="21 Industrial Area">21 Industrial Area</option>
+                                    <option value="22 Industrial Area">22 Industrial Area</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="max-width: 150px;">
                                 <label>City</label>
                                 <input type="text" id="dealLocation" placeholder="e.g., Lahore" required>
                             </div>
@@ -1013,6 +1044,7 @@
                                     <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="broadcasts" class="section-checkbox" onchange="loadUserPermissions()"> Manage Broadcasts</label>
                                     <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="travel" class="section-checkbox" onchange="loadUserPermissions()"> Manage Travel</label>
                                     <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="users" class="section-checkbox" onchange="loadUserPermissions()"> Manage Users</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="sellers" class="section-checkbox" onchange="loadUserPermissions()"> Manage Sellers</label>
                                     <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="daily-prices" class="section-checkbox" onchange="loadUserPermissions()"> Manage Daily Prices</label>
                                 </div>
                             </div>
@@ -1046,6 +1078,347 @@
                     </form>
                 </div>
             </section>
+
+
+            <!-- Manage Sellers Section -->
+            <section id="sellers" class="admin-section" style="display:none;">
+                <h1>Manage Sellers</h1>
+
+                <div class="form-container">
+                    <h3 id="sellerFormTitle">Add New Seller</h3>
+                    <form id="sellerForm">
+                        <!-- 1. Basic Information -->
+                        <h4 class="form-section-title" style="margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; font-weight:bold; color:var(--primary-color);">1. Basic Information</h4>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Seller ID (Auto Generated)</label>
+                                <input type="text" id="sellerId" readonly style="background: rgba(0,0,0,0.2); color:#94a3b8; cursor: not-allowed;">
+                            </div>
+                            <div class="input-group">
+                                <label>Business Name <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="sellerBusinessName" placeholder="e.g. StopBuy Food" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Owner Name <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="sellerOwnerName" placeholder="Owner Name" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Business Type <span style="color:var(--accent-color);">*</span></label>
+                                <select id="sellerBusinessType" required>
+                                    <option value="">Select Business Type</option>
+                                    <option value="Retailer">Retailer</option>
+                                    <option value="Wholesaler">Wholesaler</option>
+                                    <option value="Distributor">Distributor</option>
+                                    <option value="Manufacturer">Manufacturer</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 2. Contact Information -->
+                        <h4 class="form-section-title" style="margin-top:20px; margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; font-weight:bold; color:var(--primary-color);">2. Contact Information</h4>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Mobile Number <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="sellerMobile" placeholder="e.g. 0300-1234567" required>
+                            </div>
+                            <div class="input-group">
+                                <label>WhatsApp Number <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="sellerWhatsapp" placeholder="e.g. 0300-1234567" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Email Address</label>
+                                <input type="email" id="sellerEmail" placeholder="email@example.com">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Website</label>
+                                <input type="url" id="sellerWebsite" placeholder="https://...">
+                            </div>
+                            <div class="input-group">
+                                <label>Facebook Page</label>
+                                <input type="url" id="sellerFacebook" placeholder="https://facebook.com/...">
+                            </div>
+                            <div class="input-group">
+                                <label>Instagram Page</label>
+                                <input type="url" id="sellerInstagram" placeholder="https://instagram.com/...">
+                            </div>
+                        </div>
+
+                        <!-- 3. Location Information -->
+                        <h4 class="form-section-title" style="margin-top:20px; margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; font-weight:bold; color:var(--primary-color);">3. Location Information</h4>
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 2;">
+                                <label>Address <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="sellerAddress" placeholder="Address" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Area</label>
+                                <select id="sellerArea">
+                                    <option value="">Select Area</option>
+                                    <option value="F.B. Area">F.B. Area</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Block No.</label>
+                                <select id="sellerBlockNo">
+                                    <option value="">Select Block No.</option>
+                                    <option value="1 Sharifabad">1 Sharifabad</option>
+                                    <option value="2 Sharifabad">2 Sharifabad</option>
+                                    <option value="3 Hussainabad">3 Hussainabad</option>
+                                    <option value="4 Tayyababad">4 Tayyababad</option>
+                                    <option value="6 Tayyababad">6 Tayyababad</option>
+                                    <option value="7 Azizabad">7 Azizabad</option>
+                                    <option value="8 Azizabad">8 Azizabad</option>
+                                    <option value="9 Dastagir">9 Dastagir</option>
+                                    <option value="10 Dastagir">10 Dastagir</option>
+                                    <option value="11 Sharifabad">11 Sharifabad</option>
+                                    <option value="12 Sharifabad">12 Sharifabad</option>
+                                    <option value="13 Gulberg Town">13 Gulberg Town</option>
+                                    <option value="14 Naseerabad">14 Naseerabad</option>
+                                    <option value="15 Naseerabad">15 Naseerabad</option>
+                                    <option value="16 Water Pump">16 Water Pump</option>
+                                    <option value="17 Samanabad">17 Samanabad</option>
+                                    <option value="18 Samanabad">18 Samanabad</option>
+                                    <option value="19 Al-Noor Society">19 Al-Noor Society</option>
+                                    <option value="20 Ancholi">20 Ancholi</option>
+                                    <option value="21 Industrial Area">21 Industrial Area</option>
+                                    <option value="22 Industrial Area">22 Industrial Area</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>City <span style="color:var(--accent-color);">*</span></label>
+                                <select id="sellerCity" required>
+                                    <option value="">Select City</option>
+                                    <option value="Karachi">Karachi</option>
+                                    <option value="Lahore">Lahore</option>
+                                    <option value="Islamabad">Islamabad</option>
+                                    <option value="Rawalpindi">Rawalpindi</option>
+                                    <option value="Peshawar">Peshawar</option>
+                                    <option value="Multan">Multan</option>
+                                    <option value="Faisalabad">Faisalabad</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Branches <span style="color:var(--accent-color);">*</span></label>
+                                <select id="sellerBranches" required onchange="window.toggleSellerBranchFields()">
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Conditional branches block -->
+                        <div id="sellerBranchFields" style="display:none; padding:15px; border:1px solid var(--border-color); border-radius:8px; margin-bottom:15px; background:rgba(255,255,255,0.02);">
+                            <h5 style="font-weight:bold; margin-bottom:10px; color:#38bdf8;">Branch Details</h5>
+                            <div class="form-row">
+                                <div class="input-group" style="flex: 2;">
+                                    <label>Branch Address</label>
+                                    <input type="text" id="sellerBranchAddress" placeholder="Branch Address">
+                                </div>
+                                <div class="input-group">
+                                    <label>Phone No</label>
+                                    <input type="text" id="sellerBranchPhone" placeholder="Branch Phone">
+                                </div>
+                                <div class="input-group">
+                                    <label>Whatsapp No</label>
+                                    <input type="text" id="sellerBranchWhatsapp" placeholder="Branch Whatsapp">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Conditional non-branches block -->
+                        <div id="sellerNonBranchFields" style="padding:15px; border:1px solid var(--border-color); border-radius:8px; margin-bottom:15px; background:rgba(255,255,255,0.02);">
+                            <h5 style="font-weight:bold; margin-bottom:10px; color:#38bdf8;">Additional Location Details</h5>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label>Province</label>
+                                    <input type="text" id="sellerProvince" placeholder="e.g. Punjab">
+                                </div>
+                                <div class="input-group" style="flex: 2;">
+                                    <label>Google Maps Link</label>
+                                    <input type="url" id="sellerMapsLink" placeholder="https://maps.google.com/...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Business Details -->
+                        <h4 class="form-section-title" style="margin-top:20px; margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; font-weight:bold; color:var(--primary-color);">4. Business Details</h4>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Category <span style="color:var(--accent-color);">*</span></label>
+                                <select id="sellerCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Food Stuffs">Food Stuffs</option>
+                                    <option value="Computers">Computers</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Mobiles">Mobiles</option>
+                                    <option value="Grocery">Grocery</option>
+                                    <option value="Fashion">Fashion</option>
+                                    <option value="Travel">Travel</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Sub Categories</label>
+                                <input type="text" id="sellerSubCategories" placeholder="e.g. Burgers, Pizza, Fries">
+                            </div>
+                            <div class="input-group">
+                                <label>Operating Hours</label>
+                                <input type="text" id="sellerHours" placeholder="e.g. 11:00 AM - 11:00 PM">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group" style="width: 100%; margin-bottom: 8px;">
+                                <label>Business Description</label>
+                                <textarea id="sellerDescription" class="admin-input" rows="3" placeholder="Write description..." style="width: 100%; resize: vertical; min-height: 80px;"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- 5. Verification & Status -->
+                        <h4 class="form-section-title" style="margin-top:20px; margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; font-weight:bold; color:var(--primary-color);">5. Verification & Status</h4>
+                        <div class="form-row" style="margin-bottom:15px; padding:10px; background:rgba(0,0,0,0.15); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+                            <div style="display:flex; flex-wrap:wrap; gap:20px; width:100%;">
+                                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:bold; color:#10b981;">
+                                    <input type="checkbox" id="sellerVerified" style="transform: scale(1.2);"> Verified Seller
+                                </label>
+                                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:bold; color:#f59e0b;">
+                                    <input type="checkbox" id="sellerFeatured" style="transform: scale(1.2);"> Featured Seller
+                                </label>
+                                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:bold; color:#3b82f6;">
+                                    <input type="checkbox" id="sellerPremium" style="transform: scale(1.2);"> Premium Seller
+                                </label>
+                                <div style="border-left:1px solid rgba(255,255,255,0.1); padding-left:20px; display:flex; gap:15px; align-items:center;">
+                                    <span style="font-weight:bold; color:#cbd5e1;">Status:</span>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#10b981;">
+                                        <input type="checkbox" id="sellerStatusActive" class="seller-status-cb" onchange="window.toggleSellerStatusCheckbox('Active')" style="transform: scale(1.2);"> Active
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#94a3b8;">
+                                        <input type="checkbox" id="sellerStatusInactive" class="seller-status-cb" onchange="window.toggleSellerStatusCheckbox('Inactive')" style="transform: scale(1.2);"> Inactive
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#ef4444;">
+                                        <input type="checkbox" id="sellerStatusSuspended" class="seller-status-cb" onchange="window.toggleSellerStatusCheckbox('Suspended')" style="transform: scale(1.2);"> Suspended
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions" style="margin-top: 15px;">
+                            <button type="submit" class="btn btn-primary" id="btnSaveSeller">Save Seller</button>
+                            <button type="button" class="btn btn-secondary" id="btnCancelSeller" style="display:none;" onclick="cancelSellerEdit()">Cancel Edit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="list-container">
+                    <h3 style="color:#0f172a !important; display:inline-block; padding: 6px 15px; border: 1px solid rgba(56,189,248,0.5); border-radius: 8px; background: rgba(56,189,248,0.1); border-left: 4px solid #38bdf8; margin-bottom: 20px;">Seller Listings</h3>
+                    <table class="admin-table compact-table modern-user-table">
+                        <thead>
+                            <tr>
+                                <th>Seller ID</th>
+                                <th>Business Name</th>
+                                <th>Type</th>
+                                <th>City</th>
+                                <th>Products</th>
+                                <th>Deals</th>
+                                <th>Orders</th>
+                                <th>Verified</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sellerList">
+                            <!-- Sellers injected here via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Seller Profile Modal -->
+            <div id="sellerProfileModal" class="fixed inset-0 z-[2000] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 relative text-white">
+                    <button onclick="window.closeSellerProfile()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                    
+                    <h2 class="text-2xl font-bold text-center mb-6 text-sky-400">Seller Profile Details</h2>
+                    
+                    <!-- Seller Profile Header -->
+                    <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-5 mb-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 id="profileBusinessName" class="text-xl font-bold text-white mb-1">Business Name</h3>
+                                <p id="profileOwnerName" class="text-sm text-slate-400">Owner Name</p>
+                            </div>
+                            <span id="profileCategory" class="bg-sky-500/10 text-sky-400 text-xs font-bold px-3 py-1 rounded-full border border-sky-500/20">Category</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 text-sm mt-3 pt-3 border-t border-slate-700/50">
+                            <div>
+                                <p class="text-slate-400 text-xs">City</p>
+                                <p id="profileCity" class="font-medium text-slate-200">City</p>
+                            </div>
+                            <div>
+                                <p class="text-slate-400 text-xs">Phone</p>
+                                <p id="profilePhone" class="font-medium text-slate-200">Phone</p>
+                            </div>
+                            <div class="col-span-2">
+                                <p class="text-slate-400 text-xs">WhatsApp</p>
+                                <p id="profileWhatsApp" class="font-medium text-slate-200">WhatsApp</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics Cards -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-4 text-center">
+                            <span class="block text-2xl font-black text-sky-400" id="profileProductsCount">0</span>
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Products Posted</span>
+                        </div>
+                        <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-4 text-center">
+                            <span class="block text-2xl font-black text-amber-500" id="profileDealsCount">0</span>
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Deals Posted</span>
+                        </div>
+                        <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-4 text-center">
+                            <span class="block text-2xl font-black text-emerald-400" id="profileOrdersCount">0</span>
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Orders Received</span>
+                        </div>
+                    </div>
+
+                    <!-- Status Badges -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div id="profileVerifiedBadge" class="border rounded-xl p-3 text-center transition-colors">
+                            <i class="fa-solid fa-circle-check text-xl block mb-1"></i>
+                            <span class="text-xs font-bold block">Verified</span>
+                        </div>
+                        <div id="profileFeaturedBadge" class="border rounded-xl p-3 text-center transition-colors">
+                            <i class="fa-solid fa-star text-xl block mb-1"></i>
+                            <span class="text-xs font-bold block">Featured</span>
+                        </div>
+                        <div id="profilePremiumBadge" class="border rounded-xl p-3 text-center transition-colors">
+                            <i class="fa-solid fa-crown text-xl block mb-1"></i>
+                            <span class="text-xs font-bold block">Premium</span>
+                        </div>
+                    </div>
+
+                    <!-- Additional Details -->
+                    <div class="border-t border-slate-800 pt-4 text-sm">
+                        <div class="mb-3">
+                            <span class="text-slate-400 block text-xs">Operating Hours</span>
+                            <span id="profileHours" class="text-slate-200 font-medium">Not specified</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block text-xs">Business Description</span>
+                            <p id="profileDescription" class="text-slate-300 mt-1 italic text-xs leading-relaxed">No description provided.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex justify-end">
+                        <button onclick="window.closeSellerProfile()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-bold text-sm transition-colors border border-slate-700">Close</button>
+                    </div>
+                </div>
+            </div>
 
             <!-- Banner Management Section -->
             <section id="banners" class="admin-section">
