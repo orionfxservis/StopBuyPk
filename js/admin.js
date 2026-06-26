@@ -2260,12 +2260,50 @@ function renderDynamicAdminFields() {
             </div>
         `;
     } else {
-        // Default to Food / Other fields
+        const isFood = (category === 'Food' || category === 'Foods' || category === 'Fast Food' || category === 'Desi Cuisine' || category === 'Chinese');
+        const prodNameHtml = isFood ? `
+                    <select id="prodName" class="dynamic-admin-field" required>
+                        <option value="">Select Product Name</option>
+                        <optgroup label="🍔 Fast Food">
+                            <option value="Burgers">Burgers</option>
+                            <option value="Sandwiches & Wraps">Sandwiches & Wraps</option>
+                            <option value="Pizza">Pizza</option>
+                            <option value="Fries & Snacks">Fries & Snacks</option>
+                        </optgroup>
+                        <optgroup label="🍛 Desi Cuisine">
+                            <option value="Rice">Rice</option>
+                            <option value="Karahi">Karahi</option>
+                            <option value="Handi">Handi</option>
+                            <option value="Curry">Curry</option>
+                            <option value="BBQ">BBQ</option>
+                            <option value="Bread">Bread</option>
+                        </optgroup>
+                        <optgroup label="🥡 Chinese">
+                            <option value="Rice">Rice</option>
+                            <option value="Noodles">Noodles</option>
+                            <option value="Main Course">Main Course</option>
+                            <option value="Soup">Soup</option>
+                            <option value="Appetizers">Appetizers</option>
+                        </optgroup>
+                        <optgroup label="🌊 Seafood">
+                            <option value="Seafood">Seafood</option>
+                        </optgroup>
+                        <optgroup label="🍰 Desserts">
+                            <option value="Desserts">Desserts</option>
+                        </optgroup>
+                        <optgroup label="🥤 Beverages">
+                            <option value="Beverages">Beverages</option>
+                        </optgroup>
+                    </select>
+        ` : `
+                    <input type="text" id="prodName" class="dynamic-admin-field" placeholder="Product Name" required>
+        `;
+
         container.innerHTML = `
             <div class="form-row">
                 <div class="input-group">
                     <label>Product Name</label>
-                    <input type="text" id="prodName" class="dynamic-admin-field" placeholder="Product Name" required>
+                    ${prodNameHtml}
                 </div>
                 <div class="input-group">
                     <label>Product Variety</label>
