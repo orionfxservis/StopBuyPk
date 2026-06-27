@@ -403,7 +403,7 @@
         </div>
 
         <!-- Hero Banner -->
-        <div class="max-w-screen-2xl mx-auto px-6 pt-12 pb-2 flex items-center justify-between">
+        <div class="max-w-screen-2xl mx-auto px-6 pt-[68px] pb-2 flex items-center justify-between">
             <div class="flex gap-4 items-start w-full">
 
                 <div class="hidden lg:block w-[120px] flex-shrink-0">
@@ -455,7 +455,7 @@
 
                     <!-- Promotional Banners Carousel -->
                     <div dir="ltr"
-                        class="relative w-full rounded-3xl shadow-sm border border-emerald-200 overflow-hidden bg-[#F4F9F2] mb-6 group">
+                        class="hidden relative w-full rounded-3xl shadow-sm border border-emerald-200 overflow-hidden bg-[#F4F9F2] mb-6 group" style="display: none !important;">
 
                         <div id="promo-carousel" class="flex w-full">
                             <!-- Slide 1 -->
@@ -515,7 +515,7 @@
                     </div>
 
                     <!-- 🔥 Compare Before You Buy Interactive Section -->
-                    <section class="bg-white rounded-3xl py-6 px-6 border border-emerald-100 shadow-md mt-[124px] mb-6 relative overflow-hidden">
+                    <section class="bg-white rounded-3xl py-6 px-6 border border-emerald-100 shadow-md mt-[24px] mb-6 relative overflow-hidden">
                         <!-- SOFT GLOW BACKGROUND -->
                         <div class="absolute inset-0 pointer-events-none opacity-30">
                             <div class="absolute -top-10 -left-10 w-40 h-40 bg-emerald-100 rounded-full blur-2xl"></div>
@@ -586,6 +586,187 @@
                                 <span class="text-base">🔌</span>
                                 <span class="lang-en">Laptop Charger @ Good Price</span>
                                 <span class="lang-ur">لیپ ٹاپ چارجر اچھی قیمت پر</span>
+                            </div>
+
+                        </div>
+
+                        <!-- Heroic Comparison Showcase Grid -->
+                        <div dir="ltr" class="grid grid-cols-4 gap-4 mt-8 pt-6 border-t border-slate-100 relative z-10 text-left">
+                            
+                            <!-- Card 1: The Comparison Hero Card -->
+                            <div class="bg-gradient-to-br from-slate-50 to-white rounded-2xl p-4 border border-emerald-100 shadow-sm flex flex-col justify-between hover:shadow-md transition duration-300">
+                                <div>
+                                    <!-- Tagline -->
+                                    <div class="mb-3">
+                                        <span class="text-[10px] font-bold tracking-wider uppercase bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full">
+                                            Comparison Hero
+                                        </span>
+                                        <p class="text-[11px] text-slate-500 mt-2 font-medium italic leading-tight">
+                                            "Don't make the image the hero. Make the comparison the hero."
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- Product Info -->
+                                    <div class="flex items-center gap-3 my-3">
+                                        <span class="text-3xl">🍔</span>
+                                        <div>
+                                            <h4 class="font-bold text-base text-slate-900 leading-tight">Zinger Burger</h4>
+                                            <span class="text-[9px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-semibold uppercase tracking-wider">Food</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Price Comparison Block -->
+                                    <div class="grid grid-cols-2 gap-2 bg-white p-3 rounded-xl border border-slate-100 my-3 shadow-inner text-xs">
+                                        <div>
+                                            <div class="text-[9px] font-bold text-emerald-600 uppercase tracking-wider">🏆 Lowest</div>
+                                            <div class="text-base font-extrabold text-slate-900 mt-0.5">Rs. 399</div>
+                                            <div class="text-[10px] font-semibold text-slate-500">FRYCHI</div>
+                                        </div>
+                                        <div class="border-l border-slate-100 pl-3">
+                                            <div class="text-[9px] font-bold text-red-500 uppercase tracking-wider">Highest</div>
+                                            <div class="text-base font-extrabold text-slate-900 mt-0.5">Rs. 520</div>
+                                            <div class="text-[10px] font-semibold text-slate-500">Burger Lab</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Savings Badge -->
+                                    <div class="flex items-center justify-between bg-emerald-50 text-emerald-800 px-2.5 py-1.5 rounded-xl border border-emerald-100 text-xs font-bold">
+                                        <span>Savings:</span>
+                                        <span class="text-emerald-700 font-extrabold">Save Rs. 121</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                                    <span class="text-slate-500 font-medium">12 Restaurants</span>
+                                    <a href="./pages/food.html?search=zinger" class="inline-flex items-center gap-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-2.5 py-1 rounded transition-colors shadow-sm text-xs">
+                                        Compare →
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Today's Biggest Savings -->
+                            <div class="bg-gradient-to-br from-slate-50 to-white rounded-2xl p-4 border border-emerald-100 shadow-sm flex flex-col justify-between hover:shadow-md transition duration-300">
+                                <div>
+                                    <div class="pb-2 border-b border-slate-100">
+                                        <h4 class="font-bold text-sm text-slate-900 flex items-center gap-2">
+                                            <i class="fas fa-arrow-trend-down text-emerald-600"></i>
+                                            <span>Today's Biggest Savings</span>
+                                        </h4>
+                                        <p class="text-[11px] text-slate-500 mt-0.5">Top price drops across Pakistan</p>
+                                    </div>
+
+                                    <div class="space-y-2.5 my-3">
+                                        <!-- Item 1 -->
+                                        <div class="p-2 bg-white rounded-xl border border-slate-100 shadow-sm flex items-center justify-between">
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-lg">💻</span>
+                                                <div class="leading-tight">
+                                                    <div class="text-xs font-bold text-slate-800">HP EliteBook</div>
+                                                    <div class="text-[9px] text-slate-400">Computers</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-[10px] font-bold text-emerald-750 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">Save Rs. 8,500/-</span>
+                                        </div>
+
+                                        <!-- Item 2 -->
+                                        <div class="p-2 bg-white rounded-xl border border-slate-100 shadow-sm flex items-center justify-between">
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-lg">🍛</span>
+                                                <div class="leading-tight">
+                                                    <div class="text-xs font-bold text-slate-800">Chicken Mandi</div>
+                                                    <div class="text-[9px] text-slate-400">Food</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-[10px] font-bold text-emerald-750 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">Save Rs. 450/-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-[9px] text-slate-400 font-bold uppercase tracking-wider text-right">
+                                    Verified Price Drop
+                                </div>
+                            </div>
+
+                            <!-- Card 3: Comparison Badges Widget -->
+                            <div class="bg-gradient-to-br from-slate-50 to-white rounded-2xl p-4 border border-emerald-100 shadow-sm flex flex-col justify-between hover:shadow-md transition duration-300">
+                                <div>
+                                    <div class="pb-2 border-b border-slate-100">
+                                        <h4 class="font-bold text-sm text-slate-900 flex items-center gap-2">
+                                            <i class="fas fa-tags text-emerald-600"></i>
+                                            <span>Comparison Badges</span>
+                                        </h4>
+                                        <p class="text-[11px] text-slate-500 mt-0.5">Smart shopping indicators</p>
+                                    </div>
+
+                                    <!-- Badges List -->
+                                    <div class="space-y-1.5 my-3">
+                                        <div class="flex items-center gap-2.5 p-1.5 bg-white rounded-xl border border-slate-100 shadow-sm">
+                                            <span class="text-base">🏆</span>
+                                            <div>
+                                                <div class="text-xs font-bold text-slate-800">Lowest Price</div>
+                                                <div class="text-[9px] text-slate-400">Lowest rate across Pakistan</div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2.5 p-1.5 bg-white rounded-xl border border-slate-100 shadow-sm">
+                                            <span class="text-base">🔥</span>
+                                            <div>
+                                                <div class="text-xs font-bold text-slate-800">Best Deal</div>
+                                                <div class="text-[9px] text-slate-400">Highest value for money</div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2.5 p-1.5 bg-white rounded-xl border border-slate-100 shadow-sm">
+                                            <span class="text-base">📍</span>
+                                            <div>
+                                                <div class="text-xs font-bold text-slate-800">Near You</div>
+                                                <div class="text-[9px] text-slate-400">Available close to you</div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2.5 p-1.5 bg-white rounded-xl border border-slate-100 shadow-sm">
+                                            <span class="text-base">⭐</span>
+                                            <div>
+                                                <div class="text-xs font-bold text-slate-800">Verified Seller</div>
+                                                <div class="text-[9px] text-slate-400">Trusted merchant</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 4: Weekly Savings Widget -->
+                            <div class="bg-gradient-to-br from-[#0A3D2A] to-[#0D5C3A] text-white rounded-2xl p-4 shadow-md flex flex-col justify-between hover:shadow-lg transition duration-300 relative overflow-hidden">
+                                <!-- Subtle Background Pattern -->
+                                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none"></div>
+                                
+                                <div class="relative z-10">
+                                    <div class="pb-2 border-b border-white/10">
+                                        <h4 class="font-bold text-sm flex items-center gap-2 text-[#8CC63F]">
+                                            <i class="fas fa-wallet"></i>
+                                            <span>Weekly Savings</span>
+                                        </h4>
+                                        <p class="text-[11px] text-emerald-200 mt-0.5 font-medium">Real-time cumulative savings</p>
+                                    </div>
+
+                                    <!-- Savings Counter Block -->
+                                    <div class="text-center my-4 py-3 bg-black/10 rounded-2xl border border-white/10">
+                                        <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-300 block mb-0.5">
+                                            Pakistan Saved
+                                        </span>
+                                        
+                                        <div class="text-2xl sm:text-3xl font-black text-white tracking-tight my-1">
+                                            Rs. 2,84,350
+                                        </div>
+                                        
+                                        <span class="text-[10px] font-medium text-emerald-200/90 block">
+                                            through StopBuyPk this week
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="relative z-10 mt-auto pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-emerald-200/80">
+                                    <span>Scope Limit:</span>
+                                    <span class="bg-emerald-900/50 border border-emerald-400/30 px-2 py-0.5 rounded font-semibold">
+                                        Food &amp; Computers Only
+                                    </span>
+                                </div>
                             </div>
 
                         </div>
@@ -3450,7 +3631,7 @@
                                 <div class="absolute top-2 right-2 w-8 h-8 bg-white/95 rounded-full flex items-center justify-center shadow cursor-pointer hover:scale-110 transition" onclick="event.stopPropagation()">
                                     <i class="far fa-heart text-gray-700 text-sm"></i>
                                 </div>
-                             </div>
+                            </div>
                             
                             <div class="flex-1 flex flex-col justify-between px-1">
                                 <div>
