@@ -1396,7 +1396,14 @@ function populateCategoryDropdown() {
             if (prodSubCategorySelect) {
                 let uniqueSubCats = [];
                 if (selectedCat === 'Food Stuffs' || selectedCat === 'Food') {
-                    uniqueSubCats = ['Fast Food', 'Desi Cuisine', 'Bar BQ', 'Chinese', 'Sea Food', 'Dessert'];
+                    let subCats = ['Fast Food', 'Desi Cuisine', 'Bar BQ', 'Chinese', 'Sea Food', 'Dessert'];
+                    const relevantCats = categories.filter(c => c.name === selectedCat);
+                    relevantCats.forEach(cat => {
+                        if (cat.subCategory) {
+                            subCats.push(...cat.subCategory.split(',').map(s => s.trim()).filter(s => s));
+                        }
+                    });
+                    uniqueSubCats = [...new Set(subCats)].filter(s => s !== 'Platter' && s !== 'Deals');
                 } else {
                     // Filter sub-categories for this category name
                     const relevantCats = categories.filter(c => c.name === selectedCat);
@@ -2294,6 +2301,9 @@ function renderDynamicAdminFields() {
                         <optgroup label="🥤 Beverages">
                             <option value="Beverages">Beverages</option>
                         </optgroup>
+                        <optgroup label="🕌 Arabic Cuisine">
+                            <option value="Mandi">🍛Mandi</option>
+                        </optgroup>
                     </select>
         ` : `
                     <input type="text" id="prodName" class="dynamic-admin-field" placeholder="Product Name" required>
@@ -2475,6 +2485,225 @@ function renderDynamicAdminFields() {
                 </div>
             </div>
         `;
+
+        if (isFood) {
+            const prodNameSelect = document.getElementById('prodName');
+            const prodSubCategorySelect = document.getElementById('prodSubCategory');
+            const standardTypeSelect = document.getElementById('prodStandardProductType');
+
+            if (prodNameSelect && standardTypeSelect) {
+                const updateStandardTypes = () => {
+                    const subCatVal = prodSubCategorySelect ? prodSubCategorySelect.value : '';
+                    const nameVal = prodNameSelect.value;
+                    const currentVal = standardTypeSelect.value;
+                    // Check if selected subcategory is Fast Food or Desi Cuisine (allowing for emoji or no emoji)
+                    const isFastFood = subCatVal.includes('Fast Food');
+                    const isDesi = subCatVal.includes('Desi Cuisine');
+                    const isArabic = subCatVal.includes('Arabic Cuisine');
+                    const isChinese = subCatVal.includes('Chinese');
+
+                    if (isArabic && nameVal === 'Mandi') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Mandi">Chicken Mandi</option>
+                            <option value="Mutton Mandi">Mutton Mandi</option>
+                            <option value="Beef Mandi">Beef Mandi</option>
+                            <option value="Family Mandi">Family Mandi</option>
+                            <option value="Mixed Mandi">Mixed Mandi</option>
+                        `;
+                    } else if (isFastFood && nameVal === 'Burgers') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Beef Burger">Beef Burger</option>
+                            <option value="Cheese Burger">Cheese Burger</option>
+                            <option value="Chicken Burger">Chicken Burger</option>
+                            <option value="Crispy Chicken Burger">Crispy Chicken Burger</option>
+                            <option value="Double Patty Burger">Double Patty Burger</option>
+                            <option value="Grilled Chicken Burger">Grilled Chicken Burger</option>
+                            <option value="Jalapeno Burger">Jalapeno Burger</option>
+                            <option value="Mighty Burger">Mighty Burger</option>
+                            <option value="Tower Burger">Tower Burger</option>
+                            <option value="Zinger Burger">Zinger Burger</option>
+                        `;
+                    } else if (isFastFood && nameVal === 'Sandwiches & Wraps') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Sandwich">Chicken Sandwich</option>
+                            <option value="Club Sandwich">Club Sandwich</option>
+                            <option value="Grilled Sandwich">Grilled Sandwich</option>
+                            <option value="BBQ Sandwich">BBQ Sandwich</option>
+                            <option value="Chicken Shawarma">Chicken Shawarma</option>
+                            <option value="Beef Shawarma">Beef Shawarma</option>
+                            <option value="Chicken Wrap">Chicken Wrap</option>
+                            <option value="Zinger Wrap">Zinger Wrap</option>
+                            <option value="Chicken Roll">Chicken Roll</option>
+                            <option value="Paratha Roll">Paratha Roll</option>
+                        `;
+                    } else if (isFastFood && nameVal === 'Pizza') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Tikka Pizza">Chicken Tikka Pizza</option>
+                            <option value="Fajita Pizza">Fajita Pizza</option>
+                            <option value="Pepperoni Pizza">Pepperoni Pizza</option>
+                            <option value="Malai Boti Pizza">Malai Boti Pizza</option>
+                            <option value="Cheese Pizza">Cheese Pizza</option>
+                            <option value="Veggie Pizza">Veggie Pizza</option>
+                            <option value="Supreme Pizza">Supreme Pizza</option>
+                            <option value="BBQ Pizza">BBQ Pizza</option>
+                        `;
+                    } else if (isFastFood && nameVal === 'Fries & Snacks') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="French Fries">French Fries</option>
+                            <option value="Loaded Fries">Loaded Fries</option>
+                            <option value="Masala Fries">Masala Fries</option>
+                            <option value="Curly Fries">Curly Fries</option>
+                            <option value="Chicken Nuggets">Chicken Nuggets</option>
+                            <option value="Chicken Wings">Chicken Wings</option>
+                            <option value="Chicken Strips">Chicken Strips</option>
+                            <option value="Garlic Bread">Garlic Bread</option>
+                        `;
+                    } else if (isDesi && nameVal === 'Rice') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Biryani">Chicken Biryani</option>
+                            <option value="Beef Biryani">Beef Biryani</option>
+                            <option value="Mutton Biryani">Mutton Biryani</option>
+                            <option value="Sindhi Biryani">Sindhi Biryani</option>
+                            <option value="Chicken Pulao">Chicken Pulao</option>
+                            <option value="Beef Pulao">Beef Pulao</option>
+                            <option value="Mutton Pulao">Mutton Pulao</option>
+                        `;
+                    } else if (isDesi && nameVal === 'Karahi') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Karahi">Chicken Karahi</option>
+                            <option value="Mutton Karahi">Mutton Karahi</option>
+                            <option value="Beef Karahi">Beef Karahi</option>
+                            <option value="White Karahi">White Karahi</option>
+                        `;
+                    } else if (isDesi && nameVal === 'Handi') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Handi">Chicken Handi</option>
+                            <option value="Mutton Handi">Mutton Handi</option>
+                            <option value="Malai Handi">Malai Handi</option>
+                        `;
+                    } else if (isDesi && nameVal === 'Curry') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Curry">Chicken Curry</option>
+                            <option value="Beef Curry">Beef Curry</option>
+                            <option value="Mutton Curry">Mutton Curry</option>
+                            <option value="Aloo Gosht">Aloo Gosht</option>
+                            <option value="Nihari">Nihari</option>
+                            <option value="Paya">Paya</option>
+                            <option value="Haleem">Haleem</option>
+                        `;
+                    } else if (isDesi && nameVal === 'BBQ') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Tikka">Chicken Tikka</option>
+                            <option value="Chicken Boti">Chicken Boti</option>
+                            <option value="Malai Boti">Malai Boti</option>
+                            <option value="Behari Boti">Behari Boti</option>
+                            <option value="Seekh Kabab">Seekh Kabab</option>
+                            <option value="Chapli Kabab">Chapli Kabab</option>
+                            <option value="Shami Kabab">Shami Kabab</option>
+                            <option value="Reshmi Kabab">Reshmi Kabab</option>
+                            <option value="Chicken Malai Tikka">Chicken Malai Tikka</option>
+                        `;
+                    } else if (isDesi && nameVal === 'Bread') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Naan">Naan</option>
+                            <option value="Roghni Naan">Roghni Naan</option>
+                            <option value="Garlic Naan">Garlic Naan</option>
+                            <option value="Tandoori Roti">Tandoori Roti</option>
+                            <option value="Paratha">Paratha</option>
+                        `;
+                    } else if (isChinese && nameVal === 'Rice') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Fried Rice">Chicken Fried Rice</option>
+                            <option value="Egg Fried Rice">Egg Fried Rice</option>
+                            <option value="Vegetable Fried Rice">Vegetable Fried Rice</option>
+                            <option value="Special Fried Rice">Special Fried Rice</option>
+                        `;
+                    } else if (isChinese && nameVal === 'Noodles') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Chow Mein">Chicken Chow Mein</option>
+                            <option value="Vegetable Chow Mein">Vegetable Chow Mein</option>
+                            <option value="Chicken Hakka Noodles">Chicken Hakka Noodles</option>
+                            <option value="Singapore Noodles">Singapore Noodles</option>
+                        `;
+                    } else if (isChinese && nameVal === 'Main Course') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Manchurian">Chicken Manchurian</option>
+                            <option value="Chicken Shashlik">Chicken Shashlik</option>
+                            <option value="Chicken Chili Dry">Chicken Chili Dry</option>
+                            <option value="Chicken Chili Gravy">Chicken Chili Gravy</option>
+                            <option value="Kung Pao Chicken">Kung Pao Chicken</option>
+                            <option value="Sweet & Sour Chicken">Sweet & Sour Chicken</option>
+                        `;
+                    } else if (isChinese && nameVal === 'Soup') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Hot & Sour Soup">Hot & Sour Soup</option>
+                            <option value="Chicken Corn Soup">Chicken Corn Soup</option>
+                            <option value="Vegetable Soup">Vegetable Soup</option>
+                        `;
+                    } else if (isChinese && nameVal === 'Appetizers') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Spring Rolls">Spring Rolls</option>
+                            <option value="Chicken Spring Rolls">Chicken Spring Rolls</option>
+                            <option value="Dynamite Chicken">Dynamite Chicken</option>
+                            <option value="Chicken Tempura">Chicken Tempura</option>
+                        `;
+                    } else {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Zinger Burger">Zinger Burger</option>
+                            <option value="Chicken Burger">Chicken Burger</option>
+                            <option value="Beef Burger">Beef Burger</option>
+                            <option value="Shami Kabab Burger">Shami Kabab Burger</option>
+                            <option value="Chicken Tikka Burger">Chicken Tikka Burger</option>
+                            <option value="Fish Burger">Fish Burger</option>
+                            <option value="Fries">Fries</option>
+                            <option value="Pizza Medium">Pizza Medium</option>
+                            <option value="Pizza Large">Pizza Large</option>
+                            <option value="Pizza Small">Pizza Small</option>
+                            <option value="Shawarma">Shawarma</option>
+                            <option value="Sandwich Shawarma">Sandwich Shawarma</option>
+                            <option value="Quarter Broast Leg">Quarter Broast Leg</option>
+                            <option value="Quarter Broast Chest">Quarter Broast Chest</option>
+                            <option value="Half Broast">Half Broast</option>
+                            <option value="Chicken Chili">Chicken Chili</option>
+                            <option value="Chicken Shashlik">Chicken Shashlik</option>
+                            <option value="Fried Rice">Fried Rice</option>
+                            <option value="Chicken Jalfrezi">Chicken Jalfrezi</option>
+                            <option value="Chicken Manchurian">Chicken Manchurian</option>
+                            <option value="Chicken Biryani">Chicken Biryani</option>
+                            <option value="Beef Biryani">Beef Biryani</option>
+                            <option value="Karahi">Karahi</option>
+                        `;
+                    }
+                    // Restore previous value if it is still valid in the new options list
+                    const hasOption = Array.from(standardTypeSelect.options).some(opt => opt.value === currentVal);
+                    if (hasOption) {
+                        standardTypeSelect.value = currentVal;
+                    } else {
+                        standardTypeSelect.value = '';
+                    }
+                };
+
+                prodNameSelect.addEventListener('change', updateStandardTypes);
+                updateStandardTypes();
+            }
+        }
     }
     const staticStatus = document.getElementById('staticStatusContainer');
     if (staticStatus) {
