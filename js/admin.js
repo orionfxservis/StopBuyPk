@@ -2277,6 +2277,9 @@ function renderDynamicAdminFields() {
                             <option value="Pizza">Pizza</option>
                             <option value="Fries & Snacks">Fries & Snacks</option>
                         </optgroup>
+                        <optgroup label="🌮 Rolls">
+                            <option value="Rolls">Rolls</option>
+                        </optgroup>
                         <optgroup label="🍛 Desi Cuisine">
                             <option value="Rice">Rice</option>
                             <option value="Karahi">Karahi</option>
@@ -2346,6 +2349,17 @@ function renderDynamicAdminFields() {
                         <option value="Chicken Biryani">Chicken Biryani</option>
                         <option value="Beef Biryani">Beef Biryani</option>
                         <option value="Karahi">Karahi</option>
+                        <option value="Chicken Roll">Chicken Roll</option>
+                        <option value="Beef Roll">Beef Roll</option>
+                        <option value="Malai Boti Roll">Malai Boti Roll</option>
+                        <option value="Behari Roll">Behari Roll</option>
+                        <option value="Chicken Tikka Roll">Chicken Tikka Roll</option>
+                        <option value="Seekh Kabab Roll">Seekh Kabab Roll</option>
+                        <option value="Reshmi Roll">Reshmi Roll</option>
+                        <option value="Mayo Garlic Roll">Mayo Garlic Roll</option>
+                        <option value="Cheese Roll">Cheese Roll</option>
+                        <option value="Zinger Roll">Zinger Roll</option>
+                        <option value="Chapli Kabab Roll">Chapli Kabab Roll</option>
                     </select>
                 </div>
             </div>
@@ -2449,7 +2463,22 @@ function renderDynamicAdminFields() {
                     <label>Area</label>
                     <select id="prodArea" class="dynamic-admin-field">
                         <option value="">Select Area</option>
-                        <option value="F.B. Area">F.B. Area</option>
+                        <option value="Bahadurabad">Bahadurabad</option>
+                        <option value="Clifton">Clifton</option>
+                        <option value="Defence">Defence</option>
+                        <option value="Federal B Area">Federal B Area</option>
+                        <option value="Gulshan-e-Iqbal">Gulshan-e-Iqbal</option>
+                        <option value="Gulistan-e-Johar">Gulistan-e-Johar</option>
+                        <option value="Korangi">Korangi</option>
+                        <option value="Landhi">Landhi</option>
+                        <option value="Liaquatabad">Liaquatabad</option>
+                        <option value="Malir">Malir</option>
+                        <option value="North Nazimabad">North Nazimabad</option>
+                        <option value="Nazimabad">Nazimabad</option>
+                        <option value="Orangi">Orangi</option>
+                        <option value="PECHS">PECHS</option>
+                        <option value="Saddar">Saddar</option>
+                        <option value="Shah Faisal">Shah Faisal</option>
                     </select>
                 </div>
                 <div class="input-group">
@@ -2502,7 +2531,22 @@ function renderDynamicAdminFields() {
                     const isArabic = subCatVal.includes('Arabic Cuisine');
                     const isChinese = subCatVal.includes('Chinese');
 
-                    if (isArabic && nameVal === 'Mandi') {
+                    if (nameVal === 'Rolls' || nameVal === '🌮 Rolls') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Roll">Chicken Roll</option>
+                            <option value="Beef Roll">Beef Roll</option>
+                            <option value="Malai Boti Roll">Malai Boti Roll</option>
+                            <option value="Behari Roll">Behari Roll</option>
+                            <option value="Chicken Tikka Roll">Chicken Tikka Roll</option>
+                            <option value="Seekh Kabab Roll">Seekh Kabab Roll</option>
+                            <option value="Reshmi Roll">Reshmi Roll</option>
+                            <option value="Mayo Garlic Roll">Mayo Garlic Roll</option>
+                            <option value="Cheese Roll">Cheese Roll</option>
+                            <option value="Zinger Roll">Zinger Roll</option>
+                            <option value="Chapli Kabab Roll">Chapli Kabab Roll</option>
+                        `;
+                    } else if (isArabic && nameVal === 'Mandi') {
                         standardTypeSelect.innerHTML = `
                             <option value="">Select Standard Product Type</option>
                             <option value="Chicken Mandi">Chicken Mandi</option>
@@ -2703,6 +2747,76 @@ function renderDynamicAdminFields() {
                 prodNameSelect.addEventListener('change', updateStandardTypes);
                 updateStandardTypes();
             }
+        }
+
+        const prodAreaSelect = document.getElementById('prodArea');
+        const prodBlockNoSelect = document.getElementById('prodBlockNo');
+        if (prodAreaSelect && prodBlockNoSelect) {
+            const updateBlocks = () => {
+                const areaVal = prodAreaSelect.value;
+                const currentBlockVal = prodBlockNoSelect.value;
+                if (areaVal === 'Korangi') {
+                    prodBlockNoSelect.innerHTML = `
+                        <option value="">Select Block No.</option>
+                        <option value="Korangi No.1">Korangi No.1</option>
+                        <option value="Korangi No.2">Korangi No.2</option>
+                        <option value="Korangi No.2½">Korangi No.2½</option>
+                        <option value="Korangi No.3">Korangi No.3</option>
+                        <option value="Korangi No.3½">Korangi No.3½</option>
+                        <option value="Korangi No.4">Korangi No.4</option>
+                        <option value="Korangi No.4½">Korangi No.4½</option>
+                        <option value="Korangi No.5">Korangi No.5</option>
+                        <option value="Korangi No.5½">Korangi No.5½</option>
+                        <option value="Korangi No.6">Korangi No.6</option>
+                        <option value="Sector 31-A">Sector 31-A</option>
+                        <option value="Sector 31-B">Sector 31-B</option>
+                        <option value="Sector 32-A">Sector 32-A</option>
+                        <option value="Sector 32-B">Sector 32-B</option>
+                        <option value="Sector 33-A">Sector 33-A</option>
+                        <option value="Sector 33-B">Sector 33-B</option>
+                        <option value="Sector 33-C">Sector 33-C</option>
+                        <option value="Sector 34-A">Sector 34-A</option>
+                        <option value="Sector 34-B">Sector 34-B</option>
+                    `;
+                } else if (areaVal === 'Federal B Area') {
+                    prodBlockNoSelect.innerHTML = `
+                        <option value="">Select Block No.</option>
+                        <option value="1 Sharifabad">1 Sharifabad</option>
+                        <option value="2 Sharifabad">2 Sharifabad</option>
+                        <option value="3 Hussainabad">3 Hussainabad</option>
+                        <option value="4 Tayyababad">4 Tayyababad</option>
+                        <option value="6 Tayyababad">6 Tayyababad</option>
+                        <option value="7 Azizabad">7 Azizabad</option>
+                        <option value="8 Azizabad">8 Azizabad</option>
+                        <option value="9 Dastagir">9 Dastagir</option>
+                        <option value="10 Dastagir">10 Dastagir</option>
+                        <option value="11 Sharifabad">11 Sharifabad</option>
+                        <option value="12 Sharifabad">12 Sharifabad</option>
+                        <option value="13 Gulberg Town">13 Gulberg Town</option>
+                        <option value="14 Naseerabad">14 Naseerabad</option>
+                        <option value="15 Naseerabad">15 Naseerabad</option>
+                        <option value="16 Water Pump">16 Water Pump</option>
+                        <option value="17 Samanabad">17 Samanabad</option>
+                        <option value="18 Samanabad">18 Samanabad</option>
+                        <option value="19 Al-Noor Society">19 Al-Noor Society</option>
+                        <option value="20 Ancholi">20 Ancholi</option>
+                        <option value="21 Industrial Area">21 Industrial Area</option>
+                        <option value="22 Industrial Area">22 Industrial Area</option>
+                    `;
+                } else {
+                    prodBlockNoSelect.innerHTML = `
+                        <option value="">Select Block No.</option>
+                    `;
+                }
+                const hasOption = Array.from(prodBlockNoSelect.options).some(opt => opt.value === currentBlockVal);
+                if (hasOption) {
+                    prodBlockNoSelect.value = currentBlockVal;
+                } else {
+                    prodBlockNoSelect.value = '';
+                }
+            };
+            prodAreaSelect.addEventListener('change', updateBlocks);
+            updateBlocks();
         }
     }
     const staticStatus = document.getElementById('staticStatusContainer');
