@@ -1556,6 +1556,17 @@ window.updateBlockOptionsGlobal = function(areaVal, blockNoSelect) {
         for (let i = 1; i <= 5; i++) {
             optionsHtml += `<option value="Sector ${i}">Sector ${i}</option>`;
         }
+    } else if (areaVal === 'Landhi') {
+        const landhiBlocks = [
+            'Landhi No. 1', 'Landhi No. 2', 'Landhi No. 3', 'Landhi No. 3½', 'Landhi No. 4', 'Landhi No. 5', 'Landhi No. 6',
+            'Sector 36-A', 'Sector 36-B', 'Sector 36-C', 'Sector 36-D',
+            'Sector 37-A', 'Sector 37-B', 'Sector 37-C', 'Sector 37-D',
+            'Sector 35-A', 'Sector 35-B',
+            'Future Colony', 'Sherpao Colony', 'Muslimabad', 'Babar Market', 'Bhains Colony', 'Landhi Industrial Area'
+        ];
+        landhiBlocks.forEach(b => {
+            optionsHtml += `<option value="${b}">${b}</option>`;
+        });
     }
     blockNoSelect.innerHTML = optionsHtml;
     const hasOption = Array.from(blockNoSelect.options).some(opt => opt.value === currentBlockVal);
