@@ -1,0 +1,2180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - StopBuy</title>
+    <link rel="stylesheet" href="../css/style.css"> <!-- Reusing main styles for variables -->
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <!-- Fixed Background & Glass Effect Overlay -->
+    <div
+        class="fixed inset-0 z-[-2] bg-[url('../images/bg/bg-home.jpg')] bg-cover bg-center bg-no-repeat pointer-events-none">
+    </div>
+    <div
+        class="fixed inset-0 z-[-1] bg-gradient-to-b from-slate-900/70 to-slate-800/50 backdrop-blur-xl pointer-events-none">
+    </div>
+
+    <!-- Click Sound -->
+    <audio id="clickSound" src="../click.mp3"></audio>
+
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo"
+                style="padding: 10px 0; display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                <img src="../images/logo/stopbuy-logo.png" alt="StopBuy Admin Pannel"
+                    style="max-width: 20%; height: auto; border-radius: 8px;">
+                <span style="font-size: 14px; color: #cbd5e1; font-weight: bold;">StopBuy Admin Panel</span>
+            </div>
+            <ul class="menu">
+                <li onclick="showSection('dashboard')"><i class="fa-solid fa-chart-line"></i> Dashboard</li>
+                <li onclick="showSection('categories')"><i class="fa-solid fa-layer-group"></i> Manage Categories</li>
+                <li onclick="showSection('products')"><i class="fa-solid fa-box"></i> Manage Products <span id="productsPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
+                <li onclick="showSection('deals')"><i class="fa-solid fa-fire"></i> Manage Deals <span id="dealsPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
+                <li onclick="showSection('live-rates')"><i class="fa-solid fa-chart-line"></i> Live Rates</li>
+				<li onclick="showSection('users')"><i class="fa-solid fa-users"></i> Manage Users</li>
+				<li onclick="showSection('sellers')"><i class="fa-solid fa-store"></i> Manage Sellers</li>
+                <li onclick="showSection('performance')"><i class="fa-solid fa-chart-line"></i> User Performance</li>
+                <li onclick="showSection('ads')"><i class="fa-solid fa-bullhorn"></i> Place Ads</li>
+                <li onclick="showSection('banners')"><i class="fa-solid fa-image"></i> Manage Banners <span id="bannersPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
+                <li onclick="showSection('blogs')"><i class="fa-solid fa-blog"></i> Manage Blogs <span id="blogsPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
+                <li onclick="showSection('broadcasts')"><i class="fa-solid fa-bullhorn"></i> Manage Broadcasts <span id="broadcastsPendingBadge" style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span></li>
+                <li onclick="showSection('travel')"><i class="fa-solid fa-plane"></i> Manage Travel <span
+                        id="travelPendingBadge"
+                        style="display:none; background:#eab308; color:#000; border-radius:50%; padding:2px 6px; font-size:10px; margin-left:5px; font-weight:bold;">0</span>
+                </li>
+                <li onclick="showSection('daily-prices')"><i class="fa-solid fa-chart-bar"></i> Manage Daily Prices</li>
+                <li onclick="logout()"><i class="fa-solid fa-sign-out-alt"></i> Logout</li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Top Bar / User Profile -->
+            <div style="display: flex; justify-content: flex-end; align-items: center; padding: 10px 20px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border-color); gap: 20px;">
+                
+                <!-- Notification Bell -->
+                <div style="position: relative; cursor: pointer;" onclick="document.getElementById('notificationDropdown').classList.toggle('hidden')">
+                    <i class="fa-solid fa-bell" style="font-size: 1.2rem; color: #cbd5e1; transition: color 0.3s;"></i>
+                    <span id="topNotificationBadge" style="display:none; position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white; border-radius: 50%; font-size: 0.6rem; padding: 2px 5px; font-weight: bold;">0</span>
+                    
+                    <!-- Dropdown -->
+                    <div id="notificationDropdown" class="hidden" style="position: absolute; top: 150%; right: -10px; width: 300px; background: #1e293b; border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 1000; overflow: hidden;">
+                        <div style="padding: 10px; background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--border-color); font-weight: bold;">Notifications</div>
+                        <div id="notificationList" style="max-height: 300px; overflow-y: auto;">
+                            <!-- Notifications dynamically injected here -->
+                            <div style="padding: 15px; text-align: center; color: #888; font-size: 0.9rem;">No new notifications</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Profile -->
+                <div style="display: flex; align-items: center; gap: 15px; border-left: 1px solid var(--border-color); padding-left: 20px;">
+                    <div style="text-align: right;">
+                        <div id="headerUserName" style="font-weight: bold; font-size: 1rem; color: #fff;">User Name</div>
+                        <div id="headerUserRole" style="font-size: 0.8rem; color: var(--primary-color);">Role</div>
+                    </div>
+                    <img id="headerUserPic" src="https://via.placeholder.com/40" alt="User Pic" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-color);">
+                </div>
+            </div>
+
+            <section id="dashboard" class="admin-section active">
+	<!-- Dashboard Overview -->
+    <!-- TOP ANALYTICS CARDS -->
+	<div class="stats-grid section-spacing" style="margin-bottom:2rem;">
+
+		<!-- Total Products CARD STYLE -->
+<div class="stat-card blue" style="padding:18px; overflow:hidden; position:relative; border-radius:20px;">
+
+    <div class="stat-content">
+
+        <!-- TOP -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+
+            <!-- ICON -->
+            <div
+            style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(59,130,246,0.15);">
+
+                <i class="fas fa-box-open" style="font-size:15px; color:#3b82f6;"></i>
+            </div>
+
+            <!-- BADGE -->
+            <span
+            style="font-size:10px; background:rgba(59,130,246,0.15); color:#1d4ed8; padding:4px 10px; border-radius:999px; font-weight:700;">
+                +24%
+            </span>
+        </div>
+
+        <!-- TITLE + NUMBER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:flex-start; padding-top:2px; margin-bottom:10px;">
+
+            <h3
+            style="margin:0; font-size:17px; font-weight:700; color:#111827;">
+                Total Products
+            </h3>
+
+            <div
+            style="font-size:17px; font-weight:800; color:#3b82f6; line-height:1;">
+                <span id="totalProducts">40</span>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.08); padding-top:10px;">
+
+            <span
+            style="font-size:12px; color:#6b7280; font-weight:500;">
+                Live product listings
+            </span>
+
+            <span
+            style="
+                font-size:13px; color:#065f46; font-weight:700; cursor:pointer;">
+                View Products
+            </span>
+        </div>
+    </div>
+</div>
+
+		<!-- Total Cmpanies CARD STYLE -->
+<div class="stat-card teal" style="padding:18px; overflow:hidden; position:relative; border-radius:20px;">
+
+    <div class="stat-content">
+
+        <!-- TOP -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+
+            <!-- ICON -->
+            <div
+            style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(20,184,166,0.15);">
+
+                <i class="fas fa-building" style="font-size:15px; color:#14b8a6;"></i>
+            </div>
+
+            <!-- BADGE -->
+            <span
+            style="font-size:10px; background:rgba(20,184,166,0.15); color:#0f766e; padding:4px 10px; border-radius:999px; font-weight:700;">
+                +12%
+            </span>
+        </div>
+
+        <!-- TITLE + NUMBER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:flex-start; padding-top:2px; margin-bottom:10px;">
+
+            <h3
+            style="margin:0; font-size:17px; font-weight:700; color:#111827;">
+                Total Companies
+            </h3>
+
+            <div
+            style="font-size:17px; font-weight:800; color:#14b8a6; line-height:1;">
+                <span id="totalCompanies">5</span>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.08); padding-top:10px;">
+
+            <span
+            style="font-size:12px; color:#6b7280; font-weight:500;">
+                Registered Businesses
+            </span>
+
+            <span
+            style="
+                font-size:13px; color:#065f46; font-weight:700; cursor:pointer;">
+                View Details
+            </span>
+        </div>
+    </div>
+</div>
+
+		<!-- TOTAL USERS CARD STYLE -->
+<div class="stat-card yellow" style="padding:18px; overflow:hidden; position:relative; border-radius:20px;">
+
+    <div class="stat-content">
+
+        <!-- TOP -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+
+            <!-- ICON -->
+            <div
+            style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(245,158,11,0.15);">
+
+                <i class="fas fa-users" style="font-size:15px; color:#f59e0b;"></i>
+            </div>
+
+            <!-- BADGE -->
+            <span
+            style="font-size:10px; background:rgba(245,158,11,0.15); color:#b45309; padding:4px 10px; border-radius:999px; font-weight:700;">
+                +8%
+            </span>
+        </div>
+
+        <!-- TITLE + NUMBER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:flex-start; padding-top:2px; margin-bottom:10px;">
+
+            <h3
+            style="margin:0; font-size:17px; font-weight:700; color:#111827;">
+                Total Users
+            </h3>
+
+            <div
+            style="font-size:17px; font-weight:800; color:#f59e0b; line-height:1;">
+                <span id="totalUsers">10</span>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.08); padding-top:10px;">
+
+            <span
+            style="font-size:12px; color:#6b7280; font-weight:500;">
+                Registered Customers
+            </span>
+
+            <span
+            style="
+                font-size:13px; color:#065f46; font-weight:700; cursor:pointer;">
+                View Records
+            </span>
+        </div>
+    </div>
+</div>
+
+		<!-- TOTAL VISITORS CARD STYLE -->
+<div class="stat-card red" style="padding:18px; overflow:hidden; position:relative; border-radius:20px;">
+
+    <div class="stat-content">
+
+        <!-- TOP -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+
+            <!-- ICON -->
+            <div
+            style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(239,68,68,0.15);">
+
+                <i class="fas fa-chart-line" style="font-size:15px; color:#ef4444;"></i>
+            </div>
+
+            <!-- BADGE -->
+            <span
+            style="font-size:10px; background:rgba(239,68,68,0.15); color:#b91c1c; padding:4px 10px; border-radius:999px; font-weight:700;">
+                +24%
+            </span>
+        </div>
+
+        <!-- TITLE + NUMBER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:flex-start; padding-top:2px; margin-bottom:10px;">
+
+            <h3
+            style="margin:0; font-size:17px; font-weight:700; color:#111827;">
+                Active Visitors
+            </h3>
+
+            <div
+            style="font-size:17px; font-weight:800; color:#ef4444; line-height:1;">
+                <span id="activeVisitors">248</span>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.08); padding-top:10px;">
+
+            <span
+            style="font-size:12px; color:#6b7280; font-weight:500;">
+                Current Online Users
+            </span>
+
+            <span
+            style="
+                font-size:13px; color:#065f46; font-weight:700; cursor:pointer;">
+                View Activity
+            </span>
+        </div>
+    </div>
+</div>
+
+		<!-- TOTAL SEARCH CARD STYLE -->
+<div class="stat-card blue" style="padding:18px; overflow:hidden; position:relative; border-radius:20px;">
+
+    <div class="stat-content">
+
+        <!-- TOP -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+
+            <!-- ICON -->
+            <div
+            style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(20,184,166,0.15);">
+
+                <i class="fas fa-box-open" style="font-size:15px; color:#14b8a6;"></i>
+            </div>
+
+            <!-- BADGE -->
+            <span
+            style="font-size:10px; background:rgba(16,185,129,0.15); color:#047857; padding:4px 10px; border-radius:999px; font-weight:700;">
+                +31%
+            </span>
+        </div>
+
+        <!-- TITLE + NUMBER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:flex-start; padding-top:2px; margin-bottom:10px;">
+
+            <h3
+            style="margin:0; font-size:17px; font-weight:700; color:#111827;">
+                Today's Searchers
+            </h3>
+
+            <div
+            style="font-size:17px; font-weight:800; color:#10b981; line-height:1;">
+                <span id="totalProducts">3,250</span>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div
+        style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.08); padding-top:10px;">
+
+            <span
+            style="font-size:12px; color:#6b7280; font-weight:500;">
+                Users Search Activity
+            </span>
+
+            <span
+            style="
+                font-size:13px; color:#065f46; font-weight:700; cursor:pointer;">
+                View Insights
+            </span>
+        </div>
+    </div>
+</div>
+
+		<!-- TOTAL PANDING APPROVAL CARD STYLE -->
+		<div class="stat-card red" style="padding:18px; overflow:hidden; position:relative; border-radius:20px;">
+			<div class="stat-content">
+
+				<!-- TOP -->
+				<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+
+					<!-- ICON -->
+					<div
+					style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(20,184,166,0.15);">
+
+						<i class="fas fa-box-open" style="font-size:15px; color:#14b8a6;"></i>
+					</div>
+
+					<!-- BADGE -->
+					<span
+					style="font-size:10px; background:rgba(16,185,129,0.15); color:#047857; padding:4px 10px; border-radius:999px; font-weight:700;">
+						Pending
+					</span>
+				</div>
+
+				<!-- TITLE + NUMBER -->
+				<div
+					style="display:flex; justify-content:space-between; align-items:flex-start; padding-top:2px; margin-bottom:10px;">
+
+					<h3
+					style="margin:0; font-size:17px; font-weight:700; color:#111827;">
+						Panding Approvals
+					</h3>
+
+					<div
+					style="font-size:17px; font-weight:800; color:#10b981; line-height:1;">
+						<span id="totalProducts">50</span>
+					</div>
+				</div>
+
+				<!-- FOOTER -->
+				<div
+					style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.08); padding-top:10px;">
+
+					<span
+					style="font-size:12px; color:#6b7280; font-weight:500;">
+						View Review Request
+					</span>
+
+					<span
+						style="
+							font-size:13px; color:#065f46; font-weight:700; cursor:pointer;">
+							Review Now
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- TOTAL MARKET TRENDS STYLE -->
+		<div class="stat-card yellow" style="padding:18px; overflow:hidden; position:relative; border-radius:20px;">
+			<div class="stat-content">
+
+				<!-- TOP -->
+				<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+
+					<!-- ICON -->
+					<div
+						style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(20,184,166,0.15);">
+
+						<i class="fas fa-box-open" style="font-size:15px; color:#14b8a6;"></i>
+					</div>
+
+					<!-- BADGE -->
+					<span
+					style="font-size:10px; background:rgba(16,185,129,0.15); color:#047857; padding:4px 10px; border-radius:999px; font-weight:700;">
+						Trending
+					</span>
+				</div>
+
+				<!-- TITLE + NUMBER -->
+				<div
+					style="display:flex; justify-content:space-between; align-items:flex-start; padding-top:2px; margin-bottom:10px;">
+
+					<h3
+					style="margin:0; font-size:17px; font-weight:700; color:#111827;">
+						Market Trends
+					</h3>
+
+					<div
+					style="font-size:17px; font-weight:800; color:#10b981; line-height:1;">
+						<span id="totalProducts">18</span>
+					</div>
+				</div>
+
+				<!-- FOOTER -->
+				<div
+					style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.08); padding-top:10px;">
+
+					<span
+					style="font-size:12px; color:#6b7280; font-weight:500;">
+						AI Monitored Trends
+					</span>
+
+					<span
+					style="
+					font-size:13px; color:#065f46; font-weight:700; cursor:pointer;">
+						Explore
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+                <!-- Broadcast Scroll Bar -->
+                <div id="broadcastContainer" class="broadcast-container section-spacing">
+                    <div class="broadcast-icon" style="color: #f59e0b;"><i class="fa-solid fa-bullhorn"></i></div>
+                    <div class="broadcast-wrapper">
+                        <div class="broadcast-content" id="broadcastText">Loading admin status...</div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions-grid section-spacing">
+                    <div class="quick-action" data-target="purchase.html">New Purchase <i
+                            class="fa-solid fa-cart-shopping"></i></div>
+                    <div class="quick-action" data-target="sales.html">New Sale <i
+                            class="fa-solid fa-cash-register"></i></div>
+                    <div class="quick-action" data-target="expenses.html">Add Expense <i
+                            class="fa-solid fa-money-bill-wave"></i></div>
+                    <div class="quick-action" data-target="inventory.html">Inventory <i
+                            class="fa-solid fa-boxes-stacked"></i></div>
+                    <div class="quick-action" data-target="reports.html">Report <i class="fa-solid fa-file-invoice"></i>
+                    </div>
+                </div>
+
+
+                <!-- Charts & Low Stock -->
+                <div class="chart-row section-spacing">
+                    <div class="chart-col">
+                        <div class="form-container chart-container-fixed">
+                            <h3 style="margin-bottom: 5px;">Total Sale</h3>
+                            <div style="position: relative; height:200px; width:100%;"><canvas
+                                    id="pharaSalesChart"></canvas></div>
+                        </div>
+                        <div class="form-container">
+                            <h3 style="color:#f59e0b;"><i class="fa-solid fa-triangle-exclamation"></i> Low Stock Alerts
+                            </h3>
+                            <table class="admin-table">
+                                <tbody id="lowStockTableBody">
+                                    <tr>
+                                        <td style="color:#aaa; text-align:center;">Working On It</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="chart-col">
+                        <div class="form-container chart-container-fixed">
+                            <h3 style="margin-bottom: 5px;">Credit Tracking</h3>
+                            <div style="position: relative; height:200px; width:100%;"><canvas
+                                    id="pharaCreditChart"></canvas></div>
+                        </div>
+                        <div class="form-container">
+                            <h3 style="color:#38bdf8;"><i class="fa-solid fa-clock"></i> Recent Activity</h3>
+                            <div id="recentActivity">
+                                <ul style="list-style:none; padding:0; margin:0; font-size:0.9rem;">
+                                    <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.1);">ðŸ§¾ Sale
+                                        recorded - Rs 5,000</li>
+                                    <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.1);">ðŸ“¦
+                                        Purchase added - 20 items</li>
+                                    <li style="padding:6px 0;">ðŸ’¸ Expense added - Rs 1,200</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-col">
+                        <div class="form-container chart-container-fixed">
+                            <h3 style="margin-bottom: 5px;">Inventory</h3>
+                            <div style="position: relative; height:200px; width:100%;"><canvas
+                                    id="pharaInventoryChart"></canvas></div>
+                        </div>
+                        <div class="form-container">
+                            <h3 style="color:#22c55e;"><i class="fa-solid fa-arrow-trend-up"></i> Top Selling Products
+                            </h3>
+                            <div id="topSellingList">
+                                <p style="color:#aaa;">No sales data available</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Category Management -->
+            <section id="categories" class="admin-section">
+                <h1>Manage Categories</h1>
+
+                <div class="form-container">
+                    <h3>Add New Category</h3>
+                    <form id="categoryForm">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Category Name</label>
+                                <input type="text" id="catName" placeholder="e.g., Electronics" required
+                                    style="max-width: 300px;">
+                            </div>
+                            <div class="input-group">
+                                <label>Sub Categories (comma separated)</label>
+                                <input type="text" id="catSubCategory" placeholder="e.g., Mobile, Laptop, Tablet"
+                                    style="max-width: 300px;">
+                            </div>
+                        </div>
+                        <div id="fieldsContainer" style="margin-top: 20px;">
+                            <!-- Dynamic fields will be added here -->
+                        </div>
+                        <div class="form-actions" style="margin-top: 15px;">
+                            <button type="button" class="btn btn-secondary" onclick="addField()">+ Add Field</button>
+                            <button type="submit" class="btn btn-primary" id="btnSaveCategory">Add Category</button>
+                            <button type="button" class="btn btn-secondary" id="btnCancelCategory" style="display:none;"
+                                onclick="cancelCategoryEdit()">Cancel Edit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="list-container">
+                    <h3>Existing Categories</h3>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Fields</th>
+                                <th>Visibility</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryList">
+                            <!-- Categories will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Product Management (Placeholder for Company View mostly) -->
+            <section id="products" class="admin-section">
+                <h1>Manage Products</h1>
+
+                <div class="form-container">
+                    <h3>Add New Product</h3>
+                    <form id="adminProductForm">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Choose Category</label>
+                                <select id="prodCategory" required>
+                                    <option value="">Select Category</option>
+                                    <!-- Populated via JS -->
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Select Sub Category</label>
+                                <select id="prodSubCategory" required>
+                                    <option value="">Select Sub Category</option>
+                                    <!-- Populated via JS -->
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Image</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="url" id="prodImage" placeholder="https://..." style="flex: 1;">
+                                    <input type="file" id="prodImageUpload" accept="image/*" style="display: none;">
+                                    <button type="button" class="btn btn-secondary"
+                                        onclick="document.getElementById('prodImageUpload').click()"
+                                        style="padding: 10px 15px;"><i class="fa-solid fa-upload"></i></button>
+                                </div>
+                                <span id="prodUploadStatus"
+                                    style="font-size: 0.8rem; color: var(--accent-color); margin-top: 5px; display: none;">Uploading...</span>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Fields Injected Here -->
+                        <div id="dynamicProductFields"></div>
+
+                        <div id="staticStatusContainer" class="input-group" style="margin-top:10px;">
+                            <label>Status <span style="color:var(--accent-color);">*</span></label>
+                            <select id="prodStatus" class="admin-input" required>
+                                <option value="Publish">Publish</option>
+                                <option value="Draft">Draft</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Add
+                            Product</button>
+                    </form>
+                </div>
+
+                <!-- Search & Filters Toolbar -->
+                <div class="form-container" style="padding: 15px; margin-bottom: 15px; border-top: 4px solid var(--primary-color);">
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-weight: 700; color: #1e293b;"><i class="fa-solid fa-filter"></i> Filters & Search</span>
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; flex: 1; justify-content: flex-end; align-items: center;">
+                            <input type="text" id="prodSearchInput" placeholder="Search by name/brand..." class="admin-input" style="max-width: 250px; margin-bottom: 0;">
+                            <select id="prodFilterCategory" class="admin-input" style="max-width: 180px; margin-bottom: 0;">
+                                <option value="">All Categories</option>
+                            </select>
+                            <select id="prodFilterSubCategory" class="admin-input" style="max-width: 180px; margin-bottom: 0;">
+                                <option value="">All Sub Categories</option>
+                            </select>
+                            <select id="prodFilterPostBy" class="admin-input" style="max-width: 180px; margin-bottom: 0;">
+                                <option value="">All Authors</option>
+                            </select>
+                            <button type="button" class="btn btn-secondary" onclick="resetProductFilters()" style="padding: 0 15px; height: 30px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; border-radius: 10px; margin-bottom: 8px;">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-table-header">
+					<div>Image</div>
+					<div>Name</div>
+					<div>Category</div>
+					<div>Price</div>
+					<div>Actions</div>
+					<div>Post By</div>
+				</div>
+                <div id="adminProductList">
+                    <!-- Products injected here via JS -->
+                </div>
+                <!-- Pagination Controls -->
+                <div id="adminProductPagination" style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 10px 15px; background: rgba(30, 41, 59, 0.05); border-radius: 10px; border: 1px solid var(--border-color); color: #334155; font-size: 0.9rem;">
+                    <!-- Injected dynamically -->
+                </div>
+            </section>
+
+            <!-- Place Ads Section -->
+            <section id="ads" class="admin-section">
+                <h1>Place Ads</h1>
+                <div class="form-container">
+                    <h3>Create New Ad</h3>
+                    <p>Ad placement functionality coming soon...</p>
+                </div>
+            </section>
+
+            <!-- Manage Deals of the Day -->
+            <section id="deals" class="admin-section">
+                <h1>Manage Deals of the Day</h1>
+                <div class="form-container">
+                    <h3 id="dealFormTitle">Add New Deal</h3>
+                    <form id="dealForm">
+                        <div class="form-row">
+                            <div class="input-group" style="max-width: 180px;">
+                                <label>Category</label>
+                                <select id="dealCategory" required>
+                                    <option value="">Select Category</option>
+                                    <!-- Populated via JS -->
+                                </select>
+                            </div>
+                            <div class="input-group" style="max-width: 180px;">
+                                <label>Sub Category</label>
+                                <select id="dealSubCategory" required>
+                                    <option value="">Select Sub Category</option>
+                                    <!-- Populated via JS -->
+                                </select>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Deal Title / Name</label>
+                                <input type="text" id="dealName" placeholder="e.g., Nike Running Shoes" required
+                                    style="width: 100%;">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Image URL or Upload</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="url" id="dealImage" placeholder="https://..." required
+                                        style="flex: 1;">
+                                    <input type="file" id="dealImageUpload" accept="image/*" style="display: none;">
+                                    <button type="button" class="btn btn-secondary"
+                                        onclick="document.getElementById('dealImageUpload').click()"
+                                        style="padding: 10px 15px;"><i class="fa-solid fa-upload"></i></button>
+                                </div>
+                                <span id="uploadStatus"
+                                    style="font-size: 0.8rem; color: var(--accent-color); margin-top: 5px; display: none;">Uploading...</span>
+                            </div>
+                            <div class="input-group">
+                                <label>Short Description</label>
+                                <input type="text" id="dealDesc" placeholder="Max 2 lines description" required>
+                            </div>
+                            <div class="input-group" style="max-width: 180px;">
+                                <label>Price</label>
+                                <input type="text" id="dealPrice" placeholder="e.g., Rs 4,500" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Product Detail</label>
+                                <textarea id="dealProductDetail" placeholder="Detailed product specifications, features, etc." style="width: 100%; height: 80px; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.1); color: white; resize: vertical;"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Brand</label>
+                                <input type="text" id="dealBrand" placeholder="e.g., Nike">
+                            </div>
+                            <div class="input-group">
+                                <label>Video Link (TikTok/FB) (Optional)</label>
+                                <input type="url" id="dealVideo" placeholder="https://tiktok.com/...">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Contact No</label>
+                                <input type="text" id="dealContactNo" placeholder="e.g., +923001234567">
+                            </div>
+                            <div class="input-group">
+                                <label>WhatsApp Number</label>
+                                <input type="text" id="dealWhatsapp" placeholder="e.g., +923001234567" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Delivery No</label>
+                                <input type="text" id="dealDeliveryNo" placeholder="e.g., +923001234567">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 2;">
+                                <label>Address</label>
+                                <input type="text" id="dealAddress" placeholder="e.g., 123 Street Block Y">
+                            </div>
+                            <div class="input-group">
+                                <label>Area</label>
+                                <select id="dealArea">
+                                    <option value="">Select Area</option>
+                                    <option value="Bahadurabad">Bahadurabad</option>
+                                    <option value="Clifton">Clifton</option>
+                                    <option value="Defence">Defence</option>
+                                    <option value="Federal B Area">Federal B Area</option>
+                                    <option value="Gulshan-e-Iqbal">Gulshan-e-Iqbal</option>
+                                    <option value="Gulistan-e-Johar">Gulistan-e-Johar</option>
+                                    <option value="Korangi">Korangi</option>
+                                    <option value="Landhi">Landhi</option>
+                                    <option value="Liaquatabad">Liaquatabad</option>
+                                    <option value="Malir">Malir</option>
+                                    <option value="North Nazimabad">North Nazimabad</option>
+                                    <option value="Nazimabad">Nazimabad</option>
+                                    <option value="Orangi">Orangi</option>
+                                    <option value="PECHS">PECHS</option>
+                                    <option value="Saddar">Saddar</option>
+                                    <option value="Shah Faisal">Shah Faisal</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Block No.</label>
+                                <select id="dealBlockNo">
+                                    <option value="">Select Block No.</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="max-width: 150px;">
+                                <label>City</label>
+                                <select id="dealLocation" required>
+                                    <option value="">Select City</option>
+                                    <option value="Karachi">Karachi</option>
+                                    <option value="Lahore">Lahore</option>
+                                    <option value="Islamabad">Islamabad</option>
+                                    <option value="Rawalpindi">Rawalpindi</option>
+                                    <option value="Peshawar">Peshawar</option>
+                                    <option value="Multan">Multan</option>
+                                    <option value="Faisalabad">Faisalabad</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Status <span style="color:var(--accent-color);">*</span></label>
+                                <select id="dealStatus" class="admin-input" required>
+                                    <option value="Publish">Publish</option>
+                                    <option value="Draft">Draft</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions" style="margin-top: 15px;">
+                            <button type="submit" class="btn btn-primary" id="btnSaveDeal">Add Deal</button>
+                            <button type="button" class="btn btn-secondary" id="btnCancelDeal" style="display:none;"
+                                onclick="cancelDealEdit()">Cancel Edit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Search & Filters Toolbar for Deals -->
+                <div class="form-container" style="padding: 15px; margin-bottom: 15px; border-top: 4px solid var(--primary-color);">
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-weight: 700; color: #1e293b;"><i class="fa-solid fa-filter"></i> Filters & Search</span>
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; flex: 1; justify-content: flex-end; align-items: center;">
+                            <input type="text" id="dealSearchInput" placeholder="Search by name/brand..." class="admin-input" style="max-width: 250px; margin-bottom: 0;">
+                            <select id="dealFilterCategory" class="admin-input" style="max-width: 180px; margin-bottom: 0;">
+                                <option value="">All Categories</option>
+                            </select>
+                            <select id="dealFilterSubCategory" class="admin-input" style="max-width: 180px; margin-bottom: 0;">
+                                <option value="">All Sub Categories</option>
+                            </select>
+                            <select id="dealFilterPostBy" class="admin-input" style="max-width: 180px; margin-bottom: 0;">
+                                <option value="">All Authors</option>
+                            </select>
+                            <button type="button" class="btn btn-secondary" onclick="resetDealFilters()" style="padding: 0 15px; height: 30px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; border-radius: 10px; margin-bottom: 8px;">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="width: 100%; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; background: rgba(0,0,0,0.15); margin-top: 20px;">
+                    <div class="grid-table-header" style="grid-template-columns: 80px 1.2fr 1.2fr 2fr 1.2fr 150px 1.2fr; display: grid; gap: 10px; padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; font-weight: bold; margin-bottom: 15px;">
+                        <div>Image</div>
+                        <div>Category</div>
+                        <div>Sub Category</div>
+                        <div>Deal Name</div>
+                        <div>Price</div>
+                        <div>Action</div>
+                        <div>Post</div>
+                    </div>
+                    <div id="dealList">
+                        <!-- Deals injected here via JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- User Management Section -->
+            <section id="users" class="admin-section">
+                <h1>Manage Users</h1>
+
+                <div class="form-container">
+                    <h3 id="userFormTitle">Add New User</h3>
+                    <form id="userForm">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Profile Picture URL</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="text" id="userPic" placeholder="https://..." style="flex: 1;">
+                                    <input type="file" id="userPicUpload" accept="image/*" style="display: none;">
+                                    <button type="button" class="btn btn-secondary"
+                                        onclick="document.getElementById('userPicUpload').click()"
+                                        style="padding: 10px 15px;"><i class="fa-solid fa-upload"></i></button>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Full Name</label>
+                                <input type="text" id="userName" placeholder="e.g., Ali Khan" required>
+                            </div>
+                            <div class="input-group" id="companyNameGroup" style="opacity: 0.4; pointer-events: none;">
+                                <label>Company Name</label>
+                                <input type="text" id="companyName" placeholder="e.g., ABC Corp" disabled>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>User ID</label>
+                                <input type="text" id="userId" placeholder="e.g., ali123" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Password</label>
+                                <input type="text" id="userPassword" placeholder="User Password" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>User Role / Type</label>
+                                <select id="userRole" required onchange="toggleCompanyField()">
+                                    <option value="user">Normal User</option>
+                                    <option value="company">Company</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Account Status</label>
+                                <select id="userStatus" required>
+                                    <option value="active">Active</option>
+                                    <option value="hold">On Hold</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions" style="margin-top: 15px;">
+                            <button type="submit" class="btn btn-primary" id="btnSaveUser">Save User</button>
+                            <button type="button" class="btn btn-secondary" id="btnCancelUser" style="display:none;"
+                                onclick="cancelUserEdit()">Cancel Edit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="list-container">
+                    <h3 style="color:#0f172a !important; display:inline-block; padding: 6px 15px; border: 1px solid rgba(56,189,248,0.5); border-radius: 8px; background: rgba(56,189,248,0.1); border-left: 4px solid #38bdf8; margin-bottom: 20px;">Regular Users & Admin</h3>
+                    <table class="admin-table compact-table modern-user-table">
+                        <thead>
+                            <tr>
+                                <th>Picture</th>
+                                <th>User Name</th>
+                                <th>Company</th>
+                                <th>User Id</th>
+                                <th>Status</th>
+                                <th>Stats</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="regularUserList">
+                            <!-- Regular Users injected here via JS -->
+                        </tbody>
+                    </table>
+
+                    <h3 style="color:#0f172a !important; display:inline-block; padding: 6px 15px; border: 1px solid rgba(245,158,11,0.5); border-radius: 8px; background: rgba(245,158,11,0.1); border-left: 4px solid #f59e0b; margin-top: 30px; margin-bottom: 20px;">System Users (Super Admin / Guest)</h3>
+                    <table class="admin-table compact-table modern-user-table">
+                        <thead>
+                            <tr>
+                                <th>Picture</th>
+                                <th>Role</th>
+                                <th>Name</th>
+                                <th>User Id</th>
+                                <th>Status</th>
+                                <th>Stats</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="systemUserList">
+                            <!-- System Users injected here via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Assign Rights UI -->
+                <div class="form-container" style="margin-top: 20px;">
+                    <h3>Assign Section Rights</h3>
+                    <form id="rightsForm">
+                        <div class="form-row" style="align-items: flex-start;">
+                            <div class="input-group">
+                                <label>Select User</label>
+                                <select id="rightsUserSelect" required onchange="onUserSelectChange()">
+                                    <option value="">Select a user...</option>
+                                    <!-- Populated via JS -->
+                                </select>
+
+                                <label style="margin-top: 15px;">Action Rights (For the selected user & sections)</label>
+                                <div id="permissionsGrid" style="display: flex; flex-wrap: wrap; gap: 20px; padding: 15px; background: rgba(0,0,0,0.1); border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                                        <div style="background: rgba(255,255,255,0.08); padding: 8px 4px; border-radius: 4px; display:flex; justify-content:center; align-items:center;">
+                                            <input type="checkbox" value="Draft" class="perm-checkbox" style="margin:0; transform: scale(0.8);">
+                                        </div>
+                                        Draft
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                                        <div style="background: rgba(255,255,255,0.08); padding: 8px 4px; border-radius: 4px; display:flex; justify-content:center; align-items:center;">
+                                            <input type="checkbox" value="Publish" class="perm-checkbox" style="margin:0; transform: scale(0.8);">
+                                        </div>
+                                        Publish
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                                        <div style="background: rgba(255,255,255,0.08); padding: 8px 4px; border-radius: 4px; display:flex; justify-content:center; align-items:center;">
+                                            <input type="checkbox" value="Edit" class="perm-checkbox" style="margin:0; transform: scale(0.8);">
+                                        </div>
+                                        Edit
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                                        <div style="background: rgba(255,255,255,0.08); padding: 8px 4px; border-radius: 4px; display:flex; justify-content:center; align-items:center;">
+                                            <input type="checkbox" value="Delete" class="perm-checkbox" style="margin:0; transform: scale(0.8);">
+                                        </div>
+                                        Delete
+                                    </label>
+                                </div>
+                                <div style="margin-top: 15px;">
+                                    <label>Charges (Per post rate)</label>
+                                    <input type="number" id="rightsUserCharges" placeholder="Enter charge per post" min="0" step="0.01" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.1); color: white; margin-top: 5px;">
+                                </div>
+                                <div class="form-actions" style="margin-top: 15px;">
+                                    <button type="submit" class="btn btn-primary" id="btnSaveRights">Save Rights</button>
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label>Select Sections</label>
+                                <div id="sectionsGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; background: rgba(0,0,0,0.1); border-radius: 8px; border: 1px solid var(--border-color); max-height: 250px; overflow-y: auto;">
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="dashboard" class="section-checkbox" onchange="loadUserPermissions()"> Dashboard</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="ads" class="section-checkbox" onchange="loadUserPermissions()"> Place Ads</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="categories" class="section-checkbox" onchange="loadUserPermissions()"> Manage Categories</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="banners" class="section-checkbox" onchange="loadUserPermissions()"> Manage Banners</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="products" class="section-checkbox" onchange="loadUserPermissions()"> Manage Products</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="blogs" class="section-checkbox" onchange="loadUserPermissions()"> Manage Blogs</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="deals" class="section-checkbox" onchange="loadUserPermissions()"> Manage Deals</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="broadcasts" class="section-checkbox" onchange="loadUserPermissions()"> Manage Broadcasts</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="travel" class="section-checkbox" onchange="loadUserPermissions()"> Manage Travel</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="users" class="section-checkbox" onchange="loadUserPermissions()"> Manage Users</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="sellers" class="section-checkbox" onchange="loadUserPermissions()"> Manage Sellers</label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" value="daily-prices" class="section-checkbox" onchange="loadUserPermissions()"> Manage Daily Prices</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Assign Categories UI -->
+                <div class="form-container" style="margin-top: 20px;">
+                    <h3>Assign Categories</h3>
+                    <form id="categoryAssignForm">
+                        <div class="form-row" style="align-items: flex-start;">
+                            <div class="input-group">
+                                <label>Select User</label>
+                                <select id="categoryAssignUserSelect" required onchange="onCategoryAssignUserChange()">
+                                    <option value="">Select a user...</option>
+                                    <!-- Populated via JS -->
+                                </select>
+                                <div class="form-actions" style="margin-top: 15px;">
+                                    <button type="submit" class="btn btn-primary" id="btnSaveCategoryAssign">Save Category Assignment</button>
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label>Select Categories</label>
+                                <div id="categoriesAssignGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; background: rgba(0,0,0,0.1); border-radius: 8px; border: 1px solid var(--border-color); max-height: 250px; overflow-y: auto;">
+                                    <!-- Populated dynamically via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+
+            <!-- Manage Sellers Section -->
+            <section id="sellers" class="admin-section" style="display:none;">
+                <h1>Manage Sellers</h1>
+
+                <div class="form-container">
+                    <h3 id="sellerFormTitle">Add New Seller</h3>
+                    <form id="sellerForm">
+                        <!-- 1. Basic Information -->
+                        <h4 class="form-section-title" style="margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; font-weight:bold; color:var(--primary-color);">1. Basic Information</h4>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Seller ID (Auto Generated)</label>
+                                <input type="text" id="sellerId" readonly style="background: rgba(0,0,0,0.2); color:#94a3b8; cursor: not-allowed;">
+                            </div>
+                            <div class="input-group">
+                                <label>Business Name <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="sellerBusinessName" placeholder="e.g. StopBuy Food" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Owner Name <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="sellerOwnerName" placeholder="Owner Name" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Business Type <span style="color:var(--accent-color);">*</span></label>
+                                <select id="sellerBusinessType" required>
+                                    <option value="">Select Business Type</option>
+                                    <option value="Retailer">Retailer</option>
+                                    <option value="Wholesaler">Wholesaler</option>
+                                    <option value="Distributor">Distributor</option>
+                                    <option value="Manufacturer">Manufacturer</option>
+                                    <option value="Food">Food</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 2. Contact Information -->
+                        <h4 class="form-section-title" style="margin-top:20px; margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; font-weight:bold; color:var(--primary-color);">2. Contact Information</h4>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Mobile Number <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="sellerMobile" placeholder="e.g. 0300-1234567" required>
+                            </div>
+                            <div class="input-group">
+                                <label>WhatsApp Number <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="sellerWhatsapp" placeholder="e.g. 0300-1234567" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Email Address</label>
+                                <input type="email" id="sellerEmail" placeholder="email@example.com">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Website</label>
+                                <input type="url" id="sellerWebsite" placeholder="https://...">
+                            </div>
+                            <div class="input-group">
+                                <label>Facebook Page</label>
+                                <input type="url" id="sellerFacebook" placeholder="https://facebook.com/...">
+                            </div>
+                            <div class="input-group">
+                                <label>Instagram Page</label>
+                                <input type="url" id="sellerInstagram" placeholder="https://instagram.com/...">
+                            </div>
+                        </div>
+
+                        <!-- 3. Location Information -->
+                        <h4 class="form-section-title" style="margin-top:20px; margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; font-weight:bold; color:var(--primary-color);">3. Location Information</h4>
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 2;">
+                                <label>Address <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="sellerAddress" placeholder="Address" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Area</label>
+                                <select id="sellerArea">
+                                    <option value="">Select Area</option>
+                                    <option value="Bahadurabad">Bahadurabad</option>
+                                    <option value="Clifton">Clifton</option>
+                                    <option value="Defence">Defence</option>
+                                    <option value="Federal B Area">Federal B Area</option>
+                                    <option value="Gulshan-e-Iqbal">Gulshan-e-Iqbal</option>
+                                    <option value="Gulistan-e-Johar">Gulistan-e-Johar</option>
+                                    <option value="Korangi">Korangi</option>
+                                    <option value="Landhi">Landhi</option>
+                                    <option value="Liaquatabad">Liaquatabad</option>
+                                    <option value="Malir">Malir</option>
+                                    <option value="North Nazimabad">North Nazimabad</option>
+                                    <option value="Nazimabad">Nazimabad</option>
+                                    <option value="Orangi">Orangi</option>
+                                    <option value="PECHS">PECHS</option>
+                                    <option value="Saddar">Saddar</option>
+                                    <option value="Shah Faisal">Shah Faisal</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Block No.</label>
+                                <select id="sellerBlockNo">
+                                    <option value="">Select Block No.</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>City <span style="color:var(--accent-color);">*</span></label>
+                                <select id="sellerCity" required>
+                                    <option value="">Select City</option>
+                                    <option value="Karachi">Karachi</option>
+                                    <option value="Lahore">Lahore</option>
+                                    <option value="Islamabad">Islamabad</option>
+                                    <option value="Rawalpindi">Rawalpindi</option>
+                                    <option value="Peshawar">Peshawar</option>
+                                    <option value="Multan">Multan</option>
+                                    <option value="Faisalabad">Faisalabad</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Branches <span style="color:var(--accent-color);">*</span></label>
+                                <select id="sellerBranches" required onchange="window.toggleSellerBranchFields()">
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Conditional branches block -->
+                        <div id="sellerBranchFields" style="display:none; padding:15px; border:1px solid var(--border-color); border-radius:8px; margin-bottom:15px; background:rgba(255,255,255,0.02);">
+                            <h5 style="font-weight:bold; margin-bottom:10px; color:#38bdf8;">Branch Details</h5>
+                            <div class="form-row">
+                                <div class="input-group" style="flex: 2;">
+                                    <label>Branch Address</label>
+                                    <input type="text" id="sellerBranchAddress" placeholder="Branch Address">
+                                </div>
+                                <div class="input-group">
+                                    <label>Phone No</label>
+                                    <input type="text" id="sellerBranchPhone" placeholder="Branch Phone">
+                                </div>
+                                <div class="input-group">
+                                    <label>Whatsapp No</label>
+                                    <input type="text" id="sellerBranchWhatsapp" placeholder="Branch Whatsapp">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Conditional non-branches block -->
+                        <div id="sellerNonBranchFields" style="padding:15px; border:1px solid var(--border-color); border-radius:8px; margin-bottom:15px; background:rgba(255,255,255,0.02);">
+                            <h5 style="font-weight:bold; margin-bottom:10px; color:#38bdf8;">Additional Location Details</h5>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label>Province</label>
+                                    <input type="text" id="sellerProvince" placeholder="e.g. Punjab">
+                                </div>
+                                <div class="input-group" style="flex: 2;">
+                                    <label>Google Maps Link</label>
+                                    <input type="url" id="sellerMapsLink" placeholder="https://maps.google.com/...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Business Details -->
+                        <h4 class="form-section-title" style="margin-top:20px; margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; font-weight:bold; color:var(--primary-color);">4. Business Details</h4>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Category <span style="color:var(--accent-color);">*</span></label>
+                                <select id="sellerCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Food Stuffs">Food Stuffs</option>
+                                    <option value="Computers">Computers</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Mobiles">Mobiles</option>
+                                    <option value="Grocery">Grocery</option>
+                                    <option value="Fashion">Fashion</option>
+                                    <option value="Travel">Travel</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Sub Categories</label>
+                                <input type="text" id="sellerSubCategories" placeholder="e.g. Burgers, Pizza, Fries">
+                            </div>
+                            <div class="input-group">
+                                <label>Operating Hours</label>
+                                <input type="text" id="sellerHours" placeholder="e.g. 11:00 AM - 11:00 PM">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group" style="width: 100%; margin-bottom: 8px;">
+                                <label>Business Description</label>
+                                <textarea id="sellerDescription" class="admin-input" rows="3" placeholder="Write description..." style="width: 100%; resize: vertical; min-height: 80px;"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- 5. Verification & Status -->
+                        <h4 class="form-section-title" style="margin-top:20px; margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; font-weight:bold; color:var(--primary-color);">5. Verification & Status</h4>
+                        <div class="form-row" style="margin-bottom:15px; padding:10px; background:rgba(0,0,0,0.15); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+                            <div style="display:flex; flex-wrap:wrap; gap:20px; width:100%;">
+                                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:bold; color:#10b981;">
+                                    <input type="checkbox" id="sellerVerified" style="transform: scale(1.2);"> Verified Seller
+                                </label>
+                                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:bold; color:#f59e0b;">
+                                    <input type="checkbox" id="sellerFeatured" style="transform: scale(1.2);"> Featured Seller
+                                </label>
+                                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:bold; color:#3b82f6;">
+                                    <input type="checkbox" id="sellerPremium" style="transform: scale(1.2);"> Premium Seller
+                                </label>
+                                <div style="border-left:1px solid rgba(255,255,255,0.1); padding-left:20px; display:flex; gap:15px; align-items:center;">
+                                    <span style="font-weight:bold; color:#cbd5e1;">Status:</span>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#10b981;">
+                                        <input type="checkbox" id="sellerStatusActive" class="seller-status-cb" onchange="window.toggleSellerStatusCheckbox('Active')" style="transform: scale(1.2);"> Active
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#94a3b8;">
+                                        <input type="checkbox" id="sellerStatusInactive" class="seller-status-cb" onchange="window.toggleSellerStatusCheckbox('Inactive')" style="transform: scale(1.2);"> Inactive
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#ef4444;">
+                                        <input type="checkbox" id="sellerStatusSuspended" class="seller-status-cb" onchange="window.toggleSellerStatusCheckbox('Suspended')" style="transform: scale(1.2);"> Suspended
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions" style="margin-top: 15px;">
+                            <button type="submit" class="btn btn-primary" id="btnSaveSeller">Save Seller</button>
+                            <button type="button" class="btn btn-secondary" id="btnCancelSeller" style="display:none;" onclick="cancelSellerEdit()">Cancel Edit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="list-container">
+                    <h3 style="color:#0f172a !important; display:inline-block; padding: 6px 15px; border: 1px solid rgba(56,189,248,0.5); border-radius: 8px; background: rgba(56,189,248,0.1); border-left: 4px solid #38bdf8; margin-bottom: 20px;">Seller Listings</h3>
+                    <table class="admin-table compact-table modern-user-table">
+                        <thead>
+                            <tr>
+                                <th>Seller ID</th>
+                                <th>Business Name</th>
+                                <th>Type</th>
+                                <th>City</th>
+                                <th>Products</th>
+                                <th>Deals</th>
+                                <th>Orders</th>
+                                <th>Verified</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sellerList">
+                            <!-- Sellers injected here via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Seller Profile Modal -->
+            <div id="sellerProfileModal" class="fixed inset-0 z-[2000] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 relative text-white">
+                    <button onclick="window.closeSellerProfile()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                    
+                    <h2 class="text-2xl font-bold text-center mb-6 text-sky-400">Seller Profile Details</h2>
+                    
+                    <!-- Seller Profile Header -->
+                    <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-5 mb-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 id="profileBusinessName" class="text-xl font-bold text-white mb-1">Business Name</h3>
+                                <p id="profileOwnerName" class="text-sm text-slate-400">Owner Name</p>
+                            </div>
+                            <span id="profileCategory" class="bg-sky-500/10 text-sky-400 text-xs font-bold px-3 py-1 rounded-full border border-sky-500/20">Category</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 text-sm mt-3 pt-3 border-t border-slate-700/50">
+                            <div>
+                                <p class="text-slate-400 text-xs">City</p>
+                                <p id="profileCity" class="font-medium text-slate-200">City</p>
+                            </div>
+                            <div>
+                                <p class="text-slate-400 text-xs">Phone</p>
+                                <p id="profilePhone" class="font-medium text-slate-200">Phone</p>
+                            </div>
+                            <div class="col-span-2">
+                                <p class="text-slate-400 text-xs">WhatsApp</p>
+                                <p id="profileWhatsApp" class="font-medium text-slate-200">WhatsApp</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics Cards -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-4 text-center">
+                            <span class="block text-2xl font-black text-sky-400" id="profileProductsCount">0</span>
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Products Posted</span>
+                        </div>
+                        <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-4 text-center">
+                            <span class="block text-2xl font-black text-amber-500" id="profileDealsCount">0</span>
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Deals Posted</span>
+                        </div>
+                        <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-4 text-center">
+                            <span class="block text-2xl font-black text-emerald-400" id="profileOrdersCount">0</span>
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Orders Received</span>
+                        </div>
+                    </div>
+
+                    <!-- Status Badges -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div id="profileVerifiedBadge" class="border rounded-xl p-3 text-center transition-colors">
+                            <i class="fa-solid fa-circle-check text-xl block mb-1"></i>
+                            <span class="text-xs font-bold block">Verified</span>
+                        </div>
+                        <div id="profileFeaturedBadge" class="border rounded-xl p-3 text-center transition-colors">
+                            <i class="fa-solid fa-star text-xl block mb-1"></i>
+                            <span class="text-xs font-bold block">Featured</span>
+                        </div>
+                        <div id="profilePremiumBadge" class="border rounded-xl p-3 text-center transition-colors">
+                            <i class="fa-solid fa-crown text-xl block mb-1"></i>
+                            <span class="text-xs font-bold block">Premium</span>
+                        </div>
+                    </div>
+
+                    <!-- Additional Details -->
+                    <div class="border-t border-slate-800 pt-4 text-sm">
+                        <div class="mb-3">
+                            <span class="text-slate-400 block text-xs">Operating Hours</span>
+                            <span id="profileHours" class="text-slate-200 font-medium">Not specified</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block text-xs">Business Description</span>
+                            <p id="profileDescription" class="text-slate-300 mt-1 italic text-xs leading-relaxed">No description provided.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex justify-end">
+                        <button onclick="window.closeSellerProfile()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-bold text-sm transition-colors border border-slate-700">Close</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banner Management Section -->
+            <section id="banners" class="admin-section">
+                <h1>Manage Banners</h1>
+                <div class="form-container">
+                    <h3>Add New Banner</h3>
+                    <form id="bannerForm">
+                        <div class="input-group">
+                            <label>Banner Image URL</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="bannerImage" placeholder="/images/banner/banner.jpg" required
+                                    style="flex: 1;">
+                                <input type="file" id="bannerImageUpload" accept="image/*" style="display: none;">
+                                <button type="button" class="btn btn-secondary"
+                                    onclick="document.getElementById('bannerImageUpload').click()"
+                                    style="padding: 10px 15px;"><i class="fa-solid fa-upload"></i></button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Banner Type</label>
+                            <select id="bannerType" required>
+                                <option value="horizontal">Horizontal Banner</option>
+                                <option value="vertical-left">Vertical Banner Left</option>
+                                <option value="vertical-right">Vertical Banner Right</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Weblink (Optional)</label>
+                            <input type="url" id="bannerLink" placeholder="https://example.com/promo">
+                        </div>
+                        <div class="input-group">
+                            <label>Status <span style="color:var(--accent-color);">*</span></label>
+                            <select id="bannerStatus" class="admin-input" required>
+                                <option value="Publish">Publish</option>
+                                <option value="Draft">Draft</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Preview</label>
+                            <div id="bannerPreview" class="banner-preview">
+                                <p>Image preview will appear here</p>
+                            </div>
+                        </div>
+                        <div class="form-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+                            <button type="submit" class="btn btn-primary" id="btnSaveBanner">Add Banner</button>
+                            <button type="button" class="btn btn-secondary" id="btnCancelBanner" style="display:none;"
+                                onclick="cancelBannerEdit()">Cancel Edit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="list-container">
+                    <h3>Existing Banners</h3>
+                    <div id="bannerList" class="banner-grid">
+                        <!-- Banners injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Blog Management Section -->
+            <section id="blogs" class="admin-section">
+                <h1>Manage Blogs</h1>
+                <div class="form-container">
+                    <h3 id="blogFormTitle">Add New Blog Post</h3>
+                    <form id="blogForm">
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Title (English) <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="blogTitleEn" placeholder="e.g., How to save money on groceries"
+                                    required>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Slug (Auto-generated) <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="blogSlug" placeholder="how-to-save-money-on-groceries" readonly
+                                    required style="background: rgba(0,0,0,0.2); color:#94a3b8; cursor: not-allowed;">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Title (Urdu) <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="blogTitleUr"
+                                    placeholder="e.g., Ú¯Ø±ÙˆØ³Ø±ÛŒ Ù¾Ø± Ù¾ÛŒØ³Û’ Ú©ÛŒØ³Û’ Ø¨Ú†Ø§Ø¦ÛŒÚº" required
+                                    dir="rtl">
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Author Name <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="blogAuthor" placeholder="e.g., Ali Khan" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Category (English) <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="blogCategoryDropdown" placeholder="e.g., Grocery" required>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Category (Urdu) <span style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="blogCategoryUr"
+                                    placeholder="e.g., Ù…ÛÙ†Ú¯Ø§Ø¦ÛŒ Ú©Ø§ Ø±Ø¬Ø­Ø§Ù†" required dir="rtl">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Blog Image URL <span style="color:var(--accent-color);">*</span></label>
+                                <input type="url" id="blogImage" placeholder="https://example.com/blog-image.jpg"
+                                    required>
+                                <small style="color:#aaa;">Recommended aspect ratio: 16:9</small>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Status <span style="color:var(--accent-color);">*</span></label>
+                                <select id="blogStatus" required>
+                                    <option value="Publish">Publish</option>
+                                    <option value="Draft">Draft</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1;">
+                                <label>SEO Title</label>
+                                <input type="text" id="blogSeoTitle"
+                                    placeholder="Optimized title for search engines...">
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Meta Description</label>
+                                <input type="text" id="blogMetaDesc" placeholder="Brief meta description for SEO...">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Short Description (English) <span
+                                        style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="blogDescEn" placeholder="Brief summary for the card..." required>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Short Description (Urdu) <span
+                                        style="color:var(--accent-color);">*</span></label>
+                                <input type="text" id="blogDescUr" placeholder="Ù…Ø®ØªØµØ± ØªÙØµÛŒÙ„..." required
+                                    dir="rtl">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Content (English) <span style="color:var(--accent-color);">*</span></label>
+                                <textarea id="blogContentEn" rows="6" placeholder="Write your blog content here..."
+                                    required
+                                    style="width: 100%; border: 1px solid var(--border-color); background: var(--bg-dark); color: var(--text-color); padding: 10px; border-radius: 5px;"></textarea>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Content (Urdu) <span style="color:var(--accent-color);">*</span></label>
+                                <textarea id="blogContentUr" rows="6"
+                                    placeholder="ÛŒÛØ§Úº Ø§Ù¾Ù†Ø§ Ø¨Ù„Ø§Ú¯ Ù„Ú©Ú¾ÛŒÚº..." required dir="rtl"
+                                    style="width: 100%; border: 1px solid var(--border-color); background: var(--bg-dark); color: var(--text-color); padding: 10px; border-radius: 5px;"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-actions"
+                            style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
+                            <button type="submit" class="btn btn-primary" id="btnSaveBlog">Publish</button>
+                            <button type="button" class="btn btn-info" id="btnPublishFacebook"
+                                onclick="shareAdminBlogToFacebook()"
+                                style="background: #1877f2; border-color: #1877f2; color: white;">
+                                <i class="fab fa-facebook"></i> Publish on Facebook
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="btnCancelBlog" style="display:none;"
+                                onclick="cancelBlogEdit()">Cancel Edit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="list-container">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="margin: 0;">Existing Blogs</h3>
+                        <div class="search-filter-bar" style="display: flex; gap: 10px;">
+                            <input type="text" id="blogSearchInput" placeholder="Search blog..."
+                                style="padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.8); color: white;">
+                            <select id="blogCategoryFilter"
+                                style="padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.8); color: white;">
+                                <option value="All">All Categories</option>
+                                <option value="Grocery">Grocery</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Fashion">Fashion</option>
+                                <option value="Inflation Insight">Inflation Insight</option>
+                                <option value="News">News</option>
+                                <option value="Tips">Tips</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid-table-header"
+                        style="grid-template-columns: 40px 60px 2fr 1fr 1fr 80px 100px 120px; gap: 15px;">
+                        <div><input type="checkbox" id="selectAllBlogs"></div>
+                        <div>Image</div>
+                        <div>Title</div>
+                        <div>Category</div>
+                        <div>Status</div>
+                        <div>Views</div>
+                        <div>Date</div>
+                        <div>Actions</div>
+                    </div>
+                    <div id="blogList">
+                        <!-- Blogs injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Broadcast Management Section -->
+            <section id="broadcasts" class="admin-section">
+                <h1>Manage Broadcasts</h1>
+                <div class="form-container">
+                    <h3 id="broadcastFormTitle">Create New Broadcast</h3>
+                    <form id="broadcastForm">
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Message Content <span style="color:var(--accent-color);">*</span></label>
+                                <textarea id="broadcastMessage" rows="4" placeholder="Enter your message here..."
+                                    required
+                                    style="width: 100%; border: 1px solid var(--border-color); background: var(--bg-dark); color: var(--text-color); padding: 10px; border-radius: 5px;"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Target Audience <span style="color:var(--accent-color);">*</span></label>
+                                <select id="broadcastAudience" required onchange="toggleSpecificUserField()">
+
+                                    <option value="all">All Users (Including Admin)</option>
+                                    <option value="main">Main Page Only</option>
+                                    <option value="specific">Specific User</option>
+
+                                </select>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Status <span style="color:var(--accent-color);">*</span></label>
+                                <select id="broadcastStatus" required>
+                                    <option value="Publish">Publish</option>
+                                    <option value="Draft">Draft</option>
+                                    <option value="delete">Delete (Remove)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row" id="specificUserGroup" style="display: none;">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Select User <span style="color:var(--accent-color);">*</span></label>
+                                <select id="broadcastSpecificUser">
+                                    <option value="">-- Choose User --</option>
+                                    <!-- Populated dynamically via JS -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions" style="margin-top: 15px;">
+                            <button type="submit" class="btn btn-primary" id="btnSaveBroadcast">Save Broadcast</button>
+                            <button type="button" class="btn btn-secondary" id="btnCancelBroadcast"
+                                style="display:none;" onclick="cancelBroadcastEdit()">Cancel Edit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="list-container">
+                    <h3>Broadcast History</h3>
+                    <div class="grid-table-header" style="grid-template-columns: 1fr 2fr 100px 100px 100px;">
+                        <div>Target</div>
+                        <div>Message</div>
+                        <div>Date</div>
+                        <div>Status</div>
+                        <div>Actions</div>
+                    </div>
+                    <div id="broadcastList">
+                        <!-- Broadcasts injected here via JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Travel Management -->
+            <section id="travel" class="admin-section">
+                <h1>Manage Travel Packages</h1>
+                <div class="travel-form">
+                    <h2 id="travelFormTitle" style="color:var(--primary-color); margin-bottom: 20px;">Add Travel Package
+                    </h2>
+                    <form id="travelForm" style="display:flex; flex-direction:column; gap:10px;">
+                        <!-- Package Details -->
+                        <div style="display:flex; gap:10px;">
+                            <input type="text" id="travelTitle" placeholder="Package Title *" required
+                                class="admin-input" style="flex:1;">
+                            <select id="travelCategory" required class="admin-input" style="flex:1;">
+                                <option value="">Category *</option>
+                                <option value="Hajj">Hajj</option>
+                                <option value="Umrah">Umrah</option>
+                                <option value="Pakistan Tour">Pakistan Tour</option>
+                                <option value="International Tour">International Tour</option>
+                            </select>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <input type="text" id="travelDeparture" placeholder="Departure City *" required
+                                class="admin-input" style="flex:1;">
+                            <input type="text" id="travelDestination" placeholder="Destination *" required
+                                class="admin-input" style="flex:1;">
+                        </div>
+
+                        <!-- Pricing & Duration -->
+                        <div style="display:flex; gap:10px;">
+                            <input type="number" id="travelDuration" placeholder="Duration (Days) *" required
+                                class="admin-input" style="flex:1;">
+                            <input type="number" id="travelPrice" placeholder="Price (PKR) *" required
+                                class="admin-input" style="flex:1;">
+                            <select id="travelPriceType" class="admin-input" style="flex:1;">
+                                <option value="Per Person">Per Person</option>
+                                <option value="Per Family">Per Family</option>
+                            </select>
+                        </div>
+
+                        <!-- Travel Details -->
+                        <div style="display:flex; gap:10px;">
+                            <div id="travelTransportContainer" class="admin-input"
+                                style="flex:1; display:flex; align-items:center; gap:10px; padding: 0 10px; min-height: 40px; background-color: var(--input-bg, rgba(15, 23, 42, 0.5)); border: 1px solid var(--border-color, #334155); border-radius: 6px;">
+                                <span style="color: #94a3b8; font-size: 0.9rem;">Transport:</span>
+                                <label
+                                    style="display:flex; align-items:center; gap:5px; font-size: 0.9rem; cursor:pointer;"><input
+                                        type="checkbox" name="transportOption" value="Air"> Air</label>
+                                <label
+                                    style="display:flex; align-items:center; gap:5px; font-size: 0.9rem; cursor:pointer;"><input
+                                        type="checkbox" name="transportOption" value="Bus"> Bus</label>
+                                <label
+                                    style="display:flex; align-items:center; gap:5px; font-size: 0.9rem; cursor:pointer;"><input
+                                        type="checkbox" name="transportOption" value="Private"> Private</label>
+                            </div>
+                            <select id="travelHotel" class="admin-input" style="flex:1;">
+                                <option value="None">Hotel Type</option>
+                                <option value="3 Star">3 Star</option>
+                                <option value="4 Star">4 Star</option>
+                                <option value="5 Star">5 Star</option>
+                            </select>
+                            <select id="travelMeals" class="admin-input" style="flex:1;">
+                                <option value="No">Meals Included: No</option>
+                                <option value="Yes">Meals Included: Yes</option>
+                            </select>
+                        </div>
+
+                        <!-- Extra Features -->
+                        <div style="display:flex; gap:10px;">
+                            <select id="travelGuide" class="admin-input" style="flex:1;">
+                                <option value="No">Guide Included: No</option>
+                                <option value="Yes">Guide Included: Yes</option>
+                            </select>
+                            <input type="text" id="travelZiyarat" placeholder="Ziyarat / Tour Points"
+                                class="admin-input" style="flex:2;">
+                        </div>
+
+                        <!-- Media -->
+                        <div style="display:flex; gap:10px;">
+                            <input type="url" id="travelImage" placeholder="Upload Image URL *" required
+                                class="admin-input" style="flex:1;">
+                            <input type="url" id="travelBrochure" placeholder="Brochure URL (Optional)"
+                                class="admin-input" style="flex:1;">
+                        </div>
+
+                        <!-- Description -->
+                        <textarea id="travelDetails" rows="3" placeholder="Full Details *" required
+                            class="admin-input"></textarea>
+
+                        <!-- Company Info -->
+                        <div style="display:flex; gap:10px; margin-top: 5px;">
+                            <input type="text" id="travelCompany" placeholder="Company Name *" required
+                                class="admin-input" style="flex:1;">
+                            <input type="text" id="travelContact" placeholder="Contact Number *" required
+                                class="admin-input" style="flex:1;">
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <input type="text" id="travelWhatsapp" placeholder="WhatsApp Number" class="admin-input"
+                                style="flex:1;">
+                            <input type="email" id="travelEmail" placeholder="Email" class="admin-input"
+                                style="flex:1;">
+                        </div>
+
+                        <!-- Status -->
+                        <div style="display:flex; gap:10px;">
+                            <select id="travelListingType" class="admin-input" style="flex:1;">
+                                <option value="Basic">Listing: Basic (Free)</option>
+                                <option value="Featured">Listing: Premium (Featured)</option>
+                            </select>
+                            <select id="travelVerified" class="admin-input" style="flex:1;">
+                                <option value="No">Verified Company: No</option>
+                                <option value="Yes">Verified Company: Yes</option>
+                            </select>
+                            <select id="travelStatus" class="admin-input" style="flex:1;">
+                                <option value="Publish">Status: Publish</option>
+                                <option value="Draft">Status: Draft</option>
+                            </select>
+                        </div>
+
+                        <div style="display:flex; gap:10px; margin-top: 5px;">
+                            <button type="submit" id="btnSaveTravel" class="btn btn-primary"
+                                style="flex:1; padding:10px; font-weight:bold;">Submit Package</button>
+                            <button type="button" id="btnCancelTravel" class="btn btn-secondary"
+                                style="display:none; flex:1; padding:10px; font-weight:bold;"
+                                onclick="cancelTravelEdit()">Cancel Edit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="list-container">
+                    <h3>Existing Packages</h3>
+                    <div class="grid-table-header" style="grid-template-columns: 80px 2fr 1fr 1fr 1fr 1fr 80px;">
+                        <div>Image</div>
+                        <div>Company & Title</div>
+                        <div>Category</div>
+                        <div>Duration</div>
+                        <div>Price</div>
+                        <div>Status/Level</div>
+                        <div>Actions</div>
+                    </div>
+                    <div id="travelList">
+                        <!-- Packages injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Manage Daily Prices Section -->
+            <section id="daily-prices" class="admin-section">
+                <h1>Manage Daily Prices</h1>
+                <div class="list-container">
+                    <h3>Uploaded PDF Sources</h3>
+                    <div class="overflow-x-auto">
+                        <table class="admin-table w-full text-sm">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Date</th>
+                                    <th class="text-left">File Name</th>
+                                    <th class="text-left">Status</th>
+                                    <th class="text-left">Price Status</th>
+                                    <th class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dailyPriceTable">
+                                <!-- JS will load data here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Manage Live Rates Section -->
+            <section id="live-rates" class="admin-section">
+               <h1>Manage Live Rates</h1>
+               <div class="form-container">
+                  <h3>Update Market Rates</h3>
+            
+                  <form id="liveRatesForm">
+                     <div class="form-row">
+                        <div class="input-group">
+                           <label>Petrol Price</label>
+                           <input type="number" id="adminPetrolPrice" placeholder="272.15" step="0.01">
+                        </div>
+            
+                        <div class="input-group">
+                           <label>Diesel Price</label>
+                           <input type="number" id="adminDieselPrice" placeholder="284.35" step="0.01">
+                        </div>
+                     </div>
+                     <div class="form-row">
+                        <div class="input-group">
+                           <label>Gold Price</label>
+                           <input type="number" id="adminGoldPrice" placeholder="350000" step="1">
+                        </div>
+            
+                        <div class="input-group">
+                           <label>Updated Time</label>
+                           <input type="text" id="ratesUpdatedTime" readonly>
+                        </div>
+                     </div>
+                     <button type="submit" class="btn btn-primary">
+                        Save Rates
+                     </button>
+                  </form>
+                </div>
+            </section>
+            <!-- User Performance Section -->
+            <section id="performance" class="admin-section" style="display: none;">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-white mb-1">User Performance Analytics</h1>
+                        <p class="text-sm text-slate-400">Monitor and evaluate publishing metrics and contributions of all system and regular users.</p>
+                    </div>
+                    <!-- Date Range Selector -->
+                    <div class="flex flex-wrap items-center gap-2 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700/50">
+                        <button onclick="setPerformanceFilter('today', this)" class="perf-filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200">Today</button>
+                        <button onclick="setPerformanceFilter('week', this)" class="perf-filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-slate-700 transition-all duration-200">This Week</button>
+                        <button onclick="setPerformanceFilter('month', this)" class="perf-filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200">This Month</button>
+                        <button onclick="setPerformanceFilter('3months', this)" class="perf-filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200">Last 3 Months</button>
+                        <button onclick="setPerformanceFilter('custom', this)" class="perf-filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200">Custom Date</button>
+                    </div>
+                </div>
+
+                <!-- Custom Date Range Form (Hidden by default) -->
+                <div id="customDateRangeContainer" class="hidden bg-slate-800/50 p-4 rounded-2xl border border-slate-700/50 mb-6 transition-all duration-300">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1.5">Start Date</label>
+                            <input type="date" id="perfStartDate" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1.5">End Date</label>
+                            <input type="date" id="perfEndDate" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <button onclick="applyCustomDateFilter()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-200 shadow-lg shadow-emerald-900/20">Apply Filter</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metrics Summary Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
+                    <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/40 text-center">
+                        <span class="block text-xs font-medium text-slate-400 mb-1">Products</span>
+                        <span id="perfStatProducts" class="text-xl font-bold text-sky-400">0</span>
+                    </div>
+                    <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/40 text-center">
+                        <span class="block text-xs font-medium text-slate-400 mb-1">Deals</span>
+                        <span id="perfStatDeals" class="text-xl font-bold text-amber-500">0</span>
+                    </div>
+                    <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/40 text-center">
+                        <span class="block text-xs font-medium text-slate-400 mb-1">Banners</span>
+                        <span id="perfStatBanners" class="text-xl font-bold text-rose-400">0</span>
+                    </div>
+                    <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/40 text-center">
+                        <span class="block text-xs font-medium text-slate-400 mb-1">Blogs</span>
+                        <span id="perfStatBlogs" class="text-xl font-bold text-emerald-400">0</span>
+                    </div>
+                    <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/40 text-center">
+                        <span class="block text-xs font-medium text-slate-400 mb-1">Travel</span>
+                        <span id="perfStatTravel" class="text-xl font-bold text-purple-400">0</span>
+                    </div>
+                    <div class="bg-slate-800/60 p-4 rounded-2xl border border-slate-700/60 text-center shadow-lg shadow-slate-900/10">
+                        <span class="block text-xs font-medium text-slate-300 mb-1">Total</span>
+                        <span id="perfStatTotal" class="text-xl font-extrabold text-white">0</span>
+                    </div>
+                </div>
+
+                <!-- Charts Container Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-slate-800/40 p-5 rounded-3xl border border-slate-700/40">
+                        <h3 class="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-column text-sky-400"></i> Weekly User Activity
+                        </h3>
+                        <div class="h-64 relative">
+                            <canvas id="weeklyActivityChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800/40 p-5 rounded-3xl border border-slate-700/40">
+                        <h3 class="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-bar text-amber-500"></i> Monthly User Activity
+                        </h3>
+                        <div class="h-64 relative">
+                            <canvas id="monthlyActivityChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800/40 p-5 rounded-3xl border border-slate-700/40">
+                        <h3 class="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-award text-emerald-400"></i> Top 5 Performers
+                        </h3>
+                        <div class="h-64 relative">
+                            <canvas id="topPerformersChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800/40 p-5 rounded-3xl border border-slate-700/40">
+                        <h3 class="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-rose-400"></i> User Share Contribution
+                        </h3>
+                        <div class="h-64 relative">
+                            <canvas id="userPieChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tables Grid -->
+                <div class="grid grid-cols-1 gap-6">
+                    <!-- User Activity Summary -->
+                    <div class="bg-slate-800/30 p-5 rounded-3xl border border-slate-700/30">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-semibold text-white">User Activity Summary</h3>
+                            <div class="flex items-center gap-2">
+                                <span id="perfTargetUserLabel" class="text-xs text-emerald-400 bg-emerald-950/40 px-2.5 py-1 rounded-full hidden"></span>
+                                <select id="activityTableFilterSelect" onchange="setPerformanceFilter(this.value, null)" class="text-xs bg-slate-800 px-3 py-1 rounded-full border border-slate-700 focus:outline-none cursor-pointer" style="color: darkgreen; font-weight: bold;">
+                                    <option value="today" class="bg-slate-800 text-slate-400">Today</option>
+                                    <option value="week" selected class="bg-slate-800 text-slate-400">This Week</option>
+                                    <option value="month" class="bg-slate-800 text-slate-400">This Month</option>
+                                    <option value="3months" class="bg-slate-800 text-slate-400">Last 3 Months</option>
+                                    <option value="custom" class="bg-slate-800 text-slate-400">Custom Date</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="admin-table w-full text-sm">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left py-3 px-4">User</th>
+                                        <th class="text-center py-3 px-4">Categories</th>
+                                        <th class="text-center py-3 px-4">Products</th>
+                                        <th class="text-center py-3 px-4">Deals</th>
+                                        <th class="text-center py-3 px-4">Place Ads</th>
+                                        <th class="text-center py-3 px-4">Banners</th>
+                                        <th class="text-center py-3 px-4">Blogs</th>
+                                        <th class="text-center py-3 px-4">Broadcast</th>
+                                        <th class="text-center py-3 px-4">Travel</th>
+                                        <th class="text-center py-3 px-4">Total Activity</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="perfActivitySummaryBody">
+                                    <!-- Dynamic rows loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- User Posting Details Invoice Modal -->
+    <div id="userInvoiceModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 hidden">
+        <div class="bg-slate-900 border border-slate-700/50 w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden flex flex-col shadow-2xl">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950">
+                <div class="flex items-center gap-3">
+                    <img src="../images/logo/stopbuy-logo.png" alt="StopBuy Logo" class="h-8 object-contain">
+                    <span class="text-white font-bold text-lg">StopBuy Posting Invoice</span>
+                </div>
+                <button onclick="closeUserInvoiceModal()" class="text-slate-400 hover:text-white transition-colors duration-150">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Body (Printable Container) -->
+            <div class="flex-1 overflow-y-auto p-6 space-y-6" id="userInvoicePrintArea">
+                <!-- Header Info -->
+                <div class="bg-slate-850 p-6 rounded-2xl border border-slate-800 flex flex-col md:flex-row justify-between gap-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-white mb-2" id="invoiceUserFullName">User: Loading...</h2>
+                        <p class="text-sm text-slate-400">Username: <span id="invoiceUserName" class="text-slate-300 font-semibold">...</span></p>
+                        <p class="text-sm text-slate-400">Role: <span id="invoiceUserRole" class="text-slate-300 font-semibold">...</span></p>
+                        <p class="text-sm text-slate-400">Rate per Post: <span id="invoiceUserRatePerPost" class="text-slate-300 font-semibold">Rs. 0</span></p>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <!-- Date Filter Row inside Invoice -->
+                        <div class="flex flex-col gap-1.5 no-print">
+                            <label class="text-xs text-slate-400 font-medium">Invoice Period</label>
+                            <select id="invoiceFilterSelect" onchange="onInvoiceFilterChange()" class="text-xs bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700 focus:outline-none cursor-pointer" style="color: darkgreen; font-weight: bold;">
+                                <option value="today" class="bg-slate-800 text-slate-400">Today</option>
+                                <option value="week" class="bg-slate-800 text-slate-400">This Week</option>
+                                <option value="month" selected class="bg-slate-800 text-slate-400">This Month</option>
+                                <option value="3months" class="bg-slate-800 text-slate-400">Last 3 Months</option>
+                                <option value="custom" class="bg-slate-800 text-slate-400">Custom Date</option>
+                            </select>
+                        </div>
+                        
+                        <div id="invoiceCustomDateRange" class="hidden flex items-center gap-2 mt-1 no-print">
+                            <input type="date" id="invoiceStartDate" onchange="onInvoiceCustomDateChange()" class="text-xs bg-slate-800 text-white px-2 py-1 rounded border border-slate-700 focus:outline-none">
+                            <span class="text-xs text-slate-400">to</span>
+                            <input type="date" id="invoiceEndDate" onchange="onInvoiceCustomDateChange()" class="text-xs bg-slate-800 text-white px-2 py-1 rounded border border-slate-700 focus:outline-none">
+                        </div>
+                        
+                        <p class="text-xs text-slate-400 mt-2">Report Generated: <span id="invoiceGenerationDate" class="text-slate-300 font-mono"></span></p>
+                    </div>
+                </div>
+
+                <!-- Invoice Content (Items & Counts) -->
+                <div class="border border-slate-800 rounded-2xl overflow-hidden">
+                    <table class="w-full text-sm text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-950 text-slate-300 font-semibold border-b border-slate-800">
+                                <th class="py-3 px-4">Section / Category</th>
+                                <th class="py-3 px-4 text-center">Post Count</th>
+                                <th class="py-3 px-4">Item Details (Names / Dates)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoiceTableBody" class="text-slate-300 divide-y divide-slate-800 bg-slate-900/50">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-slate-950 font-bold border-t border-slate-800">
+                                <td class="py-4 px-4 text-white text-base">Total Activity</td>
+                                <td class="py-4 px-4 text-center text-sky-400 text-lg" id="invoiceTotalCount">0</td>
+                                <td class="py-4 px-4 text-xs text-slate-400">All published and draft items matching the range.</td>
+                            </tr>
+                            <tr class="bg-slate-950 font-bold border-t border-slate-800">
+                                <td class="py-4 px-4 text-white text-base">Total Payment</td>
+                                <td class="py-4 px-4 text-center text-emerald-400 text-lg" id="invoiceTotalPayment">Rs. 0</td>
+                                <td class="py-4 px-4 text-xs text-slate-400">Calculated payment based on the rate of Rs. <span id="invoiceRatePerPostFooter">0</span> per post.</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-4 border-t border-slate-800 bg-slate-950 flex items-center justify-end gap-3 no-print">
+                <button onclick="closeUserInvoiceModal()" class="btn btn-secondary px-4 py-2 text-xs text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-705 transition-colors">
+                    Close
+                </button>
+                <button onclick="printUserInvoice()" class="btn btn-primary px-4 py-2 text-xs text-white bg-emerald-600 hover:bg-emerald-500 rounded-lg flex items-center gap-2 transition-colors">
+                    <i class="fa-solid fa-print"></i> Print / Export PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Specific CSS Styling overrides to hide rest of page during print -->
+    <style>
+        @media print {
+            body > *:not(#userInvoiceModal) {
+                display: none !important;
+            }
+            #userInvoiceModal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: auto;
+                background: white !important;
+                color: black !important;
+                display: block !important;
+            }
+            #userInvoiceModal > div {
+                border: none !important;
+                max-width: 100% !important;
+                max-height: none !important;
+                box-shadow: none !important;
+                background: white !important;
+            }
+            #userInvoicePrintArea {
+                background: white !important;
+                color: black !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            #userInvoicePrintArea * {
+                color: black !important;
+                border-color: #ddd !important;
+            }
+            .bg-slate-850, .bg-slate-900/50, .bg-slate-950 {
+                background-color: #f8fafc !important;
+                border-color: #e2e8f0 !important;
+            }
+            .text-white, .text-slate-300 {
+                color: #0f172a !important;
+            }
+            .text-emerald-400 {
+                color: #047857 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+
+    <script src="../js/data-service.js"></script>
+    <script src="../js/admin.js"></script>
+    <script src="../js/blog-manager.js"></script>
+
+</body>
+
+</html>
