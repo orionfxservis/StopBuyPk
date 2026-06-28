@@ -146,6 +146,9 @@ async function initAdmin() {
         // }
 
         updateBannerPreview();
+        if (typeof window.initAddressDropdowns === 'function') {
+            window.initAddressDropdowns();
+        }
     } catch (error) {
         console.error("Failed to load admin data:", error);
         // alert("Failed to load data. Please try refreshing."); // Suppressed for local testing without GAS
@@ -814,7 +817,10 @@ window.editDeal = (index) => {
     if (document.getElementById('dealContactNo')) document.getElementById('dealContactNo').value = deal.contactNo || '';
     if (document.getElementById('dealDeliveryNo')) document.getElementById('dealDeliveryNo').value = deal.deliveryNo || '';
     if (document.getElementById('dealAddress')) document.getElementById('dealAddress').value = deal.address || '';
-    if (document.getElementById('dealArea')) document.getElementById('dealArea').value = deal.area || '';
+    if (document.getElementById('dealArea')) {
+        document.getElementById('dealArea').value = deal.area || '';
+        document.getElementById('dealArea').dispatchEvent(new Event('change'));
+    }
     if (document.getElementById('dealBlockNo')) document.getElementById('dealBlockNo').value = deal.blockNo || '';
 
     if (dealFormTitle) dealFormTitle.textContent = "Edit Deal";
@@ -834,7 +840,10 @@ window.cancelDealEdit = () => {
     if (document.getElementById('dealContactNo')) document.getElementById('dealContactNo').value = '';
     if (document.getElementById('dealDeliveryNo')) document.getElementById('dealDeliveryNo').value = '';
     if (document.getElementById('dealAddress')) document.getElementById('dealAddress').value = '';
-    if (document.getElementById('dealArea')) document.getElementById('dealArea').value = '';
+    if (document.getElementById('dealArea')) {
+        document.getElementById('dealArea').value = '';
+        document.getElementById('dealArea').dispatchEvent(new Event('change'));
+    }
     if (document.getElementById('dealBlockNo')) document.getElementById('dealBlockNo').value = '';
 
     if (dealFormTitle) dealFormTitle.textContent = "Add New Deal";
@@ -1466,6 +1475,120 @@ function populateCategoryDropdown() {
         dealCategorySelect.onchange();
     }
 }
+
+window.updateBlockOptionsGlobal = function(areaVal, blockNoSelect) {
+    if (!blockNoSelect) return;
+    const currentBlockVal = blockNoSelect.value;
+    let optionsHtml = '<option value="">Select Block No.</option>';
+    
+    if (areaVal === 'Korangi') {
+        for (let i = 1; i <= 6; i++) {
+            optionsHtml += `<option value="Korangi No.${i}">Korangi No.${i}</option>`;
+            if (i <= 5) {
+                optionsHtml += `<option value="Korangi No.${i}½">Korangi No.${i}½</option>`;
+            }
+        }
+        for (let i = 31; i <= 36; i++) {
+            optionsHtml += `<option value="Sector ${i}">Sector ${i}</option>`;
+            optionsHtml += `<option value="Sector ${i}-A">Sector ${i}-A</option>`;
+            optionsHtml += `<option value="Sector ${i}-B">Sector ${i}-B</option>`;
+            optionsHtml += `<option value="Sector ${i}-C">Sector ${i}-C</option>`;
+            optionsHtml += `<option value="Sector ${i}-D">Sector ${i}-D</option>`;
+        }
+    } else if (areaVal === 'Gulshan-e-Iqbal') {
+        for (let i = 1; i <= 19; i++) {
+            optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
+            if (i === 13) {
+                ['A', 'B', 'C', 'D', 'E', 'F'].forEach(letter => {
+                    optionsHtml += `<option value="Block 13-${letter}">Block 13-${letter}</option>`;
+                });
+            }
+        }
+    } else if (areaVal === 'Gulistan-e-Johar') {
+        for (let i = 1; i <= 22; i++) {
+            optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
+        }
+    } else if (areaVal === 'North Nazimabad') {
+        const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'];
+        letters.forEach(l => {
+            optionsHtml += `<option value="Block ${l}">Block ${l}</option>`;
+        });
+    } else if (areaVal === 'Federal B Area') {
+        const fbBlocks = [
+            { num: 1, name: 'Sharifabad' },
+            { num: 2, name: 'Sharifabad' },
+            { num: 3, name: 'Hussainabad' },
+            { num: 4, name: 'Tayyababad' },
+            { num: 5, name: 'Tahiraabad' },
+            { num: 6, name: 'Tayyababad' },
+            { num: 7, name: 'Azizabad' },
+            { num: 8, name: 'Azizabad' },
+            { num: 9, name: 'Dastagir' },
+            { num: 10, name: 'Dastagir' },
+            { num: 11, name: 'Sharifabad' },
+            { num: 12, name: 'Sharifabad' },
+            { num: 13, name: 'Gulberg Town' },
+            { num: 14, name: 'Naseerabad' },
+            { num: 15, name: 'Naseerabad' },
+            { num: 16, name: 'Water Pump' },
+            { num: 17, name: 'Samanabad' },
+            { num: 18, name: 'Samanabad' },
+            { num: 19, name: 'Al-Noor Society' },
+            { num: 20, name: 'Ancholi' },
+            { num: 21, name: 'Industrial Area' }
+        ];
+        fbBlocks.forEach(b => {
+            optionsHtml += `<option value="Block ${b.num} (${b.name})">Block ${b.num} (${b.name})</option>`;
+        });
+    } else if (areaVal === 'Clifton') {
+        for (let i = 1; i <= 9; i++) {
+            optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
+        }
+    } else if (areaVal === 'Defence') {
+        for (let i = 1; i <= 8; i++) {
+            optionsHtml += `<option value="Phase ${i}">Phase ${i}</option>`;
+        }
+    } else if (areaVal === 'PECHS') {
+        for (let i = 1; i <= 6; i++) {
+            optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
+        }
+    } else if (areaVal === 'Shah Faisal') {
+        for (let i = 1; i <= 5; i++) {
+            optionsHtml += `<option value="Sector ${i}">Sector ${i}</option>`;
+        }
+    }
+    blockNoSelect.innerHTML = optionsHtml;
+    const hasOption = Array.from(blockNoSelect.options).some(opt => opt.value === currentBlockVal);
+    if (hasOption) {
+        blockNoSelect.value = currentBlockVal;
+    } else {
+        blockNoSelect.value = '';
+    }
+};
+
+window.initAddressDropdowns = function() {
+    const dealAreaSelect = document.getElementById('dealArea');
+    const dealBlockNoSelect = document.getElementById('dealBlockNo');
+    if (dealAreaSelect && dealBlockNoSelect) {
+        const updateDealBlocks = () => {
+            window.updateBlockOptionsGlobal(dealAreaSelect.value, dealBlockNoSelect);
+        };
+        dealAreaSelect.removeEventListener('change', updateDealBlocks);
+        dealAreaSelect.addEventListener('change', updateDealBlocks);
+        updateDealBlocks();
+    }
+
+    const sellerAreaSelect = document.getElementById('sellerArea');
+    const sellerBlockNoSelect = document.getElementById('sellerBlockNo');
+    if (sellerAreaSelect && sellerBlockNoSelect) {
+        const updateSellerBlocks = () => {
+            window.updateBlockOptionsGlobal(sellerAreaSelect.value, sellerBlockNoSelect);
+        };
+        sellerAreaSelect.removeEventListener('change', updateSellerBlocks);
+        sellerAreaSelect.addEventListener('change', updateSellerBlocks);
+        updateSellerBlocks();
+    }
+};
 
 // Function to render dynamic form fields
 function renderDynamicAdminFields() {
@@ -2636,105 +2759,7 @@ function renderDynamicAdminFields() {
     const prodBlockNoSelect = document.getElementById('prodBlockNo');
     if (prodAreaSelect && prodBlockNoSelect) {
         const updateBlocks = () => {
-            const areaVal = prodAreaSelect.value;
-            const currentBlockVal = prodBlockNoSelect.value;
-            
-            let optionsHtml = '<option value="">Select Block No.</option>';
-            
-            if (areaVal === 'Korangi') {
-                // Korangi No.1–6
-                for (let i = 1; i <= 6; i++) {
-                    optionsHtml += `<option value="Korangi No.${i}">Korangi No.${i}</option>`;
-                    if (i <= 5) {
-                        optionsHtml += `<option value="Korangi No.${i}½">Korangi No.${i}½</option>`;
-                    }
-                }
-                // Sectors 31–36
-                for (let i = 31; i <= 36; i++) {
-                    optionsHtml += `<option value="Sector ${i}">Sector ${i}</option>`;
-                    optionsHtml += `<option value="Sector ${i}-A">Sector ${i}-A</option>`;
-                    optionsHtml += `<option value="Sector ${i}-B">Sector ${i}-B</option>`;
-                    if (i === 33 || i === 35 || i === 36) {
-                        optionsHtml += `<option value="Sector ${i}-C">Sector ${i}-C</option>`;
-                    }
-                }
-            } else if (areaVal === 'Gulshan-e-Iqbal') {
-                // Block 1–19
-                for (let i = 1; i <= 19; i++) {
-                    optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
-                    if (i === 13) {
-                        ['A', 'B', 'C', 'D', 'E', 'F'].forEach(letter => {
-                            optionsHtml += `<option value="Block 13-${letter}">Block 13-${letter}</option>`;
-                        });
-                    }
-                }
-            } else if (areaVal === 'Gulistan-e-Johar') {
-                // Block 1–22
-                for (let i = 1; i <= 22; i++) {
-                    optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
-                }
-            } else if (areaVal === 'North Nazimabad') {
-                // Block A–S
-                const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'];
-                letters.forEach(l => {
-                    optionsHtml += `<option value="Block ${l}">Block ${l}</option>`;
-                });
-            } else if (areaVal === 'Federal B Area') {
-                // Block 1–21
-                const fbBlocks = [
-                    { num: 1, name: 'Sharifabad' },
-                    { num: 2, name: 'Sharifabad' },
-                    { num: 3, name: 'Hussainabad' },
-                    { num: 4, name: 'Tayyababad' },
-                    { num: 5, name: 'Tahiraabad' },
-                    { num: 6, name: 'Tayyababad' },
-                    { num: 7, name: 'Azizabad' },
-                    { num: 8, name: 'Azizabad' },
-                    { num: 9, name: 'Dastagir' },
-                    { num: 10, name: 'Dastagir' },
-                    { num: 11, name: 'Sharifabad' },
-                    { num: 12, name: 'Sharifabad' },
-                    { num: 13, name: 'Gulberg Town' },
-                    { num: 14, name: 'Naseerabad' },
-                    { num: 15, name: 'Naseerabad' },
-                    { num: 16, name: 'Water Pump' },
-                    { num: 17, name: 'Samanabad' },
-                    { num: 18, name: 'Samanabad' },
-                    { num: 19, name: 'Al-Noor Society' },
-                    { num: 20, name: 'Ancholi' },
-                    { num: 21, name: 'Industrial Area' }
-                ];
-                fbBlocks.forEach(b => {
-                    optionsHtml += `<option value="Block ${b.num} (${b.name})">Block ${b.num} (${b.name})</option>`;
-                });
-            } else if (areaVal === 'Clifton') {
-                // Block 1–9
-                for (let i = 1; i <= 9; i++) {
-                    optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
-                }
-            } else if (areaVal === 'Defence') {
-                // Phase 1–8
-                for (let i = 1; i <= 8; i++) {
-                    optionsHtml += `<option value="Phase ${i}">Phase ${i}</option>`;
-                }
-            } else if (areaVal === 'PECHS') {
-                // Block 1–6
-                for (let i = 1; i <= 6; i++) {
-                    optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
-                }
-            } else if (areaVal === 'Shah Faisal') {
-                // Sector 1–5
-                for (let i = 1; i <= 5; i++) {
-                    optionsHtml += `<option value="Sector ${i}">Sector ${i}</option>`;
-                }
-            }
-            prodBlockNoSelect.innerHTML = optionsHtml;
-            const hasOption = Array.from(prodBlockNoSelect.options).some(opt => opt.value === currentBlockVal);
-            if (hasOption) {
-                prodBlockNoSelect.value = currentBlockVal;
-            } else {
-                prodBlockNoSelect.value = '';
-            }
+            window.updateBlockOptionsGlobal(prodAreaSelect.value, prodBlockNoSelect);
         };
         prodAreaSelect.addEventListener('change', updateBlocks);
         updateBlocks();
@@ -2784,6 +2809,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const pSub = document.getElementById('prodSubCategory');
     if (pCat) pCat.addEventListener('change', renderDynamicAdminFields);
     if (pSub) pSub.addEventListener('change', renderDynamicAdminFields);
+
+    if (typeof window.initAddressDropdowns === 'function') {
+        window.initAddressDropdowns();
+    }
 
     // Filter controls event listeners
     const searchInput = document.getElementById('prodSearchInput');
@@ -5158,6 +5187,9 @@ window.toggleSellerStatusCheckbox = function(status) {
 window.cancelSellerEdit = function() {
     sellerEditIndex = -1;
     document.getElementById('sellerForm').reset();
+    if (document.getElementById('sellerArea')) {
+        document.getElementById('sellerArea').dispatchEvent(new Event('change'));
+    }
     document.getElementById('sellerFormTitle').textContent = 'Add New Seller';
     document.getElementById('btnCancelSeller').style.display = 'none';
     window.generateSellerId();
@@ -5264,7 +5296,10 @@ window.editSeller = function(index) {
     document.getElementById('sellerFacebook').value = s.facebookPage || '';
     document.getElementById('sellerInstagram').value = s.instagramPage || '';
     document.getElementById('sellerAddress').value = s.address || '';
-    if (document.getElementById('sellerArea')) document.getElementById('sellerArea').value = s.area || '';
+    if (document.getElementById('sellerArea')) {
+        document.getElementById('sellerArea').value = s.area || '';
+        document.getElementById('sellerArea').dispatchEvent(new Event('change'));
+    }
     if (document.getElementById('sellerBlockNo')) document.getElementById('sellerBlockNo').value = s.blockNo || '';
     document.getElementById('sellerCity').value = s.city || '';
     document.getElementById('sellerBranches').value = s.branches || 'No';
