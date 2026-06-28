@@ -1475,6 +1475,58 @@ function renderDynamicAdminFields() {
     const category = document.getElementById('prodCategory').value;
     const subCategory = document.getElementById('prodSubCategory').value;
 
+    const addressAreaBlockCityHtml = `
+            <div class="input-group">
+                <label>Address</label>
+                <input type="text" id="prodAddress" class="dynamic-admin-field" placeholder="Full Address" required>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Area</label>
+                    <select id="prodArea" class="dynamic-admin-field" required>
+                        <option value="">Select Area</option>
+                        <option value="Bahadurabad">Bahadurabad</option>
+                        <option value="Clifton">Clifton</option>
+                        <option value="Defence">Defence</option>
+                        <option value="Federal B Area">Federal B Area</option>
+                        <option value="Gulshan-e-Iqbal">Gulshan-e-Iqbal</option>
+                        <option value="Gulistan-e-Johar">Gulistan-e-Johar</option>
+                        <option value="Korangi">Korangi</option>
+                        <option value="Landhi">Landhi</option>
+                        <option value="Liaquatabad">Liaquatabad</option>
+                        <option value="Malir">Malir</option>
+                        <option value="North Nazimabad">North Nazimabad</option>
+                        <option value="Nazimabad">Nazimabad</option>
+                        <option value="Orangi">Orangi</option>
+                        <option value="PECHS">PECHS</option>
+                        <option value="Saddar">Saddar</option>
+                        <option value="Shah Faisal">Shah Faisal</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Block No.</label>
+                    <select id="prodBlockNo" class="dynamic-admin-field" required>
+                        <option value="">Select Block No.</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>City</label>
+                    <select id="prodCity" class="dynamic-admin-field" required>
+                        <option value="">Select City</option>
+                        <option value="Karachi">Karachi</option>
+                        <option value="Lahore">Lahore</option>
+                        <option value="Islamabad">Islamabad</option>
+                        <option value="Rawalpindi">Rawalpindi</option>
+                        <option value="Peshawar">Peshawar</option>
+                        <option value="Multan">Multan</option>
+                        <option value="Faisalabad">Faisalabad</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+    `;
+
     if (category === 'Vehicles' || category === 'Vehicle') {
         container.innerHTML = `
             <div class="form-row">
@@ -1792,61 +1844,7 @@ function renderDynamicAdminFields() {
                     <input type="text" id="prodCompanyName" class="dynamic-admin-field" placeholder="Shop / Office / Company Name" disabled>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="input-group" style="flex: 2;">
-                    <label>Address</label>
-                    <input type="text" id="prodAddress" class="dynamic-admin-field" placeholder="Address" required>
-                </div>
-                <div class="input-group">
-                    <label>Area</label>
-                    <select id="prodArea" class="dynamic-admin-field" required>
-                        <option value="">Select Area</option>
-                        <option value="F.B. Area">F.B. Area</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Block No.</label>
-                    <select id="prodBlockNo" class="dynamic-admin-field" required>
-                        <option value="">Select Block No.</option>
-                        <option value="1 Sharifabad">1 Sharifabad</option>
-                        <option value="2 Sharifabad">2 Sharifabad</option>
-                        <option value="3 Hussainabad">3 Hussainabad</option>
-                        <option value="4 Tayyababad">4 Tayyababad</option>
-                        <option value="6 Tayyababad">6 Tayyababad</option>
-                        <option value="7 Azizabad">7 Azizabad</option>
-                        <option value="8 Azizabad">8 Azizabad</option>
-                        <option value="9 Dastagir">9 Dastagir</option>
-                        <option value="10 Dastagir">10 Dastagir</option>
-                        <option value="11 Sharifabad">11 Sharifabad</option>
-                        <option value="12 Sharifabad">12 Sharifabad</option>
-                        <option value="13 Gulberg Town">13 Gulberg Town</option>
-                        <option value="14 Naseerabad">14 Naseerabad</option>
-                        <option value="15 Naseerabad">15 Naseerabad</option>
-                        <option value="16 Water Pump">16 Water Pump</option>
-                        <option value="17 Samanabad">17 Samanabad</option>
-                        <option value="18 Samanabad">18 Samanabad</option>
-                        <option value="19 Al-Noor Society">19 Al-Noor Society</option>
-                        <option value="20 Ancholi">20 Ancholi</option>
-                        <option value="21 Industrial Area">21 Industrial Area</option>
-                        <option value="22 Industrial Area">22 Industrial Area</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="input-group">
-                    <label>City</label>
-                    <select id="prodCity" class="dynamic-admin-field" required>
-                        <option value="">Select City</option>
-                        <option value="Karachi">Karachi</option>
-                        <option value="Lahore">Lahore</option>
-                        <option value="Islamabad">Islamabad</option>
-                        <option value="Rawalpindi">Rawalpindi</option>
-                        <option value="Peshawar">Peshawar</option>
-                        <option value="Multan">Multan</option>
-                        <option value="Faisalabad">Faisalabad</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
+            ${addressAreaBlockCityHtml}
                 <div class="input-group">
                     <label>Phone No.</label>
                     <input type="text" id="prodPhone" class="dynamic-admin-field" placeholder="Phone No." required>
@@ -2100,61 +2098,7 @@ function renderDynamicAdminFields() {
                     <input type="text" id="prodCompanyName" class="dynamic-admin-field" placeholder="Shop / Office / Company Name" disabled>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="input-group" style="flex: 2;">
-                    <label>Address</label>
-                    <input type="text" id="prodAddress" class="dynamic-admin-field" placeholder="Address" required>
-                </div>
-                <div class="input-group">
-                    <label>Area</label>
-                    <select id="prodArea" class="dynamic-admin-field" required>
-                        <option value="">Select Area</option>
-                        <option value="F.B. Area">F.B. Area</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Block No.</label>
-                    <select id="prodBlockNo" class="dynamic-admin-field" required>
-                        <option value="">Select Block No.</option>
-                        <option value="1 Sharifabad">1 Sharifabad</option>
-                        <option value="2 Sharifabad">2 Sharifabad</option>
-                        <option value="3 Hussainabad">3 Hussainabad</option>
-                        <option value="4 Tayyababad">4 Tayyababad</option>
-                        <option value="6 Tayyababad">6 Tayyababad</option>
-                        <option value="7 Azizabad">7 Azizabad</option>
-                        <option value="8 Azizabad">8 Azizabad</option>
-                        <option value="9 Dastagir">9 Dastagir</option>
-                        <option value="10 Dastagir">10 Dastagir</option>
-                        <option value="11 Sharifabad">11 Sharifabad</option>
-                        <option value="12 Sharifabad">12 Sharifabad</option>
-                        <option value="13 Gulberg Town">13 Gulberg Town</option>
-                        <option value="14 Naseerabad">14 Naseerabad</option>
-                        <option value="15 Naseerabad">15 Naseerabad</option>
-                        <option value="16 Water Pump">16 Water Pump</option>
-                        <option value="17 Samanabad">17 Samanabad</option>
-                        <option value="18 Samanabad">18 Samanabad</option>
-                        <option value="19 Al-Noor Society">19 Al-Noor Society</option>
-                        <option value="20 Ancholi">20 Ancholi</option>
-                        <option value="21 Industrial Area">21 Industrial Area</option>
-                        <option value="22 Industrial Area">22 Industrial Area</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="input-group">
-                    <label>City</label>
-                    <select id="prodCity" class="dynamic-admin-field" required>
-                        <option value="">Select City</option>
-                        <option value="Karachi">Karachi</option>
-                        <option value="Lahore">Lahore</option>
-                        <option value="Islamabad">Islamabad</option>
-                        <option value="Rawalpindi">Rawalpindi</option>
-                        <option value="Peshawar">Peshawar</option>
-                        <option value="Multan">Multan</option>
-                        <option value="Faisalabad">Faisalabad</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
+            ${addressAreaBlockCityHtml}
                 <div class="input-group">
                     <label>Phone No.</label>
                     <input type="text" id="prodPhone" class="dynamic-admin-field" placeholder="Phone No." required>
@@ -2255,11 +2199,8 @@ function renderDynamicAdminFields() {
                     <input type="text" id="prodMake" class="dynamic-admin-field" placeholder="e.g., 2023" required>
                 </div>
             </div>
+            ${addressAreaBlockCityHtml}
             <div class="form-row">
-                <div class="input-group">
-                    <label>Location / City</label>
-                    <input type="text" id="prodLocation" class="dynamic-admin-field" placeholder="e.g., Lahore" required>
-                </div>
                 <div class="input-group">
                     <label>Price (Rs.)</label>
                     <input type="number" id="prodPrice" class="dynamic-admin-field" placeholder="e.g., 150000" required>
@@ -2453,66 +2394,7 @@ function renderDynamicAdminFields() {
                 </div>
             </div>
 
-            <div class="input-group">
-                <label>Address</label>
-                <input type="text" id="prodAddress" class="dynamic-admin-field" placeholder="Full Address">
-            </div>
-
-            <div class="form-row">
-                <div class="input-group">
-                    <label>Area</label>
-                    <select id="prodArea" class="dynamic-admin-field">
-                        <option value="">Select Area</option>
-                        <option value="Bahadurabad">Bahadurabad</option>
-                        <option value="Clifton">Clifton</option>
-                        <option value="Defence">Defence</option>
-                        <option value="Federal B Area">Federal B Area</option>
-                        <option value="Gulshan-e-Iqbal">Gulshan-e-Iqbal</option>
-                        <option value="Gulistan-e-Johar">Gulistan-e-Johar</option>
-                        <option value="Korangi">Korangi</option>
-                        <option value="Landhi">Landhi</option>
-                        <option value="Liaquatabad">Liaquatabad</option>
-                        <option value="Malir">Malir</option>
-                        <option value="North Nazimabad">North Nazimabad</option>
-                        <option value="Nazimabad">Nazimabad</option>
-                        <option value="Orangi">Orangi</option>
-                        <option value="PECHS">PECHS</option>
-                        <option value="Saddar">Saddar</option>
-                        <option value="Shah Faisal">Shah Faisal</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Block No.</label>
-                    <select id="prodBlockNo" class="dynamic-admin-field">
-                        <option value="">Select Block No.</option>
-                        <option value="1 Sharifabad">1 Sharifabad</option>
-                        <option value="2 Sharifabad">2 Sharifabad</option>
-                        <option value="3 Hussainabad">3 Hussainabad</option>
-                        <option value="4 Tayyababad">4 Tayyababad</option>
-                        <option value="6 Tayyababad">6 Tayyababad</option>
-                        <option value="7 Azizabad">7 Azizabad</option>
-                        <option value="8 Azizabad">8 Azizabad</option>
-                        <option value="9 Dastagir">9 Dastagir</option>
-                        <option value="10 Dastagir">10 Dastagir</option>
-                        <option value="11 Sharifabad">11 Sharifabad</option>
-                        <option value="12 Sharifabad">12 Sharifabad</option>
-                        <option value="13 Gulberg Town">13 Gulberg Town</option>
-                        <option value="14 Naseerabad">14 Naseerabad</option>
-                        <option value="15 Naseerabad">15 Naseerabad</option>
-                        <option value="16 Water Pump">16 Water Pump</option>
-                        <option value="17 Samanabad">17 Samanabad</option>
-                        <option value="18 Samanabad">18 Samanabad</option>
-                        <option value="19 Al-Noor Society">19 Al-Noor Society</option>
-                        <option value="20 Ancholi">20 Ancholi</option>
-                        <option value="21 Industrial Area">21 Industrial Area</option>
-                        <option value="22 Industrial Area">22 Industrial Area</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>City</label>
-                    <input type="text" id="prodCity" class="dynamic-admin-field" placeholder="e.g. Lahore">
-                </div>
-            </div>
+            ${addressAreaBlockCityHtml}
         `;
 
         if (isFood) {
@@ -2748,76 +2630,114 @@ function renderDynamicAdminFields() {
                 updateStandardTypes();
             }
         }
+    }
 
-        const prodAreaSelect = document.getElementById('prodArea');
-        const prodBlockNoSelect = document.getElementById('prodBlockNo');
-        if (prodAreaSelect && prodBlockNoSelect) {
-            const updateBlocks = () => {
-                const areaVal = prodAreaSelect.value;
-                const currentBlockVal = prodBlockNoSelect.value;
-                if (areaVal === 'Korangi') {
-                    prodBlockNoSelect.innerHTML = `
-                        <option value="">Select Block No.</option>
-                        <option value="Korangi No.1">Korangi No.1</option>
-                        <option value="Korangi No.2">Korangi No.2</option>
-                        <option value="Korangi No.2½">Korangi No.2½</option>
-                        <option value="Korangi No.3">Korangi No.3</option>
-                        <option value="Korangi No.3½">Korangi No.3½</option>
-                        <option value="Korangi No.4">Korangi No.4</option>
-                        <option value="Korangi No.4½">Korangi No.4½</option>
-                        <option value="Korangi No.5">Korangi No.5</option>
-                        <option value="Korangi No.5½">Korangi No.5½</option>
-                        <option value="Korangi No.6">Korangi No.6</option>
-                        <option value="Sector 31-A">Sector 31-A</option>
-                        <option value="Sector 31-B">Sector 31-B</option>
-                        <option value="Sector 32-A">Sector 32-A</option>
-                        <option value="Sector 32-B">Sector 32-B</option>
-                        <option value="Sector 33-A">Sector 33-A</option>
-                        <option value="Sector 33-B">Sector 33-B</option>
-                        <option value="Sector 33-C">Sector 33-C</option>
-                        <option value="Sector 34-A">Sector 34-A</option>
-                        <option value="Sector 34-B">Sector 34-B</option>
-                    `;
-                } else if (areaVal === 'Federal B Area') {
-                    prodBlockNoSelect.innerHTML = `
-                        <option value="">Select Block No.</option>
-                        <option value="1 Sharifabad">1 Sharifabad</option>
-                        <option value="2 Sharifabad">2 Sharifabad</option>
-                        <option value="3 Hussainabad">3 Hussainabad</option>
-                        <option value="4 Tayyababad">4 Tayyababad</option>
-                        <option value="6 Tayyababad">6 Tayyababad</option>
-                        <option value="7 Azizabad">7 Azizabad</option>
-                        <option value="8 Azizabad">8 Azizabad</option>
-                        <option value="9 Dastagir">9 Dastagir</option>
-                        <option value="10 Dastagir">10 Dastagir</option>
-                        <option value="11 Sharifabad">11 Sharifabad</option>
-                        <option value="12 Sharifabad">12 Sharifabad</option>
-                        <option value="13 Gulberg Town">13 Gulberg Town</option>
-                        <option value="14 Naseerabad">14 Naseerabad</option>
-                        <option value="15 Naseerabad">15 Naseerabad</option>
-                        <option value="16 Water Pump">16 Water Pump</option>
-                        <option value="17 Samanabad">17 Samanabad</option>
-                        <option value="18 Samanabad">18 Samanabad</option>
-                        <option value="19 Al-Noor Society">19 Al-Noor Society</option>
-                        <option value="20 Ancholi">20 Ancholi</option>
-                        <option value="21 Industrial Area">21 Industrial Area</option>
-                        <option value="22 Industrial Area">22 Industrial Area</option>
-                    `;
-                } else {
-                    prodBlockNoSelect.innerHTML = `
-                        <option value="">Select Block No.</option>
-                    `;
+    const prodAreaSelect = document.getElementById('prodArea');
+    const prodBlockNoSelect = document.getElementById('prodBlockNo');
+    if (prodAreaSelect && prodBlockNoSelect) {
+        const updateBlocks = () => {
+            const areaVal = prodAreaSelect.value;
+            const currentBlockVal = prodBlockNoSelect.value;
+            
+            let optionsHtml = '<option value="">Select Block No.</option>';
+            
+            if (areaVal === 'Korangi') {
+                // Korangi No.1–6
+                for (let i = 1; i <= 6; i++) {
+                    optionsHtml += `<option value="Korangi No.${i}">Korangi No.${i}</option>`;
+                    if (i <= 5) {
+                        optionsHtml += `<option value="Korangi No.${i}½">Korangi No.${i}½</option>`;
+                    }
                 }
-                const hasOption = Array.from(prodBlockNoSelect.options).some(opt => opt.value === currentBlockVal);
-                if (hasOption) {
-                    prodBlockNoSelect.value = currentBlockVal;
-                } else {
-                    prodBlockNoSelect.value = '';
+                // Sectors 31–36
+                for (let i = 31; i <= 36; i++) {
+                    optionsHtml += `<option value="Sector ${i}">Sector ${i}</option>`;
+                    optionsHtml += `<option value="Sector ${i}-A">Sector ${i}-A</option>`;
+                    optionsHtml += `<option value="Sector ${i}-B">Sector ${i}-B</option>`;
+                    if (i === 33 || i === 35 || i === 36) {
+                        optionsHtml += `<option value="Sector ${i}-C">Sector ${i}-C</option>`;
+                    }
                 }
-            };
-            prodAreaSelect.addEventListener('change', updateBlocks);
-            updateBlocks();
-        }
+            } else if (areaVal === 'Gulshan-e-Iqbal') {
+                // Block 1–19
+                for (let i = 1; i <= 19; i++) {
+                    optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
+                    if (i === 13) {
+                        ['A', 'B', 'C', 'D', 'E', 'F'].forEach(letter => {
+                            optionsHtml += `<option value="Block 13-${letter}">Block 13-${letter}</option>`;
+                        });
+                    }
+                }
+            } else if (areaVal === 'Gulistan-e-Johar') {
+                // Block 1–22
+                for (let i = 1; i <= 22; i++) {
+                    optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
+                }
+            } else if (areaVal === 'North Nazimabad') {
+                // Block A–S
+                const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'];
+                letters.forEach(l => {
+                    optionsHtml += `<option value="Block ${l}">Block ${l}</option>`;
+                });
+            } else if (areaVal === 'Federal B Area') {
+                // Block 1–21
+                const fbBlocks = [
+                    { num: 1, name: 'Sharifabad' },
+                    { num: 2, name: 'Sharifabad' },
+                    { num: 3, name: 'Hussainabad' },
+                    { num: 4, name: 'Tayyababad' },
+                    { num: 5, name: 'Tahiraabad' },
+                    { num: 6, name: 'Tayyababad' },
+                    { num: 7, name: 'Azizabad' },
+                    { num: 8, name: 'Azizabad' },
+                    { num: 9, name: 'Dastagir' },
+                    { num: 10, name: 'Dastagir' },
+                    { num: 11, name: 'Sharifabad' },
+                    { num: 12, name: 'Sharifabad' },
+                    { num: 13, name: 'Gulberg Town' },
+                    { num: 14, name: 'Naseerabad' },
+                    { num: 15, name: 'Naseerabad' },
+                    { num: 16, name: 'Water Pump' },
+                    { num: 17, name: 'Samanabad' },
+                    { num: 18, name: 'Samanabad' },
+                    { num: 19, name: 'Al-Noor Society' },
+                    { num: 20, name: 'Ancholi' },
+                    { num: 21, name: 'Industrial Area' }
+                ];
+                fbBlocks.forEach(b => {
+                    optionsHtml += `<option value="Block ${b.num} (${b.name})">Block ${b.num} (${b.name})</option>`;
+                });
+            } else if (areaVal === 'Clifton') {
+                // Block 1–9
+                for (let i = 1; i <= 9; i++) {
+                    optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
+                }
+            } else if (areaVal === 'Defence') {
+                // Phase 1–8
+                for (let i = 1; i <= 8; i++) {
+                    optionsHtml += `<option value="Phase ${i}">Phase ${i}</option>`;
+                }
+            } else if (areaVal === 'PECHS') {
+                // Block 1–6
+                for (let i = 1; i <= 6; i++) {
+                    optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
+                }
+            } else if (areaVal === 'Shah Faisal') {
+                // Sector 1–5
+                for (let i = 1; i <= 5; i++) {
+                    optionsHtml += `<option value="Sector ${i}">Sector ${i}</option>`;
+                }
+            }
+            prodBlockNoSelect.innerHTML = optionsHtml;
+            const hasOption = Array.from(prodBlockNoSelect.options).some(opt => opt.value === currentBlockVal);
+            if (hasOption) {
+                prodBlockNoSelect.value = currentBlockVal;
+            } else {
+                prodBlockNoSelect.value = '';
+            }
+        };
+        prodAreaSelect.addEventListener('change', updateBlocks);
+        updateBlocks();
     }
     const staticStatus = document.getElementById('staticStatusContainer');
     if (staticStatus) {
@@ -3296,6 +3216,15 @@ window.editProduct = (index) => {
                     field.value = prod[key];
                 }
             });
+
+            const areaSelect = document.getElementById('prodArea');
+            if (areaSelect) {
+                areaSelect.dispatchEvent(new Event('change'));
+                const blockSelect = document.getElementById('prodBlockNo');
+                if (blockSelect && prod.blockNo !== undefined) {
+                    blockSelect.value = prod.blockNo;
+                }
+            }
 
             if (prod.category === 'Computer' && (prod.subCategory === 'Laptops' || prod.subCategory === 'ChromeBook' || prod.subCategory === 'Chromebook' || prod.subCategory === 'Chromebooks' || prod.subCategory === 'Laptop Charger')) {
                 window.toggleLaptopShopField();
