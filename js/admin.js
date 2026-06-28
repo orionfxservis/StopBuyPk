@@ -1952,6 +1952,7 @@ function renderDynamicAdminFields() {
                     <textarea id="productDetail" class="dynamic-admin-field admin-input" rows="3" placeholder="Write product description..." style="width: 100%; resize: vertical; min-height: 80px;" required></textarea>
                 </div>
             </div>
+            <h4 class="form-section-title" style="margin-top:20px; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; font-weight:bold; color:var(--primary-color);">Seller's / Shop's Area</h4>
             <div class="form-row">
                 <div class="input-group">
                     <label>Seller</label>
@@ -2206,6 +2207,7 @@ function renderDynamicAdminFields() {
                     <textarea id="prodDetails" class="dynamic-admin-field admin-input" rows="3" placeholder="Write product details..." style="width: 100%; resize: vertical; min-height: 80px;" required></textarea>
                 </div>
             </div>
+            <h4 class="form-section-title" style="margin-top:20px; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; font-weight:bold; color:var(--primary-color);">Seller's / Shop's Area</h4>
             <div class="form-row">
                 <div class="input-group">
                     <label>Seller</label>
@@ -2322,6 +2324,7 @@ function renderDynamicAdminFields() {
                     <input type="text" id="prodMake" class="dynamic-admin-field" placeholder="e.g., 2023" required>
                 </div>
             </div>
+            <h4 class="form-section-title" style="margin-top:20px; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; font-weight:bold; color:var(--primary-color);">Seller's / Shop's Area</h4>
             ${addressAreaBlockCityHtml}
             <div class="form-row">
                 <div class="input-group">
@@ -2491,14 +2494,15 @@ function renderDynamicAdminFields() {
                 </div>
             </div>
             
+            <h4 class="form-section-title" style="margin-top:20px; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; font-weight:bold; color:var(--primary-color);">Seller's / Shop's Area</h4>
             <div class="form-row">
                 <div class="input-group">
                     <label>Video Link (Optional)</label>
                     <input type="url" id="prodVideoLink" class="dynamic-admin-field" placeholder="https://youtube.com/..." />
                 </div>
                 <div class="input-group">
-                    <label>Brand</label>
-                    <input type="text" id="prodBrand" class="dynamic-admin-field" placeholder="Brand Name">
+                    <label>Shop / Brand Name</label>
+                    <input type="text" id="prodBrand" class="dynamic-admin-field" placeholder="Shop / Brand Name">
                 </div>
             </div>
 
