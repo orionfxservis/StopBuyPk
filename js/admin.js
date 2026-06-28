@@ -1590,6 +1590,68 @@ window.initAddressDropdowns = function() {
     }
 };
 
+window.autofillSellerDetailsForProducts = function(businessName) {
+    if (!businessName) return;
+    if (typeof sellers === 'undefined') return;
+    const matchedSeller = sellers.find(s => s.businessName && s.businessName.toLowerCase() === businessName.toLowerCase().trim());
+    if (matchedSeller) {
+        const contactField = document.getElementById('prodContact');
+        const whatsappField = document.getElementById('prodWhatsapp');
+        const deliveryField = document.getElementById('prodDelivery');
+        const addressField = document.getElementById('prodAddress');
+        const areaField = document.getElementById('prodArea');
+        const blockField = document.getElementById('prodBlockNo');
+        const cityField = document.getElementById('prodCity');
+
+        if (contactField) contactField.value = matchedSeller.mobileNumber || '';
+        if (whatsappField) whatsappField.value = matchedSeller.whatsappNumber || '';
+        if (deliveryField) deliveryField.value = matchedSeller.branchPhone || matchedSeller.mobileNumber || '';
+        if (addressField) addressField.value = matchedSeller.address || '';
+        
+        if (areaField) {
+            areaField.value = matchedSeller.area || '';
+            areaField.dispatchEvent(new Event('change'));
+        }
+        if (blockField) {
+            blockField.value = matchedSeller.blockNo || '';
+        }
+        if (cityField) {
+            cityField.value = matchedSeller.city || '';
+        }
+    }
+};
+
+window.autofillSellerDetailsForDeals = function(businessName) {
+    if (!businessName) return;
+    if (typeof sellers === 'undefined') return;
+    const matchedSeller = sellers.find(s => s.businessName && s.businessName.toLowerCase() === businessName.toLowerCase().trim());
+    if (matchedSeller) {
+        const contactField = document.getElementById('dealContactNo');
+        const whatsappField = document.getElementById('dealWhatsapp');
+        const deliveryField = document.getElementById('dealDeliveryNo');
+        const addressField = document.getElementById('dealAddress');
+        const areaField = document.getElementById('dealArea');
+        const blockField = document.getElementById('dealBlockNo');
+        const cityField = document.getElementById('dealLocation');
+
+        if (contactField) contactField.value = matchedSeller.mobileNumber || '';
+        if (whatsappField) whatsappField.value = matchedSeller.whatsappNumber || '';
+        if (deliveryField) deliveryField.value = matchedSeller.mobileNumber || '';
+        if (addressField) addressField.value = matchedSeller.address || '';
+        
+        if (areaField) {
+            areaField.value = matchedSeller.area || '';
+            areaField.dispatchEvent(new Event('change'));
+        }
+        if (blockField) {
+            blockField.value = matchedSeller.blockNo || '';
+        }
+        if (cityField) {
+            cityField.value = matchedSeller.city || '';
+        }
+    }
+};
+
 // Function to render dynamic form fields
 function renderDynamicAdminFields() {
     const container = document.getElementById('dynamicProductFields');
@@ -2785,6 +2847,17 @@ function renderDynamicAdminFields() {
             restrictPublishForSection('products');
         }
     }
+
+    // Autofill Seller details on typing Shop / Brand Name
+    const prodBrandInput = document.getElementById('prodBrand');
+    if (prodBrandInput) {
+        prodBrandInput.addEventListener('input', (e) => {
+            window.autofillSellerDetailsForProducts(e.target.value);
+        });
+        prodBrandInput.addEventListener('blur', (e) => {
+            window.autofillSellerDetailsForProducts(e.target.value);
+        });
+    }
 }
 
 window.toggleLaptopShopField = function () {
@@ -2872,6 +2945,17 @@ window.toggleLaptopShopField = function () {
         dealFilterPost.addEventListener('change', (e) => {
             dealFilterPostBy = e.target.value;
             renderDeals();
+        });
+    }
+
+    // Autofill Seller details on typing Shop / Brand Name in Deals Form
+    const dealBrandInput = document.getElementById('dealBrand');
+    if (dealBrandInput) {
+        dealBrandInput.addEventListener('input', (e) => {
+            window.autofillSellerDetailsForDeals(e.target.value);
+        });
+        dealBrandInput.addEventListener('blur', (e) => {
+            window.autofillSellerDetailsForDeals(e.target.value);
         });
     }
 
