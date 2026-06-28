@@ -2808,7 +2808,6 @@ window.toggleLaptopShopField = function () {
 };
 
 // Add event listeners to redraw when category or subcategory changes
-document.addEventListener('DOMContentLoaded', () => {
     const pCat = document.getElementById('prodCategory');
     const pSub = document.getElementById('prodSubCategory');
     if (pCat) pCat.addEventListener('change', renderDynamicAdminFields);
@@ -2875,7 +2874,6 @@ document.addEventListener('DOMContentLoaded', () => {
             renderDeals();
         });
     }
-});
 
 const adminProductForm = document.getElementById('adminProductForm');
 
@@ -5415,7 +5413,6 @@ window.closeSellerProfile = function() {
     }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
     const sellerForm = document.getElementById('sellerForm');
     if (sellerForm) {
         sellerForm.addEventListener('submit', async (e) => {
@@ -5519,5 +5516,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-});
 
