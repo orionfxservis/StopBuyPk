@@ -151,7 +151,7 @@ async function initAdmin() {
         }
     } catch (error) {
         console.error("Failed to load admin data:", error);
-        // alert("Failed to load data. Please try refreshing."); // Suppressed for local testing without GAS
+        alert("Failed to load admin data from database: " + error.message);
     }
 }
 
@@ -5420,7 +5420,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sellerForm) {
         sellerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const sellerId = document.getElementById('sellerId').value;
+            try {
+                const sellerId = document.getElementById('sellerId').value;
             const businessName = document.getElementById('sellerBusinessName').value;
             const ownerName = document.getElementById('sellerOwnerName').value;
             const businessType = document.getElementById('sellerBusinessType').value;
@@ -5511,6 +5512,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.renderSellers();
             } catch (err) {
                 alert('Error saving seller: ' + err.message);
+            }
+            } catch (outerErr) {
+                console.error("Error in seller submit:", outerErr);
+                alert("Error in seller submit: " + outerErr.message);
             }
         });
     }
