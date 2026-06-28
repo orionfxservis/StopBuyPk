@@ -20,15 +20,17 @@ let userEditIndex = -1; // State to track user editing
 let dealEditIndex = -1; // State to track deal editing
 let broadcasts = [];
 let broadcastEditIndex = -1;
+let sellers = [];
+let sellerEditIndex = -1;
 
 function hasPublishPermission(cUser, section) {
     if (!cUser || !cUser.userId) return false;
     if (String(cUser.userId).toLowerCase() === 'admin') return true;
-    
+
     let perms = cUser.permissions;
     let loopCount = 0;
     while (typeof perms === 'string' && loopCount < 3) {
-        try { perms = JSON.parse(perms); } catch(e) { break; }
+        try { perms = JSON.parse(perms); } catch (e) { break; }
         loopCount++;
     }
     if (perms && typeof perms === 'object' && !Array.isArray(perms)) {
@@ -59,7 +61,7 @@ const bannerPreview = document.getElementById('bannerPreview');
 
 async function initAdmin() {
     try {
-        const [categoriesRes, productsRes, bannersRes, dealsRes, usersRes, blogsRes, travelRes, broadcastsRes] = await Promise.all([
+        const [categoriesRes, productsRes, bannersRes, dealsRes, usersRes, blogsRes, travelRes, broadcastsRes, sellersRes] = await Promise.all([
             DataService.getCategories(),
             DataService.getProducts(),
             DataService.getBanners(),
@@ -67,7 +69,8 @@ async function initAdmin() {
             DataService.getUsers(),
             DataService.getBlogs(),
             DataService.getTravelPackages(),
-            DataService.getBroadcasts()
+            DataService.getBroadcasts(),
+            DataService.getSellers()
         ]);
 
         categories = categoriesRes || [];
@@ -78,6 +81,7 @@ async function initAdmin() {
         blogs = blogsRes || [];
         travelPackages = travelRes || [];
         broadcasts = broadcastsRes || [];
+        sellers = sellersRes || [];
 
         // Track Login and Active Days for currently logged-in user
         try {
@@ -88,12 +92,12 @@ async function initAdmin() {
                 if (userIndex !== -1) {
                     const todayStr = new Date().toISOString().split('T')[0];
                     const liveUser = users[userIndex];
-                    
+
                     liveUser.lastLogin = new Date().toISOString();
-                    
+
                     let daysList = liveUser.activeDaysList || [];
                     if (typeof daysList === 'string') {
-                        try { daysList = JSON.parse(daysList); } catch(e) { daysList = []; }
+                        try { daysList = JSON.parse(daysList); } catch (e) { daysList = []; }
                     }
                     if (!Array.isArray(daysList)) {
                         daysList = [];
@@ -103,12 +107,12 @@ async function initAdmin() {
                     }
                     liveUser.activeDaysList = daysList;
                     liveUser.activeDays = daysList.length;
-                    
+
                     currentUser.lastLogin = liveUser.lastLogin;
                     currentUser.activeDays = liveUser.activeDays;
                     currentUser.activeDaysList = liveUser.activeDaysList;
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    
+
                     // Call saveUsers asynchronously so it doesn't block the UI rendering
                     DataService.saveUsers(users).catch(err => console.error("Failed to async save users:", err));
                 }
@@ -121,13 +125,15 @@ async function initAdmin() {
         renderBanners();
         renderDeals();
         renderUsers();
+        renderSellers();
+        generateSellerId();
         if (typeof renderBlogs === "function") renderBlogs(); else window.renderBlogs();
         renderTravelPackages(); // New function for travel
         renderBroadcasts();
         renderAdminProducts(); // New function for products
         populateCategoryDropdown(); // New function for form
         populateCategoryAssignGrid(); // Populate categories assign grid
-        
+
         enforceUserPermissions(); // Apply user rights to sidebar
         updatePendingApprovalsBadge(); // Update badges
         if (typeof populateAdminHeader === 'function') populateAdminHeader();
@@ -147,7 +153,7 @@ async function initAdmin() {
 }
 
 // Handler for background loaded cache data
-window.onBackgroundDataLoaded = function(type, data) {
+window.onBackgroundDataLoaded = function (type, data) {
     console.log(`Background data loaded: ${type}`, data);
     if (type === 'users') {
         users = data || [];
@@ -556,23 +562,23 @@ if (bannerForm) {
             }
 
             if (bannerEditIndex === -1) {
-                banners.push({ 
+                banners.push({
                     id: Date.now(),
-                    image, 
-                    link, 
-                    type, 
-                    addedBy: userName, 
+                    image,
+                    link,
+                    type,
+                    addedBy: userName,
                     status: bannerStatus,
                     createdDate: new Date().toISOString(),
                     updatedDate: new Date().toISOString()
                 });
             } else {
-                banners[bannerEditIndex] = { 
+                banners[bannerEditIndex] = {
                     id: banners[bannerEditIndex].id || Date.now(),
-                    image, 
-                    link, 
-                    type, 
-                    addedBy: banners[bannerEditIndex].addedBy || userName, 
+                    image,
+                    link,
+                    type,
+                    addedBy: banners[bannerEditIndex].addedBy || userName,
                     status: bannerStatus,
                     createdDate: banners[bannerEditIndex].createdDate || new Date().toISOString(),
                     updatedDate: new Date().toISOString()
@@ -620,18 +626,18 @@ function populateDealFilterOptions() {
     const cUserStr = localStorage.getItem('currentUser');
     const cUser = cUserStr ? JSON.parse(cUserStr) : {};
     const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
-    
+
     if (catSelect) {
         const uniqueCats = [...new Set(deals.map(d => d.category).filter(Boolean))];
         const currentVal = catSelect.value;
-        catSelect.innerHTML = '<option value="">All Categories</option>' + 
+        catSelect.innerHTML = '<option value="">All Categories</option>' +
             uniqueCats.map(cat => `<option value="${cat}">${cat}</option>`).join('');
         catSelect.value = uniqueCats.includes(currentVal) ? currentVal : '';
     }
     if (subSelect) {
         const uniqueSubs = [...new Set(deals.map(d => d.subCategory).filter(Boolean))];
         const currentVal = subSelect.value;
-        subSelect.innerHTML = '<option value="">All Sub Categories</option>' + 
+        subSelect.innerHTML = '<option value="">All Sub Categories</option>' +
             uniqueSubs.map(sub => `<option value="${sub}">${sub}</option>`).join('');
         subSelect.value = uniqueSubs.includes(currentVal) ? currentVal : '';
     }
@@ -642,29 +648,29 @@ function populateDealFilterOptions() {
             postSelect.style.display = '';
             const uniquePosts = [...new Set(deals.map(d => d.addedBy || 'Admin').filter(Boolean))];
             const currentVal = postSelect.value;
-            postSelect.innerHTML = '<option value="">All Authors</option>' + 
+            postSelect.innerHTML = '<option value="">All Authors</option>' +
                 uniquePosts.map(post => `<option value="${post}">${post}</option>`).join('');
             postSelect.value = uniquePosts.includes(currentVal) ? currentVal : '';
         }
     }
 }
 
-window.resetDealFilters = function() {
+window.resetDealFilters = function () {
     dealSearchQuery = "";
     dealFilterCategory = "";
     dealFilterSubCategory = "";
     dealFilterPostBy = "";
-    
+
     const searchInput = document.getElementById('dealSearchInput');
     const catSelect = document.getElementById('dealFilterCategory');
     const subSelect = document.getElementById('dealFilterSubCategory');
     const postSelect = document.getElementById('dealFilterPostBy');
-    
+
     if (searchInput) searchInput.value = "";
     if (catSelect) catSelect.value = "";
     if (subSelect) subSelect.value = "";
     if (postSelect) postSelect.value = "";
-    
+
     renderDeals();
 };
 
@@ -684,12 +690,12 @@ function renderDeals() {
     // Apply filters
     const filteredDeals = mappedDeals.filter(item => {
         const { deal } = item;
-        
+
         // Only show own deals if not super admin
         if (!isSuperAdmin && deal.addedBy !== userName) {
             return false;
         }
-        
+
         // Search filter
         if (dealSearchQuery) {
             const nameMatch = String(deal.name || '').toLowerCase().includes(dealSearchQuery);
@@ -701,22 +707,22 @@ function renderDeals() {
                 return false;
             }
         }
-        
+
         // Category filter
         if (dealFilterCategory && deal.category !== dealFilterCategory) {
             return false;
         }
-        
+
         // Subcategory filter
         if (dealFilterSubCategory && deal.subCategory !== dealFilterSubCategory) {
             return false;
         }
-        
+
         // Author filter
         if (dealFilterPostBy && (deal.addedBy || 'Admin') !== dealFilterPostBy) {
             return false;
         }
-        
+
         return true;
     });
 
@@ -801,14 +807,18 @@ window.editDeal = (index) => {
     document.getElementById('dealLocation').value = deal.location || '';
     document.getElementById('dealWhatsapp').value = deal.whatsapp || '';
     document.getElementById('dealVideo').value = deal.video || '';
-    
+
     // Populate new fields safely
     if (document.getElementById('dealProductDetail')) document.getElementById('dealProductDetail').value = deal.productDetail || '';
     if (document.getElementById('dealBrand')) document.getElementById('dealBrand').value = deal.brand || '';
     if (document.getElementById('dealContactNo')) document.getElementById('dealContactNo').value = deal.contactNo || '';
     if (document.getElementById('dealDeliveryNo')) document.getElementById('dealDeliveryNo').value = deal.deliveryNo || '';
     if (document.getElementById('dealAddress')) document.getElementById('dealAddress').value = deal.address || '';
-    if (document.getElementById('dealAreaBlock')) document.getElementById('dealAreaBlock').value = deal.areaBlock || '';
+    if (document.getElementById('dealArea')) {
+        document.getElementById('dealArea').value = deal.area || '';
+        document.getElementById('dealArea').dispatchEvent(new Event('change'));
+    }
+    if (document.getElementById('dealBlockNo')) document.getElementById('dealBlockNo').value = deal.blockNo || '';
 
     if (dealFormTitle) dealFormTitle.textContent = "Edit Deal";
     if (btnSaveDeal) btnSaveDeal.textContent = "Update Deal";
@@ -820,14 +830,18 @@ window.editDeal = (index) => {
 window.cancelDealEdit = () => {
     dealEditIndex = -1;
     dealForm.reset();
-    
+
     // Clear new inputs explicitly just in case
     if (document.getElementById('dealProductDetail')) document.getElementById('dealProductDetail').value = '';
     if (document.getElementById('dealBrand')) document.getElementById('dealBrand').value = '';
     if (document.getElementById('dealContactNo')) document.getElementById('dealContactNo').value = '';
     if (document.getElementById('dealDeliveryNo')) document.getElementById('dealDeliveryNo').value = '';
     if (document.getElementById('dealAddress')) document.getElementById('dealAddress').value = '';
-    if (document.getElementById('dealAreaBlock')) document.getElementById('dealAreaBlock').value = '';
+    if (document.getElementById('dealArea')) {
+        document.getElementById('dealArea').value = '';
+        document.getElementById('dealArea').dispatchEvent(new Event('change'));
+    }
+    if (document.getElementById('dealBlockNo')) document.getElementById('dealBlockNo').value = '';
 
     if (dealFormTitle) dealFormTitle.textContent = "Add New Deal";
     if (btnSaveDeal) btnSaveDeal.textContent = "Add Deal";
@@ -956,7 +970,13 @@ if (dealForm) {
             contactNo: document.getElementById('dealContactNo') ? document.getElementById('dealContactNo').value : (existingDeal.contactNo || ''),
             deliveryNo: document.getElementById('dealDeliveryNo') ? document.getElementById('dealDeliveryNo').value : (existingDeal.deliveryNo || ''),
             address: document.getElementById('dealAddress') ? document.getElementById('dealAddress').value : (existingDeal.address || ''),
-            areaBlock: document.getElementById('dealAreaBlock') ? document.getElementById('dealAreaBlock').value : (existingDeal.areaBlock || ''),
+            area: document.getElementById('dealArea') ? document.getElementById('dealArea').value : (existingDeal.area || ''),
+            blockNo: document.getElementById('dealBlockNo') ? document.getElementById('dealBlockNo').value : (existingDeal.blockNo || ''),
+            areaBlock: (document.getElementById('dealArea') && document.getElementById('dealBlockNo')) 
+                ? (document.getElementById('dealArea').value && document.getElementById('dealBlockNo').value 
+                    ? `${document.getElementById('dealArea').value} - ${document.getElementById('dealBlockNo').value}` 
+                    : (document.getElementById('dealArea').value || document.getElementById('dealBlockNo').value || ''))
+                : (existingDeal.areaBlock || ''),
             addedBy: dealEditIndex === -1 ? userName : (existingDeal.addedBy || userName),
             createdDate: dealEditIndex === -1 ? new Date().toISOString() : (existingDeal.createdDate || new Date().toISOString()),
             updatedDate: new Date().toISOString()
@@ -992,13 +1012,13 @@ async function saveUsers() {
         let perms = u.permissions;
         let loopCount = 0;
         while (typeof perms === 'string' && loopCount < 3) {
-            try { perms = JSON.parse(perms); } catch(e) { break; }
+            try { perms = JSON.parse(perms); } catch (e) { break; }
             loopCount++;
         }
         if (!perms || typeof perms !== 'object' || Array.isArray(perms)) {
             perms = {};
         }
-        
+
         // Sync assignedCategories from permissions wrapper if present, otherwise set it
         if (perms.assignedCategories) {
             u.assignedCategories = perms.assignedCategories;
@@ -1008,17 +1028,17 @@ async function saveUsers() {
             u.assignedCategories = [];
             perms.assignedCategories = [];
         }
-        
+
         // Sync charges into permissions object so it gets saved to Google Sheets
         if (u.charges !== undefined) {
             perms.charges = u.charges;
         } else if (perms.charges !== undefined) {
             u.charges = perms.charges;
         }
-        
+
         u.permissions = perms;
     });
-    
+
     // Safety check to prevent wiping the main admin account if it was missing from local storage
     const hasAdmin = users.some(u => String(u.userId).toLowerCase() === 'admin' && u.role === 'admin');
     if (!hasAdmin) {
@@ -1038,7 +1058,7 @@ async function saveUsers() {
     renderUsers();
 }
 
-window.setUserStatus = async function(index, status) {
+window.setUserStatus = async function (index, status) {
     if (users[index]) {
         users[index].status = status;
         await saveUsers();
@@ -1049,14 +1069,14 @@ function renderUsers() {
     const regularList = document.getElementById('regularUserList');
     const systemList = document.getElementById('systemUserList');
     if (!regularList || !systemList) return;
-    
+
     let regularHtml = '';
     let systemHtml = '';
 
     users.forEach((u, index) => {
         const fallbackAvatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(u.fullName || 'User') + '&background=e2e8f0&color=475569';
         const isSuperAdmin = String(u.userId).toLowerCase() === 'admin';
-        
+
         // Calculate total postings for this user across all sections
         const userName = u.username || u.fullName || u.userId || 'N/A';
         const uLower = userName.toLowerCase().trim();
@@ -1069,7 +1089,7 @@ function renderUsers() {
             return creator === uLower || creator === fullNameLower || creator === userIdLower;
         };
 
-        const totalPosts = 
+        const totalPosts =
             (categories || []).filter(userMatches).length +
             (products || []).filter(userMatches).length +
             (deals || []).filter(userMatches).length +
@@ -1077,7 +1097,7 @@ function renderUsers() {
             (blogs || []).filter(userMatches).length +
             (broadcasts || []).filter(userMatches).length +
             (travelPackages || []).filter(userMatches).length;
-        
+
         if (isSuperAdmin) {
             systemHtml += `
             <tr>
@@ -1130,12 +1150,12 @@ function renderUsers() {
                 </td>
                 <td>
                     ${(() => {
-                        const s = String(u.status || u.Status || 'active').toLowerCase();
-                        const isActive = s === 'active' || s === 'approve' || s === 'approved' || s === 'publish';
-                        return `<span class="status-pill ${isActive ? 'active' : 'pending'}">
+                    const s = String(u.status || u.Status || 'active').toLowerCase();
+                    const isActive = s === 'active' || s === 'approve' || s === 'approved' || s === 'publish';
+                    return `<span class="status-pill ${isActive ? 'active' : 'pending'}">
                             ${isActive ? '<i class="fa-solid fa-check-circle"></i> ACTIVE' : '<i class="fa-solid fa-clock"></i> PENDING'}
                         </span>`;
-                    })()}
+                })()}
                 </td>
                 <td>
                     <span class="badge" style="background:#0ea5e9; color:white; font-weight:bold; cursor:pointer; font-size:11px;" onclick="showUserPerformanceStats('${userName}')">${totalPosts} Posts</span>
@@ -1157,17 +1177,17 @@ function renderUsers() {
 
     regularList.innerHTML = regularHtml;
     systemList.innerHTML = systemHtml;
-    
+
     if (typeof populatePermissionDropdown === 'function') populatePermissionDropdown();
     if (typeof populateCategoryAssignDropdown === 'function') populateCategoryAssignDropdown();
 }
 
 
-window.toggleCompanyField = function() {
+window.toggleCompanyField = function () {
     const role = document.getElementById('userRole').value;
     const companyGroup = document.getElementById('companyNameGroup');
     const companyInput = document.getElementById('companyName');
-    
+
     if (role === 'company') {
         companyGroup.style.opacity = '1';
         companyGroup.style.pointerEvents = 'auto';
@@ -1183,14 +1203,14 @@ window.toggleCompanyField = function() {
 if (userForm) {
     userForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const existingUser = userEditIndex === -1 ? {} : users[userEditIndex];
         const newUser = {
             ...existingUser,
             id: userEditIndex === -1 ? Date.now() : existingUser.id,
             pic: document.getElementById('userPic').value,
             fullName: document.getElementById('userName').value, // Also save as userName for backward compatibility
-            userName: document.getElementById('userName').value, 
+            userName: document.getElementById('userName').value,
             username: document.getElementById('userName').value,
             userId: document.getElementById('userId').value,
             password: document.getElementById('userPassword').value,
@@ -1215,12 +1235,12 @@ if (userForm) {
     });
 }
 
-window.editUser = function(index) {
+window.editUser = function (index) {
     userEditIndex = index;
     const u = users[index];
 
     if (userFormTitle) userFormTitle.textContent = "Edit User";
-    
+
     document.getElementById('userPic').value = u.pic || '';
     document.getElementById('userName').value = u.fullName || u.userName || u.name || u.username || '';
     document.getElementById('userId').value = u.userId || u.id || u.username || '';
@@ -1228,15 +1248,15 @@ window.editUser = function(index) {
     document.getElementById('userRole').value = u.role || 'user';
     document.getElementById('companyName').value = u.companyName || '';
     document.getElementById('userStatus').value = u.status || 'active';
-    
+
     toggleCompanyField();
-    
+
     if (btnCancelUser) btnCancelUser.style.display = 'inline-block';
     if (btnSaveUser) btnSaveUser.textContent = 'Update User';
     window.scrollTo({ top: userForm.offsetTop - 100, behavior: 'smooth' });
 }
 
-window.cancelUserEdit = function() {
+window.cancelUserEdit = function () {
     userEditIndex = -1;
     if (userForm) userForm.reset();
     toggleCompanyField();
@@ -1305,19 +1325,19 @@ function populateCategoryDropdown() {
                 const uId = String(u.userId || u.id || '').trim().toLowerCase();
                 const uEmail = String(u.email || '').trim().toLowerCase();
                 const uName = String(u.username || u.userName || '').trim().toLowerCase();
-                return (uId && uId === cUid) || 
-                       (uEmail && uEmail === cUid) || 
-                       (uName && uName === cUname) ||
-                       (uName && uName === cUid);
+                return (uId && uId === cUid) ||
+                    (uEmail && uEmail === cUid) ||
+                    (uName && uName === cUname) ||
+                    (uName && uName === cUid);
             });
-            
+
             // Helper to get assigned categories from permissions or assignedCategories
             const getAssigned = (usr) => {
                 if (!usr) return [];
                 let perms = usr.permissions;
                 let loopCount = 0;
                 while (typeof perms === 'string' && loopCount < 3) {
-                    try { perms = JSON.parse(perms); } catch(e) { break; }
+                    try { perms = JSON.parse(perms); } catch (e) { break; }
                     loopCount++;
                 }
                 if (perms && typeof perms === 'object' && !Array.isArray(perms) && perms.assignedCategories) {
@@ -1334,7 +1354,7 @@ function populateCategoryDropdown() {
             while (typeof assigned === 'string' && loopCount < 3) {
                 try {
                     assigned = JSON.parse(assigned);
-                } catch(e) {
+                } catch (e) {
                     if (assigned.includes(',')) {
                         assigned = assigned.split(',').map(s => s.trim());
                     } else if (assigned) {
@@ -1349,7 +1369,7 @@ function populateCategoryDropdown() {
 
             if (assigned && Array.isArray(assigned) && assigned.length > 0) {
                 const assignedLower = assigned.map(a => String(a).trim().toLowerCase());
-                allowedCategories = uniqueCategories.filter(name => 
+                allowedCategories = uniqueCategories.filter(name =>
                     assignedLower.includes(String(name).trim().toLowerCase())
                 );
             } else {
@@ -1380,15 +1400,27 @@ function populateCategoryDropdown() {
             const selectedCat = prodCategorySelect.value;
             const prodSubCategorySelect = document.getElementById('prodSubCategory');
             if (prodSubCategorySelect) {
-                // Filter sub-categories for this category name
-                const relevantCats = categories.filter(c => c.name === selectedCat);
-                let subCats = [];
-                relevantCats.forEach(cat => {
-                    if (cat.subCategory) {
-                        subCats.push(...cat.subCategory.split(',').map(s => s.trim()).filter(s => s));
-                    }
-                });
-                const uniqueSubCats = [...new Set(subCats)];
+                let uniqueSubCats = [];
+                if (selectedCat === 'Food Stuffs' || selectedCat === 'Food') {
+                    let subCats = ['Fast Food', 'Desi Cuisine', 'Bar BQ', 'Chinese', 'Sea Food', 'Dessert'];
+                    const relevantCats = categories.filter(c => c.name === selectedCat);
+                    relevantCats.forEach(cat => {
+                        if (cat.subCategory) {
+                            subCats.push(...cat.subCategory.split(',').map(s => s.trim()).filter(s => s));
+                        }
+                    });
+                    uniqueSubCats = [...new Set(subCats)].filter(s => s !== 'Platter' && s !== 'Deals');
+                } else {
+                    // Filter sub-categories for this category name
+                    const relevantCats = categories.filter(c => c.name === selectedCat);
+                    let subCats = [];
+                    relevantCats.forEach(cat => {
+                        if (cat.subCategory) {
+                            subCats.push(...cat.subCategory.split(',').map(s => s.trim()).filter(s => s));
+                        }
+                    });
+                    uniqueSubCats = [...new Set(subCats)];
+                }
 
                 prodSubCategorySelect.innerHTML = '<option value="">Select Sub Category</option>' +
                     uniqueSubCats.map(sub => `<option value="${sub}">${sub}</option>`).join('');
@@ -1418,14 +1450,19 @@ function populateCategoryDropdown() {
             const selectedCat = dealCategorySelect.value;
             const dealSubCategorySelect = document.getElementById('dealSubCategory');
             if (dealSubCategorySelect) {
-                const relevantCats = categories.filter(c => c.name === selectedCat);
-                let subCats = [];
-                relevantCats.forEach(cat => {
-                    if (cat.subCategory) {
-                        subCats.push(...cat.subCategory.split(',').map(s => s.trim()).filter(s => s));
-                    }
-                });
-                const uniqueSubCats = [...new Set(subCats)];
+                let uniqueSubCats = [];
+                if (selectedCat === 'Food Stuffs' || selectedCat === 'Food') {
+                    uniqueSubCats = ['Platter', 'Deals'];
+                } else {
+                    const relevantCats = categories.filter(c => c.name === selectedCat);
+                    let subCats = [];
+                    relevantCats.forEach(cat => {
+                        if (cat.subCategory) {
+                            subCats.push(...cat.subCategory.split(',').map(s => s.trim()).filter(s => s));
+                        }
+                    });
+                    uniqueSubCats = [...new Set(subCats)];
+                }
 
                 dealSubCategorySelect.innerHTML = '<option value="">Select Sub Category</option>' +
                     uniqueSubCats.map(sub => `<option value="${sub}">${sub}</option>`).join('');
@@ -1436,6 +1473,97 @@ function populateCategoryDropdown() {
     }
 }
 
+window.updateBlockOptionsGlobal = function(areaVal, blockNoSelect) {
+    if (!blockNoSelect) return;
+    const currentBlockVal = blockNoSelect.value;
+    let optionsHtml = '<option value="">Select Block No.</option>';
+    
+    if (areaVal === 'Korangi') {
+        for (let i = 1; i <= 6; i++) {
+            optionsHtml += `<option value="Korangi No.${i}">Korangi No.${i}</option>`;
+            if (i <= 5) {
+                optionsHtml += `<option value="Korangi No.${i}½">Korangi No.${i}½</option>`;
+            }
+        }
+        for (let i = 31; i <= 36; i++) {
+            optionsHtml += `<option value="Sector ${i}">Sector ${i}</option>`;
+            optionsHtml += `<option value="Sector ${i}-A">Sector ${i}-A</option>`;
+            optionsHtml += `<option value="Sector ${i}-B">Sector ${i}-B</option>`;
+            if (i === 33 || i === 35 || i === 36) {
+                optionsHtml += `<option value="Sector ${i}-C">Sector ${i}-C</option>`;
+            }
+        }
+    } else if (areaVal === 'Gulshan-e-Iqbal') {
+        for (let i = 1; i <= 19; i++) {
+            optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
+            if (i === 13) {
+                ['A', 'B', 'C', 'D', 'E', 'F'].forEach(letter => {
+                    optionsHtml += `<option value="Block 13-${letter}">Block 13-${letter}</option>`;
+                });
+            }
+        }
+    } else if (areaVal === 'Gulistan-e-Johar') {
+        for (let i = 1; i <= 22; i++) {
+            optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
+        }
+    } else if (areaVal === 'North Nazimabad') {
+        const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'];
+        letters.forEach(l => {
+            optionsHtml += `<option value="Block ${l}">Block ${l}</option>`;
+        });
+    } else if (areaVal === 'Federal B Area') {
+        const fbBlocks = [
+            { num: 1, name: 'Sharifabad' },
+            { num: 2, name: 'Sharifabad' },
+            { num: 3, name: 'Hussainabad' },
+            { num: 4, name: 'Tayyababad' },
+            { num: 5, name: 'Tahiraabad' },
+            { num: 6, name: 'Tayyababad' },
+            { num: 7, name: 'Azizabad' },
+            { num: 8, name: 'Azizabad' },
+            { num: 9, name: 'Dastagir' },
+            { num: 10, name: 'Dastagir' },
+            { num: 11, name: 'Sharifabad' },
+            { num: 12, name: 'Sharifabad' },
+            { num: 13, name: 'Gulberg Town' },
+            { num: 14, name: 'Naseerabad' },
+            { num: 15, name: 'Naseerabad' },
+            { num: 16, name: 'Water Pump' },
+            { num: 17, name: 'Samanabad' },
+            { num: 18, name: 'Samanabad' },
+            { num: 19, name: 'Al-Noor Society' },
+            { num: 20, name: 'Ancholi' },
+            { num: 21, name: 'Industrial Area' }
+        ];
+        fbBlocks.forEach(b => {
+            optionsHtml += `<option value="Block ${b.num} (${b.name})">Block ${b.num} (${b.name})</option>`;
+        });
+    } else if (areaVal === 'Clifton') {
+        for (let i = 1; i <= 9; i++) {
+            optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
+        }
+    } else if (areaVal === 'Defence') {
+        for (let i = 1; i <= 8; i++) {
+            optionsHtml += `<option value="Phase ${i}">Phase ${i}</option>`;
+        }
+    } else if (areaVal === 'PECHS') {
+        for (let i = 1; i <= 6; i++) {
+            optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
+        }
+    } else if (areaVal === 'Shah Faisal') {
+        for (let i = 1; i <= 5; i++) {
+            optionsHtml += `<option value="Sector ${i}">Sector ${i}</option>`;
+        }
+    }
+    blockNoSelect.innerHTML = optionsHtml;
+    const hasOption = Array.from(blockNoSelect.options).some(opt => opt.value === currentBlockVal);
+    if (hasOption) {
+        blockNoSelect.value = currentBlockVal;
+    } else {
+        blockNoSelect.value = '';
+    }
+};
+
 // Function to render dynamic form fields
 function renderDynamicAdminFields() {
     const container = document.getElementById('dynamicProductFields');
@@ -1443,6 +1571,58 @@ function renderDynamicAdminFields() {
 
     const category = document.getElementById('prodCategory').value;
     const subCategory = document.getElementById('prodSubCategory').value;
+
+    const addressAreaBlockCityHtml = `
+            <div class="input-group">
+                <label>Address</label>
+                <input type="text" id="prodAddress" class="dynamic-admin-field" placeholder="Full Address" required>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Area</label>
+                    <select id="prodArea" class="dynamic-admin-field" required>
+                        <option value="">Select Area</option>
+                        <option value="Bahadurabad">Bahadurabad</option>
+                        <option value="Clifton">Clifton</option>
+                        <option value="Defence">Defence</option>
+                        <option value="Federal B Area">Federal B Area</option>
+                        <option value="Gulshan-e-Iqbal">Gulshan-e-Iqbal</option>
+                        <option value="Gulistan-e-Johar">Gulistan-e-Johar</option>
+                        <option value="Korangi">Korangi</option>
+                        <option value="Landhi">Landhi</option>
+                        <option value="Liaquatabad">Liaquatabad</option>
+                        <option value="Malir">Malir</option>
+                        <option value="North Nazimabad">North Nazimabad</option>
+                        <option value="Nazimabad">Nazimabad</option>
+                        <option value="Orangi">Orangi</option>
+                        <option value="PECHS">PECHS</option>
+                        <option value="Saddar">Saddar</option>
+                        <option value="Shah Faisal">Shah Faisal</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Block No.</label>
+                    <select id="prodBlockNo" class="dynamic-admin-field" required>
+                        <option value="">Select Block No.</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>City</label>
+                    <select id="prodCity" class="dynamic-admin-field" required>
+                        <option value="">Select City</option>
+                        <option value="Karachi">Karachi</option>
+                        <option value="Lahore">Lahore</option>
+                        <option value="Islamabad">Islamabad</option>
+                        <option value="Rawalpindi">Rawalpindi</option>
+                        <option value="Peshawar">Peshawar</option>
+                        <option value="Multan">Multan</option>
+                        <option value="Faisalabad">Faisalabad</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+    `;
 
     if (category === 'Vehicles' || category === 'Vehicle') {
         container.innerHTML = `
@@ -1761,31 +1941,7 @@ function renderDynamicAdminFields() {
                     <input type="text" id="prodCompanyName" class="dynamic-admin-field" placeholder="Shop / Office / Company Name" disabled>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="input-group">
-                    <label>Address</label>
-                    <input type="text" id="prodAddress" class="dynamic-admin-field" placeholder="Address" required>
-                </div>
-                <div class="input-group">
-                    <label>Area / Block No.</label>
-                    <input type="text" id="prodArea" class="dynamic-admin-field" placeholder="Area / Block No." required>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="input-group">
-                    <label>City</label>
-                    <select id="prodCity" class="dynamic-admin-field" required>
-                        <option value="">Select City</option>
-                        <option value="Karachi">Karachi</option>
-                        <option value="Lahore">Lahore</option>
-                        <option value="Islamabad">Islamabad</option>
-                        <option value="Rawalpindi">Rawalpindi</option>
-                        <option value="Peshawar">Peshawar</option>
-                        <option value="Multan">Multan</option>
-                        <option value="Faisalabad">Faisalabad</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
+            ${addressAreaBlockCityHtml}
                 <div class="input-group">
                     <label>Phone No.</label>
                     <input type="text" id="prodPhone" class="dynamic-admin-field" placeholder="Phone No." required>
@@ -1809,15 +1965,15 @@ function renderDynamicAdminFields() {
                 </div>
             </div>
         `;
-        setTimeout(() => { 
-            window.toggleLaptopShopField(); 
+        setTimeout(() => {
+            window.toggleLaptopShopField();
             const brandSelect = document.getElementById('prodBrand');
             if (brandSelect) {
                 const handleBrandChange = () => {
                     const brand = brandSelect.value;
                     const nameContainer = document.getElementById('prodNameContainer');
                     if (!nameContainer) return;
-                    
+
                     const brandNames = {
                         'Dell': [
                             'Dell 45W Laptop Charger',
@@ -1867,7 +2023,7 @@ function renderDynamicAdminFields() {
                             'Acer Predator Charger'
                         ]
                     };
-                    
+
                     if (brandNames[brand]) {
                         nameContainer.innerHTML = `
                             <label>Product Name</label>
@@ -2039,31 +2195,7 @@ function renderDynamicAdminFields() {
                     <input type="text" id="prodCompanyName" class="dynamic-admin-field" placeholder="Shop / Office / Company Name" disabled>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="input-group">
-                    <label>Address</label>
-                    <input type="text" id="prodAddress" class="dynamic-admin-field" placeholder="Address" required>
-                </div>
-                <div class="input-group">
-                    <label>Area / Block No.</label>
-                    <input type="text" id="prodArea" class="dynamic-admin-field" placeholder="Area / Block No." required>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="input-group">
-                    <label>City</label>
-                    <select id="prodCity" class="dynamic-admin-field" required>
-                        <option value="">Select City</option>
-                        <option value="Karachi">Karachi</option>
-                        <option value="Lahore">Lahore</option>
-                        <option value="Islamabad">Islamabad</option>
-                        <option value="Rawalpindi">Rawalpindi</option>
-                        <option value="Peshawar">Peshawar</option>
-                        <option value="Multan">Multan</option>
-                        <option value="Faisalabad">Faisalabad</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
+            ${addressAreaBlockCityHtml}
                 <div class="input-group">
                     <label>Phone No.</label>
                     <input type="text" id="prodPhone" class="dynamic-admin-field" placeholder="Phone No." required>
@@ -2164,11 +2296,8 @@ function renderDynamicAdminFields() {
                     <input type="text" id="prodMake" class="dynamic-admin-field" placeholder="e.g., 2023" required>
                 </div>
             </div>
+            ${addressAreaBlockCityHtml}
             <div class="form-row">
-                <div class="input-group">
-                    <label>Location / City</label>
-                    <input type="text" id="prodLocation" class="dynamic-admin-field" placeholder="e.g., Lahore" required>
-                </div>
                 <div class="input-group">
                     <label>Price (Rs.)</label>
                     <input type="number" id="prodPrice" class="dynamic-admin-field" placeholder="e.g., 150000" required>
@@ -2176,16 +2305,100 @@ function renderDynamicAdminFields() {
             </div>
         `;
     } else {
-        // Default to Food / Other fields
+        const isFood = (category === 'Food' || category === 'Foods' || category === 'Fast Food' || category === 'Desi Cuisine' || category === 'Chinese');
+        const prodNameHtml = isFood ? `
+                    <select id="prodName" class="dynamic-admin-field" required>
+                        <option value="">Select Product Name</option>
+                        <optgroup label="🍔 Fast Food">
+                            <option value="Burgers">Burgers</option>
+                            <option value="Sandwiches & Wraps">Sandwiches & Wraps</option>
+                            <option value="Pizza">Pizza</option>
+                            <option value="Fries & Snacks">Fries & Snacks</option>
+                        </optgroup>
+                        <optgroup label="🌮 Rolls">
+                            <option value="Rolls">Rolls</option>
+                        </optgroup>
+                        <optgroup label="🍛 Desi Cuisine">
+                            <option value="Rice">Rice</option>
+                            <option value="Karahi">Karahi</option>
+                            <option value="Handi">Handi</option>
+                            <option value="Curry">Curry</option>
+                            <option value="BBQ">BBQ</option>
+                            <option value="Bread">Bread</option>
+                        </optgroup>
+                        <optgroup label="🥡 Chinese">
+                            <option value="Rice">Rice</option>
+                            <option value="Noodles">Noodles</option>
+                            <option value="Main Course">Main Course</option>
+                            <option value="Soup">Soup</option>
+                            <option value="Appetizers">Appetizers</option>
+                        </optgroup>
+                        <optgroup label="🌊 Seafood">
+                            <option value="Seafood">Seafood</option>
+                        </optgroup>
+                        <optgroup label="🍰 Desserts">
+                            <option value="Desserts">Desserts</option>
+                        </optgroup>
+                        <optgroup label="🥤 Beverages">
+                            <option value="Beverages">Beverages</option>
+                        </optgroup>
+                        <optgroup label="🕌 Arabic Cuisine">
+                            <option value="Mandi">🍛Mandi</option>
+                        </optgroup>
+                    </select>
+        ` : `
+                    <input type="text" id="prodName" class="dynamic-admin-field" placeholder="Product Name" required>
+        `;
+
         container.innerHTML = `
             <div class="form-row">
                 <div class="input-group">
                     <label>Product Name</label>
-                    <input type="text" id="prodName" class="dynamic-admin-field" placeholder="Product Name" required>
+                    ${prodNameHtml}
                 </div>
                 <div class="input-group">
                     <label>Product Variety</label>
                     <input type="text" id="prodVariety" class="dynamic-admin-field" placeholder="e.g., Spicy, Large">
+                </div>
+                <div class="input-group">
+                    <label>Standard Product Type</label>
+                    <select id="prodStandardProductType" class="dynamic-admin-field">
+                        <option value="">Select Standard Product Type</option>
+                        <option value="Zinger Burger">Zinger Burger</option>
+                        <option value="Chicken Burger">Chicken Burger</option>
+                        <option value="Beef Burger">Beef Burger</option>
+                        <option value="Shami Kabab Burger">Shami Kabab Burger</option>
+                        <option value="Chicken Tikka Burger">Chicken Tikka Burger</option>
+                        <option value="Fish Burger">Fish Burger</option>
+                        <option value="Fries">Fries</option>
+                        <option value="Pizza Medium">Pizza Medium</option>
+                        <option value="Pizza Large">Pizza Large</option>
+                        <option value="Pizza Small">Pizza Small</option>
+                        <option value="Shawarma">Shawarma</option>
+                        <option value="Sandwich Shawarma">Sandwich Shawarma</option>
+                        <option value="Quarter Broast Leg">Quarter Broast Leg</option>
+                        <option value="Quarter Broast Chest">Quarter Broast Chest</option>
+                        <option value="Half Broast">Half Broast</option>
+                        <option value="Chicken Chili">Chicken Chili</option>
+                        <option value="Chicken Shashlik">Chicken Shashlik</option>
+                        <option value="Fried Rice">Fried Rice</option>
+                        <option value="Chicken Jalfrezi">Chicken Jalfrezi</option>
+                        <option value="Chicken Manchurian">Chicken Manchurian</option>
+                        <option value="Chicken Biryani">Chicken Biryani</option>
+                        <option value="Beef Biryani">Beef Biryani</option>
+                        <option value="Karahi">Karahi</option>
+                        <option value="Chicken Roll">Chicken Roll</option>
+                        <option value="Beef Roll">Beef Roll</option>
+                        <option value="Malai Boti Roll">Malai Boti Roll</option>
+                        <option value="Behari Roll">Behari Roll</option>
+                        <option value="Chicken Tikka Roll">Chicken Tikka Roll</option>
+                        <option value="Seekh Kabab Roll">Seekh Kabab Roll</option>
+                        <option value="Reshmi Roll">Reshmi Roll</option>
+                        <option value="Mayo Garlic Roll">Mayo Garlic Roll</option>
+                        <option value="Cheese Roll">Cheese Roll</option>
+                        <option value="Zinger Roll">Zinger Roll</option>
+                        <option value="Chapli Kabab Roll">Chapli Kabab Roll</option>
+                    </select>
                 </div>
             </div>
 
@@ -2278,22 +2491,252 @@ function renderDynamicAdminFields() {
                 </div>
             </div>
 
-            <div class="input-group">
-                <label>Address</label>
-                <input type="text" id="prodAddress" class="dynamic-admin-field" placeholder="Full Address">
-            </div>
-
-                <div class="form-row">
-                <div class="input-group">
-                    <label>Area / Block No.</label>
-                    <input type="text" id="prodBlockNo" class="dynamic-admin-field" placeholder="e.g. Block A">
-                </div>
-                <div class="input-group">
-                    <label>City</label>
-                    <input type="text" id="prodCity" class="dynamic-admin-field" placeholder="e.g. Lahore">
-                </div>
-            </div>
+            ${addressAreaBlockCityHtml}
         `;
+
+        if (isFood) {
+            const prodNameSelect = document.getElementById('prodName');
+            const prodSubCategorySelect = document.getElementById('prodSubCategory');
+            const standardTypeSelect = document.getElementById('prodStandardProductType');
+
+            if (prodNameSelect && standardTypeSelect) {
+                const updateStandardTypes = () => {
+                    const subCatVal = prodSubCategorySelect ? prodSubCategorySelect.value : '';
+                    const nameVal = prodNameSelect.value;
+                    const currentVal = standardTypeSelect.value;
+                    // Check if selected subcategory is Fast Food or Desi Cuisine (allowing for emoji or no emoji)
+                    const isFastFood = subCatVal.includes('Fast Food');
+                    const isDesi = subCatVal.includes('Desi Cuisine');
+                    const isArabic = subCatVal.includes('Arabic Cuisine');
+                    const isChinese = subCatVal.includes('Chinese');
+
+                    if (nameVal === 'Rolls' || nameVal === '🌮 Rolls') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Roll">Chicken Roll</option>
+                            <option value="Beef Roll">Beef Roll</option>
+                            <option value="Malai Boti Roll">Malai Boti Roll</option>
+                            <option value="Behari Roll">Behari Roll</option>
+                            <option value="Chicken Tikka Roll">Chicken Tikka Roll</option>
+                            <option value="Seekh Kabab Roll">Seekh Kabab Roll</option>
+                            <option value="Reshmi Roll">Reshmi Roll</option>
+                            <option value="Mayo Garlic Roll">Mayo Garlic Roll</option>
+                            <option value="Cheese Roll">Cheese Roll</option>
+                            <option value="Zinger Roll">Zinger Roll</option>
+                            <option value="Chapli Kabab Roll">Chapli Kabab Roll</option>
+                        `;
+                    } else if (isArabic && nameVal === 'Mandi') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Mandi">Chicken Mandi</option>
+                            <option value="Mutton Mandi">Mutton Mandi</option>
+                            <option value="Beef Mandi">Beef Mandi</option>
+                            <option value="Family Mandi">Family Mandi</option>
+                            <option value="Mixed Mandi">Mixed Mandi</option>
+                        `;
+                    } else if (isFastFood && nameVal === 'Burgers') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Beef Burger">Beef Burger</option>
+                            <option value="Cheese Burger">Cheese Burger</option>
+                            <option value="Chicken Burger">Chicken Burger</option>
+                            <option value="Crispy Chicken Burger">Crispy Chicken Burger</option>
+                            <option value="Double Patty Burger">Double Patty Burger</option>
+                            <option value="Grilled Chicken Burger">Grilled Chicken Burger</option>
+                            <option value="Jalapeno Burger">Jalapeno Burger</option>
+                            <option value="Mighty Burger">Mighty Burger</option>
+                            <option value="Tower Burger">Tower Burger</option>
+                            <option value="Zinger Burger">Zinger Burger</option>
+                        `;
+                    } else if (isFastFood && nameVal === 'Sandwiches & Wraps') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Sandwich">Chicken Sandwich</option>
+                            <option value="Club Sandwich">Club Sandwich</option>
+                            <option value="Grilled Sandwich">Grilled Sandwich</option>
+                            <option value="BBQ Sandwich">BBQ Sandwich</option>
+                            <option value="Chicken Shawarma">Chicken Shawarma</option>
+                            <option value="Beef Shawarma">Beef Shawarma</option>
+                            <option value="Chicken Wrap">Chicken Wrap</option>
+                            <option value="Zinger Wrap">Zinger Wrap</option>
+                            <option value="Chicken Roll">Chicken Roll</option>
+                            <option value="Paratha Roll">Paratha Roll</option>
+                        `;
+                    } else if (isFastFood && nameVal === 'Pizza') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Tikka Pizza">Chicken Tikka Pizza</option>
+                            <option value="Fajita Pizza">Fajita Pizza</option>
+                            <option value="Pepperoni Pizza">Pepperoni Pizza</option>
+                            <option value="Malai Boti Pizza">Malai Boti Pizza</option>
+                            <option value="Cheese Pizza">Cheese Pizza</option>
+                            <option value="Veggie Pizza">Veggie Pizza</option>
+                            <option value="Supreme Pizza">Supreme Pizza</option>
+                            <option value="BBQ Pizza">BBQ Pizza</option>
+                        `;
+                    } else if (isFastFood && nameVal === 'Fries & Snacks') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="French Fries">French Fries</option>
+                            <option value="Loaded Fries">Loaded Fries</option>
+                            <option value="Masala Fries">Masala Fries</option>
+                            <option value="Curly Fries">Curly Fries</option>
+                            <option value="Chicken Nuggets">Chicken Nuggets</option>
+                            <option value="Chicken Wings">Chicken Wings</option>
+                            <option value="Chicken Strips">Chicken Strips</option>
+                            <option value="Garlic Bread">Garlic Bread</option>
+                        `;
+                    } else if (isDesi && nameVal === 'Rice') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Biryani">Chicken Biryani</option>
+                            <option value="Beef Biryani">Beef Biryani</option>
+                            <option value="Mutton Biryani">Mutton Biryani</option>
+                            <option value="Sindhi Biryani">Sindhi Biryani</option>
+                            <option value="Chicken Pulao">Chicken Pulao</option>
+                            <option value="Beef Pulao">Beef Pulao</option>
+                            <option value="Mutton Pulao">Mutton Pulao</option>
+                        `;
+                    } else if (isDesi && nameVal === 'Karahi') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Karahi">Chicken Karahi</option>
+                            <option value="Mutton Karahi">Mutton Karahi</option>
+                            <option value="Beef Karahi">Beef Karahi</option>
+                            <option value="White Karahi">White Karahi</option>
+                        `;
+                    } else if (isDesi && nameVal === 'Handi') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Handi">Chicken Handi</option>
+                            <option value="Mutton Handi">Mutton Handi</option>
+                            <option value="Malai Handi">Malai Handi</option>
+                        `;
+                    } else if (isDesi && nameVal === 'Curry') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Curry">Chicken Curry</option>
+                            <option value="Beef Curry">Beef Curry</option>
+                            <option value="Mutton Curry">Mutton Curry</option>
+                            <option value="Aloo Gosht">Aloo Gosht</option>
+                            <option value="Nihari">Nihari</option>
+                            <option value="Paya">Paya</option>
+                            <option value="Haleem">Haleem</option>
+                        `;
+                    } else if (isDesi && nameVal === 'BBQ') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Tikka">Chicken Tikka</option>
+                            <option value="Chicken Boti">Chicken Boti</option>
+                            <option value="Malai Boti">Malai Boti</option>
+                            <option value="Behari Boti">Behari Boti</option>
+                            <option value="Seekh Kabab">Seekh Kabab</option>
+                            <option value="Chapli Kabab">Chapli Kabab</option>
+                            <option value="Shami Kabab">Shami Kabab</option>
+                            <option value="Reshmi Kabab">Reshmi Kabab</option>
+                            <option value="Chicken Malai Tikka">Chicken Malai Tikka</option>
+                        `;
+                    } else if (isDesi && nameVal === 'Bread') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Naan">Naan</option>
+                            <option value="Roghni Naan">Roghni Naan</option>
+                            <option value="Garlic Naan">Garlic Naan</option>
+                            <option value="Tandoori Roti">Tandoori Roti</option>
+                            <option value="Paratha">Paratha</option>
+                        `;
+                    } else if (isChinese && nameVal === 'Rice') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Fried Rice">Chicken Fried Rice</option>
+                            <option value="Egg Fried Rice">Egg Fried Rice</option>
+                            <option value="Vegetable Fried Rice">Vegetable Fried Rice</option>
+                            <option value="Special Fried Rice">Special Fried Rice</option>
+                        `;
+                    } else if (isChinese && nameVal === 'Noodles') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Chow Mein">Chicken Chow Mein</option>
+                            <option value="Vegetable Chow Mein">Vegetable Chow Mein</option>
+                            <option value="Chicken Hakka Noodles">Chicken Hakka Noodles</option>
+                            <option value="Singapore Noodles">Singapore Noodles</option>
+                        `;
+                    } else if (isChinese && nameVal === 'Main Course') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Chicken Manchurian">Chicken Manchurian</option>
+                            <option value="Chicken Shashlik">Chicken Shashlik</option>
+                            <option value="Chicken Chili Dry">Chicken Chili Dry</option>
+                            <option value="Chicken Chili Gravy">Chicken Chili Gravy</option>
+                            <option value="Kung Pao Chicken">Kung Pao Chicken</option>
+                            <option value="Sweet & Sour Chicken">Sweet & Sour Chicken</option>
+                        `;
+                    } else if (isChinese && nameVal === 'Soup') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Hot & Sour Soup">Hot & Sour Soup</option>
+                            <option value="Chicken Corn Soup">Chicken Corn Soup</option>
+                            <option value="Vegetable Soup">Vegetable Soup</option>
+                        `;
+                    } else if (isChinese && nameVal === 'Appetizers') {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Spring Rolls">Spring Rolls</option>
+                            <option value="Chicken Spring Rolls">Chicken Spring Rolls</option>
+                            <option value="Dynamite Chicken">Dynamite Chicken</option>
+                            <option value="Chicken Tempura">Chicken Tempura</option>
+                        `;
+                    } else {
+                        standardTypeSelect.innerHTML = `
+                            <option value="">Select Standard Product Type</option>
+                            <option value="Zinger Burger">Zinger Burger</option>
+                            <option value="Chicken Burger">Chicken Burger</option>
+                            <option value="Beef Burger">Beef Burger</option>
+                            <option value="Shami Kabab Burger">Shami Kabab Burger</option>
+                            <option value="Chicken Tikka Burger">Chicken Tikka Burger</option>
+                            <option value="Fish Burger">Fish Burger</option>
+                            <option value="Fries">Fries</option>
+                            <option value="Pizza Medium">Pizza Medium</option>
+                            <option value="Pizza Large">Pizza Large</option>
+                            <option value="Pizza Small">Pizza Small</option>
+                            <option value="Shawarma">Shawarma</option>
+                            <option value="Sandwich Shawarma">Sandwich Shawarma</option>
+                            <option value="Quarter Broast Leg">Quarter Broast Leg</option>
+                            <option value="Quarter Broast Chest">Quarter Broast Chest</option>
+                            <option value="Half Broast">Half Broast</option>
+                            <option value="Chicken Chili">Chicken Chili</option>
+                            <option value="Chicken Shashlik">Chicken Shashlik</option>
+                            <option value="Fried Rice">Fried Rice</option>
+                            <option value="Chicken Jalfrezi">Chicken Jalfrezi</option>
+                            <option value="Chicken Manchurian">Chicken Manchurian</option>
+                            <option value="Chicken Biryani">Chicken Biryani</option>
+                            <option value="Beef Biryani">Beef Biryani</option>
+                            <option value="Karahi">Karahi</option>
+                        `;
+                    }
+                    // Restore previous value if it is still valid in the new options list
+                    const hasOption = Array.from(standardTypeSelect.options).some(opt => opt.value === currentVal);
+                    if (hasOption) {
+                        standardTypeSelect.value = currentVal;
+                    } else {
+                        standardTypeSelect.value = '';
+                    }
+                };
+
+                prodNameSelect.addEventListener('change', updateStandardTypes);
+                updateStandardTypes();
+            }
+        }
+    }
+
+    const prodAreaSelect = document.getElementById('prodArea');
+    const prodBlockNoSelect = document.getElementById('prodBlockNo');
+    if (prodAreaSelect && prodBlockNoSelect) {
+        const updateBlocks = () => {
+            window.updateBlockOptionsGlobal(prodAreaSelect.value, prodBlockNoSelect);
+        };
+        prodAreaSelect.addEventListener('change', updateBlocks);
+        updateBlocks();
     }
     const staticStatus = document.getElementById('staticStatusContainer');
     if (staticStatus) {
@@ -2314,7 +2757,7 @@ function renderDynamicAdminFields() {
     }
 }
 
-window.toggleLaptopShopField = function() {
+window.toggleLaptopShopField = function () {
     const seller = document.getElementById('prodSeller')?.value;
     const shopField = document.getElementById('prodCompanyName');
     const shopGroup = document.getElementById('laptopCompanyGroup');
@@ -2340,6 +2783,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const pSub = document.getElementById('prodSubCategory');
     if (pCat) pCat.addEventListener('change', renderDynamicAdminFields);
     if (pSub) pSub.addEventListener('change', renderDynamicAdminFields);
+
+    // Update block dropdowns for Deals and Sellers
+    const dealAreaSelect = document.getElementById('dealArea');
+    const dealBlockNoSelect = document.getElementById('dealBlockNo');
+    if (dealAreaSelect && dealBlockNoSelect) {
+        const updateDealBlocks = () => {
+            window.updateBlockOptionsGlobal(dealAreaSelect.value, dealBlockNoSelect);
+        };
+        dealAreaSelect.addEventListener('change', updateDealBlocks);
+        updateDealBlocks();
+    }
+
+    const sellerAreaSelect = document.getElementById('sellerArea');
+    const sellerBlockNoSelect = document.getElementById('sellerBlockNo');
+    if (sellerAreaSelect && sellerBlockNoSelect) {
+        const updateSellerBlocks = () => {
+            window.updateBlockOptionsGlobal(sellerAreaSelect.value, sellerBlockNoSelect);
+        };
+        sellerAreaSelect.addEventListener('change', updateSellerBlocks);
+        updateSellerBlocks();
+    }
 
     // Filter controls event listeners
     const searchInput = document.getElementById('prodSearchInput');
@@ -2506,11 +2970,11 @@ function populateProductFilterOptions() {
     const cUserStr = localStorage.getItem('currentUser');
     const cUser = cUserStr ? JSON.parse(cUserStr) : {};
     const isSuperAdmin = String(cUser.userId || '').toLowerCase() === 'admin';
-    
+
     if (catSelect) {
         const uniqueCats = [...new Set(products.map(p => p.category).filter(Boolean))];
         const currentVal = catSelect.value;
-        catSelect.innerHTML = '<option value="">All Categories</option>' + 
+        catSelect.innerHTML = '<option value="">All Categories</option>' +
             uniqueCats.map(cat => `<option value="${cat}">${cat}</option>`).join('');
         catSelect.value = uniqueCats.includes(currentVal) ? currentVal : '';
     }
@@ -2521,27 +2985,27 @@ function populateProductFilterOptions() {
             postSelect.style.display = '';
             const uniquePosts = [...new Set(products.map(p => p.addedBy || 'Admin').filter(Boolean))];
             const currentVal = postSelect.value;
-            postSelect.innerHTML = '<option value="">All Authors</option>' + 
+            postSelect.innerHTML = '<option value="">All Authors</option>' +
                 uniquePosts.map(post => `<option value="${post}">${post}</option>`).join('');
             postSelect.value = uniquePosts.includes(currentVal) ? currentVal : '';
         }
     }
 }
 
-window.resetProductFilters = function() {
+window.resetProductFilters = function () {
     prodSearchQuery = "";
     prodFilterCategory = "";
     prodFilterPostBy = "";
     prodCurrentPage = 1;
-    
+
     const searchInput = document.getElementById('prodSearchInput');
     const catSelect = document.getElementById('prodFilterCategory');
     const postSelect = document.getElementById('prodFilterPostBy');
-    
+
     if (searchInput) searchInput.value = "";
     if (catSelect) catSelect.value = "";
     if (postSelect) postSelect.value = "";
-    
+
     renderAdminProducts();
 };
 
@@ -2563,12 +3027,12 @@ function renderAdminProducts() {
         // Apply filters
         const filteredProducts = mappedProducts.filter(item => {
             const { prod } = item;
-            
+
             // Only show own products if not super admin
             if (!isSuperAdmin && prod.addedBy !== userName) {
                 return false;
             }
-            
+
             // Search filter
             if (prodSearchQuery) {
                 const nameMatch = String(prod.name || '').toLowerCase().includes(prodSearchQuery);
@@ -2680,14 +3144,14 @@ function renderAdminProducts() {
                 paginationContainer.style.display = 'flex';
                 const showFrom = totalItems === 0 ? 0 : startIndex + 1;
                 const showTo = Math.min(endIndex, totalItems);
-                
+
                 let pagesHtml = '';
                 // Prev Button
                 pagesHtml += `<button onclick="changeProdPage(${prodCurrentPage - 1})" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" ${prodCurrentPage === 1 ? 'disabled style="opacity: 0.5; pointer-events: none;"' : ''}><i class="fa-solid fa-chevron-left"></i> Prev</button>`;
-                
+
                 // Page numbers
                 pagesHtml += `<span style="font-weight: 600; color: #334155; font-size: 0.8rem; margin: 0 10px;">Page ${prodCurrentPage} of ${totalPages}</span>`;
-                
+
                 // Next Button
                 pagesHtml += `<button onclick="changeProdPage(${prodCurrentPage + 1})" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" ${prodCurrentPage === totalPages ? 'disabled style="opacity: 0.5; pointer-events: none;"' : ''}>Next <i class="fa-solid fa-chevron-right"></i></button>`;
 
@@ -2705,7 +3169,7 @@ function renderAdminProducts() {
 }
 
 // Page change handler
-window.changeProdPage = function(page) {
+window.changeProdPage = function (page) {
     prodCurrentPage = page;
     renderAdminProducts();
     const productListEl = document.querySelector('.grid-table-header');
@@ -2772,6 +3236,15 @@ window.editProduct = (index) => {
                     field.value = prod[key];
                 }
             });
+
+            const areaSelect = document.getElementById('prodArea');
+            if (areaSelect) {
+                areaSelect.dispatchEvent(new Event('change'));
+                const blockSelect = document.getElementById('prodBlockNo');
+                if (blockSelect && prod.blockNo !== undefined) {
+                    blockSelect.value = prod.blockNo;
+                }
+            }
 
             if (prod.category === 'Computer' && (prod.subCategory === 'Laptops' || prod.subCategory === 'ChromeBook' || prod.subCategory === 'Chromebook' || prod.subCategory === 'Chromebooks' || prod.subCategory === 'Laptop Charger')) {
                 window.toggleLaptopShopField();
@@ -3357,30 +3830,30 @@ if (typeof renderDailyPrices !== 'function') {
 // ==========================================
 // USER RIGHTS MANAGEMENT
 // ==========================================
-window.populatePermissionDropdown = function() {
+window.populatePermissionDropdown = function () {
     const select = document.getElementById('rightsUserSelect');
     if (!select) return;
-    
+
     const currentSelection = select.value;
     select.innerHTML = '<option value="">Select a user...</option>';
-    
+
     users.forEach(u => {
         const option = document.createElement('option');
         option.value = u.userId;
         option.textContent = `${u.fullName || u.userId} (${u.role})`;
         select.appendChild(option);
     });
-    
+
     if (currentSelection && users.some(u => u.userId === currentSelection)) {
         select.value = currentSelection;
     }
 };
 
-window.onUserSelectChange = function() {
+window.onUserSelectChange = function () {
     const userSelect = document.getElementById('rightsUserSelect');
     const sectionCheckboxes = document.querySelectorAll('.section-checkbox');
     const chargesInput = document.getElementById('rightsUserCharges');
-    
+
     // Reset sections
     sectionCheckboxes.forEach(cb => cb.checked = false);
 
@@ -3389,7 +3862,7 @@ window.onUserSelectChange = function() {
         loadUserPermissions();
         return;
     }
-    
+
     const user = users.find(u => u.userId === userSelect.value);
     if (!user) {
         if (chargesInput) chargesInput.value = '';
@@ -3400,7 +3873,7 @@ window.onUserSelectChange = function() {
     // Normalize permissions string/object safely first
     let perms = user.permissions;
     if (typeof perms === 'string') {
-        try { perms = JSON.parse(perms); } catch(e) { perms = {}; }
+        try { perms = JSON.parse(perms); } catch (e) { perms = {}; }
     }
     if (!perms || typeof perms !== 'object' || Array.isArray(perms)) {
         perms = {};
@@ -3430,37 +3903,37 @@ window.onUserSelectChange = function() {
     loadUserPermissions();
 };
 
-window.loadUserPermissions = function() {
+window.loadUserPermissions = function () {
     const userSelect = document.getElementById('rightsUserSelect');
     const sectionCheckboxes = document.querySelectorAll('.section-checkbox');
     const permCheckboxes = document.querySelectorAll('.perm-checkbox');
-    
+
     permCheckboxes.forEach(cb => cb.checked = false);
-    
+
     if (!userSelect || !userSelect.value) return;
-    
+
     // Check which sections are selected
     const selectedSections = Array.from(sectionCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
-    
+
     const user = users.find(u => u.userId === userSelect.value);
     if (!user) return;
-    
+
     // Normalize permissions string/object safely
     let perms = user.permissions;
     if (typeof perms === 'string') {
-        try { perms = JSON.parse(perms); } catch(e) { perms = {}; }
+        try { perms = JSON.parse(perms); } catch (e) { perms = {}; }
     }
     if (!perms || typeof perms !== 'object' || Array.isArray(perms)) {
         perms = {};
     }
     user.permissions = perms;
-    
+
     if (user.role === 'admin' && user.userId === 'admin') {
         permCheckboxes.forEach(cb => cb.checked = true);
     } else {
         if (selectedSections.length > 0) {
             const firstSectionPerms = perms[selectedSections[0]] || [];
-            
+
             // To be accurate, we'll just show the rights of the first checked section to populate the UI.
             firstSectionPerms.forEach(action => {
                 const cb = document.querySelector(`.perm-checkbox[value="${action}"]`);
@@ -3476,9 +3949,9 @@ if (rightsForm) {
         e.preventDefault();
         const userSelect = document.getElementById('rightsUserSelect');
         const sectionCheckboxes = document.querySelectorAll('.section-checkbox');
-        
+
         const selectedSections = Array.from(sectionCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
-        
+
         if (!userSelect || !userSelect.value) {
             alert('Please select a user first.');
             return;
@@ -3487,35 +3960,35 @@ if (rightsForm) {
             alert('Please select at least one section.');
             return;
         }
-        
+
         const userIndex = users.findIndex(u => u.userId === userSelect.value);
         if (userIndex === -1) return;
-        
+
         const permCheckboxes = document.querySelectorAll('.perm-checkbox');
         const selectedActions = [];
         permCheckboxes.forEach(cb => {
             if (cb.checked) selectedActions.push(cb.value);
         });
-        
+
         let currentPerms = users[userIndex].permissions;
         // Normalize if it was previously an array or undefined
         if (!currentPerms || Array.isArray(currentPerms) || typeof currentPerms !== 'object') {
             currentPerms = {};
         }
-        
+
         // Apply rights to all selected sections
         selectedSections.forEach(sec => {
             currentPerms[sec] = selectedActions;
         });
-        
+
         users[userIndex].permissions = currentPerms;
-        
+
         // Save charges rate
         const chargesInput = document.getElementById('rightsUserCharges');
         if (chargesInput) {
             users[userIndex].charges = parseFloat(chargesInput.value) || 0;
         }
-        
+
         await saveUsers();
         alert('User rights updated successfully!');
     });
@@ -3524,13 +3997,13 @@ if (rightsForm) {
 // ==========================================
 // USER CATEGORIES ASSIGNMENT
 // ==========================================
-window.populateCategoryAssignDropdown = function() {
+window.populateCategoryAssignDropdown = function () {
     const select = document.getElementById('categoryAssignUserSelect');
     if (!select) return;
-    
+
     const currentSelection = select.value;
     select.innerHTML = '<option value="">Select a user...</option>';
-    
+
     users.forEach(u => {
         const isSuperAdmin = String(u.userId).toLowerCase() === 'admin';
         if (!isSuperAdmin) {
@@ -3540,18 +4013,18 @@ window.populateCategoryAssignDropdown = function() {
             select.appendChild(option);
         }
     });
-    
+
     if (currentSelection && users.some(u => u.userId === currentSelection)) {
         select.value = currentSelection;
     }
 };
 
-window.populateCategoryAssignGrid = function() {
+window.populateCategoryAssignGrid = function () {
     const grid = document.getElementById('categoriesAssignGrid');
     if (!grid) return;
-    
+
     const uniqueCategories = [...new Set(categories.map(c => c.name))];
-    
+
     grid.innerHTML = uniqueCategories.map(catName => {
         return `
             <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
@@ -3561,17 +4034,17 @@ window.populateCategoryAssignGrid = function() {
     }).join('');
 };
 
-window.onCategoryAssignUserChange = function() {
+window.onCategoryAssignUserChange = function () {
     const userSelect = document.getElementById('categoryAssignUserSelect');
     const checkboxes = document.querySelectorAll('.cat-assign-checkbox');
-    
+
     checkboxes.forEach(cb => cb.checked = false);
-    
+
     if (!userSelect || !userSelect.value) return;
-    
+
     const user = users.find(u => u.userId === userSelect.value);
     if (!user) return;
-    
+
     let assigned = (user.permissions && user.permissions.assignedCategories)
         ? user.permissions.assignedCategories
         : (user.assignedCategories || []);
@@ -3580,7 +4053,7 @@ window.onCategoryAssignUserChange = function() {
     while (typeof assigned === 'string' && loopCount < 3) {
         try {
             assigned = JSON.parse(assigned);
-        } catch(e) {
+        } catch (e) {
             if (assigned.includes(',')) {
                 assigned = assigned.split(',').map(s => s.trim());
             } else if (assigned) {
@@ -3595,7 +4068,7 @@ window.onCategoryAssignUserChange = function() {
     if (!Array.isArray(assigned)) {
         assigned = [];
     }
-    
+
     checkboxes.forEach(cb => {
         if (assigned.includes(cb.value)) {
             cb.checked = true;
@@ -3612,41 +4085,41 @@ if (categoryAssignForm) {
             alert('Please select a user first.');
             return;
         }
-        
+
         const userIndex = users.findIndex(u => u.userId === userSelect.value);
         if (userIndex === -1) return;
-        
+
         const checkboxes = document.querySelectorAll('.cat-assign-checkbox');
         const selectedCategories = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
-        
+
         // Ensure permissions object exists and is parsed
         let perms = users[userIndex].permissions;
         let loopCount = 0;
         while (typeof perms === 'string' && loopCount < 3) {
-            try { perms = JSON.parse(perms); } catch(e) { break; }
+            try { perms = JSON.parse(perms); } catch (e) { break; }
             loopCount++;
         }
         if (!perms || typeof perms !== 'object' || Array.isArray(perms)) {
             perms = {};
         }
-        
+
         perms.assignedCategories = selectedCategories;
         users[userIndex].permissions = perms;
         users[userIndex].assignedCategories = selectedCategories;
-        
+
         await saveUsers();
         alert('Category assignment updated successfully!');
     });
 }
 
-window.enforceUserPermissions = function() {
+window.enforceUserPermissions = function () {
     try {
         const currentUserStr = localStorage.getItem('currentUser');
         if (!currentUserStr) return;
-        
+
         let currentUser = JSON.parse(currentUserStr);
         if (String(currentUser.userId || currentUser.username || '').toLowerCase() === 'admin') return; // Super admin exception
-        
+
         // ALWAYS use the freshest data from the fetched 'users' array if available
         const cUid = String(currentUser.userId || '').trim().toLowerCase();
         const cUname = String(currentUser.username || '').trim().toLowerCase();
@@ -3654,10 +4127,10 @@ window.enforceUserPermissions = function() {
             const uId = String(u.userId || u.id || '').trim().toLowerCase();
             const uEmail = String(u.email || '').trim().toLowerCase();
             const uName = String(u.username || u.userName || '').trim().toLowerCase();
-            return (uId && uId === cUid) || 
-                   (uEmail && uEmail === cUid) || 
-                   (uName && uName === cUname) ||
-                   (uName && uName === cUid);
+            return (uId && uId === cUid) ||
+                (uEmail && uEmail === cUid) ||
+                (uName && uName === cUname) ||
+                (uName && uName === cUid);
         });
         if (liveUser) {
             currentUser.role = liveUser.role || currentUser.role;
@@ -3669,34 +4142,34 @@ window.enforceUserPermissions = function() {
 
         // Apply permissions to ALL non-super-admin users (admin, company, user)
         let perms = currentUser.permissions;
-        
+
         // Aggressively parse stringified JSON (handles double-stringification)
         let loopCount = 0;
         while (typeof perms === 'string' && loopCount < 3) {
-            try { 
-                perms = JSON.parse(perms); 
-            } catch(e) { 
-                break; 
+            try {
+                perms = JSON.parse(perms);
+            } catch (e) {
+                break;
             }
             loopCount++;
         }
-        
+
         if (!perms || Array.isArray(perms) || typeof perms !== 'object') {
             perms = {}; // Legacy or no perms
         }
-        
+
         console.log("Enforcing permissions for user:", currentUser.userId, "Parsed Perms:", perms);
-        
+
         const menuItems = document.querySelectorAll('.menu li[onclick^="showSection"]');
-        
+
         menuItems.forEach(li => {
             const sectionMatch = li.getAttribute('onclick').match(/showSection\('([^']+)'\)/);
             if (sectionMatch && sectionMatch[1]) {
                 const sectionId = sectionMatch[1];
                 // Always show dashboard
                 if (sectionId !== 'dashboard') {
-                    // Force hide 'Manage Users' for anyone except Super Admin
-                    if (sectionId === 'users' && String(currentUser.userId || '').toLowerCase() !== 'admin') {
+                    // Force hide 'Manage Users' and 'Manage Sellers' for anyone except Super Admin
+                    if ((sectionId === 'users' || sectionId === 'sellers') && String(currentUser.userId || '').toLowerCase() !== 'admin') {
                         li.style.display = 'none';
                     } else {
                         const sectionRights = perms[sectionId] || [];
@@ -3706,7 +4179,7 @@ window.enforceUserPermissions = function() {
                             // Ensure it's visible if it has rights (in case it was hidden)
                             li.style.display = '';
                         }
-                        
+
                         // Enforce Publish/Draft rights - Force Draft for anyone except Super Admin
                         if (String(currentUser.userId || '').toLowerCase() !== 'admin' || !sectionRights.includes('Publish')) {
                             restrictPublishForSection(sectionId);
@@ -3715,15 +4188,15 @@ window.enforceUserPermissions = function() {
                 }
             }
         });
-    } catch(e) {
+    } catch (e) {
         console.error("Error enforcing permissions", e);
     }
 };
 
-window.restrictPublishForSection = function(sectionId) {
+window.restrictPublishForSection = function (sectionId) {
     const sectionEl = document.getElementById(sectionId);
     if (!sectionEl) return;
-    
+
     const statusSelects = sectionEl.querySelectorAll('select');
     statusSelects.forEach(select => {
         let hasPublish = false;
@@ -3734,7 +4207,7 @@ window.restrictPublishForSection = function(sectionId) {
                 hasPublish = true;
             }
         });
-        
+
         if (hasPublish) {
             select.value = 'Draft';
             select.addEventListener('change', (e) => {
@@ -3746,7 +4219,7 @@ window.restrictPublishForSection = function(sectionId) {
     });
 };
 
-window.toggleApproval = async function(type, index) {
+window.toggleApproval = async function (type, index) {
     let arr = [];
     let saveFunc = null;
     let renderFunc = null;
@@ -3764,34 +4237,34 @@ window.toggleApproval = async function(type, index) {
     } else if (type === 'banners') {
         arr = banners; saveFunc = DataService.saveBanners; renderFunc = renderBanners;
     }
-    
+
     if (!arr || !arr[index]) return;
     const item = arr[index];
     const isDraft = item.status === 'Draft' || item.dealStatus === 'Draft' || item.prodStatus === 'Draft';
-    
+
     const newStatus = isDraft ? 'Publish' : 'Draft';
     if (item.status !== undefined) item.status = newStatus;
     if (item.dealStatus !== undefined) item.dealStatus = newStatus;
     if (item.prodStatus !== undefined) item.prodStatus = newStatus;
-    
+
     if (saveFunc) await saveFunc(arr);
     if (renderFunc) renderFunc();
     if (typeof updatePendingApprovalsBadge === 'function') updatePendingApprovalsBadge();
 };
 
-window.updatePendingApprovalsBadge = function() {
+window.updatePendingApprovalsBadge = function () {
     try {
         const currentUserStr = localStorage.getItem('currentUser');
         if (!currentUserStr) return;
         const currentUser = JSON.parse(currentUserStr);
         const isSuperAdmin = String(currentUser.userId || '').toLowerCase() === 'admin';
-        
+
         if (!isSuperAdmin) {
             // For regular users, we can just show them how many of THEIR posts are pending
             const userName = currentUser.fullName || currentUser.username || currentUser.userId || 'Admin';
             let userPendingCount = 0;
             let userNotifsHtml = '';
-            
+
             const checkUserPending = (arr, name) => {
                 const count = arr.filter(item => item.addedBy === userName && (item.status === 'Draft' || item.prodStatus === 'Draft')).length;
                 if (count > 0) {
@@ -3822,7 +4295,7 @@ window.updatePendingApprovalsBadge = function() {
             });
             return;
         }
-        
+
         const counts = {
             products: products.filter(p => p.status === 'Draft' || p.prodStatus === 'Draft').length,
             deals: deals.filter(d => d.status === 'Draft' || d.dealStatus === 'Draft').length,
@@ -3831,7 +4304,7 @@ window.updatePendingApprovalsBadge = function() {
             broadcasts: broadcasts.filter(b => b.status === 'Draft').length,
             travel: travelPackages.filter(p => p.status === 'Draft').length
         };
-        
+
         let totalAdminPending = 0;
         let adminNotifsHtml = '';
 
@@ -3859,12 +4332,12 @@ window.updatePendingApprovalsBadge = function() {
         if (notifList) {
             notifList.innerHTML = totalAdminPending > 0 ? adminNotifsHtml : `<div style="padding: 15px; text-align: center; color: #cbd5e1; font-size: 0.9rem;">No new notifications</div>`;
         }
-    } catch(e) {
+    } catch (e) {
         console.error("Error updating badges", e);
     }
 };
 
-window.populateAdminHeader = function() {
+window.populateAdminHeader = function () {
     const cUserStr = localStorage.getItem('currentUser');
     if (!cUserStr) return;
     const cUser = JSON.parse(cUserStr);
@@ -3903,13 +4376,13 @@ if (liveRatesForm) {
             if (parsedRates.gold) document.getElementById("adminGoldPrice").value = parsedRates.gold;
             if (parsedRates.updated) document.getElementById("ratesUpdatedTime").value = parsedRates.updated;
         }
-    } catch(e) {}
+    } catch (e) { }
 
-    liveRatesForm.addEventListener("submit", async function(e) {
+    liveRatesForm.addEventListener("submit", async function (e) {
         e.preventDefault();
 
         const currentTime = new Date().toLocaleString();
-        
+
         const previousRatesStr = localStorage.getItem("stopbuyLiveRates");
         const previousRates = previousRatesStr ? JSON.parse(previousRatesStr) : {};
 
@@ -3931,9 +4404,9 @@ if (liveRatesForm) {
         if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Updating...';
 
         await DataService.saveLiveRates(ratesData);
-        
+
         if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-save"></i> Update Rates';
-        
+
         const timeField = document.getElementById("ratesUpdatedTime");
         if (timeField) timeField.value = currentTime;
 
@@ -3944,7 +4417,7 @@ if (liveRatesForm) {
 // Auto show current time on load if not set
 const timeField = document.getElementById("ratesUpdatedTime");
 if (timeField && !timeField.value) {
-   timeField.value = new Date().toLocaleString();
+    timeField.value = new Date().toLocaleString();
 }
 
 // ==========================================
@@ -3956,9 +4429,9 @@ let performanceTargetUser = null; // For filtering by specific user from Manage 
 
 
 
-window.showPage = function(pageId) {
+window.showPage = function (pageId) {
     window.showSection(pageId);
-    const targetLi = Array.from(document.querySelectorAll('.menu li')).find(li => 
+    const targetLi = Array.from(document.querySelectorAll('.menu li')).find(li =>
         li.getAttribute('onclick') && li.getAttribute('onclick').includes(pageId)
     );
     if (targetLi) {
@@ -3968,14 +4441,14 @@ window.showPage = function(pageId) {
 };
 
 // Redirect user stats button to performance tab
-window.showUserPerformanceStats = function(username) {
+window.showUserPerformanceStats = function (username) {
     performanceTargetUser = username;
     window.showPage('performance');
 };
 
 
 
-window.setPerformanceFilter = function(filterType, btn) {
+window.setPerformanceFilter = function (filterType, btn) {
     performanceFilter = filterType;
     performanceTargetUser = null; // reset specific user filter
 
@@ -3994,10 +4467,10 @@ window.setPerformanceFilter = function(filterType, btn) {
         b.classList.remove('bg-slate-700', 'text-white');
         b.classList.add('text-slate-300');
     });
-    
+
     let targetBtn = btn;
     if (!targetBtn) {
-        targetBtn = Array.from(document.querySelectorAll('.perf-filter-btn')).find(b => 
+        targetBtn = Array.from(document.querySelectorAll('.perf-filter-btn')).find(b =>
             b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${filterType}'`)
         );
     }
@@ -4015,7 +4488,7 @@ window.setPerformanceFilter = function(filterType, btn) {
     compilePerformanceMetrics();
 };
 
-window.applyCustomDateFilter = function() {
+window.applyCustomDateFilter = function () {
     const start = document.getElementById('perfStartDate').value;
     const end = document.getElementById('perfEndDate').value;
     if (!start || !end) {
@@ -4055,7 +4528,7 @@ function isDateInFilterRange(date, filterType, customStart, customEnd) {
     const dTime = date.getTime();
     const now = new Date();
     const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-    
+
     if (filterType === 'today') {
         return dTime >= startOfToday;
     } else if (filterType === 'week') {
@@ -4067,18 +4540,18 @@ function isDateInFilterRange(date, filterType, customStart, customEnd) {
     } else if (filterType === '3months') {
         const threeMonthsAgo = new Date();
         threeMonthsAgo.setMonth(now.getMonth() - 3);
-        threeMonthsAgo.setHours(0,0,0,0);
+        threeMonthsAgo.setHours(0, 0, 0, 0);
         return dTime >= threeMonthsAgo.getTime();
     } else if (filterType === 'custom') {
         if (!customStart || !customEnd) return true;
-        const sTime = new Date(customStart).setHours(0,0,0,0);
-        const eTime = new Date(customEnd).setHours(23,59,59,999);
+        const sTime = new Date(customStart).setHours(0, 0, 0, 0);
+        const eTime = new Date(customEnd).setHours(23, 59, 59, 999);
         return dTime >= sTime && dTime <= eTime;
     }
     return true;
 }
 
-window.compilePerformanceMetrics = function() {
+window.compilePerformanceMetrics = function () {
     // Inputs
     const customStart = document.getElementById('perfStartDate') ? document.getElementById('perfStartDate').value : '';
     const customEnd = document.getElementById('perfEndDate') ? document.getElementById('perfEndDate').value : '';
@@ -4117,7 +4590,7 @@ window.compilePerformanceMetrics = function() {
     let displayUsers = [...userList];
     if (performanceTargetUser) {
         const targetLower = performanceTargetUser.toLowerCase().trim();
-        displayUsers = displayUsers.filter(u => 
+        displayUsers = displayUsers.filter(u =>
             u.username.toLowerCase().trim() === targetLower ||
             u.fullName.toLowerCase().trim() === targetLower ||
             u.userId.toLowerCase().trim() === targetLower
@@ -4128,9 +4601,9 @@ window.compilePerformanceMetrics = function() {
     const userMatches = (item, user) => {
         const creator = String(item["Post By"] || item.postBy || item.addedBy || '').toLowerCase().trim();
         if (!creator) return false;
-        return creator === user.fullName.toLowerCase().trim() || 
-               creator === user.username.toLowerCase().trim() || 
-               creator === (user.userId || '').toLowerCase().trim();
+        return creator === user.fullName.toLowerCase().trim() ||
+            creator === user.username.toLowerCase().trim() ||
+            creator === (user.userId || '').toLowerCase().trim();
     };
 
     // Filter items based on active range
@@ -4189,7 +4662,7 @@ window.compilePerformanceMetrics = function() {
         const uBlogs = filteredBlogs.filter(item => userMatches(item, user)).length;
         const uBroadcasts = filteredBroadcasts.filter(item => userMatches(item, user)).length;
         const uTravel = filteredTravel.filter(item => userMatches(item, user)).length;
-        
+
         return {
             ...user,
             categories: uCategories,
@@ -4211,7 +4684,7 @@ window.compilePerformanceMetrics = function() {
     if (document.getElementById('perfStatBanners')) document.getElementById('perfStatBanners').textContent = totalBannersCount;
     if (document.getElementById('perfStatTravel')) document.getElementById('perfStatTravel').textContent = totalTravelCount;
     if (document.getElementById('perfStatTotal')) {
-        document.getElementById('perfStatTotal').textContent = 
+        document.getElementById('perfStatTotal').textContent =
             totalCategoriesCount + totalProductsCount + totalDealsCount + totalAdsCount + totalBannersCount + totalBlogsCount + totalBroadcastsCount + totalTravelCount;
     }
 
@@ -4251,7 +4724,7 @@ window.compilePerformanceMetrics = function() {
             const wBlogs = allBlogs.filter(b => userMatches(b, user) && parseItemDate(b) >= weeklyStart).length;
             const wBroadcasts = allBroadcasts.filter(b => userMatches(b, user) && parseItemDate(b) >= weeklyStart).length;
             const wTravel = allTravel.filter(b => userMatches(b, user) && parseItemDate(b) >= weeklyStart).length;
-            
+
             return {
                 ...user,
                 totalThisWeek: wCategories + wProducts + wDeals + wAds + wBanners + wBlogs + wBroadcasts + wTravel
@@ -4284,7 +4757,7 @@ window.compilePerformanceMetrics = function() {
             const mBlogs = allBlogs.filter(b => userMatches(b, user) && parseItemDate(b) >= monthlyStart).length;
             const mBroadcasts = allBroadcasts.filter(b => userMatches(b, user) && parseItemDate(b) >= monthlyStart).length;
             const mTravel = allTravel.filter(b => userMatches(b, user) && parseItemDate(b) >= monthlyStart).length;
-            
+
             return {
                 ...user,
                 totalThisMonth: mCategories + mProducts + mDeals + mAds + mBanners + mBlogs + mBroadcasts + mTravel
@@ -4320,7 +4793,7 @@ function getWeekDaysData(filteredItems) {
     return daysData;
 }
 
-window.renderPerformanceCharts = function(userStats, filteredCategories, filteredProducts, filteredDeals, filteredAds, filteredBanners, filteredBlogs, filteredBroadcasts, filteredTravel) {
+window.renderPerformanceCharts = function (userStats, filteredCategories, filteredProducts, filteredDeals, filteredAds, filteredBanners, filteredBlogs, filteredBroadcasts, filteredTravel) {
     if (typeof Chart === 'undefined') {
         console.warn("Chart.js is not loaded. Skipping rendering of performance charts.");
         return;
@@ -4331,7 +4804,7 @@ window.renderPerformanceCharts = function(userStats, filteredCategories, filtere
         const weeklyCtx = document.getElementById('weeklyActivityChart');
         if (weeklyCtx) {
             if (perfCharts.weekly) perfCharts.weekly.destroy();
-            
+
             const catWeek = getWeekDaysData(filteredCategories);
             const prodWeek = getWeekDaysData(filteredProducts);
             const dealWeek = getWeekDaysData(filteredDeals);
@@ -4500,30 +4973,30 @@ window.renderPerformanceCharts = function(userStats, filteredCategories, filtere
 // --- USER POSTING DETAILS INVOICE MODAL LOGIC ---
 let currentInvoiceUser = null;
 
-window.openUserPostingInvoice = function(username) {
+window.openUserPostingInvoice = function (username) {
     currentInvoiceUser = username;
     const modal = document.getElementById('userInvoiceModal');
     if (!modal) return;
     modal.classList.remove('hidden');
-    
+
     // Set default select to This Month
     const filterSelect = document.getElementById('invoiceFilterSelect');
     if (filterSelect) {
         filterSelect.value = 'month';
         document.getElementById('invoiceCustomDateRange').classList.add('hidden');
     }
-    
+
     document.getElementById('invoiceGenerationDate').textContent = new Date().toLocaleString();
-    
+
     recalculateInvoice();
 };
 
-window.closeUserInvoiceModal = function() {
+window.closeUserInvoiceModal = function () {
     const modal = document.getElementById('userInvoiceModal');
     if (modal) modal.classList.add('hidden');
 };
 
-window.onInvoiceFilterChange = function() {
+window.onInvoiceFilterChange = function () {
     const val = document.getElementById('invoiceFilterSelect').value;
     const customContainer = document.getElementById('invoiceCustomDateRange');
     if (val === 'custom') {
@@ -4534,13 +5007,13 @@ window.onInvoiceFilterChange = function() {
     }
 };
 
-window.onInvoiceCustomDateChange = function() {
+window.onInvoiceCustomDateChange = function () {
     recalculateInvoice();
 };
 
-window.recalculateInvoice = function() {
+window.recalculateInvoice = function () {
     if (!currentInvoiceUser) return;
-    
+
     // Construct userList from global users array so it is in scope
     const userList = users.map(u => ({
         ...u,
@@ -4561,15 +5034,15 @@ window.recalculateInvoice = function() {
         permissions: {},
         charges: 0
     };
-    
+
     document.getElementById('invoiceUserFullName').textContent = `User: ${user.fullName}`;
     document.getElementById('invoiceUserName').textContent = user.username;
     document.getElementById('invoiceUserRole').textContent = user.role.toUpperCase();
-    
+
     // Normalize permissions string/object safely
     let perms = user.permissions;
     if (typeof perms === 'string') {
-        try { perms = JSON.parse(perms); } catch(e) { perms = {}; }
+        try { perms = JSON.parse(perms); } catch (e) { perms = {}; }
     }
     if (!perms || typeof perms !== 'object' || Array.isArray(perms)) {
         perms = {};
@@ -4582,25 +5055,25 @@ window.recalculateInvoice = function() {
     if (rateEl) rateEl.textContent = `Rs. ${userRate}`;
     const rateFooterEl = document.getElementById('invoiceRatePerPostFooter');
     if (rateFooterEl) rateFooterEl.textContent = userRate;
-    
+
     // Get invoice filter settings
     const filterType = document.getElementById('invoiceFilterSelect').value;
     const customStart = document.getElementById('invoiceStartDate').value;
     const customEnd = document.getElementById('invoiceEndDate').value;
-    
+
     // Get all items in selected range matching this user
     const userMatches = (item) => {
         const creator = String(item["Post By"] || item.postBy || item.addedBy || '').toLowerCase().trim();
         if (!creator) return false;
-        return creator === user.fullName.toLowerCase().trim() || 
-               creator === user.username.toLowerCase().trim() || 
-               creator === (user.userId || '').toLowerCase().trim();
+        return creator === user.fullName.toLowerCase().trim() ||
+            creator === user.username.toLowerCase().trim() ||
+            creator === (user.userId || '').toLowerCase().trim();
     };
-    
+
     const filterByDate = (items) => {
         return items.filter(item => isDateInFilterRange(parseItemDate(item), filterType, customStart, customEnd));
     };
-    
+
     const userCategories = filterByDate(categories || []).filter(userMatches);
     const userProducts = filterByDate(products || []).filter(userMatches);
     const userDeals = filterByDate(deals || []).filter(userMatches);
@@ -4609,7 +5082,7 @@ window.recalculateInvoice = function() {
     const userBlogs = filterByDate(blogs || []).filter(userMatches);
     const userBroadcasts = filterByDate(broadcasts || []).filter(userMatches);
     const userTravel = filterByDate(travelPackages || []).filter(userMatches);
-    
+
     const getNamesList = (items) => {
         if (items.length === 0) return `<span class="text-slate-500 italic">No posts</span>`;
         return items.map(item => {
@@ -4619,7 +5092,7 @@ window.recalculateInvoice = function() {
             return `<span class="inline-block bg-slate-800 text-slate-300 text-xs px-2 py-0.5 rounded border border-slate-700/50 mr-1.5 mb-1.5">${name} (${dateStr})</span>`;
         }).join('');
     };
-    
+
     const sections = [
         { name: 'Categories', count: userCategories.length, details: getNamesList(userCategories) },
         { name: 'Products', count: userProducts.length, details: getNamesList(userProducts) },
@@ -4630,7 +5103,7 @@ window.recalculateInvoice = function() {
         { name: 'Broadcast', count: userBroadcasts.length, details: getNamesList(userBroadcasts) },
         { name: 'Travel', count: userTravel.length, details: getNamesList(userTravel) }
     ];
-    
+
     let total = 0;
     const body = document.getElementById('invoiceTableBody');
     body.innerHTML = sections.map(sec => {
@@ -4643,13 +5116,390 @@ window.recalculateInvoice = function() {
             </tr>
         `;
     }).join('');
-    
+
     document.getElementById('invoiceTotalCount').textContent = total;
     const paymentEl = document.getElementById('invoiceTotalPayment');
     if (paymentEl) paymentEl.textContent = `Rs. ${(total * userRate).toFixed(2)}`;
 };
 
-window.printUserInvoice = function() {
+window.printUserInvoice = function () {
     window.print();
 };
+
+// --- Seller Management Functions ---
+
+window.generateSellerId = function() {
+    const idField = document.getElementById('sellerId');
+    if (idField && sellerEditIndex === -1) {
+        const num = Math.floor(100000 + Math.random() * 900000);
+        idField.value = 'SEL-' + num;
+    }
+};
+
+window.toggleSellerBranchFields = function() {
+    const branches = document.getElementById('sellerBranches')?.value || 'No';
+    const branchFields = document.getElementById('sellerBranchFields');
+    const nonBranchFields = document.getElementById('sellerNonBranchFields');
+    if (branchFields && nonBranchFields) {
+        if (branches === 'Yes') {
+            branchFields.style.display = 'block';
+            nonBranchFields.style.display = 'none';
+            document.getElementById('sellerBranchAddress').required = true;
+        } else {
+            branchFields.style.display = 'none';
+            nonBranchFields.style.display = 'block';
+            document.getElementById('sellerBranchAddress').required = false;
+        }
+    }
+};
+
+window.toggleSellerStatusCheckbox = function(status) {
+    const active = document.getElementById('sellerStatusActive');
+    const inactive = document.getElementById('sellerStatusInactive');
+    const suspended = document.getElementById('sellerStatusSuspended');
+    if (status === 'Active') {
+        if (active.checked) {
+            inactive.checked = false;
+            suspended.checked = false;
+        }
+    } else if (status === 'Inactive') {
+        if (inactive.checked) {
+            active.checked = false;
+            suspended.checked = false;
+        }
+    } else if (status === 'Suspended') {
+        if (suspended.checked) {
+            active.checked = false;
+            inactive.checked = false;
+        }
+    }
+};
+
+window.cancelSellerEdit = function() {
+    sellerEditIndex = -1;
+    document.getElementById('sellerForm').reset();
+    if (document.getElementById('sellerArea')) {
+        document.getElementById('sellerArea').dispatchEvent(new Event('change'));
+    }
+    document.getElementById('sellerFormTitle').textContent = 'Add New Seller';
+    document.getElementById('btnCancelSeller').style.display = 'none';
+    window.generateSellerId();
+    window.toggleSellerBranchFields();
+};
+
+window.renderSellers = function() {
+    const list = document.getElementById('sellerList');
+    if (!list) return;
+
+    let html = '';
+    sellers.forEach((s, index) => {
+        const prodCount = (products || []).filter(p => {
+            const addedBy = String(p.addedBy || '').toLowerCase().trim();
+            const busName = String(s.businessName || '').toLowerCase().trim();
+            const ownName = String(s.ownerName || '').toLowerCase().trim();
+            const selId = String(s.sellerId || '').toLowerCase().trim();
+            return addedBy === busName || addedBy === ownName || addedBy === selId || String(p.companyName || '').toLowerCase().trim() === busName;
+        }).length;
+
+        const dealCount = (deals || []).filter(d => {
+            const addedBy = String(d.addedBy || '').toLowerCase().trim();
+            const busName = String(s.businessName || '').toLowerCase().trim();
+            const ownName = String(s.ownerName || '').toLowerCase().trim();
+            const selId = String(s.sellerId || '').toLowerCase().trim();
+            return addedBy === busName || addedBy === ownName || addedBy === selId || String(d.companyName || '').toLowerCase().trim() === busName;
+        }).length;
+
+        const orderCount = 0;
+
+        const verifiedBadge = s.verifiedSeller 
+            ? `<span class="status-pill active" style="background:rgba(16,185,129,0.1); border:none; padding:4px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:4px; font-weight:bold; color:#10b981;"><i class="fa-solid fa-circle-check"></i> Yes</span>` 
+            : `<span class="status-pill pending" style="background:rgba(148,163,184,0.1); border:none; padding:4px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:4px; font-weight:bold; color:#94a3b8;"><i class="fa-solid fa-circle-xmark"></i> No</span>`;
+
+        let statusClass = 'active';
+        if (s.status === 'Inactive') statusClass = 'pending';
+        if (s.status === 'Suspended') statusClass = 'suspended';
+        
+        let statusStyle = '';
+        if (s.status === 'Suspended') statusStyle = 'background:rgba(239,68,68,0.1); color:#ef4444; border:none; padding:4px 8px; border-radius:12px; font-weight:bold;';
+        else if (s.status === 'Inactive') statusStyle = 'background:rgba(245,158,11,0.1); color:#f59e0b; border:none; padding:4px 8px; border-radius:12px; font-weight:bold;';
+        else statusStyle = 'background:rgba(16,185,129,0.1); color:#10b981; border:none; padding:4px 8px; border-radius:12px; font-weight:bold;';
+
+        const statusLabel = s.status || 'Active';
+
+        html += `
+            <tr>
+                <td>
+                    <span style="font-weight:700; color:#38bdf8;">${s.sellerId || 'SEL-000000'}</span>
+                </td>
+                <td>
+                    <span style="font-weight:600; color:#fff;">${s.businessName || 'N/A'}</span>
+                </td>
+                <td>
+                    <span style="color: #cbd5e1; font-size: 13px;">${s.businessType || 'Retailer'}</span>
+                </td>
+                <td>
+                    <span style="color: #cbd5e1;">${s.city || 'N/A'}</span>
+                </td>
+                <td>
+                    <span class="badge" style="background:#0ea5e9; color:white; font-weight:bold; font-size:11px; padding:2px 8px; border-radius:6px;">${prodCount}</span>
+                </td>
+                <td>
+                    <span class="badge" style="background:#f59e0b; color:white; font-weight:bold; font-size:11px; padding:2px 8px; border-radius:6px;">${dealCount}</span>
+                </td>
+                <td>
+                    <span class="badge" style="background:#10b981; color:white; font-weight:bold; font-size:11px; padding:2px 8px; border-radius:6px;">${orderCount}</span>
+                </td>
+                <td>
+                    ${verifiedBadge}
+                </td>
+                <td>
+                    <span class="status-pill ${statusClass}" style="${statusStyle}">${statusLabel.toUpperCase()}</span>
+                </td>
+                <td>
+                    <div class="action-buttons-group">
+                        <button class="action-btn purple" onclick="window.editSeller(${index})" title="Edit Seller"><i class="fa-solid fa-pen"></i></button>
+                        <button class="action-btn blue" onclick="window.viewSellerProfile(${index})" title="View Profile"><i class="fa-solid fa-eye"></i></button>
+                        <button class="action-btn red" onclick="window.deleteSeller(${index})" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+    list.innerHTML = html;
+};
+
+window.editSeller = function(index) {
+    const s = sellers[index];
+    if (!s) return;
+
+    sellerEditIndex = index;
+    document.getElementById('sellerFormTitle').textContent = 'Edit Seller: ' + s.businessName;
+    document.getElementById('btnCancelSeller').style.display = 'inline-block';
+
+    document.getElementById('sellerId').value = s.sellerId || '';
+    document.getElementById('sellerBusinessName').value = s.businessName || '';
+    document.getElementById('sellerOwnerName').value = s.ownerName || '';
+    document.getElementById('sellerBusinessType').value = s.businessType || '';
+    document.getElementById('sellerMobile').value = s.mobileNumber || '';
+    document.getElementById('sellerWhatsapp').value = s.whatsappNumber || '';
+    document.getElementById('sellerEmail').value = s.email || '';
+    document.getElementById('sellerWebsite').value = s.website || '';
+    document.getElementById('sellerFacebook').value = s.facebookPage || '';
+    document.getElementById('sellerInstagram').value = s.instagramPage || '';
+    document.getElementById('sellerAddress').value = s.address || '';
+    if (document.getElementById('sellerArea')) {
+        document.getElementById('sellerArea').value = s.area || '';
+        document.getElementById('sellerArea').dispatchEvent(new Event('change'));
+    }
+    if (document.getElementById('sellerBlockNo')) document.getElementById('sellerBlockNo').value = s.blockNo || '';
+    document.getElementById('sellerCity').value = s.city || '';
+    document.getElementById('sellerBranches').value = s.branches || 'No';
+    document.getElementById('sellerBranchAddress').value = s.branchAddress || '';
+    document.getElementById('sellerBranchPhone').value = s.branchPhone || '';
+    document.getElementById('sellerBranchWhatsapp').value = s.branchWhatsapp || '';
+    document.getElementById('sellerProvince').value = s.province || '';
+    document.getElementById('sellerMapsLink').value = s.googleMapsLink || '';
+    document.getElementById('sellerCategory').value = s.category || '';
+    document.getElementById('sellerSubCategories').value = s.subCategories || '';
+    document.getElementById('sellerDescription').value = s.businessDescription || '';
+    document.getElementById('sellerHours').value = s.operatingHours || '';
+    
+    document.getElementById('sellerVerified').checked = !!s.verifiedSeller;
+    document.getElementById('sellerFeatured').checked = !!s.featuredSeller;
+    document.getElementById('sellerPremium').checked = !!s.premiumSeller;
+    
+    document.getElementById('sellerStatusActive').checked = !!s.statusActive;
+    document.getElementById('sellerStatusInactive').checked = !!s.statusInactive;
+    document.getElementById('sellerStatusSuspended').checked = !!s.statusSuspended;
+
+    window.toggleSellerBranchFields();
+    
+    document.getElementById('sellerFormTitle').scrollIntoView({ behavior: 'smooth' });
+};
+
+window.deleteSeller = async function(index) {
+    if (confirm('Are you sure you want to delete this seller?')) {
+        sellers.splice(index, 1);
+        try {
+            await DataService.saveSellers(sellers);
+            window.renderSellers();
+            alert('Seller deleted successfully!');
+        } catch (err) {
+            alert('Error deleting seller: ' + err.message);
+        }
+    }
+};
+
+window.viewSellerProfile = function(index) {
+    const s = sellers[index];
+    if (!s) return;
+
+    const prodCount = (products || []).filter(p => {
+        const addedBy = String(p.addedBy || '').toLowerCase().trim();
+        const busName = String(s.businessName || '').toLowerCase().trim();
+        const ownName = String(s.ownerName || '').toLowerCase().trim();
+        const selId = String(s.sellerId || '').toLowerCase().trim();
+        return addedBy === busName || addedBy === ownName || addedBy === selId || String(p.companyName || '').toLowerCase().trim() === busName;
+    }).length;
+
+    const dealCount = (deals || []).filter(d => {
+        const addedBy = String(d.addedBy || '').toLowerCase().trim();
+        const busName = String(s.businessName || '').toLowerCase().trim();
+        const ownName = String(s.ownerName || '').toLowerCase().trim();
+        const selId = String(s.sellerId || '').toLowerCase().trim();
+        return addedBy === busName || addedBy === ownName || addedBy === selId || String(d.companyName || '').toLowerCase().trim() === busName;
+    }).length;
+
+    const orderCount = 0;
+
+    document.getElementById('profileBusinessName').textContent = s.businessName || 'Business Name';
+    document.getElementById('profileOwnerName').textContent = 'Owner: ' + (s.ownerName || 'Owner Name');
+    document.getElementById('profileCategory').textContent = s.category || 'Category';
+    document.getElementById('profileCity').textContent = s.city || 'City';
+    document.getElementById('profilePhone').textContent = s.mobileNumber || 'Phone';
+    document.getElementById('profileWhatsApp').textContent = s.whatsappNumber || 'WhatsApp';
+    
+    document.getElementById('profileProductsCount').textContent = prodCount;
+    document.getElementById('profileDealsCount').textContent = dealCount;
+    document.getElementById('profileOrdersCount').textContent = orderCount;
+    
+    document.getElementById('profileHours').textContent = s.operatingHours || 'Not specified';
+    document.getElementById('profileDescription').textContent = s.businessDescription || 'No description provided.';
+    
+    const verifiedBadge = document.getElementById('profileVerifiedBadge');
+    if (s.verifiedSeller) {
+        verifiedBadge.className = 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400 rounded-xl p-3 text-center';
+    } else {
+        verifiedBadge.className = 'border-slate-800 bg-slate-800/30 text-slate-500 rounded-xl p-3 text-center opacity-40';
+    }
+
+    const featuredBadge = document.getElementById('profileFeaturedBadge');
+    if (s.featuredSeller) {
+        featuredBadge.className = 'border-amber-500/30 bg-amber-500/10 text-amber-400 rounded-xl p-3 text-center';
+    } else {
+        featuredBadge.className = 'border-slate-800 bg-slate-800/30 text-slate-500 rounded-xl p-3 text-center opacity-40';
+    }
+
+    const premiumBadge = document.getElementById('profilePremiumBadge');
+    if (s.premiumSeller) {
+        premiumBadge.className = 'border-sky-500/30 bg-sky-500/10 text-sky-400 rounded-xl p-3 text-center';
+    } else {
+        premiumBadge.className = 'border-slate-800 bg-slate-800/30 text-slate-500 rounded-xl p-3 text-center opacity-40';
+    }
+
+    const modal = document.getElementById('sellerProfileModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+    }
+};
+
+window.closeSellerProfile = function() {
+    const modal = document.getElementById('sellerProfileModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+    }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const sellerForm = document.getElementById('sellerForm');
+    if (sellerForm) {
+        sellerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const sellerId = document.getElementById('sellerId').value;
+            const businessName = document.getElementById('sellerBusinessName').value;
+            const ownerName = document.getElementById('sellerOwnerName').value;
+            const businessType = document.getElementById('sellerBusinessType').value;
+            const mobileNumber = document.getElementById('sellerMobile').value;
+            const whatsappNumber = document.getElementById('sellerWhatsapp').value;
+            const email = document.getElementById('sellerEmail').value;
+            const website = document.getElementById('sellerWebsite').value;
+            const facebookPage = document.getElementById('sellerFacebook').value;
+            const instagramPage = document.getElementById('sellerInstagram').value;
+            const address = document.getElementById('sellerAddress').value;
+            const area = document.getElementById('sellerArea') ? document.getElementById('sellerArea').value : '';
+            const blockNo = document.getElementById('sellerBlockNo') ? document.getElementById('sellerBlockNo').value : '';
+            const areaBlock = (area && blockNo) ? `${area} - ${blockNo}` : (area || blockNo || '');
+            const city = document.getElementById('sellerCity').value;
+            const branches = document.getElementById('sellerBranches').value;
+            const branchAddress = document.getElementById('sellerBranchAddress').value;
+            const branchPhone = document.getElementById('sellerBranchPhone').value;
+            const branchWhatsapp = document.getElementById('sellerBranchWhatsapp').value;
+            const province = document.getElementById('sellerProvince').value;
+            const googleMapsLink = document.getElementById('sellerMapsLink').value;
+            const category = document.getElementById('sellerCategory').value;
+            const subCategories = document.getElementById('sellerSubCategories').value;
+            const businessDescription = document.getElementById('sellerDescription').value;
+            const operatingHours = document.getElementById('sellerHours').value;
+            
+            const verifiedSeller = document.getElementById('sellerVerified').checked;
+            const featuredSeller = document.getElementById('sellerFeatured').checked;
+            const premiumSeller = document.getElementById('sellerPremium').checked;
+            
+            const statusActive = document.getElementById('sellerStatusActive').checked;
+            const statusInactive = document.getElementById('sellerStatusInactive').checked;
+            const statusSuspended = document.getElementById('sellerStatusSuspended').checked;
+            
+            let status = 'Active';
+            if (statusInactive) status = 'Inactive';
+            if (statusSuspended) status = 'Suspended';
+
+            const newSeller = {
+                id: sellerEditIndex === -1 ? DataService.generateUUID() : sellers[sellerEditIndex].id,
+                sellerId,
+                businessName,
+                ownerName,
+                businessType,
+                mobileNumber,
+                whatsappNumber,
+                email,
+                website,
+                facebookPage,
+                instagramPage,
+                address,
+                area,
+                blockNo,
+                areaBlock,
+                city,
+                branches,
+                branchAddress,
+                branchPhone,
+                branchWhatsapp,
+                province,
+                googleMapsLink,
+                category,
+                subCategories,
+                businessDescription,
+                operatingHours,
+                verifiedSeller,
+                featuredSeller,
+                premiumSeller,
+                statusActive,
+                statusInactive,
+                statusSuspended,
+                status
+            };
+
+            if (sellerEditIndex === -1) {
+                if (sellers.some(s => s.sellerId === sellerId)) {
+                    alert('Duplicate Seller ID. Please regenerate.');
+                    return;
+                }
+                sellers.push(newSeller);
+            } else {
+                sellers[sellerEditIndex] = newSeller;
+            }
+
+            try {
+                await DataService.saveSellers(sellers);
+                alert(sellerEditIndex === -1 ? 'Seller Added Successfully!' : 'Seller Updated Successfully!');
+                window.cancelSellerEdit();
+                window.renderSellers();
+            } catch (err) {
+                alert('Error saving seller: ' + err.message);
+            }
+        });
+    }
+});
 
