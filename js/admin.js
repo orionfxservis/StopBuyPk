@@ -1553,9 +1553,14 @@ window.updateBlockOptionsGlobal = function(areaVal, blockNoSelect) {
             optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
         }
     } else if (areaVal === 'Shah Faisal') {
-        for (let i = 1; i <= 5; i++) {
-            optionsHtml += `<option value="Sector ${i}">Sector ${i}</option>`;
-        }
+        const shahFaisalBlocks = [
+            'Sector 1', 'Sector 2', 'Sector 3', 'Sector 4', 'Sector 5',
+            'Drigh Colony', 'Rafa-e-Aam Society', 'Golden Town', 'Natha Khan Goth',
+            'Malir Halt', 'Airport Colony', 'Model Colony (Extension)', 'Shah Faisal Green Town'
+        ];
+        shahFaisalBlocks.forEach(b => {
+            optionsHtml += `<option value="${b}">${b}</option>`;
+        });
     } else if (areaVal === 'Landhi') {
         const landhiBlocks = [
             'Landhi No. 1', 'Landhi No. 2', 'Landhi No. 3', 'Landhi No. 3½', 'Landhi No. 4', 'Landhi No. 5', 'Landhi No. 6',
@@ -1565,6 +1570,19 @@ window.updateBlockOptionsGlobal = function(areaVal, blockNoSelect) {
             'Future Colony', 'Sherpao Colony', 'Muslimabad', 'Babar Market', 'Bhains Colony', 'Landhi Industrial Area'
         ];
         landhiBlocks.forEach(b => {
+            optionsHtml += `<option value="${b}">${b}</option>`;
+        });
+    } else if (areaVal === 'Saddar') {
+        const saddarBlocks = [
+            'Saddar Main', 'Preedy Quarters', 'Civil Lines', 'Aram Bagh',
+            'Garden East', 'Garden West', 'Pakistan Chowk', 'Regal Chowk',
+            'Empress Market', 'Boulton Market', 'M.A. Jinnah Road', 'Burns Road',
+            'Jodia Bazaar', 'Kharadar', 'Mithadar', 'Napier Quarter',
+            'Ranchore Line', 'Light House', 'Zainab Market', 'Abdullah Haroon Road',
+            'Frere Town', 'Cantt Station Area', 'PIDC', 'Native Jetty',
+            'Tower', 'I.I. Chundrigar Road'
+        ];
+        saddarBlocks.forEach(b => {
             optionsHtml += `<option value="${b}">${b}</option>`;
         });
     }
