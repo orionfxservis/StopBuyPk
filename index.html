@@ -14,7 +14,22 @@
 
     <meta name="mobile-web-app-capable" content="yes">
 
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <style>
+        @keyframes slideInFromRight {
+            from {
+                transform: translateX(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        .animate-price-slide {
+            animation: slideInFromRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            opacity: 0;
+        }
+    </style>
 </head>
 
 <body class="bg-[#F8FAF9] text-[#1F2937]">
@@ -542,7 +557,7 @@
                             
                             <!-- Tag 1: Laptops @ Affordable Price -->
                             <div onclick="window.location.href='./pages/computers.html?search=laptop'" 
-                                 class="cursor-pointer bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-full px-4 py-2 text-xs md:text-sm font-semibold flex items-center gap-1.5 shadow-sm transition-all duration-300 hover:scale-[1.03] hover:shadow-md">
+                                 class="cursor-pointer bg-cyan-950/20 text-cyan-400 border border-cyan-500/30 hover:border-cyan-400 rounded-full px-4 py-2 text-xs md:text-sm font-semibold flex items-center gap-1.5 shadow-[0_2px_10px_rgba(6,182,212,0.05)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_4px_15px_rgba(6,182,212,0.2)] hover:bg-cyan-500/10">
                                 <span class="text-base">💻</span>
                                 <span class="lang-en">Laptops @ Affordable Price</span>
                                 <span class="lang-ur">لیپ ٹاپس مناسب قیمت پر</span>
@@ -550,7 +565,7 @@
 
                             <!-- Tag 2: Mobiles Amazing Deal -->
                             <div onclick="window.location.href='./pages/mobiles.html'" 
-                                 class="cursor-pointer bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-full px-4 py-2 text-xs md:text-sm font-semibold flex items-center gap-1.5 shadow-sm transition-all duration-300 hover:scale-[1.03] hover:shadow-md">
+                                 class="cursor-pointer bg-violet-950/20 text-violet-400 border border-violet-500/30 hover:border-violet-400 rounded-full px-4 py-2 text-xs md:text-sm font-semibold flex items-center gap-1.5 shadow-[0_2px_10px_rgba(139,92,246,0.05)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_4px_15px_rgba(139,92,246,0.2)] hover:bg-violet-500/10">
                                 <span class="text-base">📱</span>
                                 <span class="lang-en">Mobiles Amazing Deal</span>
                                 <span class="lang-ur">موبائل کی شاندار ڈیلز</span>
@@ -558,7 +573,7 @@
 
                             <!-- Tag 3: Fast Food Items -->
                             <div onclick="window.location.href='./pages/food.html'" 
-                                 class="cursor-pointer bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-full px-4 py-2 text-xs md:text-sm font-semibold flex items-center gap-1.5 shadow-sm transition-all duration-300 hover:scale-[1.03] hover:shadow-md">
+                                 class="cursor-pointer bg-amber-950/20 text-amber-400 border border-amber-500/30 hover:border-amber-400 rounded-full px-4 py-2 text-xs md:text-sm font-semibold flex items-center gap-1.5 shadow-[0_2px_10px_rgba(245,158,11,0.05)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_4px_15px_rgba(245,158,11,0.2)] hover:bg-amber-500/10">
                                 <span class="text-base">🍔</span>
                                 <span class="lang-en">Fast Food Items</span>
                                 <span class="lang-ur">فاسٹ فوڈ آئٹمز</span>
@@ -566,7 +581,7 @@
 
                             <!-- Tag 4: Best Deal -->
                             <div onclick="window.location.href='./pages/categories.html'" 
-                                 class="cursor-pointer bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-full px-4 py-2 text-xs md:text-sm font-semibold flex items-center gap-1.5 shadow-sm transition-all duration-300 hover:scale-[1.03] hover:shadow-md">
+                                 class="cursor-pointer bg-rose-950/20 text-rose-400 border border-rose-500/30 hover:border-rose-400 rounded-full px-4 py-2 text-xs md:text-sm font-semibold flex items-center gap-1.5 shadow-[0_2px_10px_rgba(244,63,94,0.05)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_4px_15px_rgba(244,63,94,0.2)] hover:bg-rose-500/10">
                                 <span class="text-base">🏷️</span>
                                 <span class="lang-en">Best Deal</span>
                                 <span class="lang-ur">بہترین ڈیل</span>
@@ -574,7 +589,7 @@
 
                             <!-- Tag 5: Best Chromebook Price -->
                             <div onclick="window.location.href='./pages/computers.html?search=chromebook'" 
-                                 class="cursor-pointer bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-full px-4 py-2 text-xs md:text-sm font-semibold flex items-center gap-1.5 shadow-sm transition-all duration-300 hover:scale-[1.03] hover:shadow-md">
+                                 class="cursor-pointer bg-indigo-950/20 text-indigo-400 border border-indigo-500/30 hover:border-indigo-400 rounded-full px-4 py-2 text-xs md:text-sm font-semibold flex items-center gap-1.5 shadow-[0_2px_10px_rgba(99,102,241,0.05)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_4px_15px_rgba(99,102,241,0.2)] hover:bg-indigo-500/10">
                                 <span class="text-base">💻</span>
                                 <span class="lang-en">Best Chromebook Price</span>
                                 <span class="lang-ur">بہترین کروم بک کی قیمت</span>
@@ -582,7 +597,7 @@
 
                             <!-- Tag 6: Laptop Charger @ Good Price -->
                             <div onclick="window.location.href='./pages/computers.html?search=charger'" 
-                                 class="cursor-pointer bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-full px-4 py-2 text-xs md:text-sm font-semibold flex items-center gap-1.5 shadow-sm transition-all duration-300 hover:scale-[1.03] hover:shadow-md">
+                                 class="cursor-pointer bg-emerald-950/20 text-emerald-400 border border-emerald-500/30 hover:border-emerald-400 rounded-full px-4 py-2 text-xs md:text-sm font-semibold flex items-center gap-1.5 shadow-[0_2px_10px_rgba(16,185,129,0.05)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_4px_15px_rgba(16,185,129,0.2)] hover:bg-emerald-500/10">
                                 <span class="text-base">🔌</span>
                                 <span class="lang-en">Laptop Charger @ Good Price</span>
                                 <span class="lang-ur">لیپ ٹاپ چارجر اچھی قیمت پر</span>
@@ -591,181 +606,154 @@
                         </div>
 
                         <!-- Heroic Comparison Showcase Grid -->
-                        <div dir="ltr" class="grid grid-cols-4 gap-4 mt-8 pt-6 border-t border-slate-100 relative z-10 text-left">
+                        <div dir="ltr" class="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-slate-100 relative z-10 text-left">
                             
-                            <!-- Card 1: The Comparison Hero Card -->
-                            <div class="bg-gradient-to-br from-slate-50 to-white rounded-2xl p-4 border border-emerald-100 shadow-sm flex flex-col justify-between hover:shadow-md transition duration-300">
-                                <div>
+                            <!-- Card 1: The Comparison Hero Card (Interactive Animation) -->
+                            <div class="bg-gradient-to-br from-[#021F17] via-[#053d2f] to-[#0A1A24] rounded-2xl p-5 border border-emerald-500/30 shadow-[0_10px_30px_rgba(4,120,87,0.15)] flex flex-col justify-between hover:shadow-[0_15px_40px_rgba(4,120,87,0.3)] hover:border-emerald-400/50 transition duration-300 text-white">
+                                <div class="text-left">
                                     <!-- Tagline -->
-                                    <div class="mb-3">
-                                        <span class="text-[10px] font-bold tracking-wider uppercase bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full">
-                                            Comparison Hero
-                                        </span>
-                                        <p class="text-[11px] text-slate-500 mt-2 font-medium italic leading-tight">
-                                            "Don't make the image the hero. Make the comparison the hero."
-                                        </p>
+                                    <div class="mb-3 text-center">
+                                        <h4 class="text-xs font-bold font-serif text-emerald-300 flex items-center justify-center gap-1.5" style="font-family: Georgia, 'Times New Roman', serif;">
+                                            <span id="hero-tagline-emoji" class="text-base">🍔</span>
+                                            <span class="lang-en">Compare Before You Buy</span>
+                                            <span class="lang-ur">خریدنے سے پہلے موازنہ کریں</span>
+                                        </h4>
                                     </div>
                                     
-                                    <!-- Product Info -->
-                                    <div class="flex items-center gap-3 my-3">
-                                        <span class="text-3xl">🍔</span>
-                                        <div>
-                                            <h4 class="font-bold text-base text-slate-900 leading-tight">Zinger Burger</h4>
-                                            <span class="text-[9px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-semibold uppercase tracking-wider">Food</span>
-                                        </div>
+                                    <!-- Product Name & Subheading -->
+                                    <div class="text-center mb-3">
+                                        <h3 id="hero-product-name" class="font-extrabold text-base text-white tracking-tight transition-all duration-300">Zinger Burger</h3>
+                                        <p class="text-[9px] text-slate-300 font-medium leading-normal mt-0.5">
+                                            <span class="lang-en">Compare prices from nearby restaurants & save money instantly!</span>
+                                            <span class="lang-ur">قریبی ریستورانوں سے قیمتوں کا موازنہ کریں اور رقم بچائیں!</span>
+                                        </p>
                                     </div>
 
-                                    <!-- Price Comparison Block -->
-                                    <div class="grid grid-cols-2 gap-2 bg-white p-3 rounded-xl border border-slate-100 my-3 shadow-inner text-xs">
-                                        <div>
-                                            <div class="text-[9px] font-bold text-emerald-600 uppercase tracking-wider">🏆 Lowest</div>
-                                            <div class="text-base font-extrabold text-slate-900 mt-0.5">Rs. 399</div>
-                                            <div class="text-[10px] font-semibold text-slate-500">FRYCHI</div>
-                                        </div>
-                                        <div class="border-l border-slate-100 pl-3">
-                                            <div class="text-[9px] font-bold text-red-500 uppercase tracking-wider">Highest</div>
-                                            <div class="text-base font-extrabold text-slate-900 mt-0.5">Rs. 520</div>
-                                            <div class="text-[10px] font-semibold text-slate-500">Burger Lab</div>
-                                        </div>
+                                    <!-- Lowest Price Section -->
+                                    <div class="bg-emerald-950/50 border border-emerald-500/30 rounded-xl py-1.5 px-2 text-center mb-2">
+                                        <span class="text-[8px] font-bold text-emerald-400 uppercase tracking-wider block">Lowest Price</span>
+                                        <span id="hero-lowest-price" class="text-base font-black text-emerald-400 transition-all duration-300">Rs. 399</span>
                                     </div>
 
-                                    <!-- Savings Badge -->
-                                    <div class="flex items-center justify-between bg-emerald-50 text-emerald-800 px-2.5 py-1.5 rounded-xl border border-emerald-100 text-xs font-bold">
-                                        <span>Savings:</span>
-                                        <span class="text-emerald-700 font-extrabold">Save Rs. 121</span>
+                                    <!-- Price Comparison List -->
+                                    <div id="hero-restaurants-list" class="border border-slate-800 rounded-xl p-2.5 bg-slate-950/40 shadow-inner space-y-1.5 text-[11px]">
+                                        <!-- Dynamic items populate here -->
+                                    </div>
+
+                                    <!-- Savings Highlight -->
+                                    <div id="hero-savings" class="flex items-center justify-between bg-emerald-950/60 text-slate-200 px-2.5 py-1.5 rounded-xl border border-emerald-500/30 text-[11px] font-bold my-3.5 transition-all duration-300">
+                                        <span>💰 You Save Up To:</span>
+                                        <span id="hero-saving-amount" class="text-emerald-400 font-extrabold">Rs. 121</span>
+                                    </div>
+                                    
+                                    <!-- Checklist -->
+                                    <div class="space-y-0.5 text-[10px] text-slate-300 font-medium pl-1 mb-2">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="text-emerald-400">✓</span>
+                                            <span id="hero-compared-restaurants">Compared from 12 Restaurants</span>
+                                        </div>
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="text-emerald-400">✓</span>
+                                            <span>Verified Sellers</span>
+                                        </div>
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="text-emerald-400">✓</span>
+                                            <span>Order Directly</span>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                                    <span class="text-slate-500 font-medium">12 Restaurants</span>
-                                    <a href="./pages/food.html?search=zinger" class="inline-flex items-center gap-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-2.5 py-1 rounded transition-colors shadow-sm text-xs">
-                                        Compare →
+                                <div class="mt-2 pt-2 border-t border-slate-700/50">
+                                    <a id="hero-compare-btn" href="./pages/food.html?search=zinger" class="w-full inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-orange-500 via-red-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-white font-extrabold py-2.5 rounded-xl transition-all shadow-[0_4px_15px_rgba(249,115,22,0.3)] hover:shadow-[0_6px_20px_rgba(249,115,22,0.5)] hover:scale-[1.02] text-xs uppercase tracking-wider">
+                                        Compare All Prices →
                                     </a>
                                 </div>
                             </div>
 
                             <!-- Card 2: Today's Biggest Savings -->
-                            <div class="bg-gradient-to-br from-slate-50 to-white rounded-2xl p-4 border border-emerald-100 shadow-sm flex flex-col justify-between hover:shadow-md transition duration-300">
+                            <div class="bg-gradient-to-br from-[#0B1528] via-[#0E254A] to-[#121020] rounded-2xl p-5 border border-blue-500/30 shadow-[0_10px_30px_rgba(37,99,235,0.15)] flex flex-col justify-between hover:shadow-[0_15px_40px_rgba(37,99,235,0.3)] hover:border-blue-400/50 transition duration-300 text-white animate-fade-in">
                                 <div>
-                                    <div class="pb-2 border-b border-slate-100">
-                                        <h4 class="font-bold text-sm text-slate-900 flex items-center gap-2">
-                                            <i class="fas fa-arrow-trend-down text-emerald-600"></i>
+                                    <div class="pb-2 border-b border-slate-800/80">
+                                        <h4 class="font-bold text-sm text-white flex items-center gap-2">
+                                            <i class="fas fa-arrow-trend-down text-blue-400"></i>
                                             <span>Today's Biggest Savings</span>
                                         </h4>
-                                        <p class="text-[11px] text-slate-500 mt-0.5">Top price drops across Pakistan</p>
+                                        <p class="text-[11px] text-slate-300 mt-0.5">Top price drops across Pakistan</p>
                                     </div>
 
                                     <div class="space-y-2.5 my-3">
                                         <!-- Item 1 -->
-                                        <div class="p-2 bg-white rounded-xl border border-slate-100 shadow-sm flex items-center justify-between">
+                                        <div class="p-2 bg-slate-950/45 rounded-xl border border-blue-900/35 shadow-sm flex items-center justify-between">
                                             <div class="flex items-center gap-2">
                                                 <span class="text-lg">💻</span>
                                                 <div class="leading-tight">
-                                                    <div class="text-xs font-bold text-slate-800">HP EliteBook</div>
-                                                    <div class="text-[9px] text-slate-400">Computers</div>
+                                                    <div class="text-xs font-bold text-slate-100">HP EliteBook</div>
+                                                    <div class="text-[9px] text-slate-350">Computers</div>
                                                 </div>
                                             </div>
-                                            <span class="text-[10px] font-bold text-emerald-750 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">Save Rs. 8,500/-</span>
+                                            <span class="text-[10px] font-bold text-emerald-400 bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-500/30">Save Rs. 8,500/-</span>
                                         </div>
 
                                         <!-- Item 2 -->
-                                        <div class="p-2 bg-white rounded-xl border border-slate-100 shadow-sm flex items-center justify-between">
+                                        <div class="p-2 bg-slate-950/45 rounded-xl border border-blue-900/35 shadow-sm flex items-center justify-between">
                                             <div class="flex items-center gap-2">
                                                 <span class="text-lg">🍛</span>
                                                 <div class="leading-tight">
-                                                    <div class="text-xs font-bold text-slate-800">Chicken Mandi</div>
-                                                    <div class="text-[9px] text-slate-400">Food</div>
+                                                    <div class="text-xs font-bold text-slate-100">Chicken Mandi</div>
+                                                    <div class="text-[9px] text-slate-350">Food</div>
                                                 </div>
                                             </div>
-                                            <span class="text-[10px] font-bold text-emerald-750 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">Save Rs. 450/-</span>
+                                            <span class="text-[10px] font-bold text-emerald-400 bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-500/30">Save Rs. 450/-</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text-[9px] text-slate-400 font-bold uppercase tracking-wider text-right">
+                                <div class="text-[9px] text-slate-350 font-bold uppercase tracking-wider text-right">
                                     Verified Price Drop
                                 </div>
                             </div>
 
                             <!-- Card 3: Comparison Badges Widget -->
-                            <div class="bg-gradient-to-br from-slate-50 to-white rounded-2xl p-4 border border-emerald-100 shadow-sm flex flex-col justify-between hover:shadow-md transition duration-300">
+                            <div class="bg-gradient-to-br from-[#1C160C] via-[#35250E] to-[#1C1024] rounded-2xl p-5 border border-amber-500/30 shadow-[0_10px_30px_rgba(245,158,11,0.15)] flex flex-col justify-between hover:shadow-[0_15px_40px_rgba(245,158,11,0.3)] hover:border-amber-400/50 transition duration-300 text-white animate-fade-in">
                                 <div>
-                                    <div class="pb-2 border-b border-slate-100">
-                                        <h4 class="font-bold text-sm text-slate-900 flex items-center gap-2">
-                                            <i class="fas fa-tags text-emerald-600"></i>
+                                    <div class="pb-2 border-b border-slate-800/80">
+                                        <h4 class="font-bold text-sm text-white flex items-center gap-2">
+                                            <i class="fas fa-tags text-amber-400"></i>
                                             <span>Comparison Badges</span>
                                         </h4>
-                                        <p class="text-[11px] text-slate-500 mt-0.5">Smart shopping indicators</p>
+                                        <p class="text-[11px] text-slate-300 mt-0.5">Smart shopping indicators</p>
                                     </div>
 
                                     <!-- Badges List -->
                                     <div class="space-y-1.5 my-3">
-                                        <div class="flex items-center gap-2.5 p-1.5 bg-white rounded-xl border border-slate-100 shadow-sm">
+                                        <div class="flex items-center gap-2.5 p-1.5 bg-slate-950/45 rounded-xl border border-amber-900/35 shadow-sm">
                                             <span class="text-base">🏆</span>
                                             <div>
-                                                <div class="text-xs font-bold text-slate-800">Lowest Price</div>
-                                                <div class="text-[9px] text-slate-400">Lowest rate across Pakistan</div>
+                                                <div class="text-xs font-bold text-slate-100">Lowest Price</div>
+                                                <div class="text-[9px] text-slate-350">Lowest rate across Pakistan</div>
                                             </div>
                                         </div>
-                                        <div class="flex items-center gap-2.5 p-1.5 bg-white rounded-xl border border-slate-100 shadow-sm">
+                                        <div class="flex items-center gap-2.5 p-1.5 bg-slate-950/45 rounded-xl border border-amber-900/35 shadow-sm">
                                             <span class="text-base">🔥</span>
                                             <div>
-                                                <div class="text-xs font-bold text-slate-800">Best Deal</div>
-                                                <div class="text-[9px] text-slate-400">Highest value for money</div>
+                                                <div class="text-xs font-bold text-slate-100">Best Deal</div>
+                                                <div class="text-[9px] text-slate-355">Highest value for money</div>
                                             </div>
                                         </div>
-                                        <div class="flex items-center gap-2.5 p-1.5 bg-white rounded-xl border border-slate-100 shadow-sm">
+                                        <div class="flex items-center gap-2.5 p-1.5 bg-slate-950/45 rounded-xl border border-amber-900/35 shadow-sm">
                                             <span class="text-base">📍</span>
                                             <div>
-                                                <div class="text-xs font-bold text-slate-800">Near You</div>
-                                                <div class="text-[9px] text-slate-400">Available close to you</div>
+                                                <div class="text-xs font-bold text-slate-100">Near You</div>
+                                                <div class="text-[9px] text-slate-355">Available close to you</div>
                                             </div>
                                         </div>
-                                        <div class="flex items-center gap-2.5 p-1.5 bg-white rounded-xl border border-slate-100 shadow-sm">
+                                        <div class="flex items-center gap-2.5 p-1.5 bg-slate-950/45 rounded-xl border border-amber-900/35 shadow-sm">
                                             <span class="text-base">⭐</span>
                                             <div>
-                                                <div class="text-xs font-bold text-slate-800">Verified Seller</div>
-                                                <div class="text-[9px] text-slate-400">Trusted merchant</div>
+                                                <div class="text-xs font-bold text-slate-100">Verified Seller</div>
+                                                <div class="text-[9px] text-slate-350">Trusted merchant</div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 4: Weekly Savings Widget -->
-                            <div class="bg-gradient-to-br from-[#0A3D2A] to-[#0D5C3A] text-white rounded-2xl p-4 shadow-md flex flex-col justify-between hover:shadow-lg transition duration-300 relative overflow-hidden">
-                                <!-- Subtle Background Pattern -->
-                                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none"></div>
-                                
-                                <div class="relative z-10">
-                                    <div class="pb-2 border-b border-white/10">
-                                        <h4 class="font-bold text-sm flex items-center gap-2 text-[#8CC63F]">
-                                            <i class="fas fa-wallet"></i>
-                                            <span>Weekly Savings</span>
-                                        </h4>
-                                        <p class="text-[11px] text-emerald-200 mt-0.5 font-medium">Real-time cumulative savings</p>
-                                    </div>
-
-                                    <!-- Savings Counter Block -->
-                                    <div class="text-center my-4 py-3 bg-black/10 rounded-2xl border border-white/10">
-                                        <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-300 block mb-0.5">
-                                            Pakistan Saved
-                                        </span>
-                                        
-                                        <div class="text-2xl sm:text-3xl font-black text-white tracking-tight my-1">
-                                            Rs. 2,84,350
-                                        </div>
-                                        
-                                        <span class="text-[10px] font-medium text-emerald-200/90 block">
-                                            through StopBuyPk this week
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div class="relative z-10 mt-auto pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-emerald-200/80">
-                                    <span>Scope Limit:</span>
-                                    <span class="bg-emerald-900/50 border border-emerald-400/30 px-2 py-0.5 rounded font-semibold">
-                                        Food &amp; Computers Only
-                                    </span>
                                 </div>
                             </div>
 
@@ -3471,10 +3459,194 @@
             const locationSelect = document.getElementById('mainLocationSelect');
             const productGrid = document.getElementById('product-grid');
 
+            // Interactive Hero Showcase Carousel Data
+            const heroShowcaseData = [
+                {
+                    name: "Zinger Burger",
+                    emoji: "🍔",
+                    searchQuery: "zinger",
+                    defaultList: [
+                        { seller: "Burger Lab", price: 399, distance: 1.2, isLowest: true },
+                        { seller: "FRYCHI", price: 450, distance: 2.5 },
+                        { seller: "Burger O'Clock", price: 480, distance: 3.1 },
+                        { seller: "KFC", price: 520, distance: 4.8 }
+                    ],
+                    comparedCount: 12
+                },
+                {
+                    name: "Pizza",
+                    emoji: "🍕",
+                    searchQuery: "pizza",
+                    defaultList: [
+                        { seller: "Pizza Hut", price: 899, distance: 1.5, isLowest: true },
+                        { seller: "Broadway Pizza", price: 999, distance: 2.1 },
+                        { seller: "California Pizza", price: 1099, distance: 3.5 },
+                        { seller: "Pizza Max", price: 1199, distance: 4.2 }
+                    ],
+                    comparedCount: 8
+                },
+                {
+                    name: "Chicken Broast",
+                    emoji: "🍗",
+                    searchQuery: "broast",
+                    defaultList: [
+                        { seller: "Lasania Broast", price: 499, distance: 1.0, isLowest: true },
+                        { seller: "Red Apple", price: 549, distance: 2.0 },
+                        { seller: "Kababjees", price: 599, distance: 3.2 },
+                        { seller: "KFC Broast", price: 649, distance: 4.5 }
+                    ],
+                    comparedCount: 9
+                },
+                {
+                    name: "Chicken Mandi",
+                    emoji: "🥘",
+                    searchQuery: "mandi",
+                    defaultList: [
+                        { seller: "Mandi House", price: 1250, distance: 1.8, isLowest: true },
+                        { seller: "Mandi Express", price: 1350, distance: 2.6 },
+                        { seller: "Al Arabian", price: 1450, distance: 3.8 },
+                        { seller: "Mandi Al-Khaleej", price: 1550, distance: 5.0 }
+                    ],
+                    comparedCount: 6
+                }
+            ];
+
+            let currentHeroIndex = 0;
+
+            function getActualFoodData(foodItem, allProdList) {
+                if (!allProdList || allProdList.length === 0) return null;
+                const query = foodItem.searchQuery.toLowerCase();
+                const matched = allProdList.filter(p => {
+                    const isFood = p.category && p.category.toLowerCase() === 'food';
+                    const nameMatch = (p.name || '').toLowerCase().includes(query) || (p.variety || '').toLowerCase().includes(query);
+                    return isFood && nameMatch;
+                });
+                if (matched.length < 2) return null;
+                
+                matched.sort((a, b) => parseFloat(a.price || 0) - parseFloat(b.price || 0));
+                
+                const listings = matched.slice(0, 4).map((p, idx) => {
+                    const price = parseFloat(p.price || 0);
+                    const brand = p.brand || p.variety || p.name || 'Restaurant';
+                    const distance = parseFloat(p.distance || p.distanceKm) || (1.0 + idx * 1.2);
+                    return {
+                        seller: brand,
+                        price: price,
+                        distance: parseFloat(distance.toFixed(1)),
+                        isLowest: idx === 0
+                    };
+                });
+                
+                const maxPrice = parseFloat(matched[matched.length - 1].price || 0);
+                const minPrice = listings[0].price;
+                const savings = maxPrice - minPrice;
+                
+                return {
+                    name: foodItem.name,
+                    emoji: foodItem.emoji,
+                    searchQuery: foodItem.searchQuery,
+                    list: listings,
+                    comparedCount: matched.length,
+                    savings: savings > 0 ? savings : (minPrice * 0.15)
+                };
+            }
+
+            function updateHeroWidget(productsList) {
+                const item = heroShowcaseData[currentHeroIndex];
+                const actualData = getActualFoodData(item, productsList);
+                
+                const emojiEl = document.getElementById('hero-tagline-emoji');
+                const nameEl = document.getElementById('hero-product-name');
+                const lowestPriceEl = document.getElementById('hero-lowest-price');
+                const listEl = document.getElementById('hero-restaurants-list');
+                const savingAmountEl = document.getElementById('hero-saving-amount');
+                const comparedCountEl = document.getElementById('hero-compared-restaurants');
+                const compareBtn = document.getElementById('hero-compare-btn');
+                
+                if (!nameEl) return;
+                
+                if (emojiEl) emojiEl.textContent = item.emoji;
+                nameEl.textContent = item.name;
+                
+                let listToRender = item.defaultList;
+                let comparedCount = item.comparedCount;
+                let savings = 121;
+                if (item.name === "Pizza") savings = 300;
+                if (item.name === "Chicken Broast") savings = 150;
+                if (item.name === "Chicken Mandi") savings = 300;
+                
+                if (actualData) {
+                    listToRender = actualData.list;
+                    comparedCount = actualData.comparedCount;
+                    savings = actualData.savings;
+                }
+                
+                const lowestPrice = listToRender.find(x => x.isLowest)?.price || listToRender[0].price;
+                lowestPriceEl.textContent = `Rs. ${lowestPrice.toLocaleString()}`;
+                
+                if (savingAmountEl) {
+                    savingAmountEl.textContent = `Rs. ${Math.round(savings).toLocaleString()}`;
+                }
+                
+                if (comparedCountEl) {
+                    comparedCountEl.textContent = `Compared from ${comparedCount} Restaurants`;
+                }
+                
+                if (compareBtn) {
+                    compareBtn.href = `./pages/food.html?search=${encodeURIComponent(item.searchQuery)}`;
+                }
+                
+                if (listEl) {
+                    listEl.innerHTML = listToRender.map((entry, index) => {
+                        const icon = entry.isLowest ? '🏆' : item.emoji;
+                        const highlightClass = entry.isLowest ? 'bg-emerald-50 text-emerald-800 font-semibold border-emerald-100 px-2 py-0.5 rounded-lg' : '';
+                        const textLowestBadge = entry.isLowest ? '<span class="text-[9px] bg-emerald-600 text-white font-extrabold px-1.5 py-0.5 rounded ml-1.5 uppercase">Lowest Price</span>' : '';
+                        
+                        return `
+                            <div class="flex justify-between items-center py-1 border-b border-slate-50 last:border-0 ${highlightClass}">
+                                <span class="font-bold flex items-center gap-1">
+                                    <span>${icon}</span>
+                                    <span class="truncate max-w-[120px] sm:max-w-[160px]">${entry.seller}</span>
+                                    ${textLowestBadge}
+                                </span>
+                                <div class="flex items-center gap-2 animate-price-slide" style="animation-delay: ${index * 0.1}s;">
+                                    <span class="font-extrabold text-slate-800">Rs. ${entry.price.toLocaleString()}</span>
+                                    <span class="text-[9px] text-slate-400 font-medium">${entry.distance} km</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
             if (typeof DataService !== 'undefined') {
                 DataService.getProducts().then(products => {
                     allProducts = products;
-                }).catch(e => console.log('Error loading products', e));
+                    updateHeroWidget(allProducts);
+                    
+                    setInterval(() => {
+                        currentHeroIndex = (currentHeroIndex + 1) % heroShowcaseData.length;
+                        const nameEl = document.getElementById('hero-product-name');
+                        if (nameEl) {
+                            nameEl.style.opacity = '0';
+                            nameEl.style.transform = 'translateY(-5px)';
+                            setTimeout(() => {
+                                updateHeroWidget(allProducts);
+                                nameEl.style.opacity = '1';
+                                nameEl.style.transform = 'translateY(0)';
+                            }, 250);
+                        } else {
+                            updateHeroWidget(allProducts);
+                        }
+                    }, 4000);
+                }).catch(e => {
+                    console.log('Error loading products', e);
+                    updateHeroWidget([]);
+                    setInterval(() => {
+                        currentHeroIndex = (currentHeroIndex + 1) % heroShowcaseData.length;
+                        updateHeroWidget([]);
+                    }, 4000);
+                });
             }
 
             function getActiveCategory() {
