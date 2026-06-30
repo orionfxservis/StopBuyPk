@@ -434,7 +434,7 @@ async function initFoodDeals() {
         market: p.market || '',
         unit: p.unit || '',
         address: address,
-        area: area,
+        area: areaVal,
         city: city,
         fullLocation: fullLocation,
         distanceKm: distanceKm,
