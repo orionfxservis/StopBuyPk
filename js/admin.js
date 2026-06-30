@@ -1479,7 +1479,7 @@ function populateCategoryDropdown() {
 window.updateBlockOptionsGlobal = function(areaVal, blockNoSelect) {
     if (!blockNoSelect) return;
     const currentBlockVal = blockNoSelect.value;
-    let optionsHtml = '<option value="">Select Block No.</option>';
+    let optionsHtml = '<option value="">Select Sub Area / Block / Sector</option>';
     
     if (areaVal === 'Korangi') {
         for (let i = 1; i <= 6; i++) {
@@ -1495,6 +1495,9 @@ window.updateBlockOptionsGlobal = function(areaVal, blockNoSelect) {
             optionsHtml += `<option value="Sector ${i}-C">Sector ${i}-C</option>`;
             optionsHtml += `<option value="Sector ${i}-D">Sector ${i}-D</option>`;
         }
+        ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].forEach(letter => {
+            optionsHtml += `<option value="Bhittai Colony - Sector ${letter}">Bhittai Colony - Sector ${letter}</option>`;
+        });
     } else if (areaVal === 'Gulshan-e-Iqbal') {
         for (let i = 1; i <= 19; i++) {
             optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
@@ -1552,6 +1555,18 @@ window.updateBlockOptionsGlobal = function(areaVal, blockNoSelect) {
         for (let i = 1; i <= 6; i++) {
             optionsHtml += `<option value="Block ${i}">Block ${i}</option>`;
         }
+    } else if (areaVal === 'Liaquatabad') {
+        const liaquatabadBlocks = [
+            'Liaquatabad No. 1', 'Liaquatabad No. 2', 'Liaquatabad No. 3', 'Liaquatabad No. 4', 'Liaquatabad No. 5',
+            'Liaquatabad No. 6', 'Liaquatabad No. 7', 'Liaquatabad No. 8', 'Liaquatabad No. 9', 'Liaquatabad No. 10',
+            'Block 1', 'Block 2', 'Block 3', 'Block 4', 'Block 5', 'Block 6', 'Block 7',
+            'C Area', 'Super Market', 'Dak Khana', 'Sharifabad', 'Bandhani Colony',
+            'Qasimabad', 'Gharibabad', 'Mujahid Colony', 'Commercial Area', 'Gulbahar',
+            'Teen Hatti', 'Usmania Colony', 'Moosa Colony'
+        ];
+        liaquatabadBlocks.forEach(b => {
+            optionsHtml += `<option value="${b}">${b}</option>`;
+        });
     } else if (areaVal === 'Shah Faisal') {
         const shahFaisalBlocks = [
             'Sector 1', 'Sector 2', 'Sector 3', 'Sector 4', 'Sector 5',
@@ -1583,6 +1598,61 @@ window.updateBlockOptionsGlobal = function(areaVal, blockNoSelect) {
             'Tower', 'I.I. Chundrigar Road'
         ];
         saddarBlocks.forEach(b => {
+            optionsHtml += `<option value="${b}">${b}</option>`;
+        });
+    } else if (areaVal === 'Bahadurabad') {
+        const bahadurabadBlocks = [
+            'Bahadurabad Main',
+            'Bahadur Yar Jang Road',
+            'Alamgir Road',
+            'Khalid Bin Waleed Road',
+            'Tariq Road',
+            'Shaheed-e-Millat Road',
+            'Allama Iqbal Road',
+            'Dhoraji Colony',
+            'PECHS Block 2',
+            'PECHS Block 3',
+            'PECHS Block 6'
+        ];
+        bahadurabadBlocks.forEach(b => {
+            optionsHtml += `<option value="${b}">${b}</option>`;
+        });
+    } else if (areaVal === 'Malir') {
+        const malirBlocks = [
+            'Malir 15', 'Malir City', 'Malir Colony', 'Kala Board', 'Model Colony',
+            'Model Colony Extension', 'Saudabad', 'Khokhrapar', 'Jafar-e-Tayyar', 'Gharibabad',
+            'Khuldabad', 'Dawood Goth', 'Dawood Chowrangi', 'Sharafi Goth', 'Future Colony',
+            'Bhittaiabad', 'Bakhtawar Goth', 'Quaidabad', 'Malir Halt', 'Malir Cantt',
+            'Falcon Complex', 'Askari V', 'Askari VI', '100 Quarters', 'Moinabad',
+            'Jamia Millia Road'
+        ];
+        malirBlocks.forEach(b => {
+            optionsHtml += `<option value="${b}">${b}</option>`;
+        });
+    } else if (areaVal === 'Nazimabad') {
+        const nazimabadBlocks = [
+            'Block 1', 'Block 2', 'Block 3', 'Block 4', 'Block 5',
+            'Block 5-A', 'Block 5-B', 'Block 5-C', 'Block 5-D', 'Block 5-E',
+            'Block 6 (Commercial)', 'Block 7 (Commercial)'
+        ];
+        nazimabadBlocks.forEach(b => {
+            optionsHtml += `<option value="${b}">${b}</option>`;
+        });
+    } else if (areaVal === 'Orangi' || areaVal === 'Orangi Town') {
+        const orangiBlocks = [
+            'Sector 1', 'Sector 1-A', 'Sector 1-B', 'Sector 1-C', 'Sector 1-D', 'Sector 1-E',
+            'Sector 2', 'Sector 3',
+            'Sector 4', 'Sector 4-A', 'Sector 4-B', 'Sector 4-C', 'Sector 4-D', 'Sector 4-E', 'Sector 4-F',
+            'Sector 5', 'Sector 6',
+            'Sector 7', 'Sector 7-A', 'Sector 7-B', 'Sector 7-C', 'Sector 7-D',
+            'Sector 8', 'Sector 9', 'Sector 10',
+            'Sector 11', 'Sector 11½',
+            'Sector 12', 'Sector 12-L',
+            'Sector 13', 'Sector 13-A', 'Sector 13-B', 'Sector 13-C', 'Sector 13-D', 'Sector 13-E', 'Sector 13-F', 'Sector 13-G', 'Sector 13-H',
+            'Sector 14', 'Sector 14-A', 'Sector 14-B', 'Sector 14-C',
+            'Sector 15', 'Sector 16'
+        ];
+        orangiBlocks.forEach(b => {
             optionsHtml += `<option value="${b}">${b}</option>`;
         });
     }
@@ -1719,9 +1789,9 @@ function renderDynamicAdminFields() {
                     </select>
                 </div>
                 <div class="input-group">
-                    <label>Block No.</label>
+                    <label>Sub Area / Block / Sector</label>
                     <select id="prodBlockNo" class="dynamic-admin-field" required>
-                        <option value="">Select Block No.</option>
+                        <option value="">Select Sub Area / Block / Sector</option>
                     </select>
                 </div>
                 <div class="input-group">
