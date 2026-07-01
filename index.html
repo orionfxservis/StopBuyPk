@@ -432,100 +432,237 @@
 
                 <div class="flex-1">
 
-                    <!-- Trends Box (Centered above banner) -->
-                    <div class="w-full text-center pb-2 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-                        <div onclick="openTrendsModal()"
-                            class="w-[110px] sm:w-[130px] h-[34px] sm:h-[38px] rounded-3xl bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-lg border-2 border-emerald-400 inline-flex items-center justify-center cursor-pointer transform transition-all duration-300 hover:scale-105">
-                            <span class="lang-en">Trends</span><span class="lang-ur">رجحانات</span>
+                    <!-- CTA Buttons Row -->
+                    <div class="w-full text-center pb-3 flex flex-wrap items-center justify-center gap-3">
+                        
+                        <!-- Compare Prices Now Button -->
+                        <button onclick="document.getElementById('searchInput')?.focus() || window.scrollTo({top: 0, behavior: 'smooth'})"
+                            class="h-[40px] px-5 rounded-full bg-gradient-to-r from-emerald-600 to-green-500 hover:from-emerald-500 hover:to-green-400 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg border border-emerald-400/20 transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer">
+                            🔥 <span class="lang-en">Compare Prices Now</span><span class="lang-ur">ابھی قیمتوں کا موازنہ کریں</span>
+                        </button>
+
+                        <!-- Track Price Drops Button -->
+                        <button onclick="document.getElementById('home')?.querySelector('section')?.scrollIntoView({behavior: 'smooth'})"
+                            class="h-[40px] px-5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg border border-blue-400/20 transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer">
+                            📈 <span class="lang-en">Track Price Drops</span><span class="lang-ur">قیمتوں کے اتار چڑھاو ٹریک کریں</span>
+                        </button>
+
+                        <!-- Today's Best Deals Dropdown Button -->
+                        <div class="relative inline-block text-left" id="dealsDropdownContainer">
+                            <!-- Button -->
+                            <button onclick="toggleDealsDropdown(event)"
+                                class="h-[40px] px-5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg border border-amber-400/20 transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer">
+                                💰 <span class="lang-en">Today's Best Deals</span><span class="lang-ur">آج کی بہترین ڈیلز</span>
+                                <i class="fas fa-chevron-down text-xs ml-1"></i>
+                            </button>
+                            
+                            <!-- Dropdown Menu -->
+                            <div id="dealsDropdownMenu" class="hidden absolute right-0 sm:right-auto sm:left-1/2 sm:transform sm:-translate-x-1/2 mt-2 w-48 rounded-2xl bg-white border border-gray-100 shadow-xl z-[999] overflow-hidden">
+                                <div class="py-1">
+                                    <!-- Food Deals Option -->
+                                    <button onclick="openDealsModal('Food', null, '🔥 Food Deals'); closeDealsDropdown();"
+                                        class="w-full text-left px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors flex items-center gap-2 cursor-pointer">
+                                        🔥 <span class="lang-en">Food Deals</span><span class="lang-ur">فوڈ ڈیلز</span>
+                                    </button>
+                                    <!-- Computer Deals Option -->
+                                    <button onclick="openDealsModal('Computer', null, '💻 Computer Deals'); closeDealsDropdown();"
+                                        class="w-full text-left px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-cyan-50 hover:text-cyan-600 transition-colors flex items-center gap-2 cursor-pointer">
+                                        💻 <span class="lang-en">Computer Deals</span><span class="lang-ur">کمپیوٹر ڈیلز</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Food Deals Button -->
-                        <div class="relative inline-block">
-                            <!-- Constant Glowing background aura -->
-                            <div
-                                class="absolute -inset-1 bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 rounded-3xl blur-md opacity-100 animate-pulse">
-                            </div>
-
-                            <!-- Actual Button -->
-                            <div onclick="openDealsModal('Food', null, '🔥 Food Deals')"
-                                class="relative w-[110px] sm:w-[130px] h-[34px] sm:h-[38px] rounded-3xl bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 text-white font-bold text-xs sm:text-sm shadow-xl border border-white/30 cursor-pointer transform transition-all duration-300 hover:scale-105 flex items-center justify-center">
-                                🔥 <span class="lang-en">Food Deals</span><span class="lang-ur">فوڈ ڈیلز</span>
-                            </div>
-                        </div>
-
-                        <!-- Computer Deals Button -->
-                        <div class="relative inline-block">
-                            <!-- Constant Glowing background aura -->
-                            <div
-                                class="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 rounded-3xl blur-md opacity-100 animate-pulse">
-                            </div>
-
-                            <!-- Actual Button -->
-                            <div onclick="openDealsModal('Computer', null, '💻 Computer Deals')"
-                                class="relative w-[130px] sm:w-[150px] h-[34px] sm:h-[38px] rounded-3xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 text-white font-bold text-xs sm:text-sm shadow-xl border border-white/30 cursor-pointer transform transition-all duration-300 hover:scale-105 flex items-center justify-center">
-                                💻 <span class="lang-en">Computer Deals</span><span class="lang-ur">کمپیوٹر ڈیلز</span>
-                            </div>
-                        </div>
                     </div>
 
-                    <!-- Promotional Banners Carousel -->
-                    <div dir="ltr"
-                        class="hidden relative w-full rounded-3xl shadow-sm border border-emerald-200 overflow-hidden bg-[#F4F9F2] mb-6 group" style="display: none !important;">
+                    <!-- Modern Hero Banner Section -->
+                    <div class="relative w-full rounded-[28px] overflow-hidden bg-gradient-to-br from-[#064e3b] via-[#022c22] to-[#0a1b15] border border-emerald-500/20 shadow-2xl p-6 sm:p-8 md:p-10 mb-6 mt-4">
+                        <!-- Background patterns -->
+                        <div class="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.3),transparent_70%)]"></div>
+                        <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-                        <div id="promo-carousel" class="flex w-full">
-                            <!-- Slide 1 -->
-                            <div class="w-full shrink-0">
-                                <img src="images/promotion/Delicious meals.png" alt="Cattler Farm Promo Banner"
-                                    class="w-full h-[200px] sm:h-[250px] md:h-[320px] object-cover md:object-fill">
+                        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                            
+                            <!-- Left Content Block: Headline & Subtitle -->
+                            <div class="lg:col-span-7 text-left space-y-5">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 text-xs font-semibold border border-emerald-500/20 uppercase tracking-wide">
+                                    <i class="fas fa-bolt text-amber-400"></i> Smart Price Comparison
+                                </span>
+                                
+                                <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight font-serif" style="font-family: Georgia, 'Times New Roman', serif;">
+                                    Stop Paying More.<br class="hidden sm:inline">
+                                    <span class="bg-gradient-to-r from-emerald-400 to-lime-300 bg-clip-text text-transparent">Compare Prices Across Pakistan</span> in Seconds.
+                                </h1>
+                                
+                                <p class="text-slate-300 text-sm sm:text-base md:text-lg max-w-xl font-light leading-relaxed">
+                                    Compare prices from trusted stores, discover deals, track price drops, and save money on every purchase.
+                                </p>
+                                
+                                <!-- Action Buttons / Stats -->
+                                <div class="flex flex-wrap gap-3 pt-2">
+                                    <a href="#groceries" onclick="showPage('groceries')" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-white font-bold text-sm shadow-lg shadow-emerald-950/50 hover:shadow-emerald-900/50 transform hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2">
+                                        <i class="fas fa-shopping-basket"></i> Compare Groceries
+                                    </a>
+                                    <a href="./pages/computers.html" class="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/10 hover:border-white/20 font-bold text-sm backdrop-blur-sm transform hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2">
+                                        <i class="fas fa-laptop"></i> Explore Computers
+                                    </a>
+                                </div>
                             </div>
-                            <!-- Slide 2 -->
-                            <div class="w-full shrink-0">
-                                <img src="images/promotion/Computers.png" alt="Goat Farm Promo Banner"
-                                    class="w-full h-[200px] sm:h-[250px] md:h-[320px] object-cover md:object-fill">
-                            </div>
-                            <!-- Slide 3 -->
-                            <div class="w-full shrink-0">
-                                <img src="images/promotion/go-electric-ride-the-future.png"
-                                    alt="Go Electric Promo Banner"
-                                    class="w-full h-[200px] sm:h-[250px] md:h-[320px] object-cover md:object-fill">
-                            </div>
-                        </div>
+                            
+                            <!-- Right Content Block: Price Comparison Cards Showcase -->
+                            <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                
+                                <!-- Card 1: Zinger Burger (Food) -->
+                                <div class="bg-white/5 backdrop-blur-md border border-white/10 hover:border-emerald-500/30 rounded-2xl p-4 shadow-xl hover:scale-[1.03] transition-all duration-300 flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex justify-between items-start mb-2">
+                                            <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">🍔 Food Item</span>
+                                            <span class="text-[10px] text-slate-400"><i class="fas fa-clock"></i> Updated hourly</span>
+                                        </div>
+                                        <h3 class="text-white font-bold text-sm sm:text-base truncate">Zinger Burger</h3>
+                                        <p class="text-[10px] text-slate-400 mb-3">Karachi / Lahore / Islamabad</p>
+                                        
+                                        <!-- Comparison List -->
+                                        <div class="space-y-1.5 text-xs">
+                                            <div class="flex justify-between items-center text-slate-300 py-0.5 border-b border-white/5">
+                                                <span>Imtiaz Market</span>
+                                                <span class="font-bold text-white">Rs. 380</span>
+                                            </div>
+                                            <div class="flex justify-between items-center text-slate-300 py-0.5 border-b border-white/5">
+                                                <span>Chase Up</span>
+                                                <span class="font-bold text-white">Rs. 420</span>
+                                            </div>
+                                            <div class="flex justify-between items-center text-emerald-400 font-bold py-0.5">
+                                                <span>KFC Restaurant</span>
+                                                <span class="text-white line-through font-normal text-[10px] mr-1">Rs. 650</span>
+                                                <span>Rs. 550</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 pt-2 border-t border-white/5 flex justify-between items-center">
+                                        <div class="leading-none">
+                                            <span class="text-[9px] text-emerald-400 block font-semibold uppercase">Save Up To</span>
+                                            <span class="text-xs font-black text-white">Rs. 270</span>
+                                        </div>
+                                        <a href="./pages/food.html?search=zinger" class="text-xs text-emerald-400 font-bold hover:text-emerald-300 flex items-center gap-1">
+                                            Compare <i class="fas fa-arrow-right text-[10px]"></i>
+                                        </a>
+                                    </div>
+                                </div>
 
-                        <!-- Carousel Dots -->
-                        <div id="promo-carousel-dots"
-                            class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
-                            <button onclick="goToSlide(0)"
-                                class="w-2.5 h-2.5 rounded-full bg-emerald-700 transition-colors promo-dot"></button>
-                            <button onclick="goToSlide(1)"
-                                class="w-2.5 h-2.5 rounded-full bg-black/20 hover:bg-black/40 transition-colors promo-dot"></button>
-                            <button onclick="goToSlide(2)"
-                                class="w-2.5 h-2.5 rounded-full bg-black/20 hover:bg-black/40 transition-colors promo-dot"></button>
-                        </div>
+                                <!-- Card 2: Core i5 Laptop (Computer) -->
+                                <div class="bg-white/5 backdrop-blur-md border border-white/10 hover:border-cyan-500/30 rounded-2xl p-4 shadow-xl hover:scale-[1.03] transition-all duration-300 flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex justify-between items-start mb-2">
+                                            <span class="text-xs font-bold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">💻 Computer</span>
+                                            <span class="text-[10px] text-slate-400"><i class="fas fa-shield-alt"></i> Verified</span>
+                                        </div>
+                                        <h3 class="text-white font-bold text-sm sm:text-base truncate">HP EliteBook i5</h3>
+                                        <p class="text-[10px] text-slate-400 mb-3">8GB RAM / 256GB SSD</p>
+                                        
+                                        <!-- Comparison List -->
+                                        <div class="space-y-1.5 text-xs">
+                                            <div class="flex justify-between items-center text-emerald-400 font-bold py-0.5 border-b border-white/5">
+                                                <span>Shophive</span>
+                                                <span>Rs. 75,500</span>
+                                            </div>
+                                            <div class="flex justify-between items-center text-slate-300 py-0.5 border-b border-white/5">
+                                                <span>Mega.pk</span>
+                                                <span class="font-bold text-white">Rs. 76,200</span>
+                                            </div>
+                                            <div class="flex justify-between items-center text-slate-300 py-0.5">
+                                                <span>Daraz.pk</span>
+                                                <span class="font-bold text-white">Rs. 78,000</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 pt-2 border-t border-white/5 flex justify-between items-center">
+                                        <div class="leading-none">
+                                            <span class="text-[9px] text-cyan-400 block font-semibold uppercase">Save Up To</span>
+                                            <span class="text-xs font-black text-white">Rs. 2,500</span>
+                                        </div>
+                                        <a href="./pages/computers.html?search=elitebook" class="text-xs text-cyan-400 font-bold hover:text-cyan-300 flex items-center gap-1">
+                                            Compare <i class="fas fa-arrow-right text-[10px]"></i>
+                                        </a>
+                                    </div>
+                                </div>
 
-                        <!-- Carousel Navigation -->
-                        <button onclick="prevSlide()"
-                            class="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-emerald-800 shadow opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                            <i class="fas fa-chevron-left text-sm"></i>
-                        </button>
-                        <button onclick="nextSlide()"
-                            class="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-emerald-800 shadow opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                            <i class="fas fa-chevron-right text-sm"></i>
-                        </button>
+                                <!-- Card 3: Chicken Biryani (Food) -->
+                                <div class="bg-white/5 backdrop-blur-md border border-white/10 hover:border-emerald-500/30 rounded-2xl p-4 shadow-xl hover:scale-[1.03] transition-all duration-300 flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex justify-between items-start mb-2">
+                                            <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">🍛 Food Item</span>
+                                            <span class="text-[10px] text-slate-400"><i class="fas fa-fire"></i> Hot Deal</span>
+                                        </div>
+                                        <h3 class="text-white font-bold text-sm sm:text-base truncate">Chicken Biryani</h3>
+                                        <p class="text-[10px] text-slate-400 mb-3">Single Plate Premium</p>
+                                        
+                                        <!-- Comparison List -->
+                                        <div class="space-y-1.5 text-xs">
+                                            <div class="flex justify-between items-center text-emerald-400 font-bold py-0.5 border-b border-white/5">
+                                                <span>Jedda Biryani</span>
+                                                <span>Rs. 290</span>
+                                            </div>
+                                            <div class="flex justify-between items-center text-slate-300 py-0.5 border-b border-white/5">
+                                                <span>Student Biryani</span>
+                                                <span class="font-bold text-white">Rs. 320</span>
+                                            </div>
+                                            <div class="flex justify-between items-center text-slate-300 py-0.5">
+                                                <span>Biryani Center</span>
+                                                <span class="font-bold text-white">Rs. 340</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 pt-2 border-t border-white/5 flex justify-between items-center">
+                                        <div class="leading-none">
+                                            <span class="text-[9px] text-emerald-400 block font-semibold uppercase">Save Up To</span>
+                                            <span class="text-xs font-black text-white">Rs. 50</span>
+                                        </div>
+                                        <a href="./pages/food.html?search=biryani" class="text-xs text-emerald-400 font-bold hover:text-emerald-300 flex items-center gap-1">
+                                            Compare <i class="fas fa-arrow-right text-[10px]"></i>
+                                        </a>
+                                    </div>
+                                </div>
 
-                        <!-- Deal Ends Counter Overlay -->
-                        <div
-                            class="hidden absolute right-16 top-1/2 transform -translate-y-1/2 bg-white p-4 rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] z-20 w-[170px] text-center">
-                            <div class="text-[11px] text-emerald-900 font-semibold mb-1 text-left">Deal ends in</div>
-                            <div class="font-bold text-2xl tracking-wider text-black mb-1">02:45:10</div>
-                            <div class="flex justify-between px-3 text-[9px] text-gray-500 font-medium mb-3">
-                                <span>Hours</span>
-                                <span>Min</span>
-                                <span>Sec</span>
+                                <!-- Card 4: 8GB DDR4 RAM (Computer) -->
+                                <div class="bg-white/5 backdrop-blur-md border border-white/10 hover:border-cyan-500/30 rounded-2xl p-4 shadow-xl hover:scale-[1.03] transition-all duration-300 flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex justify-between items-start mb-2">
+                                            <span class="text-xs font-bold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">🔌 Computer PC</span>
+                                            <span class="text-[10px] text-slate-400"><i class="fas fa-check-circle"></i> In Stock</span>
+                                        </div>
+                                        <h3 class="text-white font-bold text-sm sm:text-base truncate">8GB DDR4 Desktop RAM</h3>
+                                        <p class="text-[10px] text-slate-400 mb-3">Kingston / Corsair 3200MHz</p>
+                                        
+                                        <!-- Comparison List -->
+                                        <div class="space-y-1.5 text-xs">
+                                            <div class="flex justify-between items-center text-emerald-400 font-bold py-0.5 border-b border-white/5">
+                                                <span>Galaxy Computers</span>
+                                                <span>Rs. 6,400</span>
+                                            </div>
+                                            <div class="flex justify-between items-center text-slate-300 py-0.5 border-b border-white/5">
+                                                <span>Eezepc</span>
+                                                <span class="font-bold text-white">Rs. 6,600</span>
+                                            </div>
+                                            <div class="flex justify-between items-center text-slate-300 py-0.5">
+                                                <span>Czone</span>
+                                                <span class="font-bold text-white">Rs. 6,800</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 pt-2 border-t border-white/5 flex justify-between items-center">
+                                        <div class="leading-none">
+                                            <span class="text-[9px] text-cyan-400 block font-semibold uppercase">Save Up To</span>
+                                            <span class="text-xs font-black text-white">Rs. 400</span>
+                                        </div>
+                                        <a href="./pages/computers.html?search=ram" class="text-xs text-cyan-400 font-bold hover:text-cyan-300 flex items-center gap-1">
+                                            Compare <i class="fas fa-arrow-right text-[10px]"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
                             </div>
-                            <button onclick="showPage('groceries')"
-                                class="w-full bg-[#71b132] hover:bg-[#629c2a] text-white text-xs font-bold py-2 rounded-xl transition-colors">
-                                Shop Now
-                            </button>
+
                         </div>
                     </div>
 
@@ -2662,6 +2799,29 @@
                 console.error("Failed to load vertical banners", err);
             }
         }
+        
+        // ================================
+        // DEALS DROPDOWN MENU
+        // ================================
+        function toggleDealsDropdown(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('dealsDropdownMenu');
+            if (menu) {
+                menu.classList.toggle('hidden');
+            }
+        }
+        function closeDealsDropdown() {
+            const menu = document.getElementById('dealsDropdownMenu');
+            if (menu) {
+                menu.classList.add('hidden');
+            }
+        }
+        document.addEventListener('click', function(event) {
+            const container = document.getElementById('dealsDropdownContainer');
+            if (container && !container.contains(event.target)) {
+                closeDealsDropdown();
+            }
+        });
 
         // ================================
         // VISITOR COUNTER
@@ -4119,7 +4279,12 @@
             // Add Shop Name
             const shopNameEl = document.getElementById('pm-shop-name');
             if (shopNameEl) {
-                const displayShop = (companyName && companyName !== 'undefined' && companyName !== 'null' && companyName.trim() !== '') ? companyName.trim() : ((addedBy && addedBy !== 'undefined' && addedBy !== 'null') ? addedBy.trim() : 'Admin');
+                let displayShop = 'Admin';
+                if (category && (category.toLowerCase() === 'food' || category.toLowerCase() === 'fast food')) {
+                    displayShop = (brand && brand !== 'undefined' && brand !== 'null' && brand.trim() !== '') ? brand.trim() : 'Admin';
+                } else {
+                    displayShop = (companyName && companyName !== 'undefined' && companyName !== 'null' && companyName.trim() !== '') ? companyName.trim() : ((addedBy && addedBy !== 'undefined' && addedBy !== 'null') ? addedBy.trim() : 'Admin');
+                }
                 shopNameEl.textContent = displayShop;
             }
 
