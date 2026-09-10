@@ -632,6 +632,13 @@
                         <h4 class="form-section-title" style="margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; font-weight:bold; color:var(--primary-color);">Product's Area</h4>
                         <div class="form-row">
                             <div class="input-group">
+                                <label>Select Seller</label>
+                                <select id="prodSellerId">
+                                    <option value="">No Seller (Standalone)</option>
+                                    <!-- Populated via JS -->
+                                </select>
+                            </div>
+                            <div class="input-group">
                                 <label>Choose Category</label>
                                 <select id="prodCategory" required>
                                     <option value="">Select Category</option>
@@ -1292,6 +1299,16 @@
                                 <div class="input-group" style="flex: 2;">
                                     <label>Google Maps Link</label>
                                     <input type="url" id="sellerMapsLink" placeholder="https://maps.google.com/...">
+                                </div>
+                            </div>
+                            <div class="form-row" style="margin-top:10px;">
+                                <div class="input-group">
+                                    <label>Latitude <span style="font-size: 0.8rem; color: #94a3b8;">(e.g., 24.9221)</span></label>
+                                    <input type="text" id="sellerLatitude" placeholder="Latitude">
+                                </div>
+                                <div class="input-group">
+                                    <label>Longitude <span style="font-size: 0.8rem; color: #94a3b8;">(e.g., 67.0661)</span></label>
+                                    <input type="text" id="sellerLongitude" placeholder="Longitude">
                                 </div>
                             </div>
                         </div>

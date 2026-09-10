@@ -665,7 +665,7 @@
       computerSearchPanel.innerHTML = "";
 
       fields.forEach(field => {
-          const filter = createComputerFilter(field);
+          const filter = createComputerFilter(field, subcategory);
           if (filter) {
               computerSearchPanel.appendChild(filter);
           }
@@ -675,7 +675,7 @@
       restoreCurrentFilterValues();
   }
 
-  function createComputerFilter(field) {
+  function createComputerFilter(field, subcategory) {
       const wrapper = document.createElement("div");
       wrapper.className = "computer-filter-group";
 
@@ -688,10 +688,7 @@
               break;
 
           case "brand":
-              wrapper.innerHTML = `
-                  <label>Brand</label>
-                  <select id="filter-brand">
-                      <option value="">All Brands</option>
+              let brandOptions = `<option value="">All Brands</option>
                       <option>Dell</option>
                       <option>HP</option>
                       <option>Lenovo</option>
@@ -700,7 +697,17 @@
                       <option>MSI</option>
                       <option>Apple</option>
                       <option>Samsung</option>
-                      <option>Other</option>
+                      <option>Other</option>`;
+              
+              if (subcategory === 'multimedia') {
+                  brandOptions = `<option value="">All Brands</option>` + 
+                  ["AD-7000","Altec Lansing","Audionic","Blaster","Creative","Classic","Edifier","Fantech","Faster","F&D","Havit","HP","JBL","Logitech","Max230","Max550","Mega40","Mega100","Microlab","Pace","Rainbow","Reborn","Redragon","Ronin","SteelSeries","Sony","Vision35","Xiaomi","Generic / No Brand","Other"].map(b => `<option value="${b}">${b}</option>`).join('');
+              }
+
+              wrapper.innerHTML = `
+                  <label>Brand</label>
+                  <select id="filter-brand">
+                      ${brandOptions}
                   </select>
               `;
               break;
@@ -1173,10 +1180,43 @@
           return true;
       });
 
+      // Add distance
+      const viewerLatStr = localStorage.getItem("stopbuy_latitude");
+      const viewerLonStr = localStorage.getItem("stopbuy_longitude");
+      const viewerLat = viewerLatStr ? parseFloat(viewerLatStr) : 24.8607;
+      const viewerLon = viewerLonStr ? parseFloat(viewerLonStr) : 67.0011;
+
+      filtered.forEach(f => {
+          let pLat, pLon;
+          if (f.latitude && f.longitude) {
+              pLat = parseFloat(f.latitude);
+              pLon = parseFloat(f.longitude);
+          } else {
+              if (window.estimateCoordinates) {
+                  const pCoords = window.estimateCoordinates(f.address, f.area, f.city);
+                  pLat = pCoords.lat;
+                  pLon = pCoords.lon;
+              } else {
+                  pLat = 24.86; pLon = 67.0;
+              }
+          }
+          if (window.calculateDistance) {
+              f.distanceKm = window.calculateDistance(viewerLat, viewerLon, pLat, pLon);
+          } else {
+              f.distanceKm = 0;
+          }
+      });
+
       // Handle sorting
       const sortVal = document.getElementById('compSort')?.value || '';
       if (sortVal === 'price-low') {
-          filtered.sort((a, b) => (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0));
+          filtered.sort((a, b) => {
+              let tierA = window.getProximityTier ? window.getProximityTier(a.distanceKm) : 0;
+              let tierB = window.getProximityTier ? window.getProximityTier(b.distanceKm) : 0;
+              const tierDiff = tierA - tierB;
+              if (tierDiff !== 0) return tierDiff;
+              return (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0);
+          });
       } else if (sortVal === 'price-high') {
           filtered.sort((a, b) => (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0));
       } else if (sortVal === 'name-asc') {
@@ -1333,18 +1373,22 @@
           const safeCreatedDate = (p.createdDate || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
           const safeCompanyName = (p.companyName || '').toString().replace(/'/g, "\\'").replace(/"/g, "&quot;");
 
+          const displayCategory = (p.subCategory === 'Multimedia' && p.multimedia_type) 
+                                    ? p.multimedia_type 
+                                    : (p.subCategory || p.category || 'Laptops');
+
           if (currentViewMode === 'list') {
               return `
                 <div onclick="openProductDetailModal('${safeName}', '${safeImage}', '${safeDesc}', '${safePrice}', '${safeOrigPrice}', '${safeCategory}', '${safeSubCategory}', '${safeWhatsapp}', '${safeModel}', '${safeRam}', '${safeStorage}', '${safeBrand}', '${safeSeries}', '${safeProcessor}', '${safeAddedBy}', '${safeCreatedDate}', '${safeCompanyName}')" class="card relative flex flex-row items-center justify-between w-full gap-4 p-4 hover:shadow-md transition-all cursor-pointer">
                   <div class="flex items-center gap-4 flex-1">
                     <div class="relative overflow-hidden rounded-xl w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 bg-slate-50 flex items-center justify-center border border-slate-100">
                       ${condBadge}
-                      <img src="${imgUrl}" onerror="this.src='../images/placeholder.jpg'" class="max-w-full max-h-full w-auto h-auto object-contain hover:scale-105 transition-transform duration-300">
+                      <img src="${imgUrl}" onerror="this.onerror=null; this.src='https://via.placeholder.com/150'" class="max-w-full max-h-full w-auto h-auto object-contain hover:scale-105 transition-transform duration-300">
                     </div>
                     <div class="flex-1 min-w-0">
                       <h4 style="font-weight: 600; color: #1e293b; font-size: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${name}">${name}</h4>
                       <div class="flex items-center gap-4 mt-2 text-[12px] text-gray-500">
-                        <span>📂 ${p.subCategory || 'Laptops'}</span>
+                        <span>📂 ${displayCategory}</span>
                         <span>📍 ${locDisplay}</span>
                       </div>
                     </div>
@@ -1361,14 +1405,14 @@
               <div>
                 <div class="relative overflow-hidden rounded-xl">
                   ${condBadge}
-                  <img src="${imgUrl}" onerror="this.src='../images/placeholder.jpg'" class="hover:scale-105 transition-transform duration-300">
+                  <img src="${imgUrl}" onerror="this.onerror=null; this.src='https://via.placeholder.com/150'" class="hover:scale-105 transition-transform duration-300">
                 </div>
                 <h4 style="font-weight: 600; color: #1e293b; margin-top: 10px; font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${name}">${name}</h4>
               </div>
               <div>
                 <p style="color: #059669; font-weight: bold; margin-top: 8px; font-size: 15px;">${priceStr}</p>
                 <div class="flex items-center justify-between mt-2 border-t border-slate-50 pt-2 text-[11px] text-gray-500">
-                  <span>${p.subCategory || 'Laptops'}</span>
+                  <span>${displayCategory}</span>
                   <span>📍 ${locDisplay}</span>
                 </div>
               </div>
@@ -1828,6 +1872,7 @@
         &copy; 2026 StopBuyPk - Smart Price Comparison
     </div>
 
+<script src="../js/location.js"></script>
 <!-- LANG_TOGGLE_SCRIPT -->
 <script>
     const currentLang = localStorage.getItem('qeematLang') || 'en';
