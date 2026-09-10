@@ -3278,6 +3278,20 @@ document.addEventListener('blur', handleAutofillEvent, true);
 
 const adminProductForm = document.getElementById('adminProductForm');
 
+window.populateProductSellerDropdown = function () {
+    const select = document.getElementById('prodSellerId');
+    if (!select) return;
+    const currentVal = select.value;
+    select.innerHTML = '<option value="">No Seller (Standalone)</option>';
+    sellers.forEach(s => {
+        const option = document.createElement('option');
+        option.value = s.id;
+        option.textContent = `${s.ownerName} (${s.shopName || s.brandName || 'Unnamed Shop'}) - ${s.area || ''}`;
+        select.appendChild(option);
+    });
+    if (currentVal) select.value = currentVal;
+};
+
 if (adminProductForm) {
     adminProductForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -3297,6 +3311,7 @@ if (adminProductForm) {
             id: productEditIndex === -1 ? Date.now() : products[productEditIndex].id,
             category: category,
             subCategory: subCategory,
+            sellerId: document.getElementById('prodSellerId') ? document.getElementById('prodSellerId').value : '',
             image: document.getElementById('prodImage').value || (productEditIndex !== -1 ? products[productEditIndex].image : 'https://via.placeholder.com/150'),
             addedBy: productEditIndex === -1 ? userName : (products[productEditIndex].addedBy || userName),
             createdDate: productEditIndex === -1 ? new Date().toISOString() : (products[productEditIndex].createdDate || new Date().toISOString()),
@@ -3629,10 +3644,16 @@ window.editProduct = (index) => {
     productEditIndex = index;
     const pCat = document.getElementById('prodCategory');
     const pSub = document.getElementById('prodSubCategory');
+    const pSellerId = document.getElementById('prodSellerId');
 
     pCat.value = prod.category;
     // Trigger change to populate subcategories
     pCat.dispatchEvent(new Event('change'));
+
+    window.populateProductSellerDropdown();
+    if (pSellerId) {
+        pSellerId.value = prod.sellerId || '';
+    }
 
     setTimeout(() => {
         pSub.value = prod.subCategory;
@@ -3729,6 +3750,11 @@ window.cancelProductEdit = () => {
     if (pCat) {
         pCat.value = "";
         pCat.dispatchEvent(new Event('change'));
+    }
+
+    const pSellerId = document.getElementById('prodSellerId');
+    if (pSellerId) {
+        pSellerId.value = "";
     }
 
     const submitBtn = document.querySelector('#adminProductForm button[type="submit"]');
@@ -5816,6 +5842,8 @@ window.editSeller = function (index) {
     document.getElementById('sellerBranchWhatsapp').value = s.branchWhatsapp || '';
     document.getElementById('sellerProvince').value = s.province || '';
     document.getElementById('sellerMapsLink').value = s.googleMapsLink || '';
+    if (document.getElementById('sellerLatitude')) document.getElementById('sellerLatitude').value = s.latitude || '';
+    if (document.getElementById('sellerLongitude')) document.getElementById('sellerLongitude').value = s.longitude || '';
     document.getElementById('sellerCategory').value = s.category || '';
     document.getElementById('sellerSubCategories').value = s.subCategories || '';
     document.getElementById('sellerDescription').value = s.businessDescription || '';
@@ -5945,6 +5973,8 @@ if (sellerForm) {
             const branchWhatsapp = document.getElementById('sellerBranchWhatsapp').value;
             const province = document.getElementById('sellerProvince').value;
             const googleMapsLink = document.getElementById('sellerMapsLink').value;
+            const latitude = document.getElementById('sellerLatitude') ? document.getElementById('sellerLatitude').value : '';
+            const longitude = document.getElementById('sellerLongitude') ? document.getElementById('sellerLongitude').value : '';
             const category = document.getElementById('sellerCategory').value;
             const subCategories = document.getElementById('sellerSubCategories').value;
             const businessDescription = document.getElementById('sellerDescription').value;
@@ -5995,7 +6025,9 @@ if (sellerForm) {
                 statusActive,
                 statusInactive,
                 statusSuspended,
-                status
+                status,
+                latitude,
+                longitude
             };
 
             if (sellerEditIndex === -1) {

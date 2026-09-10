@@ -30,78 +30,7 @@ const modalTotalAmount = document.getElementById('modalTotalAmount');
 
 let selectedFoodId = null;
 
-function estimateCoordinates(address, area, city) {
-  const text = `${address} ${area} ${city}`.toLowerCase();
 
-  let lat = 24.8607; // Default (Karachi center)
-  let lon = 67.0011;
-
-  if (text.includes("gulshan-e-iqbal") || text.includes("gulshan e iqbal")) {
-    lat = 24.9180; lon = 67.0971;
-  } else if (text.includes("bahadurabad")) {
-    lat = 24.8828; lon = 67.0682;
-  } else if (text.includes("nazimabad")) {
-    if (text.includes("north")) {
-      lat = 24.9452; lon = 67.0435;
-    } else {
-      lat = 24.9113; lon = 67.0315;
-    }
-  } else if (text.includes("saddar")) {
-    lat = 24.8605; lon = 67.0261;
-  } else if (text.includes("f.b. area") || text.includes("f. b. area") || text.includes("federal b") || text.includes("ancholi")) {
-    lat = 24.9315; lon = 67.0784;
-  } else if (text.includes("korangi")) {
-    lat = 24.8258; lon = 67.1328;
-  } else if (text.includes("dha") || text.includes("defence")) {
-    if (text.includes("lahore")) {
-      lat = 31.4697; lon = 74.4089;
-    } else {
-      lat = 24.8016; lon = 67.0681;
-    }
-  } else if (text.includes("gulistan-e-johar") || text.includes("johar")) {
-    if (text.includes("lahore")) {
-      lat = 31.4697; lon = 74.2728;
-    } else {
-      lat = 24.9111; lon = 67.1219;
-    }
-  } else if (text.includes("liaquatabad")) {
-    lat = 24.9070; lon = 67.0423;
-  } else if (text.includes("clifton")) {
-    lat = 24.8138; lon = 67.0336;
-  } else if (text.includes("malir")) {
-    lat = 24.8974; lon = 67.1981;
-  } else if (text.includes("model town")) {
-    lat = 31.4805; lon = 74.3244;
-  } else if (text.includes("township")) {
-    lat = 31.4551; lon = 74.3090;
-  } else if (text.includes("gulberg")) {
-    lat = 31.5204; lon = 74.3587;
-  } else if (text.includes("mall road")) {
-    lat = 31.5657; lon = 74.3413;
-  } else if (text.includes("lahore")) {
-    lat = 31.5204; lon = 74.3587;
-  } else if (text.includes("islamabad")) {
-    lat = 33.6844; lon = 73.0479;
-  } else if (text.includes("rawalpindi")) {
-    lat = 33.5651; lon = 73.0169;
-  } else if (text.includes("peshawar")) {
-    lat = 34.0151; lon = 71.5249;
-  }
-
-  return { lat, lon };
-}
-
-function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
 
 function getAverageRating(id) {
   const idStr = id ? String(id) : '';
@@ -145,8 +74,16 @@ function renderFoodList() {
   const viewerLon = viewerLonStr ? parseFloat(viewerLonStr) : 67.0011;
 
   foodDeals.forEach(f => {
-    const pCoords = estimateCoordinates(f.address, f.area, f.city);
-    f.distanceKm = calculateDistance(viewerLat, viewerLon, pCoords.lat, pCoords.lon);
+    let pLat, pLon;
+    if (f.latitude && f.longitude) {
+      pLat = parseFloat(f.latitude);
+      pLon = parseFloat(f.longitude);
+    } else {
+      const pCoords = estimateCoordinates(f.address, f.area, f.city);
+      pLat = pCoords.lat;
+      pLon = pCoords.lon;
+    }
+    f.distanceKm = calculateDistance(viewerLat, viewerLon, pLat, pLon);
   });
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -202,8 +139,17 @@ function renderFoodList() {
 
   // Sort by Sort By Dropdown selection (min price to max price by default)
   const sortBy = document.getElementById('sortProducts')?.value || urlParams.get('sort') || 'priceLow';
+  
   if (sortBy === 'priceLow') {
-    filtered.sort((a, b) => a.price - b.price);
+    filtered.sort((a, b) => {
+      const tierDiff = getProximityTier(a.distanceKm) - getProximityTier(b.distanceKm);
+      if (tierDiff !== 0) return tierDiff;
+      
+      const priceDiff = a.price - b.price;
+      if (priceDiff !== 0) return priceDiff;
+
+      return a.name.localeCompare(b.name);
+    });
   } else if (sortBy === 'priceHigh') {
     filtered.sort((a, b) => b.price - a.price);
   } else if (sortBy === 'latest') {

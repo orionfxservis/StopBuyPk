@@ -121,22 +121,64 @@ const DataService = {
             const client = await DataService.ensureSupabase();
             const { data, error } = await client.from('products').select('*');
             if (error) throw error;
-            const products = data.map(p => ({
-                id: p.id,
-                category: p.category,
-                subCategory: p.sub_category,
-                image: p.image,
-                status: p.status,
-                addedBy: p.added_by,
-                createdDate: p.created_date,
-                updatedDate: p.updated_date,
-                ...(p.extra_fields || {})
-            }));
+            
+            // Fetch sellers to join coordinates
+            let sellers = [];
+            try {
+                const { data: sellersData, error: sellersError } = await client.from('sellers').select('*');
+                if (!sellersError && sellersData) {
+                    sellers = sellersData;
+                    localStorage.setItem("admin_sellers", JSON.stringify(sellersData));
+                } else {
+                    sellers = JSON.parse(localStorage.getItem("admin_sellers")) || [];
+                }
+            } catch(e) {
+                sellers = JSON.parse(localStorage.getItem("admin_sellers")) || [];
+            }
+            
+            const products = data.map(p => {
+                let prod = {
+                    id: p.id,
+                    category: p.category,
+                    subCategory: p.sub_category,
+                    multimedia_type: p.multimedia_type,
+                    standard_product_type: p.standard_product_type,
+                    image: p.image,
+                    status: p.status,
+                    addedBy: p.added_by,
+                    createdDate: p.created_date,
+                    updatedDate: p.updated_date,
+                    ...(p.extra_fields || {})
+                };
+                if (prod.sellerId) {
+                    const seller = sellers.find(s => s.id === prod.sellerId || s.seller_id === prod.sellerId);
+                    if (seller) {
+                        prod.latitude = seller.latitude || (seller.extra_fields && seller.extra_fields.latitude) || null;
+                        prod.longitude = seller.longitude || (seller.extra_fields && seller.extra_fields.longitude) || null;
+                        prod.area = seller.area || prod.area;
+                        prod.city = seller.city || prod.city;
+                    }
+                }
+                return prod;
+            });
             localStorage.setItem("admin_products", JSON.stringify(products));
             return products;
         } catch (err) {
             console.error(err);
-            return JSON.parse(localStorage.getItem("admin_products")) || [];
+            const localProducts = JSON.parse(localStorage.getItem("admin_products")) || [];
+            const localSellers = JSON.parse(localStorage.getItem("admin_sellers")) || [];
+            return localProducts.map(prod => {
+                if (prod.sellerId) {
+                    const seller = localSellers.find(s => s.id === prod.sellerId || s.seller_id === prod.sellerId);
+                    if (seller) {
+                        prod.latitude = seller.latitude || (seller.extra_fields && seller.extra_fields.latitude) || null;
+                        prod.longitude = seller.longitude || (seller.extra_fields && seller.extra_fields.longitude) || null;
+                        prod.area = seller.area || prod.area;
+                        prod.city = seller.city || prod.city;
+                    }
+                }
+                return prod;
+            });
         }
     },
 
@@ -468,6 +510,8 @@ const DataService = {
                     id: p.id,
                     category: p.category,
                     sub_category: p.subCategory || '',
+                    multimedia_type: p.multimedia_type || p.multimediaType || null,
+                    standard_product_type: p.standard_product_type || p.standardProductType || null,
                     image: p.image || '',
                     status: p.status || 'Draft',
                     added_by: p.addedBy || '',
