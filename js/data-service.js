@@ -723,6 +723,8 @@ const DataService = {
                 status_inactive: !!s.statusInactive,
                 status_suspended: !!s.statusSuspended,
                 listings_hidden: !!s.listingsHidden,
+                latitude: s.latitude || null,
+                longitude: s.longitude || null,
                 status: s.status || 'Active'
             }));
             const { error } = await client.from('sellers').upsert(rows, { onConflict: 'seller_id' });
