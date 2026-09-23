@@ -674,8 +674,7 @@
                         <div class="col-span-12 md:col-span-6 space-y-4">
                             <!-- Real-Time Multi-Store Price Engine for Pakistan Badge -->
                             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800/80 text-[10px] sm:text-xs font-semibold tracking-wider shadow-sm w-fit select-none uppercase animate-pulse">
-                                <i class="fa-solid fa-bolt-lightning text-amber-400"></i>
-                                <span>REAL-TIME MULTI-STORE PRICE ENGINE FOR PAKISTAN</span>
+                                <span>⚡ REAL-TIME MULTI-STORE PRICE ENGINE FOR PAKISTAN</span>
                             </div>
                             <h1 style="font-family: 'Times New Roman', Times, serif;" class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-800 leading-[1.15] tracking-tight relative">
                                 Find the Best Price Across Pakistan — <span class="text-[#005221]">Updated Live.</span>
@@ -684,7 +683,7 @@
                                 Live price comparisons from stores and marketplaces across Pakistan.
                             </p>
                             <!-- Action Buttons -->
-                            <div class="flex flex-wrap gap-3 pt-2">
+                            <div class="flex flex-wrap items-center gap-3 pt-2">
                                 <button onclick="const el = document.getElementById('browseCategoriesSection') || document.getElementById('price-comparison-widget') || document.getElementById('engineProductsGrid'); if (el) { el.scrollIntoView({behavior: 'smooth', block: 'start'}); }" 
                                     class="px-5 py-3 rounded-2xl bg-[#005221] hover:bg-[#003e17] text-white font-bold text-sm transition-all duration-200 flex items-center gap-2 shadow-md">
                                     <i class="fa-solid fa-bolt-lightning text-yellow-400"></i>
@@ -696,6 +695,24 @@
                                     Simulate Live Drop
                                 </button>
                             </div>
+
+                            <!-- Soft CTA Button -->
+                            <div class="pt-4">
+                                <button onclick="const rm = document.getElementById('registerModal'); rm.classList.remove('hidden'); rm.classList.add('flex'); setTimeout(() => rm.classList.remove('opacity-0'), 10);" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-amber-50 border border-amber-200 text-[#005221] hover:bg-amber-100 font-extrabold text-[11px] sm:text-xs uppercase tracking-wider transition-colors shadow-sm cursor-pointer animate-pulse">
+                                    🎁 FREE ACCOUNT &mdash; UNLOCK MORE BENEFITS &rarr;
+                                </button>
+                            </div>
+
+                            <!-- Features List (Benefit Badges) -->
+                            <div class="pt-4 pb-1">
+                                <div class="flex flex-wrap items-center gap-2 text-[12px] sm:text-[13px] font-bold text-slate-800">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 shadow-sm"><i class="fa-solid fa-bell text-amber-500"></i> Price Drop Alerts</span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 shadow-sm"><i class="fa-solid fa-heart text-red-500"></i> Save Favourites</span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 shadow-sm"><i class="fa-solid fa-chart-line text-blue-500"></i> Track Price History</span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 shadow-sm"><i class="fa-solid fa-location-dot text-red-500"></i> Nearby Deals</span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 shadow-sm"><i class="fa-solid fa-sack-dollar text-emerald-500"></i> Track Your Savings</span>
+                                </div>
+                            </div>
                         </div>
                         <!-- Shopping Cart next to Heading -->
                         <div class="col-span-12 md:col-span-6 flex flex-col items-center justify-center relative py-4">
@@ -703,7 +720,7 @@
                             <div class="absolute w-[280px] h-[280px] bg-gradient-to-tr from-slate-100 to-emerald-50 rounded-full blur-3xl z-0 opacity-80"></div>
                             
                             <img src="images/grafix/shopping_cart_mockup.png" alt="Smart Buyers"
-                                class="w-full max-w-[310px] h-auto object-contain drop-shadow-xl relative z-10 mix-blend-multiply" />
+                                class="w-full max-w-[420px] h-auto object-contain drop-shadow-2xl relative z-10 mix-blend-multiply" />
                             
                             <!-- Green Badge overlaying bottom right of cart -->
                             <div class="absolute bottom-4 right-4 md:right-8 bg-[#005221] text-white rounded-full py-2 px-3.5 flex items-center gap-1.5 shadow-lg whitespace-nowrap z-20 hover:scale-105 transition-transform duration-300">
@@ -5756,6 +5773,47 @@ async function loginWithFacebook(accountType) {
     }
 }
 </script>
+    <!-- Registration / Benefits Modal -->
+    <div id="registerModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-[999999] opacity-0 transition-opacity duration-300" onclick="const rm = document.getElementById('registerModal'); rm.classList.add('opacity-0'); setTimeout(() => { rm.classList.add('hidden'); rm.classList.remove('flex'); }, 300);">
+        <div class="bg-white max-w-[600px] w-[95vw] mx-4 rounded-3xl shadow-2xl overflow-hidden relative" onclick="event.stopPropagation()">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-[#005221] to-emerald-800 p-6 text-white relative">
+                <button onclick="const rm = document.getElementById('registerModal'); rm.classList.add('opacity-0'); setTimeout(() => { rm.classList.add('hidden'); rm.classList.remove('flex'); }, 300);" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white/20 hover:bg-white/40 rounded-full transition-colors font-bold text-lg">&times;</button>
+                <h2 class="text-2xl font-black mb-1 flex items-center gap-2">🎁 Free Account Benefits</h2>
+                <p class="text-emerald-100 text-sm font-semibold">Create an account to unlock all these features!</p>
+            </div>
+            
+            <!-- Body -->
+            <div class="p-6 max-h-[60vh] overflow-y-auto bg-slate-50">
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">Your Personal Shopping Assistant</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">Price Watch <span class="text-xs text-slate-500 font-normal">(Highly Recommended!)</span></div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">Price History <span class="text-xs text-slate-500 font-normal">(A major differentiator)</span></div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">Personal Shopping List</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">"My Savings" Dashboard</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">Personalized Deals</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">Nearby Shop Finder</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">Favourite Shops</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">Exclusive Member Coupons</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">"Don't Buy Yet" Feature</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">Registered Users get a "Smart Buy Score"</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">Save Products Across Devices</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">Order history</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">Registration should be extremely easy</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">Don't force registration for everything</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">Create two levels of users</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">Eventually introduce "StopBuy Rewards"</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">A very strong homepage message</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">What I would put on the user's dashboard</div></li>
+                    <li class="flex items-start gap-3"><span class="text-[#005221] mt-0.5"><i class="fa-solid fa-circle-check"></i></span><div class="font-bold text-slate-800 text-sm">The most important 5 features I'd build first</div></li>
+                </ul>
+            </div>
+            <!-- Footer -->
+            <div class="p-5 bg-white border-t border-slate-200 flex justify-end">
+                <button onclick="const rm = document.getElementById('registerModal'); rm.classList.add('opacity-0'); setTimeout(() => { rm.classList.add('hidden'); rm.classList.remove('flex'); }, 300);" class="px-6 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold transition-colors">Close</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
