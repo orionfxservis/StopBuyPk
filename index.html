@@ -145,9 +145,19 @@
                     </div>
                     
                     <div class="w-full space-y-4">
-                        <button onclick="goToWelcomeScreen2()" class="w-full py-3.5 bg-[#d61c22] hover:bg-red-700 text-white font-extrabold rounded-2xl transition-all duration-300 transform hover:scale-102 shadow-lg shadow-red-500/20 text-base flex items-center justify-center gap-2">
-                            🚀 Start Comparing
-                        </button>
+                        <div class="flex items-center gap-3 w-full">
+                            <div class="bg-[#d61c22] rounded-2xl p-3 shadow-lg shadow-red-500/20 flex items-center justify-center shrink-0">
+                                <img src="./images/arrow/arrow.gif" alt="arrow" style="width: 24px; height: auto; mix-blend-mode: multiply;">
+                            </div>
+                            
+                            <button onclick="goToWelcomeScreen2()" class="flex-1 py-3.5 bg-[#d61c22] hover:bg-red-700 text-white font-extrabold rounded-2xl transition-all duration-300 transform hover:scale-102 shadow-lg shadow-red-500/20 text-base flex items-center justify-center gap-2">
+                                🚀 Start Comparing
+                            </button>
+                            
+                            <div class="bg-[#d61c22] rounded-2xl p-3 shadow-lg shadow-red-500/20 flex items-center justify-center shrink-0">
+                                <img src="./images/arrow/arrow.gif" alt="arrow" style="width: 24px; height: auto; transform: scaleX(-1); mix-blend-mode: multiply;">
+                            </div>
+                        </div>
                         
                         <div class="text-xs text-slate-500 font-bold">
                             ──────── OR ────────
@@ -209,9 +219,18 @@
             <div class="hidden lg:flex w-[300px] flex-col gap-4 shrink-0">
                 <!-- Raw Video Banner with Audio -->
                 <div class="w-full h-[250px] bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl relative">
-                    <video autoplay controls playsinline class="w-full h-full object-cover">
+                    <video id="introVideo" autoplay controls playsinline class="w-full h-full object-cover">
                         <source src="./images/videos/price-comparison-02.mp4" type="video/mp4">
                     </video>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var v = document.getElementById('introVideo');
+                            if (v) {
+                                v.currentTime = 0;
+                                v.play().catch(e => console.log('Autoplay prevented', e));
+                            }
+                        });
+                    </script>
                 </div>
                 <div class="w-full h-[250px] bg-slate-900 border border-slate-800 rounded-3xl p-5 flex flex-col justify-between text-white relative overflow-hidden shadow-2xl text-left">
                     <div class="absolute inset-0 bg-gradient-to-br from-amber-500/25 to-slate-950 z-0"></div>
