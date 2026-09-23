@@ -1470,8 +1470,21 @@ function populateCategoryDropdown() {
                     uniqueSubCats = [...new Set(subCats)];
                 }
 
-                prodSubCategorySelect.innerHTML = '<option value="">Select Sub Category</option>' +
-                    uniqueSubCats.map(sub => `<option value="${sub}">${sub}</option>`).join('');
+                let optionsHtml = '';
+                if (selectedCat === 'Daily Grocery') {
+                    optionsHtml = '<option value="">Select Sub Category</option>' +
+                        '<option value="All Daily Groceries">All Daily Groceries</option>' +
+                        '<option value="General Store">General Store</option>' +
+                        '<option value="Chakki">Chakki</option>' +
+                        '<option value="Bakery & Confectionery">Bakery & Confectionery</option>' +
+                        '<option value="Milk Shop">Milk Shop</option>' +
+                        '<option value="Fruit Shop">Fruit Shop</option>' +
+                        '<option value="Vegetable Shop">Vegetable Shop</option>';
+                } else {
+                    optionsHtml = '<option value="">Select Sub Category</option>' +
+                        uniqueSubCats.map(sub => `<option value="${sub}">${sub}</option>`).join('');
+                }
+                prodSubCategorySelect.innerHTML = optionsHtml;
             }
         };
 
@@ -1860,6 +1873,8 @@ function renderDynamicAdminFields() {
 
     const category = document.getElementById('prodCategory').value;
     const subCategory = document.getElementById('prodSubCategory').value;
+
+
 
     const addressAreaBlockCityHtml = `
             <div class="input-group">
@@ -7055,7 +7070,7 @@ function getFallbackFieldsForSubcategory(subCategoryName) {
 }
 
 function isGroceryCategory(catName) {
-    return catName === 'Grocery' || catName === 'Groceries' || catName === 'Computers' || catName === 'Computer';
+    return catName === 'Grocery' || catName === 'Groceries' || catName === 'Computers' || catName === 'Computer' || catName === 'Daily Grocery';
 }
 
 function toggleGroceryProductUI() {
@@ -7259,7 +7274,10 @@ async function loadGrocerySubcategoryFields(subCategoryName) {
 ========================================= */
 
 function renderGroceryProductForm() {
-    if (!currentGroceryFields.length) {
+    const subCat = document.getElementById("prodSubCategory")?.value;
+    const isBulkMode = (subCat === "All Daily Grocery" || subCat === "All Daily Groceries");
+
+    if (!isBulkMode && !currentGroceryFields.length) {
         groceryFields.innerHTML = `
             <div class="p-4 rounded-xl bg-yellow-500/10
                         border border-yellow-500/20 text-yellow-300">
@@ -7273,11 +7291,42 @@ function renderGroceryProductForm() {
     const descriptionField = currentGroceryFields.find(f => f.field_name && f.field_name.toLowerCase() === "description");
     const otherFields = currentGroceryFields.filter(f => !f.field_name || f.field_name.toLowerCase() !== "description");
 
-    let html = `
-        <div class="form-container text-left" style="margin-top: 20px;">
-            <h3>Add Product</h3>
-            <div class="form-row">
-    `;
+    let html = ``;
+
+    if (isBulkMode) {
+        html += `
+        <!-- Grocery Bulk Update Panel -->
+        <div id="groceryBulkUpdatePanel" style="margin-top: 15px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); padding: 20px; border-radius: 8px; background: rgba(0,0,0,0.2);">
+            <h4 style="color: var(--primary-color); margin-bottom: 20px; font-weight: bold; text-align: center; letter-spacing: 1px;">DAILY GROCERY BULK PRICE UPDATE</h4>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <button type="button" class="btn btn-secondary" style="flex: 1; font-weight: bold; padding: 12px;"><i class="fa-solid fa-file-arrow-down"></i> 📥 Download Price Sheet</button>
+                <button type="button" class="btn btn-primary" style="flex: 1; font-weight: bold; padding: 12px;" onclick="document.getElementById('priceSheetUpload').click()"><i class="fa-solid fa-file-arrow-up"></i> 📤 Upload Price Sheet</button>
+                <input type="file" id="priceSheetUpload" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display: none;">
+            </div>
+            
+            <div style="text-align: center; margin: 15px 0; font-weight: bold; color: #94a3b8;">or</div>
+            
+            <button type="button" id="btnManualEntryToggle" class="btn btn-secondary" style="width: 100%; font-weight: bold; margin-bottom: 25px; padding: 12px; background: rgba(255,255,255,0.05);"><i class="fa-solid fa-plus"></i> + Add Product Manually</button>
+            
+            <div class="input-group" style="margin-bottom: 20px;">
+                <label>Status</label>
+                <select id="bulkUpdateStatus" class="admin-select" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 6px; color: #fff;">
+                    <option value="" style="background: #1e293b;">Select Status ▼</option>
+                    <option value="Publish" style="background: #1e293b;">Publish</option>
+                    <option value="Draft" style="background: #1e293b;">Draft</option>
+                </select>
+            </div>
+            
+            <button type="button" id="btnBulkAddProduct" class="btn btn-primary" style="width: 100%; font-weight: bold; padding: 12px;">Add Product</button>
+        </div>
+        `;
+    } else {
+        html += `
+            <div class="form-container text-left" style="margin-top: 20px;">
+                <h3>Add Product</h3>
+                <div class="form-row">
+        `;
 
     otherFields.forEach(field => {
         let input = "";
@@ -7412,6 +7461,7 @@ function renderGroceryProductForm() {
             </div>
         `;
     }
+    } // Close the else block for isBulkMode
 
     html += `
             <!-- Standard Seller's / Shop's Area (Same for all categories) -->
@@ -8259,4 +8309,51 @@ document.addEventListener('input', function (e) {
 });
 
 
+
+
+const categorySelect = document.getElementById('prodCategory');
+const subCategorySelect = document.getElementById('prodSubCategory');
+const dailyGroceryPanel = document.getElementById('dailyGroceryBulkPanel');
+const normalProductFields = document.getElementById('normalProductFields');
+const multimediaTypeWrapper = document.getElementById('multimediaTypeWrapper');
+
+function updateProductMode() {
+    const categoryText = categorySelect.options[categorySelect.selectedIndex]?.text.trim() || '';
+    const subCategoryText = subCategorySelect.options[subCategorySelect.selectedIndex]?.text.trim() || '';
+
+    const isDailyGrocery = categoryText.toLowerCase() === 'daily grocery';
+    const isSubCatSelected = subCategoryText && subCategoryText !== 'Select Sub Category';
+
+    // Update panel title
+    const panelTitle = dailyGroceryPanel?.querySelector('h3');
+    if (panelTitle) {
+        if (isDailyGrocery && isSubCatSelected && subCategoryText.toLowerCase() !== 'all daily groceries') {
+            panelTitle.textContent = subCategoryText + ' Bulk Price Update';
+        } else {
+            panelTitle.textContent = 'Daily Grocery Bulk Price Update';
+        }
+    }
+
+    // ------------------------------------
+    // DAILY GROCERY MODE
+    // ------------------------------------
+    if (isDailyGrocery && isSubCatSelected) {
+        dailyGroceryPanel?.classList.remove('hidden');
+        // Hide computer/general fields
+        normalProductFields?.classList.add('hidden');
+        // Never show Multimedia Type
+        multimediaTypeWrapper?.classList.add('hidden');
+        return;
+    }
+
+    // ------------------------------------
+    // NORMAL PRODUCT MODE
+    // ------------------------------------
+    dailyGroceryPanel?.classList.add('hidden');
+    normalProductFields?.classList.remove('hidden');
+}
+
+// Call it whenever either dropdown changes:
+categorySelect?.addEventListener('change', updateProductMode);
+subCategorySelect?.addEventListener('change', updateProductMode);
 
