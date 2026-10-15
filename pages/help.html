@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Help &amp; FAQs - StopBuy | اسٹاپ بائے | Smart Commodity Price Comparison Pakistan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" type="image/png" href="../favicon.png">
+
+  <style>
+    /* Smooth accordion styling */
+    details summary::-webkit-details-marker {
+      display: none;
+    }
+    details[open] summary svg.chevron-icon {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+
+<body class="text-slate-100 bg-slate-50">
+
+  <!-- NAVBAR -->
+  <!-- Top Navigation Bar -->
+  <nav class="bg-[#0A3D2A] text-white sticky top-0 z-[99999]">
+    <div
+      class="max-w-screen-2xl mx-auto px-4 py-2 sm:py-0 sm:h-[60px] flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-3 gap-x-2 sm:gap-4 relative">
+
+      <!-- LEFT: Logo -->
+      <a href="../index.html" class="flex items-center gap-2 flex-shrink-0 order-1 sm:order-none cursor-pointer">
+        <div class="bg-white p-1 rounded-xl shadow-sm w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center">
+          <img src="../images/logo/stopbuy-logo.png" alt="StopBuy" class="h-6 w-6 sm:h-7 sm:w-7 object-contain">
+        </div>
+
+        <div class="flex flex-col leading-tight">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-lg sm:text-xl tracking-tight">
+              <span class="text-[#8CC63F]">Stop</span><span class="text-[#5B9BD5]">Buy</span>
+            </span>
+            <div
+              class="hidden md:block border border-[#24533e] bg-emerald-900/20 text-[#58b284] px-2 py-[2px] rounded text-[10px] font-semibold tracking-wide">
+              <span class="lang-en">Price Smart, Save More</span><span class="lang-ur">سمارٹ قیمت، زیادہ بچت</span>
+            </div>
+          </div>
+          <span class="hidden md:block text-[11px] text-gray-300 mt-0.5">
+            <span class="lang-en">Smart Price Comparison for Pakistan</span><span class="lang-ur">پاکستان کے لیے سمارٹ پرائس کیئر</span>
+          </span>
+        </div>
+      </a>
+
+      <!-- CENTER: Location -->
+      <div
+        class="order-3 sm:order-none w-full sm:w-auto flex justify-center sm:flex-1 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:transform">
+        <div class="hidden lg:flex items-center gap-1 text-slate-700 text-sm bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 cursor-pointer hover:bg-slate-200 transition whitespace-nowrap"
+          onclick="showLocationModal()" id="locationBox">
+          <span>📍</span>
+          <span class="font-medium" id="current-location">Detecting...</span>
+          <span class="text-[0.6rem] ml-1">▼</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: Actions -->
+      <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0 order-2 sm:order-none">
+        <!-- Language Toggle -->
+        <div onclick="toggleLanguage()" id="lang-toggle-btn"
+          class="flex items-center justify-center w-[60px] sm:w-[70px] h-[34px] sm:h-[38px] bg-white/10 hover:bg-white/20 rounded-full text-[13px] sm:text-sm font-medium cursor-pointer transition-colors"
+          title="Switch to Urdu">
+          <span id="lang-toggle-text" class="text-center">اردو</span>
+        </div>
+
+        <!-- Login Profile Icon -->
+        <div class="relative group z-[100000]">
+          <div
+            class="login-icon-container flex items-center justify-center w-[34px] h-[34px] sm:w-[42px] sm:h-[42px] rounded-full cursor-pointer bg-transparent hover:bg-white/10 transition-colors">
+            <i class="fas fa-user-shield text-emerald-400 text-sm sm:text-lg"></i>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- Category Bar -->
+    <div class="bg-[#052C22] px-4 py-2 relative z-50 min-h-[40px]">
+      <div class="max-w-screen-2xl mx-auto w-full flex items-center justify-start relative">
+        <!-- Centered Heading -->
+        <h1
+          class="text-[15px] tracking-wide font-bold text-white absolute left-1/2 -translate-x-1/2 whitespace-nowrap">Help</h1>
+
+        <!-- Navigation Links -->
+        <div class="flex items-center z-10">
+          <!-- Home Link -->
+          <a href="../index.html"
+            class="text-emerald-400 hover:text-emerald-300 font-semibold text-sm transition-colors flex items-center">
+            <span class="lang-en"><i class="fas fa-arrow-left mr-1.5"></i> Home</span>
+            <span class="lang-ur">Home <i class="fas fa-arrow-right ml-1.5"></i></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="relative z-10 py-10 bg-[#070b14] min-h-screen">
+    <section class="section">
+      <div class="container px-4 max-w-4xl mx-auto">
+        <div class="bg-[#0b121c] border border-slate-800 p-8 sm:p-12 rounded-3xl shadow-2xl">
+
+          <!-- Page Header -->
+          <div class="mb-8 border-b border-slate-800 pb-4">
+            <h1 class="text-3xl sm:text-4xl font-bold">
+              <span class="lang-en">
+                <span class="text-emerald-500">Help &amp;</span> <span class="text-[#eab308]">Support</span>
+              </span>
+              <span class="lang-ur text-emerald-500">
+                ہم آپ کی کیا مدد کر سکتے ہیں؟
+              </span>
+            </h1>
+            <p class="lang-en text-gray-400 mt-2 text-sm sm:text-base">
+              Find answers to frequently asked questions, learn how to compare prices, and connect with our support team.
+            </p>
+            <p class="lang-ur text-gray-400 mt-2 text-sm sm:text-base">
+              اکثر پوچھے جانے والے سوالات کے جوابات حاصل کریں، قیمتوں کا موازنہ کرنے کا طریقہ سیکھیں اور ہماری ٹیم سے رابطہ کریں۔
+            </p>
+          </div>
+
+          <!-- Quick Topic Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+            <!-- Card 1 -->
+            <div class="bg-[#030712] border border-slate-800/80 p-5 rounded-2xl hover:border-emerald-500/50 transition duration-300 group">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg mb-3 group-hover:scale-105 transition-transform">
+                <i class="fas fa-search-dollar"></i>
+              </div>
+              <h3 class="font-bold text-white text-base mb-1">
+                <span class="lang-en">Price Comparison</span>
+                <span class="lang-ur">قیمتوں کا موازنہ</span>
+              </h3>
+              <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">
+                <span class="lang-en">Learn how to search products, sort lowest to highest, and identify best rates in Pakistan.</span>
+                <span class="lang-ur">مصنوعات تلاش کرنے، کم سے زیادہ قیمت ترتیب دینے اور پاکستان میں بہترین ریٹس جاننے کا طریقہ۔</span>
+              </p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-[#030712] border border-slate-800/80 p-5 rounded-2xl hover:border-emerald-500/50 transition duration-300 group">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg mb-3 group-hover:scale-105 transition-transform">
+                <i class="fas fa-location-crosshairs"></i>
+              </div>
+              <h3 class="font-bold text-white text-base mb-1">
+                <span class="lang-en">Nearby First System</span>
+                <span class="lang-ur">قریب ترین مارکیٹ کا نظام</span>
+              </h3>
+              <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">
+                <span class="lang-en">How our location algorithms automatically show you stores, supermarkets, and deals near your area.</span>
+                <span class="lang-ur">ہمارا لوکیشن سسٹم آپ کے قریب موجود دکانیں، سپر اسٹورز اور ڈیلز کیسے دکھاتا ہے۔</span>
+              </p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-[#030712] border border-slate-800/80 p-5 rounded-2xl hover:border-emerald-500/50 transition duration-300 group">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg mb-3 group-hover:scale-105 transition-transform">
+                <i class="fas fa-store"></i>
+              </div>
+              <h3 class="font-bold text-white text-base mb-1">
+                <span class="lang-en">Retailers &amp; Brands</span>
+                <span class="lang-ur">دکاندار اور برانڈز</span>
+              </h3>
+              <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">
+                <span class="lang-en">How shopkeepers, marts, and wholesalers can list products and feature daily deals on StopBuy.</span>
+                <span class="lang-ur">دکاندار اور ہول سیلرز اپنی مصنوعات اور روزانہ کی قیمتیں اسٹاپ بائے پر کیسے شامل کریں۔</span>
+              </p>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="bg-[#030712] border border-slate-800/80 p-5 rounded-2xl hover:border-emerald-500/50 transition duration-300 group">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg mb-3 group-hover:scale-105 transition-transform">
+                <i class="fas fa-flag"></i>
+              </div>
+              <h3 class="font-bold text-white text-base mb-1">
+                <span class="lang-en">Report Price Difference</span>
+                <span class="lang-ur">قیمت میں فرق رپورٹ کریں</span>
+              </h3>
+              <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">
+                <span class="lang-en">Found an outdated price or special promotion? Notify our verification team directly.</span>
+                <span class="lang-ur">اگر کوئی پرانی قیمت یا نئی پیشکش نظر آئے تو فوری طور پر ہماری ٹیم کو مطلع کریں۔</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQs Section -->
+          <div class="mb-10">
+            <h2 class="text-xl sm:text-2xl font-bold text-white mb-6 flex items-center gap-2">
+              <i class="fas fa-question-circle text-emerald-500"></i>
+              <span class="lang-en">Frequently Asked Questions (FAQs)</span>
+              <span class="lang-ur">اکثر پوچھے جانے والے سوالات</span>
+            </h2>
+
+            <!-- FAQ List (English) -->
+            <div class="lang-en space-y-4">
+              <!-- Item 1 -->
+              <details class="group bg-[#030712] border border-slate-800 rounded-2xl p-4 sm:p-5 transition">
+                <summary class="flex justify-between items-center font-semibold text-white cursor-pointer select-none">
+                  <span class="text-emerald-400">1. How does StopBuy compare prices?</span>
+                  <svg class="chevron-icon w-5 h-5 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <div class="mt-3 text-gray-300 text-sm leading-relaxed border-t border-slate-800/70 pt-3">
+                  StopBuy collects and aggregates product prices directly from retail markets, trusted supermarkets, and e-commerce stores across Pakistan. Prices are indexed and sorted from lowest to highest by default so you can easily spot where to buy at the best rate without visiting multiple places.
+                </div>
+              </details>
+
+              <!-- Item 2 -->
+              <details class="group bg-[#030712] border border-slate-800 rounded-2xl p-4 sm:p-5 transition">
+                <summary class="flex justify-between items-center font-semibold text-white cursor-pointer select-none">
+                  <span class="text-emerald-400">2. How does the "Nearby First" location feature work?</span>
+                  <svg class="chevron-icon w-5 h-5 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <div class="mt-3 text-gray-300 text-sm leading-relaxed border-t border-slate-800/70 pt-3">
+                  When you tap the location button in the header, StopBuy detects your city (such as Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad) and prioritizes local markets and marts nearby. This ensures you save money on both the items and travel costs.
+                </div>
+              </details>
+
+              <!-- Item 3 -->
+              <details class="group bg-[#030712] border border-slate-800 rounded-2xl p-4 sm:p-5 transition">
+                <summary class="flex justify-between items-center font-semibold text-white cursor-pointer select-none">
+                  <span class="text-emerald-400">3. Is StopBuy free to use for consumers?</span>
+                  <svg class="chevron-icon w-5 h-5 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <div class="mt-3 text-gray-300 text-sm leading-relaxed border-t border-slate-800/70 pt-3">
+                  Yes, StopBuy is 100% free for all shoppers and buyers. There are no registration fees, hidden commissions, or subscriptions required to view and compare prices across all categories.
+                </div>
+              </details>
+
+              <!-- Item 4 -->
+              <details class="group bg-[#030712] border border-slate-800 rounded-2xl p-4 sm:p-5 transition">
+                <summary class="flex justify-between items-center font-semibold text-white cursor-pointer select-none">
+                  <span class="text-emerald-400">4. How can retailers or supermarkets list their prices?</span>
+                  <svg class="chevron-icon w-5 h-5 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <div class="mt-3 text-gray-300 text-sm leading-relaxed border-t border-slate-800/70 pt-3">
+                  Retailers, supermarkets, and wholesale merchants can submit their business details via our <a href="contact.html" class="text-emerald-400 underline hover:text-emerald-300">Contact Us form</a> or register via the Company Login portal. Our merchant verification team will assist in listing your inventory and daily deals.
+                </div>
+              </details>
+
+              <!-- Item 5 -->
+              <details class="group bg-[#030712] border border-slate-800 rounded-2xl p-4 sm:p-5 transition">
+                <summary class="flex justify-between items-center font-semibold text-white cursor-pointer select-none">
+                  <span class="text-emerald-400">5. What should I do if a listed price is outdated or incorrect?</span>
+                  <svg class="chevron-icon w-5 h-5 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <div class="mt-3 text-gray-300 text-sm leading-relaxed border-t border-slate-800/70 pt-3">
+                  We strive for 100% accuracy, but market rates fluctuate daily. If you spot a discrepancy, please reach out via our contact page or WhatsApp helpline with the store name and updated rate. Our team verifies and updates the listing promptly.
+                </div>
+              </details>
+
+              <!-- Item 6 -->
+              <details class="group bg-[#030712] border border-slate-800 rounded-2xl p-4 sm:p-5 transition">
+                <summary class="flex justify-between items-center font-semibold text-white cursor-pointer select-none">
+                  <span class="text-emerald-400">6. Which categories are currently covered on StopBuy?</span>
+                  <svg class="chevron-icon w-5 h-5 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <div class="mt-3 text-gray-300 text-sm leading-relaxed border-t border-slate-800/70 pt-3">
+                  StopBuy covers Food &amp; Dining, Grocery &amp; Household Essentials, Electronics &amp; Home Appliances, Mobile Phones &amp; Accessories, Laptops &amp; Computers, Personal Care, Fashion &amp; Clothing, Kids &amp; Toys, Property, and Travel &amp; Tour Packages.
+                </div>
+              </details>
+            </div>
+
+            <!-- FAQ List (Urdu) -->
+            <div class="lang-ur space-y-4">
+              <!-- Item 1 -->
+              <details class="group bg-[#030712] border border-slate-800 rounded-2xl p-4 sm:p-5 transition">
+                <summary class="flex justify-between items-center font-semibold text-white cursor-pointer select-none">
+                  <span class="text-emerald-400">۱. اسٹاپ بائے قیمتوں کا موازنہ کیسے کرتا ہے؟</span>
+                  <svg class="chevron-icon w-5 h-5 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <div class="mt-3 text-gray-300 text-sm leading-relaxed border-t border-slate-800/70 pt-3">
+                  اسٹاپ بائے پاکستان بھر کے لوکل ریٹیل مارکیٹس، قابلِ اعتماد سپر اسٹورز اور آن لائن پلیٹ فارمز سے اشیاء کی قیمتیں جمع کرتا ہے۔ یہ قیمتیں خودکار طور پر کم سے زیادہ (Low to High) کی ترتیب میں دکھائی جاتی ہیں تاکہ آپ بغیر وقت ضائع کیے سستی ترین جگہ سے خریداری کر سکیں۔
+                </div>
+              </details>
+
+              <!-- Item 2 -->
+              <details class="group bg-[#030712] border border-slate-800 rounded-2xl p-4 sm:p-5 transition">
+                <summary class="flex justify-between items-center font-semibold text-white cursor-pointer select-none">
+                  <span class="text-emerald-400">۲. قریب ترین (Nearby First) فیچر کیسے کام کرتا ہے؟</span>
+                  <svg class="chevron-icon w-5 h-5 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <div class="mt-3 text-gray-300 text-sm leading-relaxed border-t border-slate-800/70 pt-3">
+                  جب آپ اوپر نیویگیشن بار میں لوکیشن بٹن پر کلک کرتے ہیں تو اسٹاپ بائے آپ کے شہر (جیسے کراچی، لاہور، اسلام آباد، راولپنڈی، فیصل آباد وغیرہ) اور علاقے کے قریب ترین دکانیں اور ڈیلز پہلے دکھاتا ہے، جس سے آپ کے وقت اور کرائے دونوں کی بچت ہوتی ہے۔
+                </div>
+              </details>
+
+              <!-- Item 3 -->
+              <details class="group bg-[#030712] border border-slate-800 rounded-2xl p-4 sm:p-5 transition">
+                <summary class="flex justify-between items-center font-semibold text-white cursor-pointer select-none">
+                  <span class="text-emerald-400">۳. کیا عام صارفین کے لیے اسٹاپ بائے کا استعمال مفت ہے؟</span>
+                  <svg class="chevron-icon w-5 h-5 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <div class="mt-3 text-gray-300 text-sm leading-relaxed border-t border-slate-800/70 pt-3">
+                  جی ہاں! عام خریداروں اور صارفین کے لیے اسٹاپ بائے بالکل ۱۰۰٪ مفت ہے۔ قیمتیں دیکھنے یا موازنہ کرنے کے لیے کسی بھی قسم کی رجسٹریشن فیس یا ماہانہ چارجز نہیں ہیں۔
+                </div>
+              </details>
+
+              <!-- Item 4 -->
+              <details class="group bg-[#030712] border border-slate-800 rounded-2xl p-4 sm:p-5 transition">
+                <summary class="flex justify-between items-center font-semibold text-white cursor-pointer select-none">
+                  <span class="text-emerald-400">۴. دکاندار اور سپر اسٹورز اپنی قیمتیں کیسے شامل کر سکتے ہیں؟</span>
+                  <svg class="chevron-icon w-5 h-5 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <div class="mt-3 text-gray-300 text-sm leading-relaxed border-t border-slate-800/70 pt-3">
+                  اگر آپ دکاندار، سپر اسٹور کے مالک یا ہول سیلر ہیں تو آپ ہمارے <a href="contact.html" class="text-emerald-400 underline hover:text-emerald-300">رابطہ صفحہ (Contact Us)</a> پر جا کر تفصیلات بھیج سکتے ہیں یا کمپنی لاگ ان کے ذریعے شامل ہو سکتے ہیں۔ ہماری ٹیم آپ کی اشیاء اور روزانہ کی قیمتوں کو درج کرنے میں رہنمائی کرے گی۔
+                </div>
+              </details>
+
+              <!-- Item 5 -->
+              <details class="group bg-[#030712] border border-slate-800 rounded-2xl p-4 sm:p-5 transition">
+                <summary class="flex justify-between items-center font-semibold text-white cursor-pointer select-none">
+                  <span class="text-emerald-400">۵. اگر مارکیٹ میں قیمت درج شدہ قیمت سے مختلف ہو تو کیا کریں؟</span>
+                  <svg class="chevron-icon w-5 h-5 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <div class="mt-3 text-gray-300 text-sm leading-relaxed border-t border-slate-800/70 pt-3">
+                  ہم ہمیشہ درست ترین ڈیٹا فراہم کرنے کی کوشش کرتے ہیں، لیکن منڈی اور مارکیٹ کے ریٹس روزانہ تبدیل ہو سکتے ہیں۔ اگر آپ کو کسی قیمت میں فرق نظر آئے تو براہ کرم واٹس ایپ یا رابطہ فارم کے ذریعے دکان کا نام اور درست ریٹ بتائیں تاکہ ہم اسے فوری اپڈیٹ کر سکیں۔
+                </div>
+              </details>
+
+              <!-- Item 6 -->
+              <details class="group bg-[#030712] border border-slate-800 rounded-2xl p-4 sm:p-5 transition">
+                <summary class="flex justify-between items-center font-semibold text-white cursor-pointer select-none">
+                  <span class="text-emerald-400">۶. اسٹاپ بائے پر فی الوقت کون سی کیٹیگریز دستیاب ہیں؟</span>
+                  <svg class="chevron-icon w-5 h-5 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+                <div class="mt-3 text-gray-300 text-sm leading-relaxed border-t border-slate-800/70 pt-3">
+                  اسٹاپ بائے پر گروسری، کھانے پینے کی اشیاء، موبائل فونز، کمپیوٹر و لیپ ٹاپس، الیکٹرانکس اور گھریلو برقی آلات، فیشن، بچوں کا سامان، پراپرٹی اور ٹریول اینڈ ٹورز شامل ہیں۔
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <!-- Need More Help Banner -->
+          <div class="bg-gradient-to-r from-[#031d14] to-[#04281c] border border-emerald-900/60 rounded-2xl p-6 sm:p-8 text-center my-8">
+            <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">
+              <span class="lang-en">Still have questions? We're here to help!</span>
+              <span class="lang-ur">مزید معلومات یا سوالات؟ ہم مدد کے لیے تیار ہیں!</span>
+            </h3>
+            <p class="text-gray-300 text-sm mb-6 max-w-xl mx-auto">
+              <span class="lang-en">Our dedicated customer support team is available to assist you with vendor inquiries, price discrepancies, or app features.</span>
+              <span class="lang-ur">ہماری کسٹمر سپورٹ ٹیم دکانداروں، قیمتوں کی تصدیق اور ایپ کے فیچرز کے حوالے سے آپ کی مکمل رہنمائی کرے گی۔</span>
+            </p>
+
+            <div class="flex flex-wrap items-center justify-center gap-3">
+              <!-- Contact Page Link -->
+              <a href="contact.html"
+                class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-[#070b14] font-bold text-sm hover:opacity-90 transition shadow-lg shadow-emerald-500/20 flex items-center gap-2">
+                <i class="fas fa-envelope"></i>
+                <span class="lang-en">Send a Message</span>
+                <span class="lang-ur">پیغام بھیجیں</span>
+              </a>
+
+              <!-- WhatsApp Support Link -->
+              <a href="https://wa.me/923330257246" target="_blank" rel="noopener noreferrer"
+                class="px-6 py-2.5 rounded-xl bg-[#25D366] text-white font-bold text-sm hover:bg-[#20ba59] transition shadow-lg shadow-emerald-900/30 flex items-center gap-2">
+                <i class="fab fa-whatsapp text-lg"></i>
+                <span class="lang-en">WhatsApp Support</span>
+                <span class="lang-ur">واٹس ایپ رابطہ</span>
+              </a>
+
+              <!-- Call Support -->
+              <a href="tel:+923330257246"
+                class="px-6 py-2.5 rounded-xl bg-slate-800 text-emerald-400 border border-slate-700 font-semibold text-sm hover:bg-slate-700 transition flex items-center gap-2">
+                <i class="fas fa-phone-alt"></i>
+                <span>+92 333 0257246</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Footer Badges -->
+          <div class="flex flex-wrap gap-3 text-[0.8rem] mt-10 pt-6 border-t border-slate-800">
+            <span class="px-4 py-1.5 rounded-full bg-[#064e3b] text-emerald-400 font-semibold border border-emerald-800 shadow-sm">
+              Made in Pakistan PK
+            </span>
+            <span class="px-4 py-1.5 rounded-full bg-slate-800 text-slate-300 font-semibold border border-slate-700 shadow-sm">
+              Urdu + English Interface
+            </span>
+            <span class="px-4 py-1.5 rounded-full bg-slate-800/80 text-emerald-400 font-semibold border border-slate-700 shadow-sm flex items-center gap-1.5">
+              <i class="fas fa-shield-halved text-xs"></i> 24/7 Knowledge Base
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- SCRIPTS -->
+  <script src="../js/script.js"></script>
+  <script src="../js/location.js"></script>
+
+  <!-- FOOTER -->
+  <div class="w-full bg-[#0A3D2A] text-emerald-50 text-center py-4 text-sm mt-auto border-t border-[#052C22]">
+    &copy; 2026 StopBuyPk - Smart Price Comparison
+  </div>
+
+  <!-- LANG_TOGGLE_SCRIPT -->
+  <script>
+    const currentLang = localStorage.getItem('qeematLang') || 'en';
+    document.documentElement.lang = currentLang;
+    document.documentElement.dir = currentLang === 'ur' ? 'rtl' : 'ltr';
+
+    function updateLanguageUI(lang) {
+      const toggleText = document.getElementById('lang-toggle-text');
+      if (toggleText) toggleText.textContent = lang === 'ur' ? 'English' : 'اردو';
+      
+      // Custom placeholder toggling if function exists
+      if (typeof togglePlaceholders === 'function') {
+        togglePlaceholders();
+      }
+    }
+
+    function toggleLanguage() {
+      const newLang = document.documentElement.lang === 'ur' ? 'en' : 'ur';
+      document.documentElement.lang = newLang;
+      document.documentElement.dir = newLang === 'ur' ? 'rtl' : 'ltr';
+      localStorage.setItem('qeematLang', newLang);
+      updateLanguageUI(newLang);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateLanguageUI(currentLang);
+    });
+  </script>
+</body>
+
+</html>
