@@ -28,6 +28,11 @@
        <priority>0.8000</priority>
   </url>
   <url>
+       <loc>https://stopbuy.pk/pages/help.html</loc>
+       <lastmod>2026-10-15T19:00:00+00:00</lastmod>
+       <priority>0.8000</priority>
+  </url>
+  <url>
        <loc>https://stopbuy.pk/pages/food.html</loc>
        <lastmod>2026-10-14T11:26:45+00:00</lastmod>
        <priority>0.8000</priority>
@@ -40,6 +45,11 @@
   <url>
        <loc>https://stopbuy.pk/pages/computers.html</loc>
        <lastmod>2026-10-14T11:26:45+00:00</lastmod>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://stopbuy.pk/pages/laptops.html</loc>
+       <lastmod>2026-10-15T19:00:00+00:00</lastmod>
        <priority>0.8000</priority>
   </url>
   <url>
@@ -130,6 +140,11 @@
   <url>
        <loc>https://stopbuy.pk/pages/kids.html</loc>
        <lastmod>2026-10-14T11:26:45+00:00</lastmod>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://stopbuy.pk/pages/travel.html</loc>
+       <lastmod>2026-10-15T19:00:00+00:00</lastmod>
        <priority>0.8000</priority>
   </url>
   <url>
