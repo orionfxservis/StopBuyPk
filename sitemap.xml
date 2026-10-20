@@ -1,165 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-       <loc>https://stopbuy.pk/</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>1.0000</priority>
+    <loc>https://stopbuy.pk/</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/index.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/categories.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/categories.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/about.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/about.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/contact.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/contact.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/help.html</loc>
+    <lastmod>2026-10-15T19:00:00+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/help.html</loc>
-       <lastmod>2026-10-15T19:00:00+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/food.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/food.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/grocery.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/grocery.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/computers.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/computers.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/laptops.html</loc>
+    <lastmod>2026-10-15T19:00:00+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/laptops.html</loc>
-       <lastmod>2026-10-15T19:00:00+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/blogs.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/food.html?search=burger</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/electronics.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/food.html?search=pizza</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/mobiles.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/food.html?search=shawarma</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/property.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/food.html?search=biryani</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/personal-care.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/food.html?search=chinese</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/fashion.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/food.html?search=broast</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/kids.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/food.html?search=bbq</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/travel.html</loc>
+    <lastmod>2026-10-15T19:00:00+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/food.html?search=seafood</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/terms.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/food.html?search=dessert</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/privacy.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
   <url>
-       <loc>https://stopbuy.pk/pages/food.html?search=drink</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
-  </url>
-  <url>
-       <loc>https://stopbuy.pk/pages/food.html?search=icecream</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
-  </url>
-  <url>
-       <loc>https://stopbuy.pk/pages/blogs.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
-  </url>
-  <url>
-       <loc>https://stopbuy.pk/pages/electronics.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
-  </url>
-  <url>
-       <loc>https://stopbuy.pk/pages/mobiles.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
-  </url>
-  <url>
-       <loc>https://stopbuy.pk/pages/property.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
-  </url>
-  <url>
-       <loc>https://stopbuy.pk/pages/personal-care.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
-  </url>
-  <url>
-       <loc>https://stopbuy.pk/pages/fashion.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
-  </url>
-  <url>
-       <loc>https://stopbuy.pk/pages/kids.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
-  </url>
-  <url>
-       <loc>https://stopbuy.pk/pages/travel.html</loc>
-       <lastmod>2026-10-15T19:00:00+00:00</lastmod>
-       <priority>0.8000</priority>
-  </url>
-  <url>
-       <loc>https://stopbuy.pk/pages/terms.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
-  </url>
-  <url>
-       <loc>https://stopbuy.pk/pages/privacy.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
-  </url>
-  <url>
-       <loc>https://stopbuy.pk/pages/cookies.html</loc>
-       <lastmod>2026-10-14T11:26:45+00:00</lastmod>
-       <priority>0.8000</priority>
+    <loc>https://stopbuy.pk/pages/cookies.html</loc>
+    <lastmod>2026-10-14T11:26:45+00:00</lastmod>
   </url>
 </urlset>
