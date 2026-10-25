@@ -23,8 +23,8 @@ body{
 
 body{
   position:relative;
-  background: linear-gradient(180deg, #031b14 0%, #052e24 40%, #0f172a 100%);
-  color: #f1f5f9;
+  background-color: #F4F9F2;
+  color: #1F2937;
   min-height: 100vh;
 }
 
@@ -283,15 +283,9 @@ textarea::placeholder{
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
-<body class="text-[#1F2937] min-h-screen flex flex-col relative overflow-x-hidden bg-transparent">
+<body class="bg-[#F4F9F2] text-[#1F2937] antialiased min-h-screen flex flex-col relative overflow-x-hidden">
 
-<!-- Custom Background -->
-<!-- Background gradient is now defined in the CSS body rule -->
-
-
-  <!-- NAVBAR -->
-      <!-- Top Navigation Bar -->
-    <nav class="bg-[#0A3D2A] text-white sticky top-0 z-[99999]">
+<nav class="bg-[#0A3D2A] text-white sticky top-0 z-[99999]">
         <div
             class="max-w-screen-2xl mx-auto px-4 py-2 sm:py-0 sm:h-[60px] flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-3 gap-x-2 sm:gap-4 relative">
 
@@ -931,9 +925,14 @@ textarea::placeholder{
       </div>
 
       <!-- Promotional Ad Banner (Moved under Featured Offers) -->
-      <div class="relative w-full rounded-3xl overflow-hidden shadow-md border border-slate-700/60 mt-8 bg-slate-950 flex items-center justify-center">
-          <img src="../images/banner/OrionFx - Web Banner.gif" alt="Stop Buy Promotional Banner"
-              class="w-full h-auto max-h-[140px] md:max-h-[180px] object-cover md:object-fill">
+      <div class="w-full mt-8">
+          <a href="https://orionfx.net" target="_blank" rel="noopener noreferrer" class="block w-full group">
+                <div class="relative w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-md border border-slate-700/60 bg-[#020b1c] transition duration-300 group-hover:shadow-xl">
+                    <img src="../images/banner/orion-fx-digital-success-banner-03.png" alt="Orion FX Digital Success Banner" 
+                        width="2079" height="266"
+                        class="w-full h-auto block aspect-[2079/266] max-h-[266px]" style="aspect-ratio: 2079 / 266;">
+                </div>
+            </a>
       </div>
 
     </div>
