@@ -54,13 +54,13 @@ function renderStars(id) {
     } else if (ratingVal >= i - 0.5) {
       starsHtml += '<i class="fas fa-star-half-alt text-yellow-400"></i>';
     } else {
-      starsHtml += '<i class="far fa-star text-slate-600"></i>';
+      starsHtml += '<i class="far fa-star text-slate-300"></i>';
     }
   }
   return `
     <div class="flex flex-col items-center gap-0.5 mt-1.5">
       <div class="flex items-center gap-0.5">${starsHtml}</div>
-      <span class="text-[9px] text-slate-400 font-bold">${avg} (${count})</span>
+      <span class="text-[9px] text-[#68756C] font-bold">${avg} (${count})</span>
     </div>
   `;
 }
@@ -175,12 +175,14 @@ function renderFoodList() {
 
   foodListingsEl.innerHTML = filtered.map(f => {
     const isSelected = String(f.id) === String(selectedFoodId);
-    const activeClass = isSelected ? 'border-[#f97316] shadow-[0_10px_35px_rgba(249,115,22,0.18)] bg-slate-800/90 ring-1 ring-[#f97316]' : 'border-slate-700 hover:border-slate-500 hover:bg-slate-800/80 bg-slate-900/60 shadow-sm';
+    const activeClass = isSelected 
+      ? 'border-[#0A3D2A] ring-2 ring-[#0A3D2A] bg-emerald-50/40 shadow-md' 
+      : 'border-[#DCE4DC] hover:border-[#16834A] hover:shadow-md bg-white shadow-[0_3px_14px_rgba(10,61,42,0.07)]';
 
     return `
-      <article data-id="${f.id}" class="food-item rounded-2xl p-3 sm:p-4 cursor-pointer transition-colors duration-300 flex flex-row gap-3 border backdrop-blur-md ${activeClass}">
+      <article data-id="${f.id}" class="food-item product-card rounded-2xl p-3 sm:p-4 cursor-pointer transition-all duration-200 flex flex-row gap-3 border ${activeClass}">
         <div class="flex flex-col items-center shrink-0">
-          <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-slate-800 shadow-inner">
+          <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-slate-50 border border-[#DCE4DC] shadow-inner">
             <img src="${f.image}" onerror="this.onerror=null; this.src='https://via.placeholder.com/150';" alt="${f.name}" class="w-full h-full object-cover transition duration-300 hover:scale-105 food-img-filter" />
           </div>
           ${renderStars(f.id)}
@@ -188,14 +190,14 @@ function renderFoodList() {
         <div class="flex-1 flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-start mb-1">
-              <h3 class="font-bold text-sm sm:text-base text-slate-100 leading-tight">${f.name}</h3>
-              <span class="text-xs font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500 whitespace-nowrap ml-2">Rs. ${f.price}</span>
+              <h3 class="font-bold text-sm sm:text-base text-[#173D2B] leading-tight">${f.name}</h3>
+              <span class="text-xs sm:text-sm font-extrabold text-[#16834A] whitespace-nowrap ml-2">Rs. ${f.price}</span>
             </div>
-            <p class="text-[0.7rem] sm:text-xs text-slate-400 mb-1 font-medium">${f.variety}</p>
-            ${f.description ? `<p class="text-[0.65rem] sm:text-[0.7rem] text-slate-500 mb-2 line-clamp-2">${f.description}</p>` : ''}
+            <p class="text-[0.7rem] sm:text-xs text-[#68756C] mb-1 font-medium">${f.variety}</p>
+            ${f.description ? `<p class="text-[0.65rem] sm:text-[0.7rem] text-[#68756C] mb-2 line-clamp-2">${f.description}</p>` : ''}
           </div>
           <div class="flex justify-between items-end">
-            <p class="text-[0.7rem] text-slate-400 font-medium">📍 ${f.fullLocation}</p>
+            <p class="text-[0.7rem] text-[#68756C] font-medium">📍 ${f.fullLocation}</p>
           </div>
         </div>
       </article>
@@ -213,6 +215,16 @@ function renderFoodList() {
 
 function selectFoodItem(id, preventScroll = false) {
   selectedFoodId = id;
+  
+  // Highlight active listing card immediately
+  document.querySelectorAll('.food-item').forEach(el => {
+    if (el.getAttribute('data-id') === String(id)) {
+      el.className = 'food-item product-card rounded-2xl p-3 sm:p-4 cursor-pointer transition-all duration-200 flex flex-row gap-3 border border-[#0A3D2A] ring-2 ring-[#0A3D2A] bg-emerald-50/40 shadow-md';
+    } else {
+      el.className = 'food-item product-card rounded-2xl p-3 sm:p-4 cursor-pointer transition-all duration-200 flex flex-row gap-3 border border-[#DCE4DC] hover:border-[#16834A] hover:shadow-md bg-white shadow-[0_3px_14px_rgba(10,61,42,0.07)]';
+    }
+  });
+
   const item = foodDeals.find(f => String(f.id) === String(id));
 
   if (item) {
@@ -228,7 +240,7 @@ function selectFoodItem(id, preventScroll = false) {
     if (fName) fName.textContent = item.name;
     if (fVariety) fVariety.textContent = item.variety;
     if (fBrand) fBrand.textContent = item.brand || item.subCategory || 'No Brand Specified';
-    if (fPrice) fPrice.innerHTML = `Rs. ${item.price} ${item.originalPrice ? `<span class="text-sm line-through text-slate-500 ml-1">Rs. ${item.originalPrice}</span>` : ''}`;
+    if (fPrice) fPrice.innerHTML = `Rs. ${item.price} ${item.originalPrice ? `<span class="text-sm line-through text-[#68756C] ml-1">Rs. ${item.originalPrice}</span>` : ''}`;
     if (fLocation) document.getElementById('fLocation').textContent =
       item.fullLocation || item.address;
     if (fDesc) fDesc.textContent = item.description;
@@ -247,7 +259,7 @@ function selectFoodItem(id, preventScroll = false) {
           starsHtml += '<i class="far fa-star text-slate-600"></i>';
         }
       }
-      fRatingDisplay.innerHTML = `${starsHtml} <span class="text-slate-300 font-bold ml-1">${avg} (${count} reviews)</span>`;
+      fRatingDisplay.innerHTML = `${starsHtml} <span class="text-[#68756C] font-bold ml-1">${avg} (${count} reviews)</span>`;
     }
 
     // Price Comparison Box Logic
@@ -275,12 +287,12 @@ function selectFoodItem(id, preventScroll = false) {
           // Lowest Price Section
           html += `
             <div class="mb-3">
-              <div class="text-[11px] font-bold text-yellow-400 mb-1">🏆 Lowest Price</div>
-              <div class="flex justify-between items-center bg-yellow-500/10 border border-yellow-500/20 p-2 rounded-lg">
-                <span class="font-bold text-slate-100">${lowest.brand || lowest.variety || 'Unknown'}</span>
+              <div class="text-[11px] font-bold text-[#E66B16] mb-1">🏆 Lowest Price</div>
+              <div class="flex justify-between items-center bg-[#FFF4E8] border border-[#FCE2CE] p-2 rounded-lg">
+                <span class="font-bold text-[#173D2B]">${lowest.brand || lowest.variety || 'Unknown'}</span>
                 <div class="flex items-center gap-2">
-                  <span class="font-extrabold text-yellow-400">Rs. ${lowest.price}</span>
-                  <span class="text-[10px] text-slate-400">(${lowest.distanceKm.toFixed(1)} km)</span>
+                  <span class="font-extrabold text-[#16834A]">Rs. ${lowest.price}</span>
+                  <span class="text-[10px] text-[#68756C]">(${lowest.distanceKm.toFixed(1)} km)</span>
                 </div>
               </div>
             </div>
@@ -289,18 +301,18 @@ function selectFoodItem(id, preventScroll = false) {
           // Nearby Options Section
           html += `
             <div class="mb-3">
-              <div class="text-[11px] font-bold text-emerald-400 mb-1">📍 Nearby Options</div>
+              <div class="text-[11px] font-bold text-[#0A3D2A] mb-1">📍 Nearby Options</div>
               <div class="space-y-1.5 max-h-[150px] overflow-y-auto pr-1">
           `;
           
           top5.forEach(comp => {
             const isCurrent = String(comp.id) === String(item.id);
             html += `
-              <div class="flex justify-between items-center py-1 border-b border-slate-700/30 ${isCurrent ? 'bg-emerald-500/10 px-1 rounded' : ''}">
-                <span class="text-slate-300 font-medium">${comp.brand || comp.variety || 'Unknown'} ${isCurrent ? '<span class="text-[9px] text-emerald-400 font-bold">(Current)</span>' : ''}</span>
+              <div class="flex justify-between items-center py-1 border-b border-[#DCE4DC] ${isCurrent ? 'bg-emerald-50/70 px-1 rounded' : ''}">
+                <span class="text-[#26332B] font-medium">${comp.brand || comp.variety || 'Unknown'} ${isCurrent ? '<span class="text-[9px] text-[#16834A] font-bold">(Current)</span>' : ''}</span>
                 <div class="flex items-center gap-2">
-                  <span class="font-bold text-slate-100">Rs. ${comp.price}</span>
-                  <span class="text-[10px] text-slate-400">(${comp.distanceKm.toFixed(1)} km)</span>
+                  <span class="font-bold text-[#16834A]">Rs. ${comp.price}</span>
+                  <span class="text-[10px] text-[#68756C]">(${comp.distanceKm.toFixed(1)} km)</span>
                 </div>
               </div>
             `;
@@ -314,14 +326,14 @@ function selectFoodItem(id, preventScroll = false) {
           // Savings Section
           if (saving > 0) {
             html += `
-              <div class="mt-2 bg-emerald-500/15 border border-emerald-500/30 p-2 rounded-lg flex items-center justify-between text-emerald-400 font-extrabold text-[13px]">
+              <div class="mt-2 bg-emerald-50 border border-emerald-200 p-2 rounded-lg flex items-center justify-between text-[#16834A] font-extrabold text-[13px]">
                 <span>💰 You Save Up To</span>
                 <span>Rs. ${saving}</span>
               </div>
             `;
           } else {
             html += `
-              <div class="mt-2 bg-slate-700/30 border border-slate-700/50 p-2 rounded-lg flex items-center justify-between text-slate-300 font-bold text-[11px]">
+              <div class="mt-2 bg-emerald-50/50 border border-emerald-200/60 p-2 rounded-lg flex items-center justify-between text-[#173D2B] font-bold text-[11px]">
                 <span>✨ You are viewing the lowest price listing!</span>
               </div>
             `;
@@ -595,8 +607,6 @@ async function initFoodDeals() {
   document.querySelectorAll('.quickFilterBtn').forEach(btn => {
     btn.addEventListener('click', () => {
       btn.classList.toggle('active-filter');
-      btn.classList.toggle('border-emerald-500');
-      btn.classList.toggle('text-emerald-400');
       renderFoodList();
     });
   });
@@ -623,6 +633,9 @@ async function initFoodDeals() {
     document.querySelectorAll('.food-category').forEach(catBtn => {
       catBtn.addEventListener('click', () => {
         const searchVal = catBtn.getAttribute('data-search') || catBtn.querySelector('span').textContent.trim();
+        document.querySelectorAll('.food-category').forEach(b => b.classList.remove('active'));
+        catBtn.classList.add('active');
+
         if (foodSearchInput) {
           foodSearchInput.value = searchVal;
           renderFoodList();
