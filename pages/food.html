@@ -14,181 +14,427 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="../css/style.css" />
   <style>
-  
-  html,
-body{
-  min-height:100%;
-  overflow-x:hidden;
+
+/* StopBuy.pk — Food page theme only */
+:root {
+  --food-bg: #F7F8F5;
+  --food-surface: #FFFFFF;
+  --food-brand: #0A3D2A;
+  --food-brand-hover: #072F20;
+  --food-heading: #173D2B;
+  --food-text: #26332B;
+  --food-muted: #68756C;
+  --food-border: #DCE4DC;
+  --food-accent: #E66B16;
+  --food-accent-bg: #FFF4E8;
+  --food-success: #16834A;
+  --food-error: #B42318;
+  --food-disabled: #E8ECE8;
+  --food-radius: 12px;
+  --food-shadow: 0 3px 14px rgba(10, 61, 42, 0.07);
 }
 
-body{
-  position:relative;
-  background-color: #F4F9F2;
-  color: #1F2937;
+/* Apply these styles only inside the food page content */
+.food-page {
+  background: var(--food-bg);
+  color: var(--food-text);
+}
+
+.food-page .food-section,
+.food-page .product-card,
+.food-page .filter-panel,
+.food-page .product-details,
+.food-page .order-panel {
+  background: var(--food-surface);
+  border: 1px solid var(--food-border);
+  border-radius: var(--food-radius);
+}
+
+.food-page .product-card {
+  box-shadow: var(--food-shadow);
+}
+
+.food-page h1,
+.food-page h2,
+.food-page h3 {
+  color: var(--food-heading);
+}
+
+.food-page .muted,
+.food-page .product-location,
+.food-page .product-date {
+  color: var(--food-muted);
+}
+
+.food-page .primary-button {
+  background: var(--food-brand);
+  color: #FFFFFF;
+}
+
+.food-page .primary-button:hover {
+  background: var(--food-brand-hover);
+}
+
+.food-page .product-price,
+.food-page .best-price {
+  color: var(--food-success);
+}
+
+.food-page .deal-badge {
+  background: var(--food-accent-bg);
+  color: #A84908;
+}
+
+.food-page input,
+.food-page select,
+.food-page textarea {
+  background: #FFFFFF;
+  color: var(--food-text);
+  border: 1px solid var(--food-border);
+  border-radius: 8px;
+}
+
+.food-page :focus-visible {
+  outline: 2px solid var(--food-success);
+  outline-offset: 2px;
+}
+
+/* Scoped Overrides for Food Page Components */
+.food-page .food-category {
+  background: #FFFFFF !important;
+  border: 1px solid var(--food-border) !important;
+  border-radius: 999px !important;
+  color: var(--food-text) !important;
+  padding: 8px 18px !important;
+  box-shadow: 0 2px 6px rgba(10, 61, 42, 0.04) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: all 0.25s ease !important;
+}
+
+.food-page .food-category span {
+  color: var(--food-text) !important;
+  font-weight: 600 !important;
+}
+
+.food-page .food-category i {
+  color: var(--food-brand) !important;
+  filter: none !important;
+}
+
+.food-page .food-category:hover {
+  border-color: var(--food-brand) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(10, 61, 42, 0.09) !important;
+}
+
+.food-page .food-category.active {
+  background: var(--food-brand) !important;
+  border-color: var(--food-brand) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(10, 61, 42, 0.2) !important;
+}
+
+.food-page .food-category.active span,
+.food-page .food-category.active i {
+  color: #FFFFFF !important;
+}
+
+.food-page .dark-panel {
+  background: var(--food-surface) !important;
+  border: 1px solid var(--food-border) !important;
+  color: var(--food-text) !important;
+  box-shadow: var(--food-shadow) !important;
+}
+
+.food-page .dark-panel label {
+  color: var(--food-heading) !important;
+}
+
+.food-page .dark-panel input,
+.food-page .dark-panel select {
+  background: #FFFFFF !important;
+  border: 1px solid var(--food-border) !important;
+  color: var(--food-text) !important;
+}
+
+.food-page .dark-panel input:focus,
+.food-page .dark-panel select:focus {
+  border-color: var(--food-success) !important;
+  outline: 2px solid var(--food-success) !important;
+  outline-offset: 1px;
+}
+
+/* Quick Filter Buttons - 4 Different Standard Solid Colors */
+.food-page .quickFilterBtn {
+  height: 42px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border: 1px solid transparent;
+  color: #FFFFFF !important;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.food-page .quickFilterBtn span {
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+}
+
+/* 1. Hot Deals - Standard Solid Red */
+.food-page .qf-hot-deals,
+.food-page #hotDealsBtn {
+  background-color: #DC2626 !important;
+  border-color: #B91C1C !important;
+  color: #FFFFFF !important;
+}
+.food-page .qf-hot-deals:hover,
+.food-page #hotDealsBtn:hover {
+  background-color: #B91C1C !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+}
+
+/* 2. Free Delivery - Standard Solid Green */
+.food-page .qf-free-delivery,
+.food-page #freeDeliveryBtn {
+  background-color: #16834A !important;
+  border-color: #15803D !important;
+  color: #FFFFFF !important;
+}
+.food-page .qf-free-delivery:hover,
+.food-page #freeDeliveryBtn:hover {
+  background-color: #15803D !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(22, 131, 74, 0.35);
+}
+
+/* 3. Top Rated - Standard Solid Amber / Gold */
+.food-page .qf-top-rated,
+.food-page #topRatedBtn {
+  background-color: #D97706 !important;
+  border-color: #B45309 !important;
+  color: #FFFFFF !important;
+}
+.food-page .qf-top-rated:hover,
+.food-page #topRatedBtn:hover {
+  background-color: #B45309 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.35);
+}
+
+/* 4. Open Now - Standard Solid Blue */
+.food-page .qf-open-now,
+.food-page #openNowBtn {
+  background-color: #2563EB !important;
+  border-color: #1D4ED8 !important;
+  color: #FFFFFF !important;
+}
+.food-page .qf-open-now:hover,
+.food-page #openNowBtn:hover {
+  background-color: #1D4ED8 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+/* Selected / Active State */
+.food-page .quickFilterBtn.active-filter {
+  outline: 3px solid #0A3D2A !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+  transform: scale(1.02);
+  filter: brightness(0.92);
+}
+
+/* Single Line Stat Cards with Standard Color Fills */
+.food-page .miniStatCard {
+  border-radius: 14px;
+  padding: 10px 14px !important;
+  min-height: 44px;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  white-space: nowrap !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s ease;
+}
+
+.food-page .miniStatCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.food-page .miniStatCard .stat-icon,
+.food-page .miniStatCard > span {
+  font-size: 18px !important;
+  line-height: 1 !important;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  margin: 0 !important;
+}
+
+.food-page .miniStatCard .stat-text {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 5px !important;
+  white-space: nowrap !important;
+}
+
+.food-page .miniStatCard h4 {
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+}
+
+.food-page .miniStatCard p {
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+}
+
+/* Card 1: Brands - Standard Emerald Green Fill */
+.food-page .stat-card-brands,
+.food-page #brandStatCard {
+  background: linear-gradient(135deg, #EAF7EE 0%, #D6F2DF 100%) !important;
+  border: 1px solid #A2DDB8 !important;
+}
+.food-page .stat-card-brands h4,
+.food-page #brandStatCard h4 {
+  color: #0A3D2A !important;
+}
+.food-page .stat-card-brands p,
+.food-page #brandStatCard p {
+  color: #175336 !important;
+}
+.food-page .stat-card-brands:hover,
+.food-page #brandStatCard:hover {
+  border-color: #0A3D2A !important;
+}
+
+/* Card 2: Live Deals - Standard Amber / Orange Fill */
+.food-page .stat-card-deals,
+.food-page #liveDealsStatCard {
+  background: linear-gradient(135deg, #FFF3E6 0%, #FFE6CC 100%) !important;
+  border: 1px solid #FFC999 !important;
+}
+.food-page .stat-card-deals h4,
+.food-page #liveDealsStatCard h4 {
+  color: #C24E05 !important;
+}
+.food-page .stat-card-deals p,
+.food-page #liveDealsStatCard p {
+  color: #8C3700 !important;
+}
+.food-page .stat-card-deals:hover,
+.food-page #liveDealsStatCard:hover {
+  border-color: #E66B16 !important;
+}
+
+/* Card 3: Areas - Standard Sky Blue Fill */
+.food-page .stat-card-areas,
+.food-page #areasStatCard {
+  background: linear-gradient(135deg, #EBF5FF 0%, #D4EAFF 100%) !important;
+  border: 1px solid #B3DAFE !important;
+}
+.food-page .stat-card-areas h4,
+.food-page #areasStatCard h4 {
+  color: #026597 !important;
+}
+.food-page .stat-card-areas p,
+.food-page #areasStatCard p {
+  color: #074B70 !important;
+}
+.food-page .stat-card-areas:hover,
+.food-page #areasStatCard:hover {
+  border-color: #0284C7 !important;
+}
+
+/* Card 4: User Rating - Standard Violet / Purple Fill */
+.food-page .stat-card-rating,
+.food-page #ratingStatCard {
+  background: linear-gradient(135deg, #F8EEFD 0%, #EED7FB 100%) !important;
+  border: 1px solid #DCBEF8 !important;
+}
+.food-page .stat-card-rating h4,
+.food-page #ratingStatCard h4 {
+  color: #6B21A8 !important;
+}
+.food-page .stat-card-rating p,
+.food-page #ratingStatCard p {
+  color: #4C137F !important;
+}
+.food-page .stat-card-rating:hover,
+.food-page #ratingStatCard:hover {
+  border-color: #7E22CE !important;
+}
+
+.food-page .food-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.food-page .food-scroll::-webkit-scrollbar-track {
+  background: #F1F4F0;
+  border-radius: 4px;
+}
+.food-page .food-scroll::-webkit-scrollbar-thumb {
+  background: #DCE4DC;
+  border-radius: 4px;
+}
+.food-page .food-scroll::-webkit-scrollbar-thumb:hover {
+  background: #16834A;
+}
+
+  
+  html,
+body {
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  position: relative;
+  background-color: #F7F8F5;
+  color: #26332B;
   min-height: 100vh;
 }
 
 /* Footer Fix */
 footer,
-.footer{
-  position:relative;
-  z-index:20;
-}
-
-/* Glass Cards */
-.glass-card{
-  border-radius:24px;
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-}
-
-/* Food Tags */
-.foodTag{
-  padding:10px 18px;
-  border-radius:999px;
-  font-size:13px;
-  font-weight:600;
-  backdrop-filter:blur(10px);
-  transition:.3s;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-  border: 1px solid transparent;
-}
-.foodTag:hover{
-  transform:translateY(-2px);
-  filter: brightness(1.2);
-}
-.foodTag.cat-fast-food { background: rgba(249,115,22,0.1); border-color: rgba(249,115,22,0.3); color: #fb923c; }
-.foodTag.cat-desi { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); color: #34d399; }
-.foodTag.cat-bbq { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: #f87171; }
-.foodTag.cat-bakery { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: #fbbf24; }
-.foodTag.cat-chinese { background: rgba(168,85,247,0.1); border-color: rgba(168,85,247,0.3); color: #c084fc; }
-.foodTag.cat-deals { background: rgba(236,72,153,0.1); border-color: rgba(236,72,153,0.3); color: #f472b6; }
-
-/* Filter Sidebars */
-.dark-panel {
-  background: rgba(15, 23, 42, 0.75) !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
-  color: #f1f5f9;
+.footer {
+  position: relative;
+  z-index: 20;
 }
 
 /* Image Filter */
 .food-img-filter {
-  filter: saturate(1.1) contrast(1.05);
+  filter: saturate(1.05) contrast(1.02);
 }
 
-/* Search Focus Glow */
-#foodSearchInput:focus {
-  box-shadow: 0 0 0 3px rgba(249,115,22,0.25) !important;
-  border-color: #f97316 !important;
-}
-
-/* Stats Cards */
-.miniStatCard{
-  background:rgba(255,255,255,.8);
-  border:1px solid rgba(16,185,129,.2);
-  border-radius:16px;
-  padding:8px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  backdrop-filter:blur(16px);
-  transition:.35s;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.miniStatCard:hover{
-  transform:translateY(-2px);
-  border-color:rgba(16,185,129,.4);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
-}
-
-.miniStatCard span{
-  font-size:22px;
-  display:block;
-}
-
-.miniStatCard .stat-text {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 6px;
-}
-
-.miniStatCard h4{
-  font-size:18px;
-  font-weight:700;
-  color:#047857;
-  line-height: 1.1;
-}
-
-.miniStatCard p{
-  font-size:13px;
-  color:#475569;
-  margin-top:0;
-  font-weight:600;
-  line-height: 1;
-}
-
-/* Quick Buttons */
-.quickFilterBtn{
-  height:42px;
-  border-radius:14px;
-  background:rgba(255,255,255,.8);
-  border:1px solid rgba(16,185,129,.2);
-  color:#475569;
-  font-size:12px;
-  font-weight:600;
-  transition:.3s;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-}
-
-.quickFilterBtn:hover{
-  background:rgba(16,185,129,.1);
-  border-color:rgba(16,185,129,.4);
-  color:#047857;
-}
-
-/* Featured Ads */
-.featureAd{
-  border-radius:18px;
-  overflow:hidden;
-  border:1px solid rgba(16,185,129,.2);
-}
-
-/* Footer */
-.stopbuyFooter{
-  position:relative;
-  z-index:50;
-  margin-top:60px;
-}
-    /* Custom simple scrollbar for the list */
-    .food-scroll::-webkit-scrollbar {
-      width: 6px;
-    }
-    .food-scroll::-webkit-scrollbar-track {
-      background: rgba(15, 23, 42, 0.5);
-      border-radius: 4px;
-    }
-    .food-scroll::-webkit-scrollbar-thumb {
-      background: rgba(234, 179, 8, 0.4);
-      border-radius: 4px;
-    }
-    .food-scroll::-webkit-scrollbar-thumb:hover {
-      background: rgba(234, 179, 8, 0.6);
-    }
-	
-	select,
+select,
 input,
-textarea{
-  color:#000000 !important;
-  background:#ffffff !important;
+textarea {
+  color: #26332B !important;
+  background: #ffffff !important;
 }
 
 select::placeholder,
 input::placeholder,
-textarea::placeholder{
-  color:#64748b !important;
+textarea::placeholder {
+  color: #68756C !important;
 }
 
 @keyframes scroll {
@@ -200,7 +446,9 @@ textarea::placeholder{
     }
 }
 
-<!-- MOBILE ONLY STYLE -->
+/* =========================
+   MOBILE ONLY STYLE
+========================= */
 /* =========================
    MOBILE FOOD ICONS
 ========================= */
@@ -248,7 +496,7 @@ textarea::placeholder{
 
   border-radius: 16px;
 
-  background: linear-gradient(135deg,#f97316,#ef4444);
+  background: #0A3D2A;
   color: white;
 
   display: flex;
@@ -256,7 +504,7 @@ textarea::placeholder{
   justify-content: center;
 
   box-shadow:
-    0 10px 30px rgba(239,68,68,.35),
+    0 10px 30px rgba(10,61,42,0.25),
     inset 0 1px 0 rgba(255,255,255,.25);
 
   border: 1px solid rgba(255,255,255,.2);
@@ -277,13 +525,14 @@ textarea::placeholder{
 }
 
 #goTopBtn:hover {
+  background: #072F20;
   transform: translateY(-2px);
 }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
-<body class="bg-[#F4F9F2] text-[#1F2937] antialiased min-h-screen flex flex-col relative overflow-x-hidden">
+<body class="bg-[#F7F8F5] text-[#26332B] antialiased min-h-screen flex flex-col relative overflow-x-hidden">
 
 <nav class="bg-[#0A3D2A] text-white sticky top-0 z-[99999]">
         <div
@@ -365,45 +614,37 @@ textarea::placeholder{
         </div>
     </nav>
 
-  <main class="flex-1 relative z-10 pt-6 pb-6">
+  <main class="food-page flex-1 relative z-10 pt-6 pb-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Banners & Search Panel Row (3-Column Layout) -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch mb-6">
           
           <!-- Left Banner (Grocery/Deals) (Reduced ~30% height: 195px) -->
-          <div class="hidden lg:flex lg:col-span-3 bg-slate-900 border border-slate-800 rounded-3xl p-4 flex-col justify-between text-white relative overflow-hidden shadow-lg h-[195px] shrink-0 text-left">
-              <div class="absolute inset-0 bg-gradient-to-br from-slate-950 to-slate-900 opacity-95 z-0"></div>
-              <div class="absolute -left-12 -top-12 w-32 h-32 rounded-full bg-red-500/10 blur-2xl"></div>
-              <div class="absolute -right-12 -bottom-8 w-32 h-32 rounded-full bg-blue-500/10 blur-2xl"></div>
-
+          <div class="hidden lg:flex lg:col-span-3 bg-white border border-[#DCE4DC] rounded-3xl p-4 flex-col justify-between text-[#26332B] relative overflow-hidden shadow-[0_3px_14px_rgba(10,61,42,0.07)] h-[195px] shrink-0 text-left">
               <div class="relative z-10 space-y-1">
-                  <span class="text-[9px] font-black uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Hot Deals</span>
+                  <span class="text-[9px] font-black uppercase tracking-wider text-[#16834A] bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Hot Deals</span>
 
                   <!-- Left Promo Content Container -->
                   <div id="leftPromoBanner1" class="transition-opacity duration-300 space-y-0.5 mt-1">
-                      <h3 class="text-base font-bold leading-tight text-white font-serif mt-0.5">🛒 Grocery Specials</h3>
-                      <p class="text-[10px] text-slate-400 font-medium leading-tight line-clamp-2">Shop daily household essentials and groceries at lowest prices.</p>
+                      <h3 class="text-base font-bold leading-tight text-[#173D2B] font-serif mt-0.5">🛒 Grocery Specials</h3>
+                      <p class="text-[10px] text-[#68756C] font-medium leading-tight line-clamp-2">Shop daily household essentials and groceries at lowest prices.</p>
                   </div>
               </div>
               <div class="relative z-10">
-                  <a id="leftPromoLink1" href="./grocery.html" class="inline-flex items-center justify-center w-full py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl shadow-md transition-all duration-300 text-center">
+                  <a id="leftPromoLink1" href="./grocery.html" class="inline-flex items-center justify-center w-full py-1.5 bg-[#0A3D2A] hover:bg-[#072F20] text-white text-xs font-bold rounded-xl shadow-sm transition-all duration-300 text-center">
                       View Specials
                   </a>
               </div>
           </div>
 
           <!-- Middle Column: Search Panel (Reduced ~30% height: 195px) -->
-          <div class="col-span-12 lg:col-span-6 flex flex-col justify-between bg-slate-900 border border-slate-800 p-4 sm:p-5 rounded-3xl shadow-lg relative overflow-hidden h-[195px]">
-              <!-- Glow -->
-              <div class="absolute -top-20 -right-20 w-60 h-60 bg-yellow-500/20 rounded-full blur-3xl pointer-events-none"></div>
-              <div class="absolute -bottom-20 -left-20 w-60 h-60 bg-[#d61c22]/10 rounded-full blur-3xl pointer-events-none"></div>
-              
+          <div class="col-span-12 lg:col-span-6 flex flex-col justify-between bg-white border border-[#DCE4DC] p-4 sm:p-5 rounded-3xl shadow-[0_3px_14px_rgba(10,61,42,0.07)] relative overflow-hidden h-[195px]">
               <div class="flex flex-col gap-1 relative z-10">
-                  <h2 class="text-lg sm:text-xl font-bold text-slate-100">
+                  <h2 class="text-lg sm:text-xl font-bold text-[#173D2B]">
                       <span class="lang-en">Food Deals & Restaurants</span><span class="lang-ur">کھانوں کی ڈیلز اور ریسٹورنٹس</span>
                   </h2>
-                  <p class="text-[0.7rem] text-slate-400 font-medium leading-snug">
+                  <p class="text-[0.7rem] text-[#68756C] font-medium leading-snug">
                       <span class="lang-en">Nearby places first. We display trusted and verified listings around you.</span><span class="lang-ur">سب سے پہلے آپ کے قریب کی جگہیں۔ ہم آپ کو آپ کے اردگرد قابلِ اعتماد اور تصدیق شدہ مقامات دکھاتے ہیں۔</span>
                   </p>
               </div>
@@ -415,35 +656,31 @@ textarea::placeholder{
                           data-ur-placeholder="مثال: پیزا، برگر، دیسی..."
                           placeholder="مثال: پیزا، برگر، دیسی..."
                           style="padding-inline-start: 3rem; padding-inline-end: 1rem;"
-                          class="w-full bg-slate-950/50 border border-slate-700 rounded-2xl text-xs sm:text-sm py-2 outline-none text-slate-100 placeholder:text-slate-500 shadow-sm transition" />
-                      <div class="absolute top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700 text-slate-400 text-xs" style="inset-inline-start: 0.6rem;">
+                          class="w-full bg-white border border-[#DCE4DC] rounded-2xl text-xs sm:text-sm py-2 outline-none text-[#26332B] placeholder:text-[#68756C] shadow-sm transition focus:border-[#16834A]" />
+                      <div class="absolute top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-[#F7F8F5] flex items-center justify-center border border-[#DCE4DC] text-[#68756C] text-xs" style="inset-inline-start: 0.6rem;">
                           🔍
                       </div>
                   </div>
                   <button id="foodSearchBtn"
-                      class="px-5 py-2 rounded-2xl bg-gradient-to-r from-[#d61c22] to-red-700 text-white font-semibold text-xs sm:text-sm shadow-[0_8px_20px_rgba(214,28,34,0.3)] hover:brightness-110 whitespace-nowrap transition">
+                          class="px-5 py-2 rounded-2xl bg-[#0A3D2A] hover:bg-[#072F20] text-white font-semibold text-xs sm:text-sm shadow-sm transition">
                       <span class="lang-en">Search</span><span class="lang-ur">تلاش</span>
                   </button>
               </div>
           </div>
 
           <!-- Right Banner (Restaurant/Food) (Reduced ~30% height: 195px) -->
-          <div class="hidden lg:flex lg:col-span-3 bg-slate-900 border border-slate-800 rounded-3xl p-4 flex-col justify-between text-white relative overflow-hidden shadow-lg h-[195px] shrink-0 text-left">
-              <div class="absolute inset-0 bg-gradient-to-br from-slate-950 to-slate-900 opacity-95 z-0"></div>
-              <div class="absolute -right-12 -top-12 w-32 h-32 rounded-full bg-red-500/10 blur-2xl"></div>
-              <div class="absolute -left-12 -bottom-8 w-32 h-32 rounded-full bg-blue-500/10 blur-2xl"></div>
-
+          <div class="hidden lg:flex lg:col-span-3 bg-[#FFF4E8] border border-[#FCE2CE] rounded-3xl p-4 flex-col justify-between text-[#26332B] relative overflow-hidden shadow-[0_3px_14px_rgba(10,61,42,0.07)] h-[195px] shrink-0 text-left">
               <div class="relative z-10 space-y-1">
-                  <span class="text-[9px] font-black uppercase tracking-wider text-[#d61c22] bg-red-500/10 px-2 py-0.5 rounded-full border border-red-500/20">Featured Offers</span>
+                  <span class="text-[9px] font-black uppercase tracking-wider text-[#A84908] bg-[#FFF4E8] px-2 py-0.5 rounded-full border border-orange-200/80 deal-badge">Featured Offers</span>
 
                   <!-- Right Promo Content Container -->
                   <div id="rightPromoBanner1" class="transition-opacity duration-300 space-y-0.5 mt-1">
-                      <h3 class="text-base font-bold leading-tight text-white font-serif mt-0.5">🍔 Restaurant Deals</h3>
-                      <p class="text-[10px] text-slate-400 font-medium leading-tight line-clamp-2">Save up to 40% on popular nearby food stuff and fast food joints.</p>
+                      <h3 class="text-base font-bold leading-tight text-[#173D2B] font-serif mt-0.5">🍔 Restaurant Deals</h3>
+                      <p class="text-[10px] text-[#68756C] font-medium leading-tight line-clamp-2">Save up to 40% on popular nearby food stuff and fast food joints.</p>
                   </div>
               </div>
               <div class="relative z-10 text-left">
-                  <a id="rightPromoLink1" href="./food.html" class="inline-flex items-center justify-center w-full py-1.5 bg-[#d61c22] hover:bg-red-700 text-white text-xs font-bold rounded-xl shadow-md transition-all duration-300 text-center">
+                  <a id="rightPromoLink1" href="./food.html" class="inline-flex items-center justify-center w-full py-1.5 bg-[#E66B16] hover:bg-[#cf5d0e] text-white text-xs font-bold rounded-xl shadow-sm transition-all duration-300 text-center">
                       Claim Offer
                   </a>
               </div>
@@ -544,34 +781,38 @@ textarea::placeholder{
 
 
 
-<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 mb-8">
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 mb-6">
 
-  <div class="miniStatCard bg-gradient-to-br from-emerald-50 to-white cursor-pointer hover:scale-105 transition-transform" id="brandStatCard">
-    <span>🍔</span>
+  <!-- Brands (Emerald Fill) -->
+  <div class="miniStatCard stat-card-brands cursor-pointer hover:scale-[1.02] transition-transform" id="brandStatCard">
+    <span class="stat-icon">🍔</span>
     <div class="stat-text">
       <h4><span class="lang-en" id="brandCountEn">0</span><span class="lang-ur" id="brandCountUr">0</span></h4>
       <p><span class="lang-en">Brands</span><span class="lang-ur">برانڈز</span></p>
     </div>
   </div>
 
-  <div class="miniStatCard bg-gradient-to-br from-amber-50 to-white cursor-pointer hover:scale-105 transition-transform" id="liveDealsStatCard">
-    <span>🔥</span>
+  <!-- Live Deals (Amber/Orange Fill) -->
+  <div class="miniStatCard stat-card-deals cursor-pointer hover:scale-[1.02] transition-transform" id="liveDealsStatCard">
+    <span class="stat-icon">🔥</span>
     <div class="stat-text">
       <h4><span class="lang-en" id="liveDealsCountEn">0</span><span class="lang-ur" id="liveDealsCountUr">0</span></h4>
       <p><span class="lang-en">Live Deals</span><span class="lang-ur">لائیو ڈیلز</span></p>
     </div>
   </div>
 
-  <div class="miniStatCard bg-gradient-to-br from-sky-50 to-white">
-    <span>📍</span>
+  <!-- Areas (Sky Blue Fill) -->
+  <div class="miniStatCard stat-card-areas" id="areasStatCard">
+    <span class="stat-icon">📍</span>
     <div class="stat-text">
       <h4><span class="lang-en">25+</span><span class="lang-ur">25+</span></h4>
       <p><span class="lang-en">Areas</span><span class="lang-ur">علاقے</span></p>
     </div>
   </div>
 
-  <div class="miniStatCard bg-gradient-to-br from-purple-50 to-white">
-    <span>⭐</span>
+  <!-- User Rating (Purple Fill) -->
+  <div class="miniStatCard stat-card-rating" id="ratingStatCard">
+    <span class="stat-icon">⭐</span>
     <div class="stat-text">
       <h4><span class="lang-en">4.8</span><span class="lang-ur">4.8</span></h4>
       <p><span class="lang-en">User Rating</span><span class="lang-ur">صارف کی درجہ بندی</span></p>
@@ -585,88 +826,88 @@ textarea::placeholder{
 
   <!-- FILTER SIDEBAR -->
   <div class="lg:w-[30%]">
-    <div class="dark-panel rounded-3xl p-5 sticky top-24 h-[650px] overflow-y-auto food-scroll shadow-lg">
+    <div class="filter-panel dark-panel rounded-3xl p-5 sticky top-24 h-[650px] overflow-y-auto food-scroll shadow-[0_3px_14px_rgba(10,61,42,0.07)] bg-white border border-[#DCE4DC]">
 
       <!-- Category -->
 	  
 	  <!-- Quick Filters -->
 <div class="grid grid-cols-2 gap-2 mb-5">
 
-  <button class="quickFilterBtn" id="hotDealsBtn">🔥 <span class="lang-en">Hot Deals</span><span class="lang-ur">زبردست ڈیلز</span></button>
-  <button class="quickFilterBtn">🚚 <span class="lang-en">Free Delivery</span><span class="lang-ur">مفت ڈیلیوری</span></button>
-  <button class="quickFilterBtn">⭐ <span class="lang-en">Top Rated</span><span class="lang-ur">سب سے زیادہ پسندیدہ</span></button>
-  <button class="quickFilterBtn">🕒 <span class="lang-en">Open Now</span><span class="lang-ur">اب کھولیں</span></button>
+  <button class="quickFilterBtn qf-hot-deals" id="hotDealsBtn">🔥 <span class="lang-en">Hot Deals</span><span class="lang-ur">زبردست ڈیلز</span></button>
+  <button class="quickFilterBtn qf-free-delivery" id="freeDeliveryBtn">🚚 <span class="lang-en">Free Delivery</span><span class="lang-ur">مفت ڈیلیوری</span></button>
+  <button class="quickFilterBtn qf-top-rated" id="topRatedBtn">⭐ <span class="lang-en">Top Rated</span><span class="lang-ur">سب سے زیادہ پسندیدہ</span></button>
+  <button class="quickFilterBtn qf-open-now" id="openNowBtn">🕒 <span class="lang-en">Open Now</span><span class="lang-ur">اب کھولیں</span></button>
 
 </div>
 <div class="mb-4">
-  <label class="text-xs text-slate-300 font-semibold mb-1 block">Category</label>
-  <select id="filterCategory" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 outline-none">
+  <label class="text-xs text-[#173D2B] font-semibold mb-1 block">Category</label>
+  <select id="filterCategory" class="w-full bg-white border border-[#DCE4DC] rounded-lg px-3 py-2 text-sm text-[#26332B] focus:border-[#16834A] outline-none">
     <option value="">All</option>
   </select>
 </div>
 
 <!-- Sub Category -->
 <div class="mb-4">
-  <label class="text-xs text-slate-300 font-semibold mb-1 block">Sub Category</label>
-  <select id="filterSubCategory" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 outline-none">
+  <label class="text-xs text-[#173D2B] font-semibold mb-1 block">Sub Category</label>
+  <select id="filterSubCategory" class="w-full bg-white border border-[#DCE4DC] rounded-lg px-3 py-2 text-sm text-[#26332B] focus:border-[#16834A] outline-none">
     <option value="">All</option>
   </select>
 </div>
 
 <!-- Product -->
 <div class="mb-4">
-  <label class="text-xs text-slate-300 font-semibold mb-1 block">Product</label>
-  <select id="filterProduct" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 outline-none">
+  <label class="text-xs text-[#173D2B] font-semibold mb-1 block">Product</label>
+  <select id="filterProduct" class="w-full bg-white border border-[#DCE4DC] rounded-lg px-3 py-2 text-sm text-[#26332B] focus:border-[#16834A] outline-none">
     <option value="">All</option>
   </select>
 </div>
 
 <!-- Product Variety -->
 <div class="mb-4">
-  <label class="text-xs text-slate-300 font-semibold mb-1 block">Variety</label>
-  <select id="filterVariety" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 outline-none">
+  <label class="text-xs text-[#173D2B] font-semibold mb-1 block">Variety</label>
+  <select id="filterVariety" class="w-full bg-white border border-[#DCE4DC] rounded-lg px-3 py-2 text-sm text-[#26332B] focus:border-[#16834A] outline-none">
     <option value="">All</option>
   </select>
 </div>
 
 <!-- Brand -->
 <div class="mb-4">
-  <label class="text-xs text-slate-300 font-semibold mb-1 block">Brand</label>
-  <select id="filterBrand" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 outline-none">
+  <label class="text-xs text-[#173D2B] font-semibold mb-1 block">Brand</label>
+  <select id="filterBrand" class="w-full bg-white border border-[#DCE4DC] rounded-lg px-3 py-2 text-sm text-[#26332B] focus:border-[#16834A] outline-none">
     <option value="">All</option>
   </select>
 </div>
 
       <!-- Price -->
       <div class="mb-4">
-        <label class="text-xs text-slate-300 font-semibold mb-1 block">Price Range</label>
+        <label class="text-xs text-[#173D2B] font-semibold mb-1 block">Price Range</label>
         <div class="flex gap-2">
-          <input id="minPrice" type="number" placeholder="Min" class="w-1/2 bg-slate-800/50 border border-slate-700 rounded-lg px-2 py-1 text-sm text-slate-100 focus:border-emerald-500 outline-none">
-          <input id="maxPrice" type="number" placeholder="Max" class="w-1/2 bg-slate-800/50 border border-slate-700 rounded-lg px-2 py-1 text-sm text-slate-100 focus:border-emerald-500 outline-none">
+          <input id="minPrice" type="number" placeholder="Min" class="w-1/2 bg-white border border-[#DCE4DC] rounded-lg px-2 py-1 text-sm text-[#26332B] focus:border-[#16834A] outline-none">
+          <input id="maxPrice" type="number" placeholder="Max" class="w-1/2 bg-white border border-[#DCE4DC] rounded-lg px-2 py-1 text-sm text-[#26332B] focus:border-[#16834A] outline-none">
         </div>
       </div>
 	  
 	  <div class="mb-4">
-		<label class="flex items-center gap-2 text-sm text-slate-300">
+		<label class="flex items-center gap-2 text-sm text-[#26332B]">
 		<input type="checkbox" id="discountOnly">
 				Discounted Items Only
 		</label>
 	  </div>
 	  
 	  <div class="mb-4">
-		<label class="flex items-center gap-2 text-sm text-slate-300">
+		<label class="flex items-center gap-2 text-sm text-[#26332B]">
 		<input type="checkbox" id="availableToday">
 				Available Today
 		</label>
 	  </div>
 	  
 	  <div class="mb-4">
-		<label class="text-xs text-slate-300 font-semibold mb-1 block">
+		<label class="text-xs text-[#173D2B] font-semibold mb-1 block">
 				Sort By
 		</label>
 
 	    <select id="sortProducts"
-			class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100">
+			class="w-full bg-white border border-[#DCE4DC] rounded-lg px-3 py-2 text-sm text-[#26332B] focus:border-[#16834A] outline-none">
 				<option value="priceLow">Price: Low to High</option>
 				<option value="priceHigh">Price: High to Low</option>
 				<option value="latest">Latest Added</option>
@@ -676,7 +917,7 @@ textarea::placeholder{
 
       <!-- Market -->
       <div class="hidden mb-4">
-        <label class="text-xs text-slate-300 font-semibold mb-1 block">Market</label>
+        <label class="text-xs text-[#173D2B] font-semibold mb-1 block">Market</label>
         <div class="space-y-1 text-sm text-slate-300">
           <label class="flex items-center gap-2"><input type="checkbox" class="marketFilter w-4 h-4 text-emerald-500 border-slate-700 bg-slate-800/50 rounded focus:ring-emerald-500" value="Imtiaz"> Imtiaz</label>
           <label class="flex items-center gap-2"><input type="checkbox" class="marketFilter w-4 h-4 text-emerald-500 border-slate-700 bg-slate-800/50 rounded focus:ring-emerald-500" value="Metro"> Metro</label>
@@ -686,7 +927,7 @@ textarea::placeholder{
 
       <!-- Unit -->
       <div class="hidden mb-4">
-        <label class="text-xs text-slate-300 font-semibold mb-1 block">Unit</label>
+        <label class="text-xs text-[#173D2B] font-semibold mb-1 block">Unit</label>
         <div class="space-y-1 text-sm text-slate-300">
           <label class="flex items-center gap-2"><input type="checkbox" class="unitFilter w-4 h-4 text-emerald-500 border-slate-700 bg-slate-800/50 rounded focus:ring-emerald-500" value="kg"> Per Kg</label>
           <label class="flex items-center gap-2"><input type="checkbox" class="unitFilter w-4 h-4 text-emerald-500 border-slate-700 bg-slate-800/50 rounded focus:ring-emerald-500" value="liter"> Per Liter</label>
@@ -695,7 +936,7 @@ textarea::placeholder{
       </div>
 
       <!-- Clear Button -->
-      <button id="clearFilters" class="w-full mt-3 py-2.5 rounded-xl bg-slate-800/50 border border-slate-700 text-sm font-semibold text-slate-300 hover:bg-slate-800 hover:text-emerald-400 transition shadow-sm">
+      <button id="clearFilters" class="w-full mt-3 py-2.5 rounded-xl bg-[#F7F8F5] border border-[#DCE4DC] text-sm font-semibold text-[#68756C] hover:bg-[#E8ECE8] hover:text-[#0A3D2A] hover:border-[#0A3D2A] transition shadow-sm">
         Clear Filters
       </button>
 
@@ -712,13 +953,13 @@ textarea::placeholder{
         <!-- Right Column: Product Details Box -->
         <div class="lg:w-[40%] flex flex-col gap-5 min-h-[650px]">
           
-          <div class="dark-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[650px] shadow-lg" id="featuredAdContainer">
+          <div class="product-details dark-panel p-0 overflow-hidden rounded-3xl flex flex-col h-[650px] shadow-[0_3px_14px_rgba(10,61,42,0.07)] bg-white border border-[#DCE4DC]" id="featuredAdContainer">
              <!-- Initial Empty State -->
-             <div id="featuredPlaceholder" class="h-full flex flex-col items-center justify-center py-20 text-slate-400 text-center px-6">
+             <div id="featuredPlaceholder" class="h-full flex flex-col items-center justify-center py-20 text-[#68756C] text-center px-6">
                 <div class="w-24 h-24 rounded-full bg-emerald-500/10 flex items-center justify-center text-5xl mb-5 border border-emerald-500/20">
                   🍔
                 </div>
-                <h3 class="text-xl font-bold text-slate-100 mb-2">
+                <h3 class="text-xl font-bold text-[#173D2B] mb-2">
                   Product Details
                 </h3>
                 <p class="max-w-md text-sm leading-relaxed">
@@ -727,7 +968,7 @@ textarea::placeholder{
              </div>
              
              <!-- Dynamic Detailed Content -->
-             <div id="featuredContent" class="hidden flex flex-col h-full bg-[rgba(15,23,42,0.9)]">
+             <div id="featuredContent" class="hidden flex flex-col h-full bg-white text-[#26332B]">
                 <!-- Product Image -->
                 <div class="relative h-[250px] w-full overflow-hidden shrink-0">
                   <img id="fImg" src="" alt="Food Image"
@@ -735,12 +976,12 @@ textarea::placeholder{
                   <div class="absolute inset-0 bg-gradient-to-t from-[rgba(15,23,42,1)] via-transparent to-transparent"></div>
                   
                   <!-- Mobile Go To Top Button -->
-                  <button class="absolute top-4 left-4 lg:hidden bg-slate-900/80 backdrop-blur-md border border-slate-700 text-orange-500 hover:text-orange-400 hover:bg-slate-800 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm z-10 flex items-center gap-2 transition" onclick="document.getElementById('goBackBtn') ? document.getElementById('goBackBtn').click() : window.scrollTo({top:0, behavior:'smooth'})">
+                  <button class="absolute top-4 left-4 lg:hidden bg-white/95 backdrop-blur-md border border-[#DCE4DC] text-[#E66B16] hover:bg-orange-50 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm z-10 flex items-center gap-2 transition" onclick="document.getElementById('goBackBtn') ? document.getElementById('goBackBtn').click() : window.scrollTo({top:0, behavior:'smooth'})">
                     <i class="fas fa-arrow-up"></i> Go To Top
                   </button>
 
                   <!-- Distance Badge -->
-                  <div class="absolute top-4 right-4 bg-slate-900/80 backdrop-blur-md border border-slate-700 text-slate-300 px-4 py-1 rounded-full text-xs font-semibold shadow-sm">
+                  <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-md border border-[#DCE4DC] text-[#26332B] px-4 py-1 rounded-full text-xs font-semibold shadow-sm">
                     📍 <span id="fDistance">1.2 KM Away</span>
                   </div>
                 </div>
@@ -751,16 +992,16 @@ textarea::placeholder{
                   <div class="mb-4">
                     <div class="flex justify-between items-baseline mb-1">
                       <div class="flex items-baseline gap-2">
-                        <h2 id="fName" class="text-lg sm:text-xl font-extrabold text-slate-100 leading-tight">Product Name</h2>
-                        <span id="fDetailsDistance" class="text-xs font-semibold text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30 bg-emerald-500/10 whitespace-nowrap">1.2 km</span>
+                        <h2 id="fName" class="text-lg sm:text-xl font-extrabold text-[#173D2B] leading-tight">Product Name</h2>
+                        <span id="fDetailsDistance" class="text-xs font-semibold text-[#16834A] px-2 py-0.5 rounded border border-emerald-200 bg-emerald-50 whitespace-nowrap">1.2 km</span>
                       </div>
-                      <div id="fPrice" class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500 whitespace-nowrap ml-4">
+                      <div id="fPrice" class="text-xl font-bold text-[#16834A] whitespace-nowrap ml-4">
                         Rs. 850
                       </div>
                     </div>
                     <div class="flex justify-between items-baseline text-sm">
-                      <div id="fVariety" class="font-medium text-emerald-400">Product Variety</div>
-                      <div id="fPostedDate" class="text-[11px] text-slate-400 font-medium whitespace-nowrap ml-4">
+                      <div id="fVariety" class="font-medium text-[#16834A]">Product Variety</div>
+                      <div id="fPostedDate" class="text-[11px] text-[#68756C] font-medium whitespace-nowrap ml-4">
                         Posted: 15 Jun 2026
                       </div>
                     </div>
@@ -771,8 +1012,8 @@ textarea::placeholder{
                   <div class="mb-4 flex gap-4">
                     <!-- Description -->
                     <div class="flex-1">
-                      <h3 class="text-sm font-semibold text-slate-300 mb-2">Product Details</h3>
-                      <p id="fDesc" class="text-[14px] leading-6 text-slate-400">Product details here...</p>
+                      <h3 class="text-sm font-semibold text-[#173D2B] mb-2">Product Details</h3>
+                      <p id="fDesc" class="text-[14px] leading-6 text-[#68756C]">Product details here...</p>
                     </div>
                     <!-- Video Box -->
                     <div id="fVideoContainer" class="hidden w-2/5 sm:w-1/3 flex-shrink-0 relative rounded-lg overflow-hidden border border-slate-700 bg-slate-800/50">
@@ -797,12 +1038,12 @@ textarea::placeholder{
                   </div>
 
                   <!-- Price Comparison Box -->
-                  <div id="priceComparisonBox" class="mt-4 mb-4 p-3 rounded-xl bg-slate-800/20 border border-emerald-500/20 hidden">
+                  <div id="priceComparisonBox" class="mt-4 mb-4 p-3 rounded-xl bg-emerald-50/40 border border-emerald-200 hidden">
                     <div class="flex items-center justify-between mb-2">
                       <span class="text-sm font-bold text-emerald-400">
                         📊 Price Comparison
                       </span>
-                      <span class="text-xs text-slate-300" id="comparisonStandardType">
+                      <span class="text-xs text-[#68756C]" id="comparisonStandardType">
                         Zinger Burger
                       </span>
                     </div>
@@ -810,11 +1051,11 @@ textarea::placeholder{
                   </div>
 
                   <!-- BUTTONS -->
-                  <div class="grid grid-cols-2 gap-3 mt-auto pt-4 border-t border-slate-800">
-                    <button id="fCallBtn" class="h-12 rounded-xl border border-slate-700 bg-slate-800/50 hover:bg-slate-700 text-slate-300 font-semibold text-sm transition-all shadow-sm">
+                  <div class="grid grid-cols-2 gap-3 mt-auto pt-4 border-t border-[#DCE4DC]">
+                    <button id="fCallBtn" class="h-12 rounded-xl border border-[#DCE4DC] bg-[#F7F8F5] hover:bg-[#E8ECE8] text-[#26332B] font-semibold text-sm transition-all shadow-sm">
                       📞 Contact
                     </button>
-                    <button id="fOrderBtn" class="h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-600 text-white font-bold text-sm shadow-[0_4px_12px_rgba(249,115,22,0.3)] transition-all" onclick="document.getElementById('orderModal').classList.remove('hidden')">
+                    <button id="fOrderBtn" class="primary-button h-12 rounded-xl bg-[#0A3D2A] hover:bg-[#072F20] text-white font-bold text-sm shadow-[0_4px_12px_rgba(10,61,42,0.15)] transition-all" onclick="document.getElementById('orderModal').classList.remove('hidden')">
                       🛒 Order Now
                     </button>
                   </div>
@@ -826,10 +1067,10 @@ textarea::placeholder{
 
       <!-- SCROLLING FEATURED ADS TICKER -->
       <div class="mt-8">
-        <h3 class="text-lg font-bold text-white mb-4 px-2">
+        <h3 class="text-lg font-bold text-[#173D2B] mb-4 px-2">
 					Featured Offers
 		</h3>
-        <div class="overflow-hidden relative w-full rounded-2xl bg-white/40 backdrop-blur-md border border-white/50 py-2.5 px-2 shadow-sm" dir="ltr">
+        <div class="overflow-hidden relative w-full rounded-2xl bg-white border border-[#DCE4DC] py-2.5 px-2 shadow-[0_3px_14px_rgba(10,61,42,0.07)]" dir="ltr">
            <div class="flex gap-4 items-center animate-[scroll_20s_linear_infinite] whitespace-nowrap min-w-max hover:[animation-play-state:paused]" style="animation: scroll 35s linear infinite;">
              
              <!-- Ad 1 -->
@@ -927,7 +1168,7 @@ textarea::placeholder{
       <!-- Promotional Ad Banner (Moved under Featured Offers) -->
       <div class="w-full mt-8">
           <a href="https://orionfx.net" target="_blank" rel="noopener noreferrer" class="block w-full group">
-                <div class="relative w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-md border border-slate-700/60 bg-[#020b1c] transition duration-300 group-hover:shadow-xl">
+                <div class="relative w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-md border border-[#DCE4DC] bg-white transition duration-300 group-hover:shadow-xl">
                     <img src="../images/banner/orion-fx-digital-success-banner-03.png" alt="Orion FX Digital Success Banner" 
                         width="2079" height="266"
                         class="w-full h-auto block aspect-[2079/266] max-h-[266px]" style="aspect-ratio: 2079 / 266;">
@@ -1396,8 +1637,8 @@ if (goTopBtn) {
             bannerEl.style.opacity = 0;
             setTimeout(() => {
                 bannerEl.innerHTML = `
-                    <h3 class="text-base font-bold leading-tight text-white font-serif mt-0.5">${item.title}</h3>
-                    <p class="text-[10px] text-slate-400 font-medium leading-tight line-clamp-2">${item.desc}</p>
+                    <h3 class="text-base font-bold leading-tight text-[#173D2B] font-serif mt-0.5">${item.title}</h3>
+                    <p class="text-[10px] text-[#68756C] font-medium leading-tight line-clamp-2">${item.desc}</p>
                 `;
                 const linkEl = document.getElementById('leftPromoLink1');
                 if (linkEl) {
@@ -1417,8 +1658,8 @@ if (goTopBtn) {
             bannerEl.style.opacity = 0;
             setTimeout(() => {
                 bannerEl.innerHTML = `
-                    <h3 class="text-base font-bold leading-tight text-white font-serif mt-0.5">${item.title}</h3>
-                    <p class="text-[10px] text-slate-400 font-medium leading-tight line-clamp-2">${item.desc}</p>
+                    <h3 class="text-base font-bold leading-tight text-[#173D2B] font-serif mt-0.5">${item.title}</h3>
+                    <p class="text-[10px] text-[#68756C] font-medium leading-tight line-clamp-2">${item.desc}</p>
                 `;
                 const linkEl = document.getElementById('rightPromoLink1');
                 if (linkEl) {
